@@ -9,11 +9,7 @@ import { cn } from "@/lib/utils";
 import { RecipeData as ImportedRecipeData } from "@/components/RecipeDisplay"; // Assuming RecipeDisplay exports this
 import { useSettings } from '@/contexts/SettingsContext'; // Import useSettings
 
-// Re-export or redefine RecipeData if not directly usable from RecipeDisplay for extension
-// For now, we'll assume ImportedRecipeData is the base and extend it.
-export interface RecipeData extends ImportedRecipeData {}
-
-export interface RecipeCardProps extends RecipeData {
+export interface RecipeCardProps extends ImportedRecipeData {
   tags?: string[];
   onDeleteAttempt?: (recipeId: string) => void;
   // onClick is implicitly part of the props when spread in CategoryPage,

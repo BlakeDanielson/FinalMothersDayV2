@@ -10,7 +10,6 @@ import { useRouter } from 'next/navigation';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
 import RecipeDisplay, { RecipeData } from "@/components/RecipeDisplay";
 import RecipeLoadingProgress from "@/components/ui/RecipeLoadingProgress";
 import ScanPhotoButton from "@/components/ui/ScanPhotoButton";
@@ -232,9 +231,6 @@ function MainPage() {
 
   const [gridTitle, setGridTitle] = useState("Recipe Categories");
 
-  const [availableCuisines, setAvailableCuisines] = useState<string[]>([]);
-  const [availableCategories, setAvailableCategories] = useState<string[]>([]);
-
   const [processedCategories, setProcessedCategories] = useState<{ name: string; count: number; imageUrl?: string | null }[]>([]);
 
   useEffect(() => {
@@ -254,11 +250,6 @@ function MainPage() {
   }, []); // Empty dependency array to run once on mount
 
   useEffect(() => {
-    const cuisines = new Set(savedRecipes.map(r => r.cuisine).filter(Boolean) as string[]);
-    const categories = new Set(savedRecipes.map(r => r.category).filter(Boolean) as string[]);
-    setAvailableCuisines(Array.from(cuisines).sort());
-    setAvailableCategories(Array.from(categories).sort());
-
     const recipesSource = savedRecipes.length > 0 ? savedRecipes : placeholderRecipes;
     const categoryMap: Record<string, { count: number; recipes: (RecipeData | PlaceholderRecipe)[] }> = {};
 
