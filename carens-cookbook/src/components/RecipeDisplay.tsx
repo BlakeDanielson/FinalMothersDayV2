@@ -10,6 +10,7 @@ import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 import { Input } from "@/components/ui/input";
 import { useSettings } from '@/contexts/SettingsContext';
+import Image from 'next/image';
 
 // Define the structure of a recipe
 export interface RecipeData {
@@ -29,7 +30,6 @@ interface RecipeDisplayProps {
   recipe: RecipeData;
   onSave?: (recipeData: RecipeData) => void;
   onPrint?: () => void;
-  onShare?: () => void;
   onGoBack?: () => void;
   onDeleteAttempt?: (recipeId: string) => void;
   onUpdateTitle?: (recipeId: string, newTitle: string) => Promise<boolean>;
@@ -124,7 +124,6 @@ const RecipeDisplay = ({
   recipe,
   onSave,
   onPrint,
-  onShare,
   onGoBack,
   onDeleteAttempt,
   onUpdateTitle,
@@ -265,10 +264,12 @@ const RecipeDisplay = ({
         <CardHeader className="p-0">
           <div className="relative h-72 md:h-96 w-full bg-gray-100">
             {showImages && recipe.image ? (
-              <img
+              <Image
                 src={recipe.image}
                 alt={recipe.title}
-                className="w-full h-full object-cover"
+                layout="fill"
+                objectFit="cover"
+                priority
               />
             ) : (
               <div className="w-full h-full flex flex-col items-center justify-center text-gray-400 bg-gray-50">
@@ -513,7 +514,7 @@ const RecipeDisplay = ({
               onClick={() => {
                 navigator.clipboard.writeText(`${window.location.origin}/?recipeId=${recipe.id}`)
                   .then(() => toast.success("Link copied to clipboard!"))
-                  .catch(err => toast.error("Failed to copy link."));
+                  .catch(() => toast.error("Failed to copy link."));
                 setShowShareOptionsModal(false);
               }}
               className="w-full mb-3 text-lg"
