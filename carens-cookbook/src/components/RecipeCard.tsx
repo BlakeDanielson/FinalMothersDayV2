@@ -23,7 +23,7 @@ export interface RecipeCardProps extends ImportedRecipeData {
 // wrapping this card or passed directly. The delete button has its own onClick.
 
 export const RecipeCard = ({
-  id, // Essential for delete
+  id,
   title,
   description,
   image,
@@ -31,28 +31,28 @@ export const RecipeCard = ({
   prepTime,
   cleanupTime,
   onDeleteAttempt,
-  // The main 'onClick' for the card (for navigation) is passed by the parent component
-  ...rest // Captures the main onClick and other props from RecipeData
+  ...rest
 }: RecipeCardProps & { onClick: () => void }) => {
-  const { showImages } = useSettings(); // Get the setting
+  const { showImages } = useSettings();
 
   return (
     <Card
-      onClick={rest.onClick} // Use the onClick passed for the card itself
+      onClick={rest.onClick}
       className={cn(
         "group relative flex flex-col justify-between overflow-hidden rounded-xl cursor-pointer",
         "bg-background border border-border hover:border-primary/20 transition-all duration-300 hover:shadow-lg",
         showImages ? "h-[350px]" : "min-h-[170px]" // Conditional height
       )}
     >
-      {id && onDeleteAttempt && (
+      {/* Delete button for when images are SHOWN (overlays image area) */}
+      {showImages && id && onDeleteAttempt && (
         <Button
           variant="destructive"
           size="icon"
           className="absolute top-2 right-2 z-10 h-8 w-8 bg-black/50 hover:bg-red-700/80 border-none backdrop-blur-sm"
           onClick={(e) => {
-            e.stopPropagation(); // Prevent card's main onClick
-            onDeleteAttempt(id); // Call delete handler
+            e.stopPropagation();
+            onDeleteAttempt(id);
           }}
           aria-label="Delete recipe"
         >
@@ -62,25 +62,44 @@ export const RecipeCard = ({
 
       {/* Conditionally render the entire image container block */} 
       {showImages && (
-        <div className="relative h-1/2 w-full overflow-hidden"> {/* This h-1/2 refers to parent's h-[350px] when showImages is true */}
+        <div className="relative h-1/2 w-full overflow-hidden">
           {image ? (
             <div
               className="absolute inset-0 bg-cover bg-center"
               style={{ backgroundImage: `url(${image})` }}
             />
           ) : (
-            // This placeholder shows if images are ON but this specific recipe has NO image
             <div className="absolute inset-0 bg-gray-100 flex items-center justify-center">
               <span className="text-gray-400 text-xs">No Image</span>
             </div>
           )}
-          {/* Gradient overlay for title readability, only when image is shown */}
           <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-background to-transparent h-16" />
         </div>
       )}
 
       {/* Text content - this will always be rendered */}
-      <div className={`flex flex-col gap-2 p-4 ${showImages ? '' : 'pt-4'}`}> {/* Ensure padding is consistent if image is off and card is shorter */} 
+      <div 
+        className={cn(
+          "flex flex-col gap-2 p-4", 
+          !showImages && "relative pt-4" // Add relative positioning if images are off for the new delete button
+        )}
+      >
+        {/* Delete button for when images are OFF (inside text content area) */}
+        {!showImages && id && onDeleteAttempt && (
+            <Button
+              variant="ghost" // Muted style
+              size="icon"
+              className="absolute top-3 right-3 z-10 h-8 w-8 text-muted-foreground hover:bg-destructive/10 hover:text-destructive" // Adjusted positioning and hover
+              onClick={(e) => {
+                e.stopPropagation();
+                onDeleteAttempt(id);
+              }}
+              aria-label="Delete recipe"
+            >
+              <Trash2 className="h-5 w-5" />
+            </Button>
+        )}
+
         {tags && tags.length > 0 && (
           <div className="flex flex-wrap gap-1 mb-1">
             {tags.map((tag, i) => (
@@ -90,7 +109,12 @@ export const RecipeCard = ({
             ))}
           </div>
         )}
-        <h3 className="text-lg font-semibold text-foreground line-clamp-2">
+        <h3 
+          className={cn(
+            "text-lg font-semibold text-foreground line-clamp-2",
+            !showImages && "pr-10" // Add padding to title if images are off and delete button is present
+          )}
+        >
           {title}
         </h3>
         <p className="text-xs text-muted-foreground line-clamp-3">{description}</p>

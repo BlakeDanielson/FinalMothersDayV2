@@ -11,12 +11,12 @@ const SettingsContext = createContext<SettingsContextType | undefined>(undefined
 
 export const SettingsProvider = ({ children }: { children: ReactNode }) => {
   const [showImages, setShowImages] = useState<boolean>(() => {
-    // Get initial value from localStorage or default to true
+    // Get initial value from localStorage or default to false (OFF)
     if (typeof window !== 'undefined') {
       const storedValue = localStorage.getItem('showImages');
-      return storedValue !== null ? JSON.parse(storedValue) : true;
+      return storedValue !== null ? JSON.parse(storedValue) : false; // Changed default to false
     }
-    return true; // Default for server-side rendering or if window is not available
+    return false; // Default for server-side rendering or if window is not available (OFF)
   });
 
   useEffect(() => {
