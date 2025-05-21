@@ -1,6 +1,6 @@
 "use client"
 
-import React, { useState, useEffect, useMemo } from "react";
+import React, { useState, useEffect, useMemo, useCallback } from "react";
 import { useParams, useRouter } from "next/navigation";
 import { motion } from "framer-motion";
 import { ArrowLeftIcon, SearchIcon } from "lucide-react";
@@ -8,10 +8,9 @@ import { Toaster, toast } from 'sonner';
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { RecipeCard, RecipeData as RecipeCardData } from "@/components/RecipeCard";
+import { RecipeCard } from "@/components/RecipeCard";
 import { BentoGrid } from "@/components/BentoGrid";
 import RecipeDisplay, { RecipeData as ImportedRecipeData } from "@/components/RecipeDisplay";
-import { useSettings } from "@/contexts/SettingsContext";
 
 // Copied from page.tsx - can be refactored into shared files later
 // REMOVE this local RecipeData definition, rely on RecipeDisplay's export
@@ -56,7 +55,7 @@ export default function CategoryPage() {
   const [currentView, setCurrentView] = useState<'list' | 'recipe'>('list');
   const [selectedRecipe, setSelectedRecipe] = useState<RecipeData | null>(null);
 
-  const fetchRecipesByCategory = async () => {
+  const fetchRecipesByCategory = useCallback(async () => {
     if (!categoryName || categoryName === "Unknown Category") return;
     setIsLoading(true);
     setError(null);
@@ -76,11 +75,11 @@ export default function CategoryPage() {
     } finally {
       setIsLoading(false);
     }
-  };
+  }, [categoryName]);
 
   useEffect(() => {
     fetchRecipesByCategory();
-  }, [categoryName, fetchRecipesByCategory]);
+  }, [fetchRecipesByCategory]);
 
   const filteredRecipes = useMemo(() => {
     return recipesForCategory.filter(recipe => 
