@@ -257,13 +257,13 @@ const RecipeDisplay = ({
           variant="ghost" 
           size="icon" 
           onClick={handleTitleEditToggle} 
-          className={`p-1 shrink-0 
+          className={`p-2 shrink-0 flex items-center justify-center 
             ${isOverlay 
               ? 'text-white/70 hover:text-white' 
               : 'text-gray-500 dark:text-gray-400 hover:text-primary dark:hover:text-primary-dark'}`}
           aria-label={isEditingTitle ? "Save title" : "Edit title"}
         >
-          {isEditingTitle ? <CheckCircle size={32} /> : <Edit3 size={32} />} 
+          {isEditingTitle ? <CheckCircle size={40} /> : <Edit3 size={40} />} 
         </Button>
       )}
         {isEditingTitle && (
@@ -271,13 +271,13 @@ const RecipeDisplay = ({
           variant="ghost" 
           size="icon" 
           onClick={() => { setCurrentEditableTitle(recipe.title); setIsEditingTitle(false); }} 
-          className={`p-1 shrink-0 
+          className={`p-2 shrink-0 flex items-center justify-center 
             ${isOverlay 
               ? 'text-white/70 hover:text-white' 
               : 'text-gray-500 dark:text-gray-400 hover:text-destructive dark:hover:text-destructive-dark'}`}
           aria-label="Cancel editing title"
         >
-          <XCircle size={32} />
+          <XCircle size={40} />
         </Button>
       )}
     </div>
@@ -286,13 +286,37 @@ const RecipeDisplay = ({
   return (
     <div className="w-full max-w-5xl mx-auto p-4 md:p-6 text-gray-800 font-sans">
       <Card className="overflow-hidden border-2 border-gray-200 shadow-xl rounded-2xl">
-        {onGoBack && (
-          <div className="px-6 md:px-8 pt-6">
-            <Button onClick={onGoBack} variant="outline" className="flex items-center gap-2 text-lg p-3 pr-4 mb-4">
+        <div className="px-6 md:px-8 pt-6 flex justify-between items-center">
+          {onGoBack && (
+            <Button onClick={onGoBack} variant="outline" className="flex items-center gap-2 text-lg p-3 pr-4">
               <HomeIcon className="h-5 w-5" /> Back to Recipes
             </Button>
+          )}
+          <div className="flex gap-2">
+            {onPrint && (
+              <Button variant="outline" size="icon" onClick={onPrint} className="border-blue-500 text-blue-500 hover:bg-blue-50 hover:text-blue-600">
+                <Printer className="h-5 w-5" />
+                <span className="sr-only">Print</span>
+              </Button>
+            )}
+            <Button variant="outline" size="icon" onClick={handleShareRecipe} className="border-green-500 text-green-500 hover:bg-green-50 hover:text-green-600">
+              <Share2 className="h-5 w-5" />
+              <span className="sr-only">Share</span>
+            </Button>
+            {onSave && (
+              <Button variant="default" size="icon" onClick={() => onSave(recipe)} className="bg-blue-600 hover:bg-blue-700 text-white">
+                <Heart className="h-5 w-5" />
+                <span className="sr-only">Save Recipe</span>
+              </Button>
+            )}
+            {onDeleteAttempt && recipe.id && (
+              <Button variant="destructive" size="icon" onClick={() => onDeleteAttempt(recipe.id!)} >
+                <Trash2 className="h-5 w-5" />
+                <span className="sr-only">Delete Recipe</span>
+              </Button>
+            )}
           </div>
-        )}
+        </div>
 
         {showImages ? (
           <CardHeader className="p-0">
@@ -325,6 +349,19 @@ const RecipeDisplay = ({
               <Separator className="my-6" />
             </div>
           )}
+
+          <div className="mb-8">
+            <h3 className="text-2xl font-semibold mb-3 text-gray-700">Servings Scale</h3>
+            <div className="flex flex-wrap gap-2 items-center">
+              {[0.5, 1, 2, 3].map((factor) => (
+                <Button key={factor} variant={scaleFactor === factor ? "default" : "outline"} size="sm" onClick={() => setScaleFactor(factor)} className={`text-md px-3 py-1 ${scaleFactor === factor ? 'bg-blue-600 text-white' : 'border-gray-400 text-gray-700'}`}>
+                  {factor}x
+                </Button>
+              ))}
+            </div>
+            <Separator className="my-6" />
+          </div>
+
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-x-8 gap-y-10">
             <div className="lg:col-span-1 space-y-8">
               {(recipe.prepTime || recipe.cleanupTime || recipe.cuisine || recipe.category) && (
@@ -348,7 +385,17 @@ const RecipeDisplay = ({
                     {recipe.cuisine && (
                       <div className="flex items-center justify-between">
                         <div className="flex items-center"><Utensils className="h-6 w-6 mr-3 text-gray-500" /> <span className="font-medium">Cuisine:</span></div>
-                        <span className="text-gray-600">{recipe.cuisine}</span>
+                        <span className="text-gray-600">
+                          {recipe.cuisine.split(' ').length === 2 ? (
+                            <>
+                              {recipe.cuisine.split(' ')[0]}
+                              <br />
+                              {recipe.cuisine.split(' ')[1]}
+                            </>
+                          ) : (
+                            recipe.cuisine
+                          )}
+                        </span>
                       </div>
                     )}
                      {recipe.category && (
@@ -363,14 +410,6 @@ const RecipeDisplay = ({
               <div>
                 <h2 className="text-3xl font-semibold mb-4 text-gray-700">Ingredients</h2>
                 <p className="text-md text-gray-500 mb-4">Check off items as you go. {allIngredientsChecked && "All done!"}</p>
-                <div className="mb-4 flex flex-wrap gap-2 items-center">
-                  <span className="text-lg font-medium text-gray-600 mr-2">Servings Scale:</span>
-                  {[0.5, 1, 2, 3].map((factor) => (
-                    <Button key={factor} variant={scaleFactor === factor ? "default" : "outline"} size="sm" onClick={() => setScaleFactor(factor)} className={`text-md px-3 py-1 ${scaleFactor === factor ? 'bg-blue-600 text-white' : 'border-gray-400 text-gray-700'}`}>
-                      {factor}x
-                    </Button>
-                  ))}
-                </div>
                 <ul className="space-y-4 pr-3 border border-gray-200 rounded-lg p-4 bg-slate-50">
                   {displayIngredients.map((ingredient) => (
                     <li key={ingredient.id} className="flex items-start space-x-4 text-lg" onClick={() => toggleIngredient(ingredient.id)}>
@@ -399,24 +438,7 @@ const RecipeDisplay = ({
         </CardContent>
 
         <CardFooter className="p-6 md:p-8 bg-gray-50 border-t border-gray-200 flex flex-wrap gap-4 justify-center md:justify-end">
-          {onPrint && (
-            <Button variant="outline" size="lg" onClick={onPrint} className="text-lg px-6 py-3 border-2 border-blue-500 text-blue-500 hover:bg-blue-50 hover:text-blue-600">
-              <Printer className="mr-2 h-6 w-6" /> Print
-            </Button>
-          )}
-          <Button variant="outline" size="lg" onClick={handleShareRecipe} className="text-lg px-6 py-3 border-2 border-green-500 text-green-500 hover:bg-green-50 hover:text-green-600">
-            <Share2 className="mr-2 h-6 w-6" /> Share
-          </Button>
-          {onSave && (
-            <Button variant="default" size="lg" onClick={() => onSave(recipe)} className="text-lg px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white">
-              <Heart className="mr-2 h-6 w-6" /> Save Recipe
-            </Button>
-          )}
-          {onDeleteAttempt && recipe.id && (
-            <Button variant="destructive" size="lg" onClick={() => onDeleteAttempt(recipe.id!)} className="text-lg px-6 py-3">
-              <Trash2 className="mr-2 h-6 w-6" /> Delete Recipe
-            </Button>
-          )}
+          {/* Buttons moved to the top */}
         </CardFooter>
       </Card>
       {showShareOptionsModal && recipe.id && (
