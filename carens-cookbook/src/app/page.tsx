@@ -234,26 +234,17 @@ function MainPage() {
   const [processedCategories, setProcessedCategories] = useState<{ name: string; count: number; imageUrl?: string | null }[]>([]);
 
   useEffect(() => {
-    // Call fetchSavedRecipes on initial component mount
     fetchSavedRecipes();
 
-    // The existing logic for handling recipeIdFromUrl can remain,
-    // but it will now operate on potentially populated savedRecipes
-    // or trigger a re-fetch if necessary, which is fine.
     const params = new URLSearchParams(window.location.search);
     const recipeIdFromUrl = params.get('recipeId');
 
     if (recipeIdFromUrl) {
-      // This part might become redundant if fetchSavedRecipes always runs first
-      // and the second useEffect [savedRecipes, router] handles displaying the recipe.
-      // However, keeping it doesn't hurt and ensures the recipe is loaded if directly linked.
-      const loadRecipeFromUrl = async () => {
-        // await fetchSavedRecipes(); // Already called above, so this might be redundant or a second call
-                                 // Let's rely on the initial call and the effect below.
-      };
-      // loadRecipeFromUrl(); // Call can be removed if fetch is guaranteed by first line
+      // const loadRecipeFromUrl = async () => { // Remove this declaration
+      // };
+      // loadRecipeFromUrl();
     }
-  }, []); // Empty dependency array ensures this runs once on mount
+  }, []);
 
   useEffect(() => {
     // This effect will process savedRecipes once they are fetched.
