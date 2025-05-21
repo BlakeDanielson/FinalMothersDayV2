@@ -50,8 +50,8 @@ export async function saveImageLocally(
     }
 
     const fileStream = fs.createWriteStream(imagePath);
-    // @ts-ignore Node.js stream types can be tricky with web ReadableStream
-    await finished(Readable.fromWeb(response.body as any).pipe(fileStream));
+    // @ts-expect-error Node.js Readable.fromWeb expects a Web ReadableStream, and Readable.fromWeb might not be recognized in all TS configs for Node built-ins without specific lib settings.
+    await finished(Readable.fromWeb(response.body as ReadableStream<Uint8Array>).pipe(fileStream));
 
     const publicUrl = `/generated_recipes_images/${filename}`;
     console.log(`Image saved locally: ${publicUrl}`);

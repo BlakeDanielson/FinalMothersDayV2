@@ -27,7 +27,7 @@ export function getSanitizedHtml(rawHtml: string): string {
   // Example: $('#social-share-buttons').remove();
 
   // Get the processed HTML
-  let cleanedHtml = $('body').html() || $('html').html(); // Try to get body content, fallback to full html if body isn't found
+  const cleanedHtml = $('body').html() || $('html').html(); // Changed let to const
 
   if (!cleanedHtml) {
     return rawHtml; // Fallback to raw HTML if cleaning results in empty content

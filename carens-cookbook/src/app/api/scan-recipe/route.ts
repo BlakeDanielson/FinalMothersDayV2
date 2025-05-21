@@ -21,6 +21,15 @@ const openaiClient = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
 });
 
+interface OpenAIErrorResponseData {
+  // Define known fields if possible, or keep it flexible
+  [key: string]: any;
+}
+interface OpenAIErrorResponse {
+  data?: OpenAIErrorResponseData;
+  status?: number;
+}
+
 const getImageSystemPrompt = (schemaString: string) => `You are an expert recipe analysis assistant specializing in interpreting images of recipes (e.g., photos of cookbook pages, recipe cards, or handwritten notes). Your task is to extract detailed recipe information directly from the provided image and then generate supplementary details.
 
 **Stage 1: Content Extraction from Image**
@@ -94,12 +103,13 @@ export async function POST(req: NextRequest) {
     }
 
     const parsedJson = JSON.parse(chatCompletion.choices[0].message.content);
-    let recipeData = scanRecipeZodSchema.parse(parsedJson);
+    const initialRecipeData = scanRecipeZodSchema.parse(parsedJson);
+    let finalRecipeData = { ...initialRecipeData }; // Start with a copy
 
     // --- IMAGE GENERATION LOGIC --- 
-    if (recipeData.image === null) { 
-      console.log(`Attempting to generate image for recipe: ${recipeData.title}`);
-      const dallePrompt = `Photorealistic, appetizing, high-quality image of ${recipeData.title}. This dish is a ${recipeData.category} (${recipeData.cuisine}). Show the dish as if it's freshly prepared and ready to eat. Bright, natural lighting. Food photography style. If the title suggests a component (like a sauce or dough), depict the complete dish it's typically part of.`;
+    if (initialRecipeData.image === null) { 
+      console.log(`Attempting to generate image for recipe: ${initialRecipeData.title}`);
+      const dallePrompt = `Photorealistic, appetizing, high-quality image of ${initialRecipeData.title}. This dish is a ${initialRecipeData.category} (${initialRecipeData.cuisine}). Show the dish as if it's freshly prepared and ready to eat. Bright, natural lighting. Food photography style. If the title suggests a component (like a sauce or dough), depict the complete dish it's typically part of.`;
       console.log("GPT Prompt for scan-recipe:", dallePrompt);
       
       try {
@@ -114,9 +124,9 @@ export async function POST(req: NextRequest) {
         const temporaryImageUrl = imageGenResponse.data?.[0]?.url;
         if (temporaryImageUrl) {
           console.log(`GPT temporary URL: ${temporaryImageUrl}`);
-          const permanentLocalUrl = await saveImageLocally(temporaryImageUrl, recipeData.title);
+          const permanentLocalUrl = await saveImageLocally(temporaryImageUrl, initialRecipeData.title);
           if (permanentLocalUrl) {
-            recipeData.image = permanentLocalUrl; 
+            finalRecipeData = { ...finalRecipeData, image: permanentLocalUrl }; // Create new object
             console.log(`Recipe image updated to local URL: ${permanentLocalUrl}`);
           } else {
             console.warn("Failed to save GPT image locally, recipe will have no image (remains null).");
@@ -124,29 +134,32 @@ export async function POST(req: NextRequest) {
         } else {
           console.warn("GPT did not return an image URL.");
         }
-      } catch (imageGenError) {
+      } catch (imageGenError: unknown) {
         console.error("Error generating image with GPT:", imageGenError);
       }
     }
     // --- END IMAGE GENERATION LOGIC --- 
 
-    return NextResponse.json(recipeData, { status: 200 });
+    return NextResponse.json(finalRecipeData, { status: 200 });
 
-  } catch (error: any) {
-    console.error('Error in /api/scan-recipe:', error);
+  } catch (error: unknown) {
+    console.error('Error in /api/scan-recipe:', error instanceof Error ? error.message : String(error));
     let errorMessage = 'Failed to process recipe from image.';
-    let errorDetails = error.message;
+    let errorDetails: string | object = error instanceof Error ? error.message : String(error);
     let statusCode = 500;
 
     if (error instanceof z.ZodError) {
       errorMessage = "Validation error: The recipe data from AI (image) is not in the expected format.";
       errorDetails = error.format();
       statusCode = 422;
-    } else if (error.response && error.response.data && typeof error.response.status === 'number') {
-        errorDetails = JSON.stringify(error.response.data);
-        statusCode = error.response.status;
-    } else if (error.message && typeof error.message === 'string') {
+    } else if (error instanceof Error && error.message) {
         // Keep generic message, use error.message for details
+    } else if (typeof error === 'object' && error !== null && 'response' in error) {
+        const errResp = error.response as OpenAIErrorResponse; // Use defined interface
+        if (errResp.data && typeof errResp.status === 'number'){
+            errorDetails = JSON.stringify(errResp.data);
+            statusCode = errResp.status;
+        }
     }
 
     return NextResponse.json({ error: errorMessage, details: errorDetails }, { status: statusCode });

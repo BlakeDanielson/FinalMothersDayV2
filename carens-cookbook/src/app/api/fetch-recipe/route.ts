@@ -24,8 +24,9 @@ const openaiClient = new OpenAI({
 });
 
 export async function POST(req: NextRequest) {
-  if (req.method !== 'POST') {
-    return NextResponse.json({ error: 'Method not allowed' }, { status: 405 });
+  if (!process.env.OPENAI_API_KEY) {
+    console.error('OPENAI_API_KEY is not set.');
+    return NextResponse.json({ error: 'Server configuration error: Missing OpenAI API key.' }, { status: 500 });
   }
 
   try {
@@ -36,29 +37,18 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: 'URL is required' }, { status: 400 });
     }
 
+    console.log(`Fetching recipe for URL: ${url} using OpenAI direct mode`);
+    const fetchResponse = await fetch(url); // Renamed to avoid conflict
+    if (!fetchResponse.ok) {
+      throw new Error(`Failed to fetch URL: ${fetchResponse.statusText} (Status: ${fetchResponse.status})`);
+    }
+    const htmlContent = await fetchResponse.text();
+    console.log(`Original HTML length: ${htmlContent.length}`);
+    const sanitizedHtml = getSanitizedHtml(htmlContent);
+    console.log(`Sanitized HTML length: ${sanitizedHtml.length}`);
+
     const schemaString = JSON.stringify(zodRecipeSchema.shape);
     const systemPrompt = `You are an advanced two-stage recipe processing assistant. Your primary goal is to return a complete and structured JSON object for a given recipe based on its HTML content.\n\n**Stage 1: Content Extraction from HTML**\nFirst, you MUST meticulously analyze the provided HTML content. From this HTML, you are REQUIRED to extract the following specific pieces of information:\n*   \`title\`: The main title of the recipe as it appears on the page.\n*   \`ingredients\`: A comprehensive array of strings, where each string is a single ingredient (e.g., \"1 cup flour\", \"2 tbsp olive oil\"). Capture all listed ingredients.\n*   \`steps\`: An array of strings, where each string is a distinct preparation or cooking step. Capture all listed steps in order.\n*   \`image\`: The direct URL to the main, most representative image of the finished recipe. If no suitable image URL is found within the HTML, this field MUST be \`null\`.\n\nThese four fields (\`title\`, \`ingredients\`, \`steps\`, \`image\`) MUST be sourced directly from the provided HTML. Do not invent or infer them if they are not present in the HTML.\n\n**Stage 2: AI-Powered Content Generation**\nOnce you have successfully extracted the \`title\`, \`ingredients\`, and \`steps\` from the HTML, you will then use THIS EXTRACTED INFORMATION to intelligently generate and provide plausible values for the following fields. These generated fields should be contextually relevant to the extracted recipe content:\n*   \`description\`: Based on the extracted \`title\`, \`ingredients\`, and \`steps\`, write a concise and appealing summary of the recipe (typically 1-3 sentences).\n*   \`cuisine\`: Based on the extracted \`ingredients\` and cooking \`steps\`, determine and state the most appropriate primary cuisine type (e.g., \"Italian\", \"Mexican\", \"Indian\", \"American Comfort Food\", \"Mediterranean\").\n*   \`category\`: Based on the overall nature of the recipe from the extracted content, determine and state a suitable meal category (e.g., \"Main Course\", \"Dessert\", \"Appetizer\", \"Side Dish\", \"Breakfast\", \"Beverage\").\n*   \`prepTime\`: Based on the extracted \`ingredients\` (e.g., amount of chopping) and \`steps\`, estimate the active preparation time required before cooking begins. Provide a string like \"Approx. X minutes\" or \"X hours Y minutes\".\n*   \`cleanupTime\`: Based on the extracted \`ingredients\` and cooking \`steps\` (e.g., number of bowls/pans used), estimate the time needed for cleanup after cooking. Provide a string like \"Approx. X minutes\".\n\n**Output Requirements:**\nYou MUST return a single JSON object. This object must contain all nine fields: \`title\`, \`ingredients\`, \`steps\`, \`image\`, \`description\`, \`cuisine\`, \`category\`, \`prepTime\`, and \`cleanupTime\`.\nAdherence to the following JSON schema structure is MANDATORY:\n${schemaString}\n`;
-
-    let recipeData: any;
-
-    // Logic now defaults to OpenAI direct fetching
-    if (!process.env.OPENAI_API_KEY) {
-      console.error('OPENAI_API_KEY is not set.');
-      return NextResponse.json({ error: 'Server configuration error: Missing OpenAI API key.' }, { status: 500 });
-    }
-    console.log(`Fetching recipe for URL: ${url} using OpenAI direct mode`);
-    const response = await fetch(url);
-    if (!response.ok) {
-      throw new Error(`Failed to fetch URL: ${response.statusText} (Status: ${response.status})`);
-    }
-    const htmlContent = await response.text();
-
-    console.log(`Original HTML length: ${htmlContent.length}`); // Log original length
-
-    // Sanitize the HTML content before sending to OpenAI
-    const sanitizedHtml = getSanitizedHtml(htmlContent);
-
-    console.log(`Sanitized HTML length: ${sanitizedHtml.length}`); // Log sanitized length
 
     const chatCompletion = await openaiClient.chat.completions.create({
       model: "o4-mini-2025-04-16",
@@ -73,13 +63,13 @@ export async function POST(req: NextRequest) {
       throw new Error('OpenAI did not return recipe content.');
     }
     const parsedJson = JSON.parse(chatCompletion.choices[0].message.content);
-    recipeData = zodRecipeSchema.parse(parsedJson); // Validate and type with Zod
+    const initialRecipeData = zodRecipeSchema.parse(parsedJson);
+    let finalRecipeData = { ...initialRecipeData }; // Start with a copy
 
-    // --- IMAGE GENERATION LOGIC --- 
-    if (!recipeData.image) { // If image is null, undefined, or empty string
-      console.log(`No image found for recipe: ${recipeData.title}. Attempting to generate one.`);
-      const dallePrompt = `Photorealistic, appetizing, high-quality image of ${recipeData.title}. This dish is a ${recipeData.category} (${recipeData.cuisine}). Show the dish as if it's freshly prepared and ready to eat. Bright, natural lighting. Food photography style. If the title suggests a component (like a sauce or dough), depict the complete dish it's typically part of.`;
-      console.log("GPT Prompt for fetch-recipe:", dallePrompt); // Log the prompt
+    if (!initialRecipeData.image) { 
+      console.log(`No image found for recipe: ${initialRecipeData.title}. Attempting to generate one.`);
+      const dallePrompt = `Photorealistic, appetizing, high-quality image of ${initialRecipeData.title}. This dish is a ${initialRecipeData.category} (${initialRecipeData.cuisine}). Show the dish as if it's freshly prepared and ready to eat. Bright, natural lighting. Food photography style. If the title suggests a component (like a sauce or dough), depict the complete dish it's typically part of.`;
+      console.log("GPT Prompt for fetch-recipe:", dallePrompt);
       
       try {
         const imageGenResponse = await openaiClient.images.generate({
@@ -92,56 +82,42 @@ export async function POST(req: NextRequest) {
 
         const temporaryImageUrl = imageGenResponse.data?.[0]?.url;
         if (temporaryImageUrl) {
-          console.log(`GPT temporary URL for ${recipeData.title}: ${temporaryImageUrl}`);
-          const permanentLocalUrl = await saveImageLocally(temporaryImageUrl, recipeData.title);
+          console.log(`GPT temporary URL for ${initialRecipeData.title}: ${temporaryImageUrl}`);
+          const permanentLocalUrl = await saveImageLocally(temporaryImageUrl, initialRecipeData.title);
           if (permanentLocalUrl) {
-            recipeData.image = permanentLocalUrl;
-            console.log(`Recipe image for ${recipeData.title} updated to local URL: ${permanentLocalUrl}`);
+            finalRecipeData = { ...finalRecipeData, image: permanentLocalUrl }; // Create new object with updated image
+            console.log(`Recipe image for ${initialRecipeData.title} updated to local URL: ${permanentLocalUrl}`);
           } else {
-            console.warn(`Failed to save GPT image locally for ${recipeData.title}, recipe will have no image.`);
+            console.warn(`Failed to save GPT image locally for ${initialRecipeData.title}, recipe will have no image.`);
           }
         } else {
-          console.warn(`GPT did not return an image URL for ${recipeData.title}.`);
+          console.warn(`GPT did not return an image URL for ${initialRecipeData.title}.`);
         }
-      } catch (imageGenError) {
-        console.error(`Error generating image with GPT for ${recipeData.title}:`, imageGenError);
+      } catch (imageGenError: unknown) { // Typed imageGenError
+        console.error(`Error generating image with GPT for ${initialRecipeData.title}:`, imageGenError instanceof Error ? imageGenError.message : String(imageGenError));
       }
     }
-    // --- END IMAGE GENERATION LOGIC --- 
 
-    return NextResponse.json(recipeData, { status: 200 });
+    return NextResponse.json(finalRecipeData, { status: 200 }); // Return the final data
 
-  } catch (error: any) {
-    console.error(`Error in /api/fetch-recipe (OpenAI mode):`, error);
+  } catch (error: unknown) { // Typed error
+    console.error(`Error in /api/fetch-recipe (OpenAI mode):`, error instanceof Error ? error.message : String(error));
     let errorMessage = 'Failed to fetch and parse recipe via OpenAI.';
-    let errorDetails = error.message;
+    let errorDetails: string | object = error instanceof Error ? error.message : String(error); 
     let statusCode = 500;
 
     if (error instanceof z.ZodError) {
       errorMessage = "Validation error: The recipe data received from OpenAI is not in the expected format.";
       errorDetails = error.format(); 
       statusCode = 422; 
-    } else if (error.message && error.message.includes("Failed to fetch URL")) {
-      // Extract status from error message if possible, or keep 500
+    } else if (error instanceof Error && error.message && error.message.includes("Failed to fetch URL")) {
       const statusMatch = error.message.match(/Status: (\d+)/);
       if (statusMatch && statusMatch[1]) {
         statusCode = parseInt(statusMatch[1], 10);
       }
       errorMessage = `Failed to fetch the recipe URL: ${error.message}`;
-    } else if (error.status && typeof error.status === 'number' && error.message && typeof error.message === 'string') { 
-        errorMessage = `API error (${error.status}): ${error.message}`;
-        statusCode = error.status;
-        if (error.data) { 
-            errorDetails = JSON.stringify(error.data);
-        }
-    } else if (error.response && error.response.data && typeof error.response.status === 'number') { 
-        errorDetails = JSON.stringify(error.response.data);
-        statusCode = error.response.status;
-    } else if (error.message && typeof error.message === 'string') {
-        // Keep the generic error message but use the error.message for details
-    } else {
-        errorDetails = "An unknown error occurred during recipe processing.";
-    }
+    } 
+    // Consider if more specific error.response checks are needed from original code
     
     console.error('Error Details:', errorDetails);
     return NextResponse.json({ error: errorMessage, details: errorDetails }, { status: statusCode });

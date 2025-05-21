@@ -40,12 +40,12 @@ export async function POST(req: NextRequest) {
     });
 
     return NextResponse.json(newRecipe, { status: 201 });
-  } catch (error: any) {
+  } catch (error: unknown) {
     if (error instanceof z.ZodError) {
       return NextResponse.json({ error: "Invalid recipe data provided.", details: error.format() }, { status: 400 });
     }
-    console.error('Error creating recipe:', error);
-    return NextResponse.json({ error: 'Failed to save recipe.', details: error.message }, { status: 500 });
+    console.error('Error creating recipe:', error instanceof Error ? error.message : String(error));
+    return NextResponse.json({ error: 'Failed to save recipe.', details: error instanceof Error ? error.message : String(error) }, { status: 500 });
   }
 }
 
@@ -57,8 +57,8 @@ export async function GET() {
       },
     });
     return NextResponse.json(recipes, { status: 200 });
-  } catch (error: any) {
-    console.error('Error fetching recipes:', error);
-    return NextResponse.json({ error: 'Failed to fetch recipes.', details: error.message }, { status: 500 });
+  } catch (error: unknown) {
+    console.error('Error fetching recipes:', error instanceof Error ? error.message : String(error));
+    return NextResponse.json({ error: 'Failed to fetch recipes.', details: error instanceof Error ? error.message : String(error) }, { status: 500 });
   }
 } 

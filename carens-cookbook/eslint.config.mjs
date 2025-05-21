@@ -1,6 +1,7 @@
 import { dirname } from "path";
 import { fileURLToPath } from "url";
 import { FlatCompat } from "@eslint/eslintrc";
+// import globals from "globals"; // Not strictly needed if next/core-web-vitals handles it
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -10,6 +11,9 @@ const compat = new FlatCompat({
 });
 
 const eslintConfig = [
+  {
+    ignores: ["src/generated/prisma/**/*"], // Ignore Prisma generated files
+  },
   ...compat.extends("next/core-web-vitals", "next/typescript"),
 ];
 

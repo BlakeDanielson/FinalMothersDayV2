@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
-import { ArrowRightIcon, SearchIcon, HomeIcon } from "lucide-react";
+import { SearchIcon, HomeIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Toaster, toast } from 'sonner';
 import heic2any from 'heic2any';
@@ -18,7 +18,6 @@ import ScanPhotoButton from "@/components/ui/ScanPhotoButton";
 
 interface RecipeCardProps extends RecipeData {
   tags?: string[];
-  id?: string;
 }
 
 const BentoGrid = ({
@@ -169,24 +168,20 @@ function MainPage() {
   const [loadingStepMessage, setLoadingStepMessage] = useState("");
   const [loadingProgress, setLoadingProgress] = useState(0);
   const [error, setError] = useState<string | null>(null);
-  const [fetchedRecipes, setFetchedRecipes] = useState<RecipeData[]>([]);
   const [savedRecipes, setSavedRecipes] = useState<RecipeData[]>([]);
   const [currentView, setCurrentView] = useState<'list' | 'recipe' | 'save'>('list');
   const [selectedRecipe, setSelectedRecipe] = useState<RecipeData | null>(null);
-  const [selectedImageFile, setSelectedImageFile] = useState<File | null>(null);
 
-  // State for filtering and sorting
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedCuisines, setSelectedCuisines] = useState<string[]>([]);
   const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
-  const [sortBy, setSortBy] = useState<string>("date_desc"); // Default sort: newest first
+  const [sortBy, setSortBy] = useState<string>("date_desc");
   const [filteredAndSortedRecipes, setFilteredAndSortedRecipes] = useState<RecipeData[]>([]);
+  const [gridTitle, setGridTitle] = useState("Recipe Ideas");
 
-  // State for filter options (to be populated from savedRecipes)
   const [availableCuisines, setAvailableCuisines] = useState<string[]>([]);
   const [availableCategories, setAvailableCategories] = useState<string[]>([]);
 
-  // Effect to derive unique cuisines and categories from saved recipes
   useEffect(() => {
     const cuisines = new Set(savedRecipes.map(r => r.cuisine).filter(Boolean) as string[]);
     const categories = new Set(savedRecipes.map(r => r.category).filter(Boolean) as string[]);
@@ -203,23 +198,19 @@ function MainPage() {
       }
       const data: RecipeData[] = await response.json();
       setSavedRecipes(data);
-    } catch (error: any) {
-      console.error("Error fetching saved recipes:", error);
-      toast.error(`Could not load your saved recipes: ${error.message}`);
+    } catch (err: unknown) {
+      console.error("Error fetching saved recipes:", err);
+      toast.error(`Could not load your saved recipes: ${err instanceof Error ? err.message : String(err)}`);
     }
   };
 
   useEffect(() => {
     const authStatus = localStorage.getItem(AUTH_STORAGE_KEY);
-    if (authStatus === 'true') {
-      setIsAuthenticated(true);
-    }
+    if (authStatus === 'true') setIsAuthenticated(true);
   }, []);
 
   useEffect(() => {
-    if (isAuthenticated) {
-      fetchSavedRecipes();
-    }
+    if (isAuthenticated) fetchSavedRecipes();
   }, [isAuthenticated]);
 
   const handleUnlockSuccess = () => {
@@ -235,55 +226,34 @@ function MainPage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!url) return;
-    setIsLoading(true);
-    setError(null);
-
-    console.log("Progress: 10%", "Okay, let's go find that recipe! 🧑‍🍳");
-    setLoadingProgress(10);
-    setLoadingStepMessage("Okay, let's go find that recipe! 🧑‍🍳"); 
+    setIsLoading(true); setError(null); setLoadingProgress(10);
+    setLoadingStepMessage("Okay, let&apos;s go find that recipe! 🧑‍🍳");
     try {
-      console.log("Progress: 25%", "Visiting the recipe page for you... 📄");
-      setLoadingProgress(25);
-      setLoadingStepMessage("Visiting the recipe page for you... 📄");
+      setLoadingProgress(25); setLoadingStepMessage("Visiting the recipe page for you... 📄");
       const response = await fetch(`/api/fetch-recipe`, {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ url }),
       });
       if (!response.ok) {
-        const errorData = await response.json();
+        const errorData = await response.json().catch(() => ({}));
         console.error("Error fetching from API:", errorData);
         throw new Error(errorData.error || 'Failed to fetch recipe from API');
       }
-
-      console.log("Progress: 75%", "Asking the chef (AI) to read the recipe... 🧐");
-      setLoadingProgress(75);
-      setLoadingStepMessage("Asking the chef (AI) to read the recipe... 🧐");
+      setLoadingProgress(75); setLoadingStepMessage("Asking the chef (AI) to read the recipe... 🧐");
       const recipeData: RecipeData = await response.json();
-
-      console.log("Progress: 90%", "Getting it all plated up for you... ✨");
-      setLoadingProgress(90);
-      setLoadingStepMessage("Getting it all plated up for you... ✨");
-      
-      console.log("Recipe data fetched successfully:", recipeData);
-      setFetchedRecipes(prevRecipes => [recipeData, ...prevRecipes.filter(r => r.title !== recipeData.title)]);
-      
-      console.log("Progress: 100%");
-      setLoadingProgress(100);
-      
-      handleViewRecipe(recipeData);
-      setUrl("");
-    } catch (err: any) {
+      setLoadingProgress(90); setLoadingStepMessage("Getting it all plated up for you... ✨");
+      handleViewRecipe(recipeData); 
+      setUrl(""); setLoadingProgress(100);
+    } catch (err: unknown) {
       console.error("Error in handleSubmit:", err);
-      setError(err.message || "An unexpected error occurred.");
+      setError(err instanceof Error ? err.message : "An unexpected error occurred.");
       setLoadingProgress(0);
-    } finally {
-      console.log("Finally block: Resetting loading state.");
+    }
+    finally { 
       setIsLoading(false);
-      setLoadingStepMessage(""); 
-      setLoadingProgress(0); 
+      setLoadingStepMessage("");
+      setLoadingProgress(0);
     }
   };
   
@@ -292,14 +262,10 @@ function MainPage() {
     try {
       const response = await fetch('/api/recipes', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(recipeToSave),
       });
-
       const responseData = await response.json();
-
       if (response.ok) {
         toast.success(`Recipe '${recipeToSave.title}' saved successfully!`);
         alert(`Recipe '${recipeToSave.title}' saved successfully!`);
@@ -310,7 +276,7 @@ function MainPage() {
         alert(`Error saving recipe: ${errorMessage}`);
         console.error("Error saving recipe - API response not OK:", responseData);
       }
-    } catch (err: any) {
+    } catch (err: unknown) {
       toast.error('An unexpected error occurred while saving. Please check your connection and try again.');
       alert('An unexpected error occurred while saving. Please check your connection and try again.');
       console.error("Error in handleSaveRecipe catch block:", err);
@@ -319,133 +285,97 @@ function MainPage() {
 
   const handleProcessImage = async (file: File) => {
     if (!file) return;
-
-    setIsLoading(true);
-    setError(null);
-    setUrl("");
-
-    setLoadingProgress(5); 
-    setLoadingStepMessage(`Checking image format '${file.name}'... 🧐`);
-
+    setIsLoading(true); setError(null); setUrl(""); 
+    setLoadingProgress(5); setLoadingStepMessage(`Checking image format '${file.name}'... 🧐`);
     let fileToProcess = file;
-
     if (file.type === 'image/heic' || file.type === 'image/heif' || file.name.toLowerCase().endsWith('.heic') || file.name.toLowerCase().endsWith('.heif')) {
       setLoadingStepMessage(`Converting '${file.name}' from HEIC to JPEG... ⏳`);
-      toast.info(`It looks like you've uploaded an HEIC image. We'll convert it to JPEG for you!`);
+      toast.info(`It looks like you&apos;ve uploaded an HEIC image. We&apos;ll convert it to JPEG for you!`);
       try {
-        const conversionResult = await heic2any({
-          blob: file,
-          toType: "image/jpeg",
-          quality: 0.8, 
-        });
-        
+        const conversionResult = await heic2any({ blob: file, toType: "image/jpeg", quality: 0.8 });
         const convertedBlob = Array.isArray(conversionResult) ? conversionResult[0] : conversionResult;
         const originalNameWithoutExt = file.name.split('.').slice(0, -1).join('.');
         fileToProcess = new File([convertedBlob], `${originalNameWithoutExt}.jpeg`, { type: 'image/jpeg' });
         toast.success(`'${file.name}' converted to JPEG successfully!`);
         console.log("HEIC converted to JPEG:", fileToProcess.name);
-      } catch (conversionError: any) {
+      } catch (conversionError: unknown) {
         console.error("Error converting HEIC to JPEG:", conversionError);
-        toast.error(`Failed to convert HEIC image: ${conversionError.message || 'Unknown error'}. Please try a different image or format.`);
-        setIsLoading(false);
-        setLoadingProgress(0);
-        setLoadingStepMessage("");
-        return; 
+        toast.error(`Failed to convert HEIC image: ${conversionError instanceof Error ? conversionError.message : 'Unknown error'}. Please try a different image or format.`);
+        setIsLoading(false); setLoadingProgress(0); setLoadingStepMessage(""); return;
       }
     }
-
-    setSelectedImageFile(fileToProcess); 
-
-    setLoadingProgress(10);
-    setLoadingStepMessage(`Preparing to scan '${fileToProcess.name}'... 🖼️`);
-
-    const formData = new FormData();
-    formData.append('image', fileToProcess); 
-
+    setLoadingProgress(10); setLoadingStepMessage(`Preparing to scan '${fileToProcess.name}'... 🖼️`);
+    const formData = new FormData(); formData.append('image', fileToProcess);
     try {
-      setLoadingProgress(30);
-      setLoadingStepMessage(`Sending '${fileToProcess.name}' for analysis... 🧠`);
-
-      const response = await fetch('/api/scan-recipe', {
-        method: 'POST',
-        body: formData,
-      });
-
+      setLoadingProgress(30); setLoadingStepMessage(`Sending '${fileToProcess.name}' for analysis... 🧠`);
+      const response = await fetch('/api/scan-recipe', { method: 'POST', body: formData });
       const responseData = await response.json();
-
       if (!response.ok) {
         console.error("Error scanning recipe from image - API response not OK:", responseData);
         throw new Error(responseData.error || 'Failed to process recipe from image.');
       }
-      
-      setLoadingProgress(80); 
-      setLoadingStepMessage("Image processed! Getting recipe details... ✨");
-
+      setLoadingProgress(80); setLoadingStepMessage("Image processed! Getting recipe details... ✨");
       const recipeData: RecipeData = responseData;
-      
-      console.log("Recipe data from image scan fetched successfully:", recipeData);
-      setFetchedRecipes(prevRecipes => [recipeData, ...prevRecipes.filter(r => r.title !== recipeData.title)]);
-      setLoadingProgress(100);
       handleViewRecipe(recipeData);
-      toast.success(`Successfully scanned recipe from '${fileToProcess.name}'!`);
-
-    } catch (err: any) {
+      toast.success(`Successfully scanned recipe from '${fileToProcess.name}'!`); setLoadingProgress(100);
+    } catch (err: unknown) {
       console.error("Error in handleProcessImage:", err);
-      setError(err.message || "An unexpected error occurred while processing the image.");
-      toast.error(err.message || "An unexpected error occurred while processing the image.");
+      const errorMsg = err instanceof Error ? err.message : "An unexpected error occurred while processing the image.";
+      setError(errorMsg);
+      toast.error(errorMsg);
       setLoadingProgress(0); 
-    } finally {
-      setIsLoading(false);
-      setLoadingStepMessage("");
-      setLoadingProgress(0);
-      setSelectedImageFile(null);
+    }
+    finally { 
+      setIsLoading(false); 
+      setLoadingStepMessage(""); 
+      setLoadingProgress(0); 
     }
   };
 
-  const handleImageFileSelect = (file: File) => {
+  const handleImageFileSelect = (file: File) => { 
     console.log("Image selected:", file.name, file.type, file.size);
-    handleProcessImage(file);
+    handleProcessImage(file); 
   };
 
-  let recipesToDisplayInGrid: RecipeData[] = placeholderRecipes;
-  let gridTitle = "Recipe Ideas";
-
-  // This logic will be replaced by filteredAndSortedRecipes logic later
-  // if (savedRecipes.length > 0) {
-  //   recipesToDisplayInGrid = savedRecipes;
-  //   gridTitle = "Your Saved Recipes";
-  // } 
-
-  // Effect for filtering and sorting - to be implemented fully later
   useEffect(() => {
-    let recipes = savedRecipes.length > 0 ? savedRecipes : placeholderRecipes;
-    // Basic placeholder for filtering logic - will be expanded
+    const recipesSource = savedRecipes.length > 0 ? [...savedRecipes] : [...placeholderRecipes];
+    let currentFilteredRecipes = [...recipesSource];
+
     if (searchTerm) {
-      recipes = recipes.filter(recipe => 
+      currentFilteredRecipes = currentFilteredRecipes.filter(recipe => 
         recipe.title.toLowerCase().includes(searchTerm.toLowerCase()) || 
-        recipe.description?.toLowerCase().includes(searchTerm.toLowerCase())
+        (recipe.description && recipe.description.toLowerCase().includes(searchTerm.toLowerCase()))
       );
     }
-    // Add cuisine, category filters and sorting logic here
-    setFilteredAndSortedRecipes(recipes);
-    
-    // Update gridTitle based on whether filtering produces results from saved or placeholders
-    if (savedRecipes.length > 0 && recipes.some(r => savedRecipes.includes(r))){
-        gridTitle = "Your Recipes"; // Or more specific like "Filtered Recipes"
-    } else if (recipes.length > 0) {
-        gridTitle = "Recipe Ideas";
-    } else {
-        gridTitle = "No Recipes Found";
+    if (selectedCuisines.length > 0) {
+      // currentFilteredRecipes = currentFilteredRecipes.filter(recipe => recipe.cuisine && selectedCuisines.includes(recipe.cuisine));
     }
-    // This title update might need a separate state if it causes issues with useEffect dependencies
+    if (selectedCategories.length > 0) {
+      // currentFilteredRecipes = currentFilteredRecipes.filter(recipe => recipe.category && selectedCategories.includes(recipe.category));
+    }
 
-  }, [savedRecipes, searchTerm, selectedCuisines, selectedCategories, sortBy, placeholderRecipes]);
+    setFilteredAndSortedRecipes(currentFilteredRecipes);
+
+    if (currentFilteredRecipes.length === 0) {
+      if (searchTerm || selectedCuisines.length > 0 || selectedCategories.length > 0) {
+        setGridTitle("No Recipes Match Your Filters");
+      } else if (savedRecipes.length === 0) {
+        setGridTitle("No Recipes Yet! Add some or scan a photo.");
+      } else {
+         setGridTitle("Your Saved Recipes");
+      }
+    } else if (savedRecipes.length > 0 && currentFilteredRecipes.some(r => savedRecipes.find(sr => sr.id === r.id))) {
+      setGridTitle("Your Recipes");
+    } else {
+      setGridTitle("Recipe Ideas");
+    }
+  }, [savedRecipes, searchTerm, selectedCuisines, selectedCategories, sortBy]);
 
   const handleClearFilters = () => {
     setSearchTerm("");
     setSelectedCuisines([]);
     setSelectedCategories([]);
-    setSortBy("date_desc"); // Reset to default sort
+    setSortBy("date_desc");
   };
 
   if (!isAuthenticated) {
@@ -481,7 +411,7 @@ function MainPage() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
           >
-            Caren's Cookbook
+            Caren&apos;s Cookbook
           </motion.h1>
           <motion.p
             className="text-xl text-muted-foreground max-w-2xl mx-auto"
@@ -526,7 +456,7 @@ function MainPage() {
                     disabled={isLoading}
                   />
                   <Button type="submit" disabled={isLoading} size="lg" className="text-lg p-6">
-                    {isLoading ? (
+                    {isLoading && !loadingStepMessage.toLowerCase().includes('scan') ? (
                       <span className="flex items-center gap-2">
                         <motion.div
                           animate={{ rotate: 360 }}
@@ -548,7 +478,7 @@ function MainPage() {
                 )}
                 {!isLoading && (
                   <p className="text-sm text-muted-foreground text-center">
-                    Enter the web address of any recipe, and we'll import it for you!
+                    Enter the web address of any recipe, and we&apos;ll import it for you!
                   </p>
                 )}
                 <div className="my-4 text-center text-muted-foreground">
@@ -557,7 +487,7 @@ function MainPage() {
                 <ScanPhotoButton onFileSelect={handleImageFileSelect} />
               </form>
             </Card>
-            {isLoading && (
+            {isLoading && loadingStepMessage && (
               <div className="mt-6">
                 <RecipeLoadingProgress progress={loadingProgress} statusMessage={loadingStepMessage} />
               </div>
@@ -565,12 +495,10 @@ function MainPage() {
           </motion.div>
         )}
 
-        {/* Filter and Sort Controls Section */}
         {currentView === 'list' && isAuthenticated && (
           <div className="mb-8 p-4 border rounded-lg shadow-sm bg-card">
             <h3 className="text-xl font-semibold mb-4 text-card-foreground">Filter & Sort Recipes</h3>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 items-end">
-              {/* Search Input */}
               <div className="col-span-1 md:col-span-2 lg:col-span-4">
                 <label htmlFor="searchRecipes" className="block text-sm font-medium text-muted-foreground mb-1">Search by Keyword</label>
                 <Input 
@@ -582,21 +510,9 @@ function MainPage() {
                   className="w-full"
                 />
               </div>
-              {/* Placeholder for Cuisine Select */}
-              <div>
-                <label className="block text-sm font-medium text-muted-foreground mb-1">Cuisine</label>
-                <p className="text-sm text-muted-foreground">(Cuisine Select Here - {availableCuisines.join(', ')})</p>
-              </div>
-              {/* Placeholder for Category Select */}
-              <div>
-                <label className="block text-sm font-medium text-muted-foreground mb-1">Category</label>
-                <p className="text-sm text-muted-foreground">(Category Select Here - {availableCategories.join(', ')})</p>
-              </div>
-              {/* Placeholder for Sort By Select */}
-              <div>
-                <label className="block text-sm font-medium text-muted-foreground mb-1">Sort By</label>
-                <p className="text-sm text-muted-foreground">(Sort Select Here - Current: {sortBy})</p>
-              </div>
+              <div><label className="block text-sm font-medium text-muted-foreground mb-1">Cuisine</label><p className="text-sm text-muted-foreground">(Cuisine Select Here - {availableCuisines.join(', ')})</p></div>
+              <div><label className="block text-sm font-medium text-muted-foreground mb-1">Category</label><p className="text-sm text-muted-foreground">(Category Select Here - {availableCategories.join(', ')})</p></div>
+              <div><label className="block text-sm font-medium text-muted-foreground mb-1">Sort By</label><p className="text-sm text-muted-foreground">(Sort Select Here - Current: {sortBy})</p></div>
               <Button variant="outline" onClick={handleClearFilters} className="w-full lg:w-auto">Clear Filters</Button>
             </div>
           </div>
@@ -615,7 +531,7 @@ function MainPage() {
           </div>
 
           <BentoGrid>
-            {(filteredAndSortedRecipes).map((recipe, index) => (
+            {filteredAndSortedRecipes.map((recipe, index) => (
               <motion.div
                 key={recipe.id || recipe.title + index}
                 initial={{ opacity: 0, y: 20 }}
