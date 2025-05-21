@@ -1,6 +1,7 @@
 "use client"
 
 import React, { useState, useEffect } from "react";
+import dynamic from 'next/dynamic';
 import { motion } from "framer-motion";
 import { SearchIcon, HomeIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
@@ -13,8 +14,13 @@ import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import RecipeDisplay, { RecipeData } from "@/components/RecipeDisplay";
 import RecipeLoadingProgress from "@/components/ui/RecipeLoadingProgress";
-import GreetingScreen from "@/components/GreetingScreen";
 import ScanPhotoButton from "@/components/ui/ScanPhotoButton";
+
+// Dynamically import GreetingScreen with ssr: false
+const GreetingScreen = dynamic(() => import('@/components/GreetingScreen'), {
+  ssr: false,
+  loading: () => <div className="flex justify-center items-center h-screen"><p>Loading...</p></div> // Basic loading state
+});
 
 interface RecipeCardProps extends RecipeData {
   tags?: string[];
