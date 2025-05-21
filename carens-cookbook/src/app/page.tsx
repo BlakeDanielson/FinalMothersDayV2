@@ -1,7 +1,6 @@
 "use client"
 
 import React, { useState, useEffect } from "react";
-import dynamic from 'next/dynamic';
 import { motion } from "framer-motion";
 import { SearchIcon, HomeIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
@@ -15,12 +14,6 @@ import { Badge } from "@/components/ui/badge";
 import RecipeDisplay, { RecipeData } from "@/components/RecipeDisplay";
 import RecipeLoadingProgress from "@/components/ui/RecipeLoadingProgress";
 import ScanPhotoButton from "@/components/ui/ScanPhotoButton";
-
-// Dynamically import GreetingScreen with ssr: false
-const GreetingScreen = dynamic(() => import('@/components/GreetingScreen'), {
-  ssr: false,
-  loading: () => <div className="flex justify-center items-center h-screen"><p>Loading...</p></div> // Basic loading state
-});
 
 interface RecipeCardProps extends RecipeData {
   tags?: string[];
@@ -163,12 +156,7 @@ const placeholderRecipes: RecipeCardProps[] = [
   },
 ];
 
-const AUTH_STORAGE_KEY = "cookbook_auth_status";
-// Use environment variable for password, with a fallback for local development if not set
-const COOKBOOK_PASSWORD = process.env.NEXT_PUBLIC_COOKBOOK_PASSWORD || "mothersday";
-
 function MainPage() {
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [url, setUrl] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [loadingStepMessage, setLoadingStepMessage] = useState("");
@@ -211,18 +199,8 @@ function MainPage() {
   };
 
   useEffect(() => {
-    const authStatus = localStorage.getItem(AUTH_STORAGE_KEY);
-    if (authStatus === 'true') setIsAuthenticated(true);
+    fetchSavedRecipes();
   }, []);
-
-  useEffect(() => {
-    if (isAuthenticated) fetchSavedRecipes();
-  }, [isAuthenticated]);
-
-  const handleUnlockSuccess = () => {
-    localStorage.setItem(AUTH_STORAGE_KEY, 'true');
-    setIsAuthenticated(true);
-  };
 
   const handleViewRecipe = (recipe: RecipeData) => {
     setSelectedRecipe(recipe);
@@ -344,7 +322,7 @@ function MainPage() {
   };
 
   useEffect(() => {
-    const recipesSource = savedRecipes.length > 0 ? [...savedRecipes] : [...placeholderRecipes];
+    let recipesSource = savedRecipes.length > 0 ? [...savedRecipes] : [...placeholderRecipes];
     let currentFilteredRecipes = [...recipesSource];
 
     if (searchTerm) {
@@ -383,16 +361,6 @@ function MainPage() {
     setSelectedCategories([]);
     setSortBy("date_desc");
   };
-
-  if (!isAuthenticated) {
-    return (
-      <GreetingScreen 
-        onUnlockSuccess={handleUnlockSuccess}
-        passwordToMatch={COOKBOOK_PASSWORD}
-        welcomeMessage="Welcome to Your Cookbook, Mom!"
-      />
-    );
-  }
 
   if (currentView === 'recipe' && selectedRecipe) {
     return (
@@ -501,7 +469,7 @@ function MainPage() {
           </motion.div>
         )}
 
-        {currentView === 'list' && isAuthenticated && (
+        {currentView === 'list' && (
           <div className="mb-8 p-4 border rounded-lg shadow-sm bg-card">
             <h3 className="text-xl font-semibold mb-4 text-card-foreground">Filter & Sort Recipes</h3>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 items-end">
