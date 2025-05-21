@@ -234,22 +234,29 @@ function MainPage() {
   const [processedCategories, setProcessedCategories] = useState<{ name: string; count: number; imageUrl?: string | null }[]>([]);
 
   useEffect(() => {
-    // Check for recipeId in URL query params on initial load
+    // Call fetchSavedRecipes on initial component mount
+    fetchSavedRecipes();
+
+    // The existing logic for handling recipeIdFromUrl can remain,
+    // but it will now operate on potentially populated savedRecipes
+    // or trigger a re-fetch if necessary, which is fine.
     const params = new URLSearchParams(window.location.search);
     const recipeIdFromUrl = params.get('recipeId');
 
     if (recipeIdFromUrl) {
-      // If there's a recipeId, we want to fetch all recipes first to find it.
-      // Then display it. This assumes fetchSavedRecipes also updates savedRecipes state.
+      // This part might become redundant if fetchSavedRecipes always runs first
+      // and the second useEffect [savedRecipes, router] handles displaying the recipe.
+      // However, keeping it doesn't hurt and ensures the recipe is loaded if directly linked.
       const loadRecipeFromUrl = async () => {
-        await fetchSavedRecipes(); // Ensure recipes are loaded
-        // The following useEffect [savedRecipes] will find and display it.
+        // await fetchSavedRecipes(); // Already called above, so this might be redundant or a second call
+                                 // Let's rely on the initial call and the effect below.
       };
-      loadRecipeFromUrl();
+      // loadRecipeFromUrl(); // Call can be removed if fetch is guaranteed by first line
     }
-  }, []); // Empty dependency array to run once on mount
+  }, []); // Empty dependency array ensures this runs once on mount
 
   useEffect(() => {
+    // This effect will process savedRecipes once they are fetched.
     const recipesSource = savedRecipes.length > 0 ? savedRecipes : placeholderRecipes;
     const categoryMap: Record<string, { count: number; recipes: (RecipeData | PlaceholderRecipe)[] }> = {};
 
@@ -276,12 +283,18 @@ function MainPage() {
     
     setProcessedCategories(uniqueCategoriesData);
 
-    if (uniqueCategoriesData.length === 0 && savedRecipes.length > 0) {
+    if (savedRecipes.length > 0) { // Check actual saved recipes for title
+      if (uniqueCategoriesData.length === 0) {
         setGridTitle("No Categories Found in Saved Recipes");
-    } else if (uniqueCategoriesData.length === 0) {
-        setGridTitle("Add Recipes to See Categories");
-    } else {
+      } else {
         setGridTitle("Recipe Categories");
+      }
+    } else { // Still on placeholders or no recipes at all
+      if (uniqueCategoriesData.length === 0) { // This implies placeholderRecipes is also empty or has no categories
+        setGridTitle("Add Recipes to See Categories");
+      } else {
+         setGridTitle("Recipe Categories"); // From placeholders
+      }
     }
 
   }, [savedRecipes]);
@@ -295,15 +308,11 @@ function MainPage() {
       const recipeToDisplay = savedRecipes.find(r => r.id === recipeIdFromUrl);
       if (recipeToDisplay) {
         handleViewRecipe(recipeToDisplay);
-        // Optionally, clear the recipeId from URL to prevent re-triggering on refresh if not desired
-        // router.replace(window.location.pathname, undefined, { shallow: true });
       } else {
         toast.error("The shared recipe could not be found.");
-        // Optionally clear param if recipe not found
-        // router.replace(window.location.pathname, undefined, { shallow: true });
       }
     }
-  }, [savedRecipes, router]); // Run when savedRecipes are loaded or router changes (for router.replace)
+  }, [savedRecipes, router]); // Rely on router being stable, or add it as a dependency if it can change and affect logic
 
   const fetchSavedRecipes = async () => {
     try {
