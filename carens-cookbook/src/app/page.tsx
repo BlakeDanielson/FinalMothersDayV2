@@ -177,6 +177,32 @@ const placeholderRecipes: PlaceholderRecipe[] = [
   }
 ];
 
+const ALL_POSSIBLE_CATEGORIES: { name: string; defaultImageUrl?: string | null }[] = [
+  { name: "Appetizer", defaultImageUrl: placeholderRecipes.find(p=>p.category === "Appetizer")?.image },
+  { name: "Beef", defaultImageUrl: placeholderRecipes.find(p=>p.category === "Beef")?.image },
+  { name: "Beverage", defaultImageUrl: placeholderRecipes.find(p=>p.category === "Drinks")?.image }, // Assuming "Drinks" is "Beverage"
+  { name: "Breakfast" }, // Add a generic breakfast image URL if available or leave null
+  { name: "Chicken", defaultImageUrl: placeholderRecipes.find(p=>p.category === "Chicken")?.image },
+  { name: "Dessert", defaultImageUrl: placeholderRecipes.find(p=>p.category === "Dessert")?.image },
+  { name: "Drinks", defaultImageUrl: placeholderRecipes.find(p=>p.category === "Drinks")?.image },
+  { name: "Lamb", defaultImageUrl: placeholderRecipes.find(p=>p.category === "Lamb")?.image },
+  { name: "Pasta", defaultImageUrl: placeholderRecipes.find(p=>p.category === "Pasta")?.image },
+  { name: "Pork", defaultImageUrl: placeholderRecipes.find(p=>p.category === "Pork")?.image },
+  { name: "Salad", defaultImageUrl: placeholderRecipes.find(p=>p.category === "Salad")?.image },
+  { name: "Sauce", defaultImageUrl: placeholderRecipes.find(p=>p.category === "Side Sauces")?.image }, // Assuming "Side Sauces" is "Sauce"
+  { name: "Seafood", defaultImageUrl: placeholderRecipes.find(p=>p.category === "Seafood")?.image },
+  { name: "Side Dish" }, // Add a generic side dish image URL if available or leave null
+  { name: "Side Sauces", defaultImageUrl: placeholderRecipes.find(p=>p.category === "Side Sauces")?.image },
+  { name: "Soup", defaultImageUrl: placeholderRecipes.find(p=>p.category === "Soup")?.image },
+  { name: "Thanksgiving", defaultImageUrl: placeholderRecipes.find(p=>p.category === "Thanksgiving")?.image },
+  { name: "Vegetable", defaultImageUrl: placeholderRecipes.find(p=>p.category === "Vegetable")?.image },
+  // Add any other categories you anticipate, e.g.:
+  // { name: "Baking", defaultImageUrl: ... },
+  // { name: "Grill", defaultImageUrl: ... },
+  // { name: "Vegan", defaultImageUrl: ... },
+  // { name: "Vegetarian", defaultImageUrl: ... },
+].sort((a, b) => a.name.localeCompare(b.name));
+
 const CategoryCard = ({
   categoryName,
   itemCount,
@@ -247,46 +273,38 @@ function MainPage() {
   }, []);
 
   useEffect(() => {
-    // This effect will process savedRecipes once they are fetched.
-    const recipesSource = savedRecipes.length > 0 ? savedRecipes : placeholderRecipes;
-    const categoryMap: Record<string, { count: number; recipes: (RecipeData | PlaceholderRecipe)[] }> = {};
+    const categoryData = ALL_POSSIBLE_CATEGORIES.map(masterCategory => {
+      const recipesInThisCategory = savedRecipes.filter(r => r.category === masterCategory.name);
+      const count = recipesInThisCategory.length;
 
-    recipesSource.forEach(recipe => {
-      if (recipe.category) {
-        if (!categoryMap[recipe.category]) {
-          categoryMap[recipe.category] = { count: 0, recipes: [] };
+      let imageUrl = null;
+      if (count > 0) {
+        const recipeWithImage = recipesInThisCategory.find(r => r.image);
+        if (recipeWithImage) {
+          imageUrl = recipeWithImage.image;
         }
-        categoryMap[recipe.category].count++;
-        categoryMap[recipe.category].recipes.push(recipe);
       }
+      
+      if (!imageUrl) { // If no saved recipe image, try placeholder
+        const placeholder = placeholderRecipes.find(p => p.category === masterCategory.name);
+        if (placeholder && placeholder.image) {
+          imageUrl = placeholder.image;
+        }
+      }
+
+      if (!imageUrl) { // If still no image, use default from master list
+        imageUrl = masterCategory.defaultImageUrl;
+      }
+
+      return {
+        name: masterCategory.name,
+        count: count,
+        imageUrl: imageUrl,
+      };
     });
-
-    const uniqueCategoriesData = Object.entries(categoryMap)
-      .map(([name, data]) => {
-        const firstRecipeWithImage = data.recipes.find(r => r.image);
-        return {
-          name,
-          count: data.count,
-          imageUrl: firstRecipeWithImage ? firstRecipeWithImage.image : null,
-        };
-      })
-      .sort((a, b) => a.name.localeCompare(b.name));
     
-    setProcessedCategories(uniqueCategoriesData);
-
-    if (savedRecipes.length > 0) { // Check actual saved recipes for title
-      if (uniqueCategoriesData.length === 0) {
-        setGridTitle("No Categories Found in Saved Recipes");
-      } else {
-        setGridTitle("Recipe Categories");
-      }
-    } else { // Still on placeholders or no recipes at all
-      if (uniqueCategoriesData.length === 0) { // This implies placeholderRecipes is also empty or has no categories
-        setGridTitle("Add Recipes to See Categories");
-      } else {
-         setGridTitle("Recipe Categories"); // From placeholders
-      }
-    }
+    setProcessedCategories(categoryData);
+    setGridTitle("Recipe Categories"); // Always show this title
 
   }, [savedRecipes]);
 
@@ -638,32 +656,6 @@ function MainPage() {
                 />
               </motion.div>
             ))}
-            {processedCategories.length === 0 && savedRecipes.length === 0 && placeholderRecipes.length > 0 && (
-                placeholderRecipes.reduce((acc: {name: string, count: number, imageUrl?: string | null}[], recipe: PlaceholderRecipe) => {
-                    if (recipe.category && !acc.find(c => c.name === recipe.category)) {
-                        const count = placeholderRecipes.filter(r => r.category === recipe.category).length;
-                        const firstPlaceholderRecipeWithImage = placeholderRecipes.find(r => r.category === recipe.category && r.image);
-                        acc.push({name: recipe.category, count, imageUrl: firstPlaceholderRecipeWithImage ? firstPlaceholderRecipeWithImage.image : null });
-                    }
-                    return acc;
-                }, [] as {name: string, count: number, imageUrl?: string | null}[])
-                .sort((a: {name: string}, b: {name: string}) => a.name.localeCompare(b.name))
-                .map((category: {name: string, count: number, imageUrl?: string | null}, index: number) => (
-                    <motion.div
-                        key={`placeholder-${category.name}-${index}`}
-                        initial={{ opacity: 0, y: 20 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 0.3, delay: 0.1 * index }}
-                    >
-                        <CategoryCard
-                            categoryName={category.name}
-                            itemCount={category.count}
-                            imageUrl={category.imageUrl}
-                            onClick={() => handleCategoryClick(category.name)}
-                        />
-                    </motion.div>
-                ))
-            )}
           </BentoGrid>
         </motion.div>
       </div>
