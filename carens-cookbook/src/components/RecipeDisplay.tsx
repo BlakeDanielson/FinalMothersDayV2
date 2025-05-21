@@ -181,7 +181,6 @@ const RecipeDisplay = ({
       setCurrentEditableTitle(recipe.title);
       return;
     }
-
     const success = await onUpdateTitle(recipe.id, currentEditableTitle.trim());
     if (success) {
       setIsEditingTitle(false);
@@ -193,9 +192,7 @@ const RecipeDisplay = ({
   };
 
   const handleTitleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
-    if (event.key === 'Enter') {
-      handleTitleSave();
-    }
+    if (event.key === 'Enter') handleTitleSave();
     if (event.key === 'Escape') {
       setCurrentEditableTitle(recipe.title);
       setIsEditingTitle(false);
@@ -207,29 +204,20 @@ const RecipeDisplay = ({
       toast.error("Cannot share recipe without an ID.");
       return;
     }
-
-    const shareUrl = `${window.location.origin}/?recipeId=${recipe.id}`; // Construct a basic shareable URL
+    const shareUrl = `${window.location.origin}/?recipeId=${recipe.id}`; 
     const titleToShare = recipe.title;
     const textToShare = `Check out this delicious recipe I found: ${recipe.title}! ${recipe.description || ''}`;
-
     if (navigator.share) {
       try {
-        await navigator.share({
-          title: titleToShare,
-          text: textToShare,
-          url: shareUrl,
-        });
+        await navigator.share({ title: titleToShare, text: textToShare, url: shareUrl });
         toast.success("Recipe shared successfully!");
       } catch (error) {
         if ((error as DOMException).name !== 'AbortError') {
           console.error("Error sharing via Web Share API:", error);
           toast.error("Could not share recipe at this time.");
         }
-        // If AbortError, user cancelled, no toast needed.
       }
     } else {
-      // Fallback: Show a modal with manual share options
-      console.log("Web Share API not supported. Fallback needed. URL to share:", shareUrl); // Placeholder
       setShowShareOptionsModal(true);
     }
   };
@@ -237,96 +225,99 @@ const RecipeDisplay = ({
   const toggleIngredient = (id: string) => {
     setDisplayIngredients(
       displayIngredients.map((ingredient) =>
-        ingredient.id === id
-          ? { ...ingredient, checked: !ingredient.checked }
-          : ingredient
+        ingredient.id === id ? { ...ingredient, checked: !ingredient.checked } : ingredient
       )
     );
   };
   
   const allIngredientsChecked = displayIngredients.length > 0 && displayIngredients.every(ing => ing.checked);
 
+  const renderTitleAndControls = (isOverlay: boolean) => (
+    <div className={`flex items-center gap-3 ${isOverlay ? '' : 'w-full'}`}>
+      {isEditingTitle ? (
+        <Input 
+          ref={titleInputRef}
+          type="text"
+          value={currentEditableTitle}
+          onChange={handleTitleChange}
+          onBlur={handleTitleSave} // Save on blur
+          onKeyDown={handleTitleKeyDown}
+          className={`text-4xl md:text-5xl font-bold tracking-tight leading-tight w-full 
+            ${isOverlay 
+              ? 'text-white bg-transparent border-b-2 border-white/50 focus:outline-none focus:border-white' 
+              : 'text-gray-800 dark:text-gray-100 bg-transparent border-b-2 border-gray-300 dark:border-gray-600 focus:border-primary dark:focus:border-primary-dark focus:outline-none'}`}
+        />
+      ) : (
+        <h1 className={`text-4xl md:text-5xl font-bold tracking-tight leading-tight ${isOverlay ? 'text-white' : 'text-gray-800 dark:text-gray-100'}`}>
+          {recipe.title || "Untitled Recipe"}
+        </h1>
+      )}
+      {onUpdateTitle && recipe.id && (
+        <Button 
+          variant="ghost" 
+          size="icon" 
+          onClick={handleTitleEditToggle} 
+          className={`p-1 shrink-0 
+            ${isOverlay 
+              ? 'text-white/70 hover:text-white' 
+              : 'text-gray-500 dark:text-gray-400 hover:text-primary dark:hover:text-primary-dark'}`}
+          aria-label={isEditingTitle ? "Save title" : "Edit title"}
+        >
+          {isEditingTitle ? <CheckCircle size={32} /> : <Edit3 size={32} />} 
+        </Button>
+      )}
+        {isEditingTitle && (
+          <Button 
+          variant="ghost" 
+          size="icon" 
+          onClick={() => { setCurrentEditableTitle(recipe.title); setIsEditingTitle(false); }} 
+          className={`p-1 shrink-0 
+            ${isOverlay 
+              ? 'text-white/70 hover:text-white' 
+              : 'text-gray-500 dark:text-gray-400 hover:text-destructive dark:hover:text-destructive-dark'}`}
+          aria-label="Cancel editing title"
+        >
+          <XCircle size={32} />
+        </Button>
+      )}
+    </div>
+  );
+
   return (
-    <div className="w-full max-w-5xl mx-auto p-4 md:p-6 text-gray-800 font-sans"> {/* Increased base text size candidate */}
+    <div className="w-full max-w-5xl mx-auto p-4 md:p-6 text-gray-800 font-sans">
       <Card className="overflow-hidden border-2 border-gray-200 shadow-xl rounded-2xl">
         {onGoBack && (
-          <div className="px-6 md:px-8 pt-6"> {/* Added padding top for standalone button */}
-            <Button 
-              onClick={onGoBack}
-              variant="outline"
-              className="flex items-center gap-2 text-lg p-3 pr-4 mb-4" // Added margin bottom
-            >
-              <HomeIcon className="h-5 w-5" />
-              Back to Recipes
+          <div className="px-6 md:px-8 pt-6">
+            <Button onClick={onGoBack} variant="outline" className="flex items-center gap-2 text-lg p-3 pr-4 mb-4">
+              <HomeIcon className="h-5 w-5" /> Back to Recipes
             </Button>
           </div>
         )}
-        <CardHeader className="p-0">
-          <div className="relative h-72 md:h-96 w-full bg-gray-100">
-            {showImages && recipe.image ? (
-              <Image
-                src={recipe.image}
-                alt={recipe.title}
-                layout="fill"
-                objectFit="cover"
-                priority
-              />
-            ) : (
-              <div className="w-full h-full flex flex-col items-center justify-center text-gray-400 bg-gray-50">
-                <ImageOff size={64} />
-                <p className="mt-2 text-lg">
-                  {recipe.image ? "Recipe Images Disabled" : "No Image Available"}
-                </p>
-              </div>
-            )}
-            <div className="absolute bottom-0 left-0 w-full bg-gradient-to-t from-black/80 to-transparent p-6 md:p-8">
-              <div className="flex items-center gap-3">
-                {isEditingTitle ? (
-                  <input 
-                    ref={titleInputRef}
-                    type="text"
-                    value={currentEditableTitle}
-                    onChange={handleTitleChange}
-                    onBlur={handleTitleSave}
-                    onKeyDown={handleTitleKeyDown}
-                    className="text-4xl md:text-5xl font-bold text-white tracking-tight leading-tight bg-transparent border-b-2 border-white/50 focus:outline-none focus:border-white w-full"
-                  />
-                ) : (
-                  <h1 className="text-4xl md:text-5xl font-bold text-white tracking-tight leading-tight">
-                    {recipe.title || "Untitled Recipe"}
-                  </h1>
-                )}
-                {onUpdateTitle && recipe.id && (
-                  <Button 
-                    variant="ghost" 
-                    size="icon" 
-                    onClick={handleTitleEditToggle} 
-                    className="text-white/70 hover:text-white p-1 shrink-0"
-                    aria-label={isEditingTitle ? "Save title" : "Edit title"}
-                  >
-                    {isEditingTitle ? <CheckCircle size={32} /> : <Edit3 size={32} />}
-                  </Button>
-                )}
-                 {isEditingTitle && (
-                   <Button 
-                    variant="ghost" 
-                    size="icon" 
-                    onClick={() => { 
-                      setCurrentEditableTitle(recipe.title); 
-                      setIsEditingTitle(false); 
-                    }} 
-                    className="text-white/70 hover:text-white p-1 shrink-0"
-                    aria-label="Cancel editing title"
-                  >
-                    <XCircle size={32} />
-                  </Button>
-                )}
+
+        {showImages ? (
+          <CardHeader className="p-0">
+            <div className="relative h-72 md:h-96 w-full bg-gray-100">
+              {recipe.image ? (
+                <Image src={recipe.image} alt={recipe.title} layout="fill" objectFit="cover" priority />
+              ) : (
+                <div className="w-full h-full flex flex-col items-center justify-center text-gray-400 bg-gray-50">
+                  <ImageOff size={64} />
+                  <p className="mt-2 text-lg">No Image Available</p>
+                </div>
+              )}
+              <div className="absolute bottom-0 left-0 w-full bg-gradient-to-t from-black/80 to-transparent p-6 md:p-8">
+                {renderTitleAndControls(true)}
               </div>
             </div>
+          </CardHeader>
+        ) : (
+          // New header for when images are OFF
+          <div className="p-6 md:p-8 border-b border-gray-200 dark:border-gray-700">
+            {renderTitleAndControls(false)}
           </div>
-        </CardHeader>
+        )}
 
-        <CardContent className="p-6 md:p-8 text-xl"> {/* Base text size for content */}
+        <CardContent className="p-6 md:p-8 text-xl">
           {recipe.description && (
             <div className="mb-8">
               <h2 className="text-3xl font-semibold mb-3 text-gray-700">Description</h2>
@@ -334,128 +325,74 @@ const RecipeDisplay = ({
               <Separator className="my-6" />
             </div>
           )}
-
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-x-8 gap-y-10">
-            {/* Left column - Metadata and Ingredients */}
             <div className="lg:col-span-1 space-y-8">
               {(recipe.prepTime || recipe.cleanupTime || recipe.cuisine || recipe.category) && (
                 <div className="bg-slate-50 rounded-xl p-6 shadow-sm">
                   <h2 className="text-3xl font-semibold mb-4 flex items-center text-gray-700">
-                    <ChefHat className="mr-3 h-8 w-8 text-blue-500" />
-                    Recipe Info
+                    <ChefHat className="mr-3 h-8 w-8 text-blue-500" /> Recipe Info
                   </h2>
-                  <div className="space-y-3 text-lg"> {/* Text size for metadata items */}
+                  <div className="space-y-3 text-lg">
                     {recipe.prepTime && (
                       <div className="flex items-center justify-between">
-                        <div className="flex items-center">
-                          <Clock className="h-6 w-6 mr-3 text-gray-500" />
-                          <span className="font-medium">Prep Time:</span>
-                        </div>
+                        <div className="flex items-center"><Clock className="h-6 w-6 mr-3 text-gray-500" /> <span className="font-medium">Prep Time:</span></div>
                         <span className="text-gray-600">{recipe.prepTime}</span>
                       </div>
                     )}
-                    {recipe.cleanupTime && ( // Using cleanupTime as Cook Time
+                    {recipe.cleanupTime && (
                       <div className="flex items-center justify-between">
-                        <div className="flex items-center">
-                           <Clock className="h-6 w-6 mr-3 text-gray-500" />
-                          <span className="font-medium">Cook Time:</span>
-                        </div>
+                        <div className="flex items-center"><Clock className="h-6 w-6 mr-3 text-gray-500" /> <span className="font-medium">Cook Time:</span></div>
                         <span className="text-gray-600">{recipe.cleanupTime}</span>
                       </div>
                     )}
                     {recipe.cuisine && (
                       <div className="flex items-center justify-between">
-                         <div className="flex items-center">
-                          <Utensils className="h-6 w-6 mr-3 text-gray-500" />
-                          <span className="font-medium">Cuisine:</span>
-                        </div>
+                        <div className="flex items-center"><Utensils className="h-6 w-6 mr-3 text-gray-500" /> <span className="font-medium">Cuisine:</span></div>
                         <span className="text-gray-600">{recipe.cuisine}</span>
                       </div>
                     )}
                      {recipe.category && (
                       <div className="flex items-center justify-between">
-                         <div className="flex items-center">
-                           {/* Consider a different icon for category if available, or use a generic one */}
-                          <Users className="h-6 w-6 mr-3 text-gray-500" /> 
-                          <span className="font-medium">Category:</span>
-                        </div>
+                        <div className="flex items-center"><Users className="h-6 w-6 mr-3 text-gray-500" /> <span className="font-medium">Category:</span></div>
                         <Badge variant="secondary" className="text-md px-3 py-1">{recipe.category}</Badge>
                       </div>
                     )}
                   </div>
                 </div>
               )}
-
               <div>
                 <h2 className="text-3xl font-semibold mb-4 text-gray-700">Ingredients</h2>
-                <p className="text-md text-gray-500 mb-4">
-                  Check off items as you go. {allIngredientsChecked && "All done!"}
-                </p>
-                {/* Recipe Scale Buttons */}
+                <p className="text-md text-gray-500 mb-4">Check off items as you go. {allIngredientsChecked && "All done!"}</p>
                 <div className="mb-4 flex flex-wrap gap-2 items-center">
                   <span className="text-lg font-medium text-gray-600 mr-2">Servings Scale:</span>
                   {[0.5, 1, 2, 3].map((factor) => (
-                    <Button
-                      key={factor}
-                      variant={scaleFactor === factor ? "default" : "outline"}
-                      size="sm"
-                      onClick={() => setScaleFactor(factor)}
-                      className={`text-md px-3 py-1 ${scaleFactor === factor ? 'bg-blue-600 text-white' : 'border-gray-400 text-gray-700'}`}
-                    >
+                    <Button key={factor} variant={scaleFactor === factor ? "default" : "outline"} size="sm" onClick={() => setScaleFactor(factor)} className={`text-md px-3 py-1 ${scaleFactor === factor ? 'bg-blue-600 text-white' : 'border-gray-400 text-gray-700'}`}>
                       {factor}x
                     </Button>
                   ))}
                 </div>
                 <ul className="space-y-4 pr-3 border border-gray-200 rounded-lg p-4 bg-slate-50">
                   {displayIngredients.map((ingredient) => (
-                    <li
-                      key={ingredient.id}
-                      className="flex items-start space-x-4 text-lg"
-                      onClick={() => toggleIngredient(ingredient.id)}
-                    >
-                      <div className="mt-1 cursor-pointer">
-                        {ingredient.checked ? <CheckSquare size={28} className="text-blue-500" /> : <Square size={28} className="text-gray-400" />}
-                      </div>
-                      <label
-                        htmlFor={ingredient.id}
-                        className={`flex-1 cursor-pointer ${
-                          ingredient.checked
-                            ? "line-through text-gray-400"
-                            : "text-gray-700"
-                        }`}
-                      >
-                        {ingredient.text}
-                      </label>
-                      <Checkbox
-                        id={ingredient.id}
-                        checked={ingredient.checked}
-                        onCheckedChange={() => toggleIngredient(ingredient.id)}
-                        className="sr-only" 
-                      />
+                    <li key={ingredient.id} className="flex items-start space-x-4 text-lg" onClick={() => toggleIngredient(ingredient.id)}>
+                      <div className="mt-1 cursor-pointer">{ingredient.checked ? <CheckSquare size={28} className="text-blue-500" /> : <Square size={28} className="text-gray-400" />}</div>
+                      <label htmlFor={ingredient.id} className={`flex-1 cursor-pointer ${ingredient.checked ? "line-through text-gray-400" : "text-gray-700"}`}>{ingredient.text}</label>
+                      <Checkbox id={ingredient.id} checked={ingredient.checked} onCheckedChange={() => toggleIngredient(ingredient.id)} className="sr-only" />
                     </li>
                   ))}
-                  {displayIngredients.length === 0 && (
-                      <p className="text-gray-500 text-center py-10">No ingredients listed.</p>
-                  )}
+                  {displayIngredients.length === 0 && <p className="text-gray-500 text-center py-10">No ingredients listed.</p>}
                 </ul>
               </div>
             </div>
-
-            {/* Right column - Description and Steps */}
             <div className="lg:col-span-2">
               <h2 className="text-3xl font-semibold mb-4 text-gray-700">Instructions</h2>
               <div className="space-y-6">
                 {(recipe.steps || []).map((step, index) => (
                   <div key={`step-${index}-${Date.now()}`} className="flex items-start space-x-4">
-                    <div className="flex-shrink-0 bg-blue-500 text-white rounded-full h-10 w-10 flex items-center justify-center text-xl font-semibold mt-1">
-                      {index + 1}
-                    </div>
+                    <div className="flex-shrink-0 bg-blue-500 text-white rounded-full h-10 w-10 flex items-center justify-center text-xl font-semibold mt-1">{index + 1}</div>
                     <p className="text-lg leading-relaxed text-gray-700 pt-1">{step}</p>
                   </div>
                 ))}
-                {(!recipe.steps || recipe.steps.length === 0) && (
-                    <p className="text-gray-500 text-center py-10">No instructions provided.</p>
-                )}
+                {(!recipe.steps || recipe.steps.length === 0) && <p className="text-gray-500 text-center py-10">No instructions provided.</p>}
               </div>
             </div>
           </div>
@@ -464,91 +401,35 @@ const RecipeDisplay = ({
         <CardFooter className="p-6 md:p-8 bg-gray-50 border-t border-gray-200 flex flex-wrap gap-4 justify-center md:justify-end">
           {onPrint && (
             <Button variant="outline" size="lg" onClick={onPrint} className="text-lg px-6 py-3 border-2 border-blue-500 text-blue-500 hover:bg-blue-50 hover:text-blue-600">
-              <Printer className="mr-2 h-6 w-6" />
-              Print
+              <Printer className="mr-2 h-6 w-6" /> Print
             </Button>
           )}
           <Button variant="outline" size="lg" onClick={handleShareRecipe} className="text-lg px-6 py-3 border-2 border-green-500 text-green-500 hover:bg-green-50 hover:text-green-600">
-            <Share2 className="mr-2 h-6 w-6" />
-            Share
+            <Share2 className="mr-2 h-6 w-6" /> Share
           </Button>
           {onSave && (
             <Button variant="default" size="lg" onClick={() => onSave(recipe)} className="text-lg px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white">
-              <Heart className="mr-2 h-6 w-6" />
-              Save Recipe
+              <Heart className="mr-2 h-6 w-6" /> Save Recipe
             </Button>
           )}
           {onDeleteAttempt && recipe.id && (
-            <Button 
-              variant="destructive" 
-              size="lg" 
-              onClick={() => onDeleteAttempt(recipe.id!)}
-              className="text-lg px-6 py-3"
-            >
-              <Trash2 className="mr-2 h-6 w-6" />
-              Delete Recipe
+            <Button variant="destructive" size="lg" onClick={() => onDeleteAttempt(recipe.id!)} className="text-lg px-6 py-3">
+              <Trash2 className="mr-2 h-6 w-6" /> Delete Recipe
             </Button>
           )}
         </CardFooter>
       </Card>
-      {/* Basic Fallback Share Modal (Styling needed) */}
       {showShareOptionsModal && recipe.id && (
-        <div 
-          className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4"
-          onClick={() => setShowShareOptionsModal(false)} // Close on overlay click
-        >
-          <Card 
-            className="bg-background p-6 rounded-lg shadow-xl w-full max-w-md"
-            onClick={(e) => e.stopPropagation()} // Prevent closing when clicking inside modal
-          >
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4" onClick={() => setShowShareOptionsModal(false)}>
+          <Card className="bg-background p-6 rounded-lg shadow-xl w-full max-w-md" onClick={(e) => e.stopPropagation()}>
             <h3 className="text-2xl font-semibold mb-4 text-gray-700">Share this Recipe</h3>
-            
-            <Input 
-              type="text" 
-              value={`${window.location.origin}/?recipeId=${recipe.id}`} 
-              readOnly 
-              className="mb-3 w-full border-gray-300 rounded p-2 text-sm"
-              onFocus={(e) => e.target.select()} // Auto-select on focus
-            />
-            <Button 
-              onClick={() => {
-                navigator.clipboard.writeText(`${window.location.origin}/?recipeId=${recipe.id}`)
-                  .then(() => toast.success("Link copied to clipboard!"))
-                  .catch(() => toast.error("Failed to copy link."));
-                setShowShareOptionsModal(false);
-              }}
-              className="w-full mb-3 text-lg"
-            >
-              Copy Link
-            </Button>
-
+            <Input type="text" value={`${window.location.origin}/?recipeId=${recipe.id}`} readOnly className="mb-3 w-full border-gray-300 rounded p-2 text-sm" onFocus={(e) => e.target.select()} />
+            <Button onClick={() => { navigator.clipboard.writeText(`${window.location.origin}/?recipeId=${recipe.id}`).then(() => toast.success("Link copied to clipboard!")).catch(() => toast.error("Failed to copy link.")); setShowShareOptionsModal(false); }} className="w-full mb-3 text-lg">Copy Link</Button>
             <div className="grid grid-cols-2 gap-3">
-              <Button 
-                asChild 
-                variant="outline"
-                className="text-lg"
-                onClick={() => setShowShareOptionsModal(false)}
-              >
-                <a href={`mailto:?subject=${encodeURIComponent(`Recipe: ${recipe.title}`)}&body=${encodeURIComponent(`Check out this recipe: ${recipe.title}\n\n${window.location.origin}/?recipeId=${recipe.id}`)}`} target="_blank" rel="noopener noreferrer" className="w-full flex items-center justify-center">
-                  Email
-                </a>
-              </Button>
-              <Button 
-                asChild 
-                variant="outline"
-                className="text-lg"
-                onClick={() => setShowShareOptionsModal(false)}
-              >
-                <a href={`https://twitter.com/intent/tweet?url=${encodeURIComponent(`${window.location.origin}/?recipeId=${recipe.id}`)}&text=${encodeURIComponent(`Check out this recipe: ${recipe.title}`)}`} target="_blank" rel="noopener noreferrer" className="w-full flex items-center justify-center">
-                  Twitter
-                </a>
-              </Button>
-              {/* Add Facebook, Pinterest, WhatsApp as desired here */}
+              <Button asChild variant="outline" className="text-lg" onClick={() => setShowShareOptionsModal(false)}><a href={`mailto:?subject=${encodeURIComponent(`Recipe: ${recipe.title}`)}&body=${encodeURIComponent(`Check out this recipe: ${recipe.title}\n\n${window.location.origin}/?recipeId=${recipe.id}`)}`} target="_blank" rel="noopener noreferrer" className="w-full flex items-center justify-center">Email</a></Button>
+              <Button asChild variant="outline" className="text-lg" onClick={() => setShowShareOptionsModal(false)}><a href={`https://twitter.com/intent/tweet?url=${encodeURIComponent(`${window.location.origin}/?recipeId=${recipe.id}`)}&text=${encodeURIComponent(`Check out this recipe: ${recipe.title}`)}`} target="_blank" rel="noopener noreferrer" className="w-full flex items-center justify-center">Twitter</a></Button>
             </div>
-            
-            <Button variant="ghost" onClick={() => setShowShareOptionsModal(false)} className="w-full mt-4 text-gray-600 hover:text-gray-800">
-              Close
-            </Button>
+            <Button variant="ghost" onClick={() => setShowShareOptionsModal(false)} className="w-full mt-4 text-gray-600 hover:text-gray-800">Close</Button>
           </Card>
         </div>
       )}

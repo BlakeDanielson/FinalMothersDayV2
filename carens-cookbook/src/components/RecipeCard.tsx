@@ -41,7 +41,7 @@ export const RecipeCard = ({
       className={cn(
         "group relative flex flex-col justify-between overflow-hidden rounded-xl cursor-pointer",
         "bg-background border border-border hover:border-primary/20 transition-all duration-300 hover:shadow-lg",
-        showImages ? "h-[350px]" : "min-h-[170px]" // Conditional height
+        showImages ? "h-[350px]" : "min-h-[170px]" // Conditional height, min-h allows for some content growth
       )}
     >
       {/* Delete button for when images are SHOWN (overlays image area) */}
@@ -77,19 +77,19 @@ export const RecipeCard = ({
         </div>
       )}
 
-      {/* Text content - this will always be rendered */}
+      {/* Text content */}
       <div 
         className={cn(
-          "flex flex-col gap-2 p-4", 
-          !showImages && "relative pt-4" // Add relative positioning if images are off for the new delete button
+          "flex flex-col gap-2", 
+          showImages ? "p-4" : "px-4 pt-3 pb-3 relative" // Adjusted padding for no-image state
         )}
       >
         {/* Delete button for when images are OFF (inside text content area) */}
         {!showImages && id && onDeleteAttempt && (
             <Button
-              variant="ghost" // Muted style
+              variant="ghost"
               size="icon"
-              className="absolute top-3 right-3 z-10 h-8 w-8 text-muted-foreground hover:bg-destructive/10 hover:text-destructive" // Adjusted positioning and hover
+              className="absolute top-3 right-3 z-10 h-8 w-8 text-muted-foreground hover:bg-destructive/10 hover:text-destructive"
               onClick={(e) => {
                 e.stopPropagation();
                 onDeleteAttempt(id);
@@ -112,7 +112,7 @@ export const RecipeCard = ({
         <h3 
           className={cn(
             "text-lg font-semibold text-foreground line-clamp-2",
-            !showImages && "pr-10" // Add padding to title if images are off and delete button is present
+            !showImages && id && onDeleteAttempt && "pr-10" // Keep padding for title if delete button is there
           )}
         >
           {title}
