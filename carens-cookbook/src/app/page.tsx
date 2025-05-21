@@ -5,6 +5,7 @@ import { motion } from "framer-motion";
 import { SearchIcon, HomeIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Toaster, toast } from 'sonner';
+import { useRouter } from 'next/navigation';
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -13,91 +14,20 @@ import { Badge } from "@/components/ui/badge";
 import RecipeDisplay, { RecipeData } from "@/components/RecipeDisplay";
 import RecipeLoadingProgress from "@/components/ui/RecipeLoadingProgress";
 import ScanPhotoButton from "@/components/ui/ScanPhotoButton";
+import { BentoGrid } from "@/components/BentoGrid";
 
-interface RecipeCardProps extends RecipeData {
+// Define a local type for placeholder recipes that includes tags, extending the imported RecipeData
+interface PlaceholderRecipe extends RecipeData {
   tags?: string[];
 }
 
-const BentoGrid = ({
-  children,
-  className,
-}: {
-  children: React.ReactNode;
-  className?: string;
-}) => {
-  return (
-    <div
-      className={cn(
-        "grid w-full grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4",
-        className,
-      )}
-    >
-      {children}
-    </div>
-  );
-};
-
-const RecipeCard = ({
-  title,
-  description,
-  image,
-  tags,
-  prepTime,
-  cleanupTime,
-  onClick,
-}: RecipeCardProps & { onClick: () => void }) => (
-  <Card
-    onClick={onClick}
-    className={cn(
-      "group relative flex flex-col justify-between overflow-hidden rounded-xl h-[350px] cursor-pointer",
-      "bg-background border border-border hover:border-primary/20 transition-all duration-300 hover:shadow-lg"
-    )}
-  >
-    <div className="relative h-1/2 w-full overflow-hidden">
-      {image ? (
-        <div
-          className="absolute inset-0 bg-cover bg-center"
-          style={{ backgroundImage: `url(${image})` }}
-        />
-      ) : (
-        <div className="absolute inset-0 bg-muted flex items-center justify-center">
-          <span className="text-muted-foreground text-sm">No image</span>
-        </div>
-      )}
-      <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-background to-transparent h-16" />
-    </div>
-
-    <div className="flex flex-col gap-2 p-4">
-      {tags && tags.length > 0 && (
-        <div className="flex flex-wrap gap-1 mb-1">
-          {tags.map((tag, i) => (
-            <Badge key={i} variant="secondary" className="text-xs px-1.5 py-0.5">
-              {tag}
-            </Badge>
-          ))}
-        </div>
-      )}
-      <h3 className="text-lg font-semibold text-foreground line-clamp-2">
-        {title}
-      </h3>
-      <p className="text-xs text-muted-foreground line-clamp-3">{description}</p>
-
-      {(prepTime || cleanupTime) && (
-        <div className="flex justify-between mt-auto pt-2 text-xs text-muted-foreground border-t border-border/50">
-          {prepTime && <span>Prep: {prepTime}</span>}
-          {cleanupTime && <span>Cook: {cleanupTime}</span>}
-        </div>
-      )}
-    </div>
-  </Card>
-);
-
-const placeholderRecipes: RecipeCardProps[] = [
+const placeholderRecipes: PlaceholderRecipe[] = [
   {
     id: "placeholder-1",
     title: "Classic Spaghetti Carbonara",
     description: "A traditional Italian pasta dish with eggs, cheese, pancetta, and black pepper.",
     tags: ["Italian", "Pasta", "Quick"],
+    category: "Pasta",
     prepTime: "10 min",
     cleanupTime: "15 min",
     ingredients: [], steps: [],
@@ -105,19 +35,21 @@ const placeholderRecipes: RecipeCardProps[] = [
   },
   {
     id: "placeholder-2",
-    title: "Avocado Toast with Poached Eggs",
-    description: "Creamy avocado spread on toasted sourdough bread topped with perfectly poached eggs.",
-    tags: ["Breakfast", "Healthy", "Vegetarian"],
-    prepTime: "5 min",
-    cleanupTime: "10 min",
+    title: "Avocado Bruschetta Bites",
+    description: "Creamy avocado spread on toasted baguette slices, topped with cherry tomatoes and basil.",
+    tags: ["Appetizer", "Healthy", "Quick"],
+    category: "Appetizer",
+    prepTime: "10 min",
+    cleanupTime: "5 min",
     ingredients: [], steps: [],
     image: "https://images.unsplash.com/photo-1525351484163-7529414344d8?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1780&q=80"
   },
   {
     id: "placeholder-3",
-    title: "Thai Green Curry",
-    description: "A fragrant and spicy curry made with coconut milk, green curry paste, and fresh vegetables.",
-    tags: ["Thai", "Spicy", "Dinner"],
+    title: "Vegetable Green Curry",
+    description: "A fragrant and spicy curry made with coconut milk, green curry paste, and a medley of fresh vegetables.",
+    tags: ["Thai", "Spicy", "Vegetable"],
+    category: "Vegetable",
     prepTime: "20 min",
     cleanupTime: "30 min",
     ingredients: [], steps: [],
@@ -128,6 +60,7 @@ const placeholderRecipes: RecipeCardProps[] = [
     title: "Chocolate Chip Cookies",
     description: "Classic homemade cookies with crispy edges and a soft, chewy center loaded with chocolate chips.",
     tags: ["Dessert", "Baking", "Family Favorite"],
+    category: "Dessert",
     prepTime: "15 min",
     cleanupTime: "12 min",
     ingredients: [], steps: [],
@@ -138,6 +71,7 @@ const placeholderRecipes: RecipeCardProps[] = [
     title: "Quinoa Salad with Roasted Vegetables",
     description: "A nutritious salad with fluffy quinoa, roasted seasonal vegetables, and a zesty lemon dressing.",
     tags: ["Salad", "Vegan", "Meal Prep"],
+    category: "Salad",
     prepTime: "15 min",
     cleanupTime: "25 min",
     ingredients: [], steps: [],
@@ -148,14 +82,145 @@ const placeholderRecipes: RecipeCardProps[] = [
     title: "Beef Stir Fry",
     description: "Tender strips of beef with colorful vegetables in a savory sauce, served over steamed rice.",
     tags: ["Asian", "Quick Dinner", "High Protein"],
+    category: "Beef",
     prepTime: "15 min",
     cleanupTime: "10 min",
     ingredients: [], steps: [],
     image: "https://images.unsplash.com/photo-1563379926898-05f4575a45d8?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1770&q=80"
   },
+  {
+    id: "placeholder-7",
+    title: "Grilled Lemon Herb Chicken",
+    description: "Juicy grilled chicken breasts marinated in lemon, herbs, and garlic.",
+    tags: ["Chicken", "Grill", "Healthy"],
+    category: "Chicken",
+    prepTime: "20 min (plus marinating)",
+    cleanupTime: "15 min",
+    ingredients: [], steps: [],
+    image: "https://images.unsplash.com/photo-1598515214211-89d3c73ecc05?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1770&q=80"
+  },
+  {
+    id: "placeholder-8",
+    title: "Pan-Seared Salmon with Asparagus",
+    description: "Flaky salmon fillets pan-seared to perfection, served with tender asparagus.",
+    tags: ["Seafood", "Quick", "Healthy"],
+    category: "Seafood",
+    prepTime: "10 min",
+    cleanupTime: "15 min",
+    ingredients: [], steps: [],
+    image: "https://images.unsplash.com/photo-1467003909585-2f8a72700288?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1770&q=80"
+  },
+  {
+    id: "placeholder-9",
+    title: "Roast Turkey with Cranberry Sauce",
+    description: "A classic Thanksgiving centerpiece, a beautifully roasted turkey served with homemade cranberry sauce.",
+    tags: ["Thanksgiving", "Holiday", "Poultry"],
+    category: "Thanksgiving",
+    prepTime: "30 min",
+    cleanupTime: "4 hours (cooking)",
+    ingredients: [], steps: [],
+    image: "https://images.unsplash.com/photo-1574966771070-9639608a1173?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1771&q=80"
+  },
+  {
+    id: "placeholder-10",
+    title: "Rosemary Garlic Lamb Chops",
+    description: "Tender lamb chops infused with rosemary and garlic, perfect for a special occasion.",
+    tags: ["Lamb", "Elegant", "Dinner"],
+    category: "Lamb",
+    prepTime: "15 min",
+    cleanupTime: "20 min",
+    ingredients: [], steps: [],
+    image: "https://images.unsplash.com/photo-1600891964091-bab6873a49dc?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1770&q=80"
+  },
+  {
+    id: "placeholder-11",
+    title: "BBQ Pulled Pork Sandwiches",
+    description: "Slow-cooked pulled pork in a tangy BBQ sauce, served on fluffy buns.",
+    tags: ["Pork", "Comfort Food", "Slow Cooker"],
+    category: "Pork",
+    prepTime: "20 min",
+    cleanupTime: "8 hours (cooking)",
+    ingredients: [], steps: [],
+    image: "https://images.unsplash.com/photo-1561962364-85c5ac2089d7?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1770&q=80"
+  },
+  {
+    id: "placeholder-12",
+    title: "Creamy Tomato Soup",
+    description: "A rich and creamy tomato soup, perfect with a grilled cheese sandwich.",
+    tags: ["Soup", "Vegetarian", "Comfort Food"],
+    category: "Soup",
+    prepTime: "10 min",
+    cleanupTime: "25 min",
+    ingredients: [], steps: [],
+    image: "https://images.unsplash.com/photo-1575252979730-6097024a8f0c?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1770&q=80"
+  },
+  {
+    id: "placeholder-13",
+    title: "Refreshing Iced Tea",
+    description: "A tall glass of freshly brewed iced tea, perfect for a hot day.",
+    tags: ["Drinks", "Summer", "Non-alcoholic"],
+    category: "Drinks",
+    prepTime: "5 min",
+    cleanupTime: "5 min",
+    ingredients: [], steps: [],
+    image: "https://images.unsplash.com/photo-1556790300-b5b204890293?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1770&q=80"
+  },
+  {
+    id: "placeholder-14",
+    title: "Garlic Aioli Sauce",
+    description: "A creamy and flavorful garlic aioli, great as a dip or spread.",
+    tags: ["Sauce", "Dip", "Garlic"],
+    category: "Side Sauces",
+    prepTime: "10 min",
+    cleanupTime: "5 min",
+    ingredients: [], steps: [],
+    image: "https://images.unsplash.com/photo-1606847773799-297f8796d602?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1770&q=80"
+  }
 ];
 
+const CategoryCard = ({
+  categoryName,
+  itemCount,
+  imageUrl,
+  onClick,
+}: {
+  categoryName: string;
+  itemCount: number;
+  imageUrl?: string | null;
+  onClick: () => void;
+}) => (
+  <Card
+    onClick={onClick}
+    className={cn(
+      "group relative flex flex-col justify-between overflow-hidden rounded-xl h-[250px] cursor-pointer",
+      "bg-background border border-border hover:border-primary/20 transition-all duration-300 hover:shadow-lg"
+    )}
+  >
+    <div className="relative h-2/3 w-full overflow-hidden">
+      {imageUrl ? (
+        <div
+          className="absolute inset-0 bg-cover bg-center transition-transform duration-300 group-hover:scale-105"
+          style={{ backgroundImage: `url(${imageUrl})` }}
+        />
+      ) : (
+        <div className="absolute inset-0 bg-muted flex items-center justify-center">
+          <HomeIcon className="h-12 w-12 text-muted-foreground/50" />
+        </div>
+      )}
+      <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-background via-background/70 to-transparent h-20" />
+    </div>
+
+    <div className="absolute bottom-0 left-0 right-0 p-4">
+      <h3 className="text-xl font-semibold text-foreground line-clamp-2">
+        {categoryName}
+      </h3>
+      <p className="text-xs text-muted-foreground">{itemCount} {itemCount === 1 ? 'recipe' : 'recipes'}</p>
+    </div>
+  </Card>
+);
+
 function MainPage() {
+  const router = useRouter();
   const [url, setUrl] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [loadingStepMessage, setLoadingStepMessage] = useState("");
@@ -165,22 +230,89 @@ function MainPage() {
   const [currentView, setCurrentView] = useState<'list' | 'recipe' | 'save'>('list');
   const [selectedRecipe, setSelectedRecipe] = useState<RecipeData | null>(null);
 
-  const [searchTerm, setSearchTerm] = useState("");
-  const [selectedCuisines, setSelectedCuisines] = useState<string[]>([]);
-  const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
-  const [sortBy, setSortBy] = useState<string>("date_desc");
-  const [filteredAndSortedRecipes, setFilteredAndSortedRecipes] = useState<RecipeData[]>([]);
-  const [gridTitle, setGridTitle] = useState("Recipe Ideas");
+  const [gridTitle, setGridTitle] = useState("Recipe Categories");
 
   const [availableCuisines, setAvailableCuisines] = useState<string[]>([]);
   const [availableCategories, setAvailableCategories] = useState<string[]>([]);
+
+  const [processedCategories, setProcessedCategories] = useState<{ name: string; count: number; imageUrl?: string | null }[]>([]);
+
+  useEffect(() => {
+    // Check for recipeId in URL query params on initial load
+    const params = new URLSearchParams(window.location.search);
+    const recipeIdFromUrl = params.get('recipeId');
+
+    if (recipeIdFromUrl) {
+      // If there's a recipeId, we want to fetch all recipes first to find it.
+      // Then display it. This assumes fetchSavedRecipes also updates savedRecipes state.
+      const loadRecipeFromUrl = async () => {
+        await fetchSavedRecipes(); // Ensure recipes are loaded
+        // The following useEffect [savedRecipes] will find and display it.
+      };
+      loadRecipeFromUrl();
+    }
+  }, []); // Empty dependency array to run once on mount
 
   useEffect(() => {
     const cuisines = new Set(savedRecipes.map(r => r.cuisine).filter(Boolean) as string[]);
     const categories = new Set(savedRecipes.map(r => r.category).filter(Boolean) as string[]);
     setAvailableCuisines(Array.from(cuisines).sort());
     setAvailableCategories(Array.from(categories).sort());
+
+    const recipesSource = savedRecipes.length > 0 ? savedRecipes : placeholderRecipes;
+    const categoryMap: Record<string, { count: number; recipes: (RecipeData | PlaceholderRecipe)[] }> = {};
+
+    recipesSource.forEach(recipe => {
+      if (recipe.category) {
+        if (!categoryMap[recipe.category]) {
+          categoryMap[recipe.category] = { count: 0, recipes: [] };
+        }
+        categoryMap[recipe.category].count++;
+        categoryMap[recipe.category].recipes.push(recipe);
+      }
+    });
+
+    const uniqueCategoriesData = Object.entries(categoryMap)
+      .map(([name, data]) => {
+        const firstRecipeWithImage = data.recipes.find(r => r.image);
+        return {
+          name,
+          count: data.count,
+          imageUrl: firstRecipeWithImage ? firstRecipeWithImage.image : null,
+        };
+      })
+      .sort((a, b) => a.name.localeCompare(b.name));
+    
+    setProcessedCategories(uniqueCategoriesData);
+
+    if (uniqueCategoriesData.length === 0 && savedRecipes.length > 0) {
+        setGridTitle("No Categories Found in Saved Recipes");
+    } else if (uniqueCategoriesData.length === 0) {
+        setGridTitle("Add Recipes to See Categories");
+    } else {
+        setGridTitle("Recipe Categories");
+    }
+
   }, [savedRecipes]);
+
+  // New useEffect to handle displaying a recipe if recipeId is in URL and recipes are loaded
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const recipeIdFromUrl = params.get('recipeId');
+
+    if (recipeIdFromUrl && savedRecipes.length > 0) {
+      const recipeToDisplay = savedRecipes.find(r => r.id === recipeIdFromUrl);
+      if (recipeToDisplay) {
+        handleViewRecipe(recipeToDisplay);
+        // Optionally, clear the recipeId from URL to prevent re-triggering on refresh if not desired
+        // router.replace(window.location.pathname, undefined, { shallow: true });
+      } else {
+        toast.error("The shared recipe could not be found.");
+        // Optionally clear param if recipe not found
+        // router.replace(window.location.pathname, undefined, { shallow: true });
+      }
+    }
+  }, [savedRecipes, router]); // Run when savedRecipes are loaded or router changes (for router.replace)
 
   const fetchSavedRecipes = async () => {
     try {
@@ -197,13 +329,67 @@ function MainPage() {
     }
   };
 
-  useEffect(() => {
-    fetchSavedRecipes();
-  }, []);
-
   const handleViewRecipe = (recipe: RecipeData) => {
     setSelectedRecipe(recipe);
     setCurrentView('recipe');
+  };
+
+  const handleDeleteRecipeFromDisplay = async (recipeId: string) => {
+    if (!recipeId) return;
+    try {
+      const response = await fetch(`/api/recipes?id=${recipeId}`, {
+        method: 'DELETE',
+      });
+      const responseData = await response.json(); 
+
+      if (response.ok) {
+        toast.success(responseData.message || 'Recipe deleted successfully!');
+        setSelectedRecipe(null);
+        setCurrentView('list');
+        fetchSavedRecipes();
+      } else {
+        toast.error(responseData.error || 'Failed to delete recipe.');
+        console.error("Error deleting recipe - API response not OK:", responseData);
+      }
+    } catch (err: unknown) {
+      toast.error('An unexpected error occurred while deleting the recipe.');
+      console.error("Error in handleDeleteRecipeFromDisplay catch block:", err);
+    }
+  };
+
+  const handleUpdateRecipeTitle = async (recipeId: string, newTitle: string): Promise<boolean> => {
+    if (!recipeId || !newTitle.trim()) return false;
+
+    try {
+      const response = await fetch(`/api/recipes`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ id: recipeId, title: newTitle.trim() }),
+      });
+      const updatedRecipeFromServer = await response.json();
+
+      if (response.ok) {
+        toast.success('Recipe title updated successfully!');
+        // Update local state
+        setSavedRecipes(prevRecipes => 
+          prevRecipes.map(r => r.id === recipeId ? { ...r, title: newTitle.trim() } : r)
+        );
+        if (selectedRecipe && selectedRecipe.id === recipeId) {
+          setSelectedRecipe(prev => prev ? { ...prev, title: newTitle.trim() } : null);
+        }
+        // If categories are derived from titles or need re-evaluating, do it here
+        // For now, assuming category structure doesn't change with title update for this page.
+        return true;
+      } else {
+        toast.error(updatedRecipeFromServer.error || 'Failed to update recipe title.');
+        console.error("Error updating title - API response not OK:", updatedRecipeFromServer);
+        return false;
+      }
+    } catch (err: unknown) {
+      toast.error('An unexpected error occurred while updating the title.');
+      console.error("Error in handleUpdateRecipeTitle catch block:", err);
+      return false;
+    }
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -251,17 +437,14 @@ function MainPage() {
       const responseData = await response.json();
       if (response.ok) {
         toast.success(`Recipe '${recipeToSave.title}' saved successfully!`);
-        alert(`Recipe '${recipeToSave.title}' saved successfully!`);
         fetchSavedRecipes();
       } else {
         const errorMessage = responseData.error || 'Failed to save recipe. Please try again.';
-        toast.error(`Error: ${errorMessage}`);
-        alert(`Error saving recipe: ${errorMessage}`);
+        toast.error(`Error saving recipe: ${errorMessage}`);
         console.error("Error saving recipe - API response not OK:", responseData);
       }
     } catch (err: unknown) {
       toast.error('An unexpected error occurred while saving. Please check your connection and try again.');
-      alert('An unexpected error occurred while saving. Please check your connection and try again.');
       console.error("Error in handleSaveRecipe catch block:", err);
     }
   };
@@ -323,45 +506,8 @@ function MainPage() {
     handleProcessImage(file); 
   };
 
-  useEffect(() => {
-    const recipesSource = savedRecipes.length > 0 ? [...savedRecipes] : [...placeholderRecipes];
-    let currentFilteredRecipes = [...recipesSource];
-
-    if (searchTerm) {
-      currentFilteredRecipes = currentFilteredRecipes.filter(recipe => 
-        recipe.title.toLowerCase().includes(searchTerm.toLowerCase()) || 
-        (recipe.description && recipe.description.toLowerCase().includes(searchTerm.toLowerCase()))
-      );
-    }
-    if (selectedCuisines.length > 0) {
-      // currentFilteredRecipes = currentFilteredRecipes.filter(recipe => recipe.cuisine && selectedCuisines.includes(recipe.cuisine));
-    }
-    if (selectedCategories.length > 0) {
-      // currentFilteredRecipes = currentFilteredRecipes.filter(recipe => recipe.category && selectedCategories.includes(recipe.category));
-    }
-
-    setFilteredAndSortedRecipes(currentFilteredRecipes);
-
-    if (currentFilteredRecipes.length === 0) {
-      if (searchTerm || selectedCuisines.length > 0 || selectedCategories.length > 0) {
-        setGridTitle("No Recipes Match Your Filters");
-      } else if (savedRecipes.length === 0) {
-        setGridTitle("No Recipes Yet! Add some or scan a photo.");
-      } else {
-         setGridTitle("Your Saved Recipes");
-      }
-    } else if (savedRecipes.length > 0 && currentFilteredRecipes.some(r => savedRecipes.find(sr => sr.id === r.id))) {
-      setGridTitle("Your Recipes");
-    } else {
-      setGridTitle("Recipe Ideas");
-    }
-  }, [savedRecipes, searchTerm, selectedCuisines, selectedCategories, sortBy]);
-
-  const handleClearFilters = () => {
-    setSearchTerm("");
-    setSelectedCuisines([]);
-    setSelectedCategories([]);
-    setSortBy("date_desc");
+  const handleCategoryClick = (categoryName: string) => {
+    router.push(`/category/${encodeURIComponent(categoryName)}`);
   };
 
   if (currentView === 'recipe' && selectedRecipe) {
@@ -371,6 +517,8 @@ function MainPage() {
           recipe={selectedRecipe} 
           onSave={handleSaveRecipe}
           onGoBack={() => setCurrentView('list')}
+          onDeleteAttempt={handleDeleteRecipeFromDisplay}
+          onUpdateTitle={handleUpdateRecipeTitle}
         />
       </>
     );
@@ -471,29 +619,6 @@ function MainPage() {
           </motion.div>
         )}
 
-        {currentView === 'list' && (
-          <div className="mb-8 p-4 border rounded-lg shadow-sm bg-card">
-            <h3 className="text-xl font-semibold mb-4 text-card-foreground">Filter & Sort Recipes</h3>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 items-end">
-              <div className="col-span-1 md:col-span-2 lg:col-span-4">
-                <label htmlFor="searchRecipes" className="block text-sm font-medium text-muted-foreground mb-1">Search by Keyword</label>
-                <Input 
-                  id="searchRecipes"
-                  type="text" 
-                  placeholder="Search by title or description..." 
-                  value={searchTerm} 
-                  onChange={(e) => setSearchTerm(e.target.value)} 
-                  className="w-full"
-                />
-              </div>
-              <div><label className="block text-sm font-medium text-muted-foreground mb-1">Cuisine</label><p className="text-sm text-muted-foreground">(Cuisine Select Here - {availableCuisines.join(', ')})</p></div>
-              <div><label className="block text-sm font-medium text-muted-foreground mb-1">Category</label><p className="text-sm text-muted-foreground">(Category Select Here - {availableCategories.join(', ')})</p></div>
-              <div><label className="block text-sm font-medium text-muted-foreground mb-1">Sort By</label><p className="text-sm text-muted-foreground">(Sort Select Here - Current: {sortBy})</p></div>
-              <Button variant="outline" onClick={handleClearFilters} className="w-full lg:w-auto">Clear Filters</Button>
-            </div>
-          </div>
-        )}
-
         <motion.div
           className="mb-8"
           initial={{ opacity: 0 }}
@@ -507,16 +632,47 @@ function MainPage() {
           </div>
 
           <BentoGrid>
-            {filteredAndSortedRecipes.map((recipe, index) => (
+            {processedCategories.map((category, index) => (
               <motion.div
-                key={recipe.id || recipe.title + index}
+                key={category.name + index}
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.3, delay: 0.1 * index }}
               >
-                <RecipeCard {...recipe} onClick={() => handleViewRecipe(recipe)} />
+                <CategoryCard 
+                  categoryName={category.name} 
+                  itemCount={category.count}
+                  imageUrl={category.imageUrl}
+                  onClick={() => handleCategoryClick(category.name)} 
+                />
               </motion.div>
             ))}
+            {processedCategories.length === 0 && savedRecipes.length === 0 && placeholderRecipes.length > 0 && (
+                placeholderRecipes.reduce((acc: {name: string, count: number, imageUrl?: string | null}[], recipe: PlaceholderRecipe) => {
+                    if (recipe.category && !acc.find(c => c.name === recipe.category)) {
+                        const count = placeholderRecipes.filter(r => r.category === recipe.category).length;
+                        const firstPlaceholderRecipeWithImage = placeholderRecipes.find(r => r.category === recipe.category && r.image);
+                        acc.push({name: recipe.category, count, imageUrl: firstPlaceholderRecipeWithImage ? firstPlaceholderRecipeWithImage.image : null });
+                    }
+                    return acc;
+                }, [] as {name: string, count: number, imageUrl?: string | null}[])
+                .sort((a: {name: string}, b: {name: string}) => a.name.localeCompare(b.name))
+                .map((category: {name: string, count: number, imageUrl?: string | null}, index: number) => (
+                    <motion.div
+                        key={`placeholder-${category.name}-${index}`}
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.3, delay: 0.1 * index }}
+                    >
+                        <CategoryCard
+                            categoryName={category.name}
+                            itemCount={category.count}
+                            imageUrl={category.imageUrl}
+                            onClick={() => handleCategoryClick(category.name)}
+                        />
+                    </motion.div>
+                ))
+            )}
           </BentoGrid>
         </motion.div>
       </div>
