@@ -39,7 +39,7 @@ Action: “Get Recipe” button
 
 Flow:
 
-Send to OpenAI GPT-4o-mini for parsing, scraping, and analysis
+Send to OpenAI o4-mini-2025-04-16 for parsing, scraping, and analysis
 
 Extract:
 

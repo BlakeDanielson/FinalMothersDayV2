@@ -1,0 +1,9 @@
+{
+  "dependencies": {
+    "cheerio": "^1.0.0",
+    "react-use-measure": "^2.1.7"
+  },
+  "devDependencies": {
+    "@types/cheerio": "^0.22.35"
+  }
+}
