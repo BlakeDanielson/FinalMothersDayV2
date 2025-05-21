@@ -2,8 +2,9 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import Script from 'next/script';
-import Navbar from "@/components/Navbar";
+// import Navbar from "@/components/Navbar";
 import { SettingsProvider } from "@/contexts/SettingsContext";
+import FloatingSettingsButton from "@/components/FloatingSettingsButton";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -24,10 +25,11 @@ export default function RootLayout({
       </head>
       <body className={inter.className}>
         <SettingsProvider>
-          <Navbar />
-          <main className="pt-16">
+          {/* <Navbar /> */}
+          <main>
             {children}
           </main>
+          <FloatingSettingsButton />
           {/* You can add a Footer component here if you have one */}
         </SettingsProvider>
         <Script
