@@ -322,7 +322,7 @@ function MainPage() {
   };
 
   useEffect(() => {
-    let recipesSource = savedRecipes.length > 0 ? [...savedRecipes] : [...placeholderRecipes];
+    const recipesSource = savedRecipes.length > 0 ? [...savedRecipes] : [...placeholderRecipes];
     let currentFilteredRecipes = [...recipesSource];
 
     if (searchTerm) {
