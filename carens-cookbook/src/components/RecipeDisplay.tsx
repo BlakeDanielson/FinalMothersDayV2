@@ -1,16 +1,16 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { Clock, Users, Utensils, ChefHat, Heart, Printer, Share2, ImageOff, CheckSquare, Square } from "lucide-react";
+import { Clock, Users, Utensils, ChefHat, Heart, Printer, Share2, ImageOff, CheckSquare, Square, HomeIcon } from "lucide-react";
 import { Card, CardContent, CardHeader, CardFooter } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Separator } from "@/components/ui/separator";
 import { Button } from "@/components/ui/button";
-import { ScrollArea } from "@/components/ui/scroll-area";
 
-// Simplified props to match our API structure
+// Define the structure of a recipe
 export interface RecipeData {
+  id?: string; // Add optional ID from database
   title: string;
   ingredients: string[];
   steps: string[];
@@ -27,6 +27,7 @@ interface RecipeDisplayProps {
   onSave?: (recipeData: RecipeData) => void;
   onPrint?: () => void;
   onShare?: () => void;
+  onGoBack?: () => void;
 }
 
 interface DisplayIngredient {
@@ -40,6 +41,7 @@ const RecipeDisplay = ({
   onSave,
   onPrint,
   onShare,
+  onGoBack,
 }: RecipeDisplayProps) => {
   const [displayIngredients, setDisplayIngredients] = useState<DisplayIngredient[]>([]);
 
@@ -68,6 +70,18 @@ const RecipeDisplay = ({
   return (
     <div className="w-full max-w-5xl mx-auto p-4 md:p-6 text-gray-800 font-sans"> {/* Increased base text size candidate */}
       <Card className="overflow-hidden border-2 border-gray-200 shadow-xl rounded-2xl">
+        {onGoBack && (
+          <div className="px-6 md:px-8">
+            <Button 
+              onClick={onGoBack}
+              variant="outline"
+              className="flex items-center gap-2 text-lg p-3 pr-4"
+            >
+              <HomeIcon className="h-5 w-5" />
+              Back to Recipes
+            </Button>
+          </div>
+        )}
         <CardHeader className="p-0">
           <div className="relative h-72 md:h-96 w-full bg-gray-100">
             {recipe.image ? (
@@ -155,42 +169,38 @@ const RecipeDisplay = ({
                 <p className="text-md text-gray-500 mb-4">
                   Check off items as you go. {allIngredientsChecked && "All done!"}
                 </p>
-                <ScrollArea className="h-[350px] md:h-[450px] pr-3 border border-gray-200 rounded-lg p-4 bg-slate-50">
-                  <ul className="space-y-4"> {/* Changed from div to ul for semantic HTML */}
-                    {displayIngredients.map((ingredient) => (
-                      <li // Changed from div to li
-                        key={ingredient.id}
-                        className="flex items-start space-x-4 text-lg" // Text size for ingredients
-                        onClick={() => toggleIngredient(ingredient.id)} // Make whole item clickable
+                <ul className="space-y-4 pr-3 border border-gray-200 rounded-lg p-4 bg-slate-50">
+                  {displayIngredients.map((ingredient) => (
+                    <li
+                      key={ingredient.id}
+                      className="flex items-start space-x-4 text-lg"
+                      onClick={() => toggleIngredient(ingredient.id)}
+                    >
+                      <div className="mt-1 cursor-pointer">
+                        {ingredient.checked ? <CheckSquare size={28} className="text-blue-500" /> : <Square size={28} className="text-gray-400" />}
+                      </div>
+                      <label
+                        htmlFor={ingredient.id}
+                        className={`flex-1 cursor-pointer ${
+                          ingredient.checked
+                            ? "line-through text-gray-400"
+                            : "text-gray-700"
+                        }`}
                       >
-                        {/* Custom Checkbox Visual */}
-                        <div className="mt-1 cursor-pointer">
-                          {ingredient.checked ? <CheckSquare size={28} className="text-blue-500" /> : <Square size={28} className="text-gray-400" />}
-                        </div>
-                        <label
-                          htmlFor={ingredient.id} // Keep for accessibility, though actual checkbox is hidden
-                          className={`flex-1 cursor-pointer ${
-                            ingredient.checked
-                              ? "line-through text-gray-400"
-                              : "text-gray-700"
-                          }`}
-                        >
-                          {ingredient.text}
-                        </label>
-                         {/* Hidden actual checkbox for form semantics if needed, but we handle state manually */}
-                        <Checkbox
-                          id={ingredient.id}
-                          checked={ingredient.checked}
-                          onCheckedChange={() => toggleIngredient(ingredient.id)}
-                          className="sr-only" 
-                        />
-                      </li>
-                    ))}
-                    {displayIngredients.length === 0 && (
-                        <p className="text-gray-500 text-center py-10">No ingredients listed.</p>
-                    )}
-                  </ul>
-                </ScrollArea>
+                        {ingredient.text}
+                      </label>
+                      <Checkbox
+                        id={ingredient.id}
+                        checked={ingredient.checked}
+                        onCheckedChange={() => toggleIngredient(ingredient.id)}
+                        className="sr-only" 
+                      />
+                    </li>
+                  ))}
+                  {displayIngredients.length === 0 && (
+                      <p className="text-gray-500 text-center py-10">No ingredients listed.</p>
+                  )}
+                </ul>
               </div>
             </div>
 
