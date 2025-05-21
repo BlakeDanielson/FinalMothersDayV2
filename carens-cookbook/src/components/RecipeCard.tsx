@@ -40,8 +40,9 @@ export const RecipeCard = ({
     <Card
       onClick={rest.onClick} // Use the onClick passed for the card itself
       className={cn(
-        "group relative flex flex-col justify-between overflow-hidden rounded-xl h-[350px] cursor-pointer",
-        "bg-background border border-border hover:border-primary/20 transition-all duration-300 hover:shadow-lg"
+        "group relative flex flex-col justify-between overflow-hidden rounded-xl cursor-pointer",
+        "bg-background border border-border hover:border-primary/20 transition-all duration-300 hover:shadow-lg",
+        showImages ? "h-[350px]" : "min-h-[170px]" // Conditional height
       )}
     >
       {id && onDeleteAttempt && (
@@ -58,27 +59,28 @@ export const RecipeCard = ({
           <Trash2 className="h-4 w-4 text-white" />
         </Button>
       )}
-      <div className="relative h-1/2 w-full overflow-hidden">
-        {showImages && image && (
-          <div
-            className="absolute inset-0 bg-cover bg-center"
-            style={{ backgroundImage: `url(${image})` }}
-          />
-        )}
-        {!showImages && image && (
-          <div className="absolute inset-0 bg-gray-200 flex items-center justify-center">
-            <span className="text-gray-500 text-sm">Images Disabled</span>
-          </div>
-        )}
-        {showImages && !image && (
-          <div className="absolute inset-0 bg-gray-100 flex items-center justify-center">
-            <span className="text-gray-400 text-xs">No Image</span>
-          </div>
-        )}
-        <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-background to-transparent h-16" />
-      </div>
 
-      <div className="flex flex-col gap-2 p-4">
+      {/* Conditionally render the entire image container block */} 
+      {showImages && (
+        <div className="relative h-1/2 w-full overflow-hidden"> {/* This h-1/2 refers to parent's h-[350px] when showImages is true */}
+          {image ? (
+            <div
+              className="absolute inset-0 bg-cover bg-center"
+              style={{ backgroundImage: `url(${image})` }}
+            />
+          ) : (
+            // This placeholder shows if images are ON but this specific recipe has NO image
+            <div className="absolute inset-0 bg-gray-100 flex items-center justify-center">
+              <span className="text-gray-400 text-xs">No Image</span>
+            </div>
+          )}
+          {/* Gradient overlay for title readability, only when image is shown */}
+          <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-background to-transparent h-16" />
+        </div>
+      )}
+
+      {/* Text content - this will always be rendered */}
+      <div className={`flex flex-col gap-2 p-4 ${showImages ? '' : 'pt-4'}`}> {/* Ensure padding is consistent if image is off and card is shorter */} 
         {tags && tags.length > 0 && (
           <div className="flex flex-wrap gap-1 mb-1">
             {tags.map((tag, i) => (
