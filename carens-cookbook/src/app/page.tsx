@@ -5,7 +5,6 @@ import { motion } from "framer-motion";
 import { SearchIcon, HomeIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Toaster, toast } from 'sonner';
-import heic2any from 'heic2any';
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -272,10 +271,13 @@ function MainPage() {
     setIsLoading(true); setError(null); setUrl(""); 
     setLoadingProgress(5); setLoadingStepMessage(`Checking image format '${file.name}'... 🧐`);
     let fileToProcess = file;
+
     if (file.type === 'image/heic' || file.type === 'image/heif' || file.name.toLowerCase().endsWith('.heic') || file.name.toLowerCase().endsWith('.heif')) {
       setLoadingStepMessage(`Converting '${file.name}' from HEIC to JPEG... ⏳`);
       toast.info(`It looks like you&apos;ve uploaded an HEIC image. We&apos;ll convert it to JPEG for you!`);
       try {
+        const heic2any = (await import('heic2any')).default;
+
         const conversionResult = await heic2any({ blob: file, toType: "image/jpeg", quality: 0.8 });
         const convertedBlob = Array.isArray(conversionResult) ? conversionResult[0] : conversionResult;
         const originalNameWithoutExt = file.name.split('.').slice(0, -1).join('.');
