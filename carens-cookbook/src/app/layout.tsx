@@ -1,22 +1,15 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Inter } from "next/font/google";
 import "./globals.css";
 import Script from 'next/script';
+import Navbar from "@/components/Navbar";
+import { SettingsProvider } from "@/contexts/SettingsContext";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
+const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: "Caren's Cookbook",
-  description: "Your personal cookbook, simplified for you, Mom!",
-  manifest: "/manifest.json",
+  description: "A collection of Caren's favorite recipes",
 };
 
 export default function RootLayout({
@@ -29,8 +22,14 @@ export default function RootLayout({
       <head>
         <meta name="theme-color" content="#007bff" />
       </head>
-      <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
-        {children}
+      <body className={inter.className}>
+        <SettingsProvider>
+          <Navbar />
+          <main className="pt-16">
+            {children}
+          </main>
+          {/* You can add a Footer component here if you have one */}
+        </SettingsProvider>
         <Script
           src="/registerServiceWorker.js"
           strategy="lazyOnload"
