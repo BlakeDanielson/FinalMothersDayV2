@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useEffect, useRef } from "react";
-import { Clock, Users, Utensils, ChefHat, Heart, Printer, Share2, ImageOff, CheckSquare, Square, HomeIcon, Trash2, CheckCircle, XCircle, Edit3 } from "lucide-react";
+import { Clock, Users, Utensils, ChefHat, Heart, Printer, Share2, ImageOff, CheckSquare, Square, HomeIcon, Trash2, CheckCircle, XCircle, Edit3, Loader2 } from "lucide-react";
 import { Card, CardContent, CardHeader, CardFooter } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -28,7 +28,7 @@ export interface RecipeData {
 
 interface RecipeDisplayProps {
   recipe: RecipeData;
-  onSave?: (recipeData: RecipeData) => void;
+  onSave?: (recipeData: RecipeData) => Promise<void>;
   onPrint?: () => void;
   onGoBack?: () => void;
   onDeleteAttempt?: (recipeId: string) => void;
@@ -120,6 +120,40 @@ const scaleAndFormatQuantity = (originalQuantity: number | null, factor: number,
   }
 };
 
+// Helper function to highlight ingredients in a step
+const highlightIngredientsInStep = (step: string, ingredients: string[]): (string | React.ReactNode)[] => {
+  let parts: (string | React.ReactNode)[] = [step];
+
+  ingredients.forEach((ingredient, ingredientIndex) => {
+    if (!ingredient || ingredient.trim() === "") return; // Skip empty ingredients
+
+    const newParts: (string | React.ReactNode)[] = [];
+    const escapedIngredient = ingredient.replace(/[.*+?^${}()|[\\]\\]/g, '\\$&'); // Escape regex special chars
+    const regex = new RegExp(`\\b(${escapedIngredient})\\b`, 'gi'); // Case-insensitive, whole word
+
+    parts.forEach(part => {
+      if (typeof part === 'string') {
+        let lastIndex = 0;
+        let match;
+        while ((match = regex.exec(part)) !== null) {
+          if (match.index > lastIndex) {
+            newParts.push(part.substring(lastIndex, match.index));
+          }
+          newParts.push(<strong key={`ing-${ingredientIndex}-${match.index}`}>{match[0]}</strong>);
+          lastIndex = regex.lastIndex;
+        }
+        if (lastIndex < part.length) {
+          newParts.push(part.substring(lastIndex));
+        }
+      } else {
+        newParts.push(part); // Pass through existing ReactNode elements
+      }
+    });
+    parts = newParts;
+  });
+  return parts;
+};
+
 const RecipeDisplay = ({
   recipe,
   onSave,
@@ -135,6 +169,7 @@ const RecipeDisplay = ({
   const titleInputRef = useRef<HTMLInputElement>(null);
   const [scaleFactor, setScaleFactor] = useState(1);
   const [showShareOptionsModal, setShowShareOptionsModal] = useState(false);
+  const [saveStatus, setSaveStatus] = useState<'idle' | 'saving' | 'saved'>('idle');
 
   useEffect(() => {
     setDisplayIngredients(
@@ -153,6 +188,7 @@ const RecipeDisplay = ({
   useEffect(() => {
     setCurrentEditableTitle(recipe.title);
     setIsEditingTitle(false);
+    setSaveStatus('idle');
   }, [recipe.title]);
 
   useEffect(() => {
@@ -283,6 +319,21 @@ const RecipeDisplay = ({
     </div>
   );
 
+  const handleSave = async () => {
+    if (onSave) {
+      setSaveStatus('saving');
+      try {
+        await onSave(recipe);
+        setSaveStatus('saved');
+        // Assuming onSave will show its own toast notifications for success/error
+      } catch (error) {
+        console.error("Error saving recipe:", error);
+        toast.error("Failed to save recipe."); // Fallback error toast
+        setSaveStatus('idle'); // Reset to idle on error
+      }
+    }
+  };
+
   return (
     <div className="w-full max-w-5xl mx-auto p-4 md:p-6 text-gray-800 font-sans">
       <Card className="overflow-hidden border-2 border-gray-200 shadow-xl rounded-2xl">
@@ -304,9 +355,28 @@ const RecipeDisplay = ({
               <span>Share</span>
             </Button>
             {onSave && (
-              <Button variant="default" onClick={() => onSave(recipe)} className="bg-blue-600 hover:bg-blue-700 text-white flex items-center gap-2">
-                <Heart className="h-5 w-5" />
-                <span>Save</span>
+              <Button 
+                variant="default" 
+                onClick={handleSave}
+                className={`text-white flex items-center gap-2 ${saveStatus === 'saved' ? 'bg-green-600 hover:bg-green-700' : 'bg-blue-600 hover:bg-blue-700'}`}
+                disabled={saveStatus === 'saving'}
+              >
+                {saveStatus === 'saving' ? (
+                  <>
+                    <Loader2 className="h-5 w-5 animate-spin" />
+                    <span>Saving...</span>
+                  </>
+                ) : saveStatus === 'saved' ? (
+                  <>
+                    <Heart className="h-5 w-5 fill-white" />
+                    <span>Saved</span>
+                  </>
+                ) : (
+                  <>
+                    <Heart className="h-5 w-5" />
+                    <span>Save</span>
+                  </>
+                )}
               </Button>
             )}
             {onDeleteAttempt && recipe.id && (
@@ -428,7 +498,9 @@ const RecipeDisplay = ({
                 {(recipe.steps || []).map((step, index) => (
                   <div key={`step-${index}-${Date.now()}`} className="flex items-start space-x-4">
                     <div className="flex-shrink-0 bg-blue-500 text-white rounded-full h-10 w-10 flex items-center justify-center text-xl font-semibold mt-1">{index + 1}</div>
-                    <p className="text-lg leading-relaxed text-gray-700 pt-1">{step}</p>
+                    <p className="text-lg leading-relaxed text-gray-700 pt-1">
+                      {highlightIngredientsInStep(step, recipe.ingredients || [])}
+                    </p>
                   </div>
                 ))}
                 {(!recipe.steps || recipe.steps.length === 0) && <p className="text-gray-500 text-center py-10">No instructions provided.</p>}
