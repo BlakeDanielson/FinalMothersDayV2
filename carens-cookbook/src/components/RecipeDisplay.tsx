@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useEffect, useRef } from "react";
-import { Clock, Users, Utensils, ChefHat, Heart, Printer, Share2, ImageOff, CheckSquare, Square, HomeIcon, Trash2, Edit3, CheckCircle, XCircle } from "lucide-react";
+import { Clock, Users, Utensils, ChefHat, Heart, Printer, Share2, ImageOff, CheckSquare, Square, HomeIcon, Trash2, CheckCircle, XCircle, Edit3 } from "lucide-react";
 import { Card, CardContent, CardHeader, CardFooter } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -263,7 +263,7 @@ const RecipeDisplay = ({
               : 'text-gray-500 dark:text-gray-400 hover:text-primary dark:hover:text-primary-dark'}`}
           aria-label={isEditingTitle ? "Save title" : "Edit title"}
         >
-          {isEditingTitle ? <CheckCircle size={40} /> : <Edit3 size={40} />} 
+          {isEditingTitle ? <CheckCircle size={70} /> : <Edit3 size={70} />} 
         </Button>
       )}
         {isEditingTitle && (
@@ -299,20 +299,20 @@ const RecipeDisplay = ({
                 <span className="sr-only">Print</span>
               </Button>
             )}
-            <Button variant="outline" size="icon" onClick={handleShareRecipe} className="border-green-500 text-green-500 hover:bg-green-50 hover:text-green-600">
+            <Button variant="outline" onClick={handleShareRecipe} className="border-green-500 text-green-500 hover:bg-green-50 hover:text-green-600 flex items-center gap-2">
               <Share2 className="h-5 w-5" />
-              <span className="sr-only">Share</span>
+              <span>Share</span>
             </Button>
             {onSave && (
-              <Button variant="default" size="icon" onClick={() => onSave(recipe)} className="bg-blue-600 hover:bg-blue-700 text-white">
+              <Button variant="default" onClick={() => onSave(recipe)} className="bg-blue-600 hover:bg-blue-700 text-white flex items-center gap-2">
                 <Heart className="h-5 w-5" />
-                <span className="sr-only">Save Recipe</span>
+                <span>Save</span>
               </Button>
             )}
             {onDeleteAttempt && recipe.id && (
-              <Button variant="destructive" size="icon" onClick={() => onDeleteAttempt(recipe.id!)} >
+              <Button variant="destructive" onClick={() => onDeleteAttempt(recipe.id!)} className="flex items-center gap-2">
                 <Trash2 className="h-5 w-5" />
-                <span className="sr-only">Delete Recipe</span>
+                <span>Delete</span>
               </Button>
             )}
           </div>
