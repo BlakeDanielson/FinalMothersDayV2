@@ -22,8 +22,7 @@ const openaiClient = new OpenAI({
 });
 
 interface OpenAIErrorResponseData {
-  // Define known fields if possible, or keep it flexible
-  [key: string]: any;
+  [key: string]: unknown;
 }
 interface OpenAIErrorResponse {
   data?: OpenAIErrorResponseData;
