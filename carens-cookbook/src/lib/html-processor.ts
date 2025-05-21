@@ -16,9 +16,9 @@ export function getSanitizedHtml(rawHtml: string): string {
   $('[role="complementary"]').remove(); // Common role for asides/sidebars
 
   // Remove comments
-  $('*').contents().each(function(this: cheerio.Element) {
-    if (this.type === 'comment') {
-      $(this).remove();
+  $('*').contents().each(function(index, element) {
+    if (element.type === 'comment') {
+      $(element).remove();
     }
   });
 
