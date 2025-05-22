@@ -178,29 +178,24 @@ const placeholderRecipes: PlaceholderRecipe[] = [
 ];
 
 const ALL_POSSIBLE_CATEGORIES: { name: string; defaultImageUrl?: string | null }[] = [
-  { name: "Appetizer", defaultImageUrl: placeholderRecipes.find(p=>p.category === "Appetizer")?.image },
-  { name: "Beef", defaultImageUrl: placeholderRecipes.find(p=>p.category === "Beef")?.image },
-  { name: "Beverage", defaultImageUrl: placeholderRecipes.find(p=>p.category === "Drinks")?.image }, // Assuming "Drinks" is "Beverage"
-  { name: "Breakfast" }, // Add a generic breakfast image URL if available or leave null
-  { name: "Chicken", defaultImageUrl: placeholderRecipes.find(p=>p.category === "Chicken")?.image },
-  { name: "Dessert", defaultImageUrl: placeholderRecipes.find(p=>p.category === "Dessert")?.image },
-  { name: "Drinks", defaultImageUrl: placeholderRecipes.find(p=>p.category === "Drinks")?.image },
-  { name: "Lamb", defaultImageUrl: placeholderRecipes.find(p=>p.category === "Lamb")?.image },
-  { name: "Pasta", defaultImageUrl: placeholderRecipes.find(p=>p.category === "Pasta")?.image },
-  { name: "Pork", defaultImageUrl: placeholderRecipes.find(p=>p.category === "Pork")?.image },
-  { name: "Salad", defaultImageUrl: placeholderRecipes.find(p=>p.category === "Salad")?.image },
-  { name: "Sauce", defaultImageUrl: placeholderRecipes.find(p=>p.category === "Side Sauces")?.image }, // Assuming "Side Sauces" is "Sauce"
-  { name: "Seafood", defaultImageUrl: placeholderRecipes.find(p=>p.category === "Seafood")?.image },
-  { name: "Side Dish" }, // Add a generic side dish image URL if available or leave null
-  { name: "Side Sauces", defaultImageUrl: placeholderRecipes.find(p=>p.category === "Side Sauces")?.image },
-  { name: "Soup", defaultImageUrl: placeholderRecipes.find(p=>p.category === "Soup")?.image },
-  { name: "Thanksgiving", defaultImageUrl: placeholderRecipes.find(p=>p.category === "Thanksgiving")?.image },
-  { name: "Vegetable", defaultImageUrl: placeholderRecipes.find(p=>p.category === "Vegetable")?.image },
-  // Add any other categories you anticipate, e.g.:
-  // { name: "Baking", defaultImageUrl: ... },
-  // { name: "Grill", defaultImageUrl: ... },
-  // { name: "Vegan", defaultImageUrl: ... },
-  // { name: "Vegetarian", defaultImageUrl: ... },
+  { name: "Appetizer", defaultImageUrl: "https://images.unsplash.com/photo-1572448061886-3DS_Store7e038d674c?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1770&q=80" },
+  { name: "Beef", defaultImageUrl: "https://images.unsplash.com/photo-1608039819226-e6ea12c05aa2?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1770&q=80" },
+  { name: "Beverage", defaultImageUrl: "https://images.unsplash.com/photo-1551030173-1b2ff3648450?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1770&q=80" },
+  { name: "Breakfast", defaultImageUrl: "https://images.unsplash.com/photo-1484723091739-30a097e8f929?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1770&q=80" },
+  { name: "Chicken", defaultImageUrl: "https://images.unsplash.com/photo-1598515214211-89d3c73ecc05?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1770&q=80" },
+  { name: "Dessert", defaultImageUrl: "https://images.unsplash.com/photo-1551024601-bec78d8d590d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1770&q=80" },
+  { name: "Drinks", defaultImageUrl: "https://images.unsplash.com/photo-1551030173-1b2ff3648450?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1770&q=80" },
+  { name: "Lamb", defaultImageUrl: "https://images.unsplash.com/photo-1600891964091-bab6873a49dc?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1770&q=80" },
+  { name: "Pasta", defaultImageUrl: "https://images.unsplash.com/photo-1589227365533-5f8bbd3ef59d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1770&q=80" },
+  { name: "Pork", defaultImageUrl: "https://images.unsplash.com/photo-1628268900122-c0a3a9ade820?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1770&q=80" },
+  { name: "Salad", defaultImageUrl: "https://images.unsplash.com/photo-1540189549336-e6e99c3679fe?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1770&q=80" },
+  { name: "Sauce", defaultImageUrl: "https://images.unsplash.com/photo-1562504648-5b7a96109ba3?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1770&q=80" },
+  { name: "Seafood", defaultImageUrl: "https://images.unsplash.com/photo-1599056000530-de9d18a6983b?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1770&q=80" },
+  { name: "Side Dish", defaultImageUrl: "https://images.unsplash.com/photo-1540420773420-3366772f4999?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1770&q=80" },
+  { name: "Side Sauces", defaultImageUrl: "https://images.unsplash.com/photo-1562504648-5b7a96109ba3?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1770&q=80" },
+  { name: "Soup", defaultImageUrl: "https://images.unsplash.com/photo-1547592180-85f173990554?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1770&q=80" },
+  { name: "Thanksgiving", defaultImageUrl: "https://images.unsplash.com/photo-1574966771070-9639608a1173?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1771&q=80" },
+  { name: "Vegetable", defaultImageUrl: "https://images.unsplash.com/photo-1597362925123-77861d3fbac8?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1770&q=80" },
 ].sort((a, b) => a.name.localeCompare(b.name));
 
 const CategoryCard = ({
