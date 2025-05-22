@@ -482,11 +482,24 @@ function MainPage() {
     try {
       setLoadingProgress(30); setLoadingStepMessage(`Sending '${fileToProcess.name}' for analysis... 🧠`);
       const response = await fetch('/api/scan-recipe', { method: 'POST', body: formData });
-      const responseData = await response.json();
+      
       if (!response.ok) {
-        console.error("Error scanning recipe from image - API response not OK:", responseData);
-        throw new Error(responseData.error || 'Failed to process recipe from image.');
+        let errorText = await response.text();
+        try {
+          // Attempt to parse as JSON in case the server did send a JSON error despite not being ok
+          const errorData = JSON.parse(errorText);
+          console.error("Error scanning recipe from image - API response not OK (JSON parsed):", errorData);
+          throw new Error(errorData.error || `Failed to process recipe from image. Server responded with status ${response.status}.`);
+        } catch (e) {
+          // If JSON parsing fails, use the raw text (likely HTML or plain text error)
+          console.error("Error scanning recipe from image - API response not OK (Non-JSON response):", errorText);
+          // Truncate long HTML error messages for toast
+          const shortErrorText = errorText.length > 100 ? errorText.substring(0, 97) + "..." : errorText;
+          throw new Error(`Failed to process recipe. Server error: ${shortErrorText} (Status: ${response.status})`);
+        }
       }
+
+      const responseData = await response.json();
       setLoadingProgress(80); setLoadingStepMessage("Image processed! Getting recipe details... ✨");
       const recipeData: RecipeData = responseData;
       handleViewRecipe(recipeData);

@@ -1,7 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import OpenAI from 'openai';
 import { z } from 'zod';
-import { saveImageLocally } from '@/lib/image-utils';
 
 // Zod schema for recipe data parsed from an image
 const scanRecipeZodSchema = z.object({
@@ -103,43 +102,8 @@ export async function POST(req: NextRequest) {
 
     const parsedJson = JSON.parse(chatCompletion.choices[0].message.content);
     const initialRecipeData = scanRecipeZodSchema.parse(parsedJson);
-    let finalRecipeData = { ...initialRecipeData }; // Start with a copy
 
-    // --- IMAGE GENERATION LOGIC --- 
-    if (initialRecipeData.image === null) { 
-      console.log(`Attempting to generate image for recipe: ${initialRecipeData.title}`);
-      const dallePrompt = `Photorealistic, appetizing, high-quality image of ${initialRecipeData.title}. This dish is a ${initialRecipeData.category} (${initialRecipeData.cuisine}). Show the dish as if it's freshly prepared and ready to eat. Bright, natural lighting. Food photography style. If the title suggests a component (like a sauce or dough), depict the complete dish it's typically part of.`;
-      console.log("GPT Prompt for scan-recipe:", dallePrompt);
-      
-      try {
-        const imageGenResponse = await openaiClient.images.generate({
-          model: "gpt-image-1",
-          prompt: dallePrompt,
-          n: 1,
-          size: "1024x1024", 
-          response_format: "url",
-        });
-
-        const temporaryImageUrl = imageGenResponse.data?.[0]?.url;
-        if (temporaryImageUrl) {
-          console.log(`GPT temporary URL: ${temporaryImageUrl}`);
-          const permanentLocalUrl = await saveImageLocally(temporaryImageUrl, initialRecipeData.title);
-          if (permanentLocalUrl) {
-            finalRecipeData = { ...finalRecipeData, image: permanentLocalUrl }; // Create new object
-            console.log(`Recipe image updated to local URL: ${permanentLocalUrl}`);
-          } else {
-            console.warn("Failed to save GPT image locally, recipe will have no image (remains null).");
-          }
-        } else {
-          console.warn("GPT did not return an image URL.");
-        }
-      } catch (imageGenError: unknown) {
-        console.error("Error generating image with GPT:", imageGenError);
-      }
-    }
-    // --- END IMAGE GENERATION LOGIC --- 
-
-    return NextResponse.json(finalRecipeData, { status: 200 });
+    return NextResponse.json(initialRecipeData, { status: 200 });
 
   } catch (error: unknown) {
     console.error('Error in /api/scan-recipe:', error instanceof Error ? error.message : String(error));
