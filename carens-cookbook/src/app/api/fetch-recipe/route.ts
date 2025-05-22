@@ -2,7 +2,6 @@ import { NextRequest, NextResponse } from 'next/server';
 import OpenAI from 'openai';
 import { z } from "zod";
 import { getSanitizedHtml } from '@/lib/html-processor';
-import { saveImageLocally } from '@/lib/image-utils';
 
 // Define Zod schema for recipe data
 const zodRecipeSchema = z.object({
@@ -64,41 +63,8 @@ export async function POST(req: NextRequest) {
     }
     const parsedJson = JSON.parse(chatCompletion.choices[0].message.content);
     const initialRecipeData = zodRecipeSchema.parse(parsedJson);
-    let finalRecipeData = { ...initialRecipeData }; // Start with a copy
 
-    if (!initialRecipeData.image) { 
-      console.log(`No image found for recipe: ${initialRecipeData.title}. Attempting to generate one.`);
-      const dallePrompt = `Photorealistic, appetizing, high-quality image of ${initialRecipeData.title}. This dish is a ${initialRecipeData.category} (${initialRecipeData.cuisine}). Show the dish as if it's freshly prepared and ready to eat. Bright, natural lighting. Food photography style. If the title suggests a component (like a sauce or dough), depict the complete dish it's typically part of.`;
-      console.log("GPT Prompt for fetch-recipe:", dallePrompt);
-      
-      try {
-        const imageGenResponse = await openaiClient.images.generate({
-          model: "gpt-image-1",
-          prompt: dallePrompt,
-          n: 1,
-          size: "1024x1024",
-          response_format: "url",
-        });
-
-        const temporaryImageUrl = imageGenResponse.data?.[0]?.url;
-        if (temporaryImageUrl) {
-          console.log(`GPT temporary URL for ${initialRecipeData.title}: ${temporaryImageUrl}`);
-          const permanentLocalUrl = await saveImageLocally(temporaryImageUrl, initialRecipeData.title);
-          if (permanentLocalUrl) {
-            finalRecipeData = { ...finalRecipeData, image: permanentLocalUrl }; // Create new object with updated image
-            console.log(`Recipe image for ${initialRecipeData.title} updated to local URL: ${permanentLocalUrl}`);
-          } else {
-            console.warn(`Failed to save GPT image locally for ${initialRecipeData.title}, recipe will have no image.`);
-          }
-        } else {
-          console.warn(`GPT did not return an image URL for ${initialRecipeData.title}.`);
-        }
-      } catch (imageGenError: unknown) { // Typed imageGenError
-        console.error(`Error generating image with GPT for ${initialRecipeData.title}:`, imageGenError instanceof Error ? imageGenError.message : String(imageGenError));
-      }
-    }
-
-    return NextResponse.json(finalRecipeData, { status: 200 }); // Return the final data
+    return NextResponse.json(initialRecipeData, { status: 200 }); // Return initialRecipeData
 
   } catch (error: unknown) { // Typed error
     console.error(`Error in /api/fetch-recipe (OpenAI mode):`, error instanceof Error ? error.message : String(error));
