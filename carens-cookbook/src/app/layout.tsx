@@ -20,28 +20,38 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <ClerkProvider
-      publishableKey={process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY}
-    >
-      <html lang="en">
-        <head>
-          <meta name="theme-color" content="#007bff" />
-        </head>
-        <body className={inter.className}>
+    <html lang="en">
+      <head>
+        <meta name="theme-color" content="#007bff" />
+      </head>
+      <body className={inter.className}>
+        <ClerkProvider
+          publishableKey={process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY}
+          appearance={{
+            elements: {
+              formButtonPrimary: 'bg-primary text-primary-foreground hover:bg-primary/90',
+              card: 'shadow-lg',
+              headerTitle: 'text-primary',
+              socialButtonsBlockButton: 'border-input hover:bg-accent',
+            },
+            variables: {
+              colorPrimary: '#007bff',
+            }
+          }}
+        >
           <SettingsProvider>
             <Navbar />
             <main className="pt-0">
               {children}
             </main>
             <FloatingSettingsButton />
-            {/* You can add a Footer component here if you have one */}
           </SettingsProvider>
           <Script
             src="/registerServiceWorker.js"
             strategy="lazyOnload"
           />
-        </body>
-      </html>
-    </ClerkProvider>
+        </ClerkProvider>
+      </body>
+    </html>
   );
 }

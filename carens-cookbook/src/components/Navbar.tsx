@@ -29,6 +29,7 @@ export default function Navbar({ className }: NavbarProps) {
 
   const navItems = [
     { href: "/", label: "Home", icon: BookOpen },
+    { href: "/profile", label: "Profile", icon: User },
     { href: "/favorites", label: "Favorites", icon: Heart, badge: "New" },
     { href: "/meal-plans", label: "Meal Plans", icon: Clock, badge: "New" },
     { href: "/shopping-lists", label: "Shopping", icon: ShoppingCart, badge: "New" },
