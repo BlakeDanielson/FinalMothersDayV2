@@ -25,21 +25,21 @@ export async function POST(req: NextRequest) {
 
   // Get the body
   const payload = await req.text();
-  const body = JSON.parse(payload);
 
   // Create a new Svix instance with your secret.
   const wh = new Webhook(webhookSecret as string);
 
-  let evt: any;
+  let evt: { type: string; data: { id: string; email_addresses?: Array<{ email_address: string }>; first_name?: string; last_name?: string; image_url?: string } };
 
   // Verify the payload with the headers
   try {
-    evt = wh.verify(payload, {
+    const verifiedEvent = wh.verify(payload, {
       "svix-id": svixId,
       "svix-timestamp": svixTimestamp,
       "svix-signature": svixSignature,
-    }) as any;
-  } catch (err) {
+    });
+    evt = verifiedEvent as typeof evt;
+  } catch (err: unknown) {
     console.error('Error verifying webhook:', err);
     return new NextResponse('Error occured', {
       status: 400
@@ -57,14 +57,14 @@ export async function POST(req: NextRequest) {
         await prisma.user.upsert({
           where: { id },
           update: {
-            email: email_addresses[0]?.email_address || '',
+            email: email_addresses?.[0]?.email_address || '',
             firstName: first_name,
             lastName: last_name,
             imageUrl: image_url,
           },
           create: {
             id,
-            email: email_addresses[0]?.email_address || '',
+            email: email_addresses?.[0]?.email_address || '',
             firstName: first_name,
             lastName: last_name,
             imageUrl: image_url,
@@ -83,7 +83,7 @@ export async function POST(req: NextRequest) {
     }
 
     return new NextResponse('Webhook processed successfully', { status: 200 });
-  } catch (error) {
+  } catch (error: unknown) {
     console.error('Error processing webhook:', error);
     return new NextResponse('Error processing webhook', { status: 500 });
   }

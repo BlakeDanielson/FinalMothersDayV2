@@ -649,8 +649,8 @@ function MainPage() {
       
       const result = await imageProcessing.processFile(fileToProcess);
       
-      if (result) {
-        const recipeData: RecipeData = result;
+      if (result && typeof result === 'object' && 'title' in result && 'ingredients' in result && 'steps' in result) {
+        const recipeData: RecipeData = result as RecipeData;
         handleViewRecipe(recipeData);
         setLoadingProgress(100);
       }
@@ -912,7 +912,7 @@ function MainPage() {
                     </div>
                     <h3 className="text-lg font-semibold mb-2">Import from URL</h3>
                     <p className="text-sm text-muted-foreground">
-                      Paste a recipe URL and we'll extract all the details
+                      Paste a recipe URL and we&apos;ll extract all the details
                     </p>
                   </div>
                   <form onSubmit={handleSubmit}>
@@ -959,7 +959,7 @@ function MainPage() {
                     </div>
                     <h3 className="text-lg font-semibold mb-2">Scan Recipe Photo</h3>
                     <p className="text-sm text-muted-foreground">
-                      Upload a photo of a recipe and we'll extract the details
+                      Upload a photo of a recipe and we&apos;ll extract the details
                     </p>
                   </div>
                   

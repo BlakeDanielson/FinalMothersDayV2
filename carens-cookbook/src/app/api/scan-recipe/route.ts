@@ -121,7 +121,7 @@ function handleOpenAIError(error: unknown): never {
   if (errorObj.status === 429 || errorObj.code === 'rate_limit_exceeded') {
     throw new RecipeProcessingError({
       type: ErrorType.AI_QUOTA_EXCEEDED,
-      message: `OpenAI rate limit exceeded: ${error.message}`,
+      message: `OpenAI rate limit exceeded: ${errorObj.message}`,
       userMessage: 'We\'ve reached our processing limit for now.',
       actionable: 'Please try again in a few minutes.',
       retryable: true,
@@ -131,10 +131,10 @@ function handleOpenAIError(error: unknown): never {
   }
 
   // Content policy violations
-  if (error.code === 'content_policy_violation') {
+  if (errorObj.code === 'content_policy_violation') {
     throw new RecipeProcessingError({
       type: ErrorType.AI_CONTENT_POLICY,
-      message: `Content policy violation: ${error.message}`,
+      message: `Content policy violation: ${errorObj.message}`,
       userMessage: 'The image content violates our processing policies.',
       actionable: 'Please try a different image.',
       retryable: false,
@@ -144,10 +144,10 @@ function handleOpenAIError(error: unknown): never {
   }
 
   // Authentication errors
-  if (error.status === 401 || error.code === 'invalid_api_key') {
+  if (errorObj.status === 401 || errorObj.code === 'invalid_api_key') {
     throw new RecipeProcessingError({
       type: ErrorType.SERVER_ERROR,
-      message: `OpenAI authentication error: ${error.message}`,
+      message: `OpenAI authentication error: ${errorObj.message}`,
       userMessage: 'Our AI service is temporarily unavailable.',
       actionable: 'Please try again later.',
       retryable: true,
@@ -157,10 +157,10 @@ function handleOpenAIError(error: unknown): never {
   }
 
   // Timeout errors
-  if (error.code === 'timeout' || error.message?.includes('timeout')) {
+  if (errorObj.code === 'timeout' || errorObj.message?.includes('timeout')) {
     throw new RecipeProcessingError({
       type: ErrorType.REQUEST_TIMEOUT,
-      message: `OpenAI request timeout: ${error.message}`,
+      message: `OpenAI request timeout: ${errorObj.message}`,
       userMessage: 'The image processing took too long.',
       actionable: 'Please try again with a clearer or smaller image.',
       retryable: true,
@@ -172,11 +172,11 @@ function handleOpenAIError(error: unknown): never {
   // Generic OpenAI errors
   throw new RecipeProcessingError({
     type: ErrorType.AI_PROCESSING_FAILED,
-    message: `OpenAI processing failed: ${error.message || 'Unknown error'}`,
+    message: `OpenAI processing failed: ${errorObj.message || 'Unknown error'}`,
     userMessage: 'Our recipe analysis system encountered an issue.',
     actionable: 'Please try again in a moment.',
     retryable: true,
-    statusCode: error.status || 500,
+    statusCode: errorObj.status || 500,
     details: { openaiError: error }
   });
 }
@@ -264,7 +264,7 @@ export async function POST(req: NextRequest) {
         response_format: { type: "json_object" },
         max_tokens: 2000,
       });
-    } catch (error: any) {
+    } catch (error: unknown) {
       handleOpenAIError(error);
     }
 
@@ -281,10 +281,10 @@ export async function POST(req: NextRequest) {
     }
 
     // Parse and validate the JSON response
-    let parsedJson: any;
+    let parsedJson: unknown;
     try {
       parsedJson = JSON.parse(chatCompletion.choices[0].message.content);
-    } catch (error) {
+    } catch {
       throw new RecipeProcessingError({
         type: ErrorType.AI_PROCESSING_FAILED,
         message: 'OpenAI returned invalid JSON',
@@ -297,7 +297,7 @@ export async function POST(req: NextRequest) {
     }
 
     // Check if AI detected no recipe (empty object response)
-    if (Object.keys(parsedJson).length === 0) {
+    if (typeof parsedJson === 'object' && parsedJson !== null && Object.keys(parsedJson).length === 0) {
       throw new RecipeProcessingError({
         type: ErrorType.RECIPE_NOT_DETECTED,
         message: 'No recipe detected in image',
@@ -310,7 +310,7 @@ export async function POST(req: NextRequest) {
     }
 
     // Validate against our schema
-    let validatedRecipeData: any;
+    let validatedRecipeData: z.infer<typeof scanRecipeZodSchema>;
     try {
       validatedRecipeData = scanRecipeZodSchema.parse(parsedJson);
     } catch (error) {

@@ -39,7 +39,7 @@ export function useRetryableRequest<T>(
 
   const abortControllerRef = useRef<AbortController | null>(null);
 
-  const calculateDelay = (attempt: number, suggestedDelay?: number): number => {
+  const calculateDelay = useCallback((attempt: number, suggestedDelay?: number): number => {
     if (suggestedDelay) {
       return Math.min(suggestedDelay, maxDelay);
     }
@@ -48,7 +48,7 @@ export function useRetryableRequest<T>(
     const exponentialDelay = Math.min(baseDelay * Math.pow(2, attempt), maxDelay);
     const jitter = Math.random() * 0.1 * exponentialDelay;
     return exponentialDelay + jitter;
-  };
+  }, [baseDelay, maxDelay]);
 
   const sleep = (ms: number): Promise<void> => {
     return new Promise(resolve => setTimeout(resolve, ms));
@@ -127,7 +127,7 @@ export function useRetryableRequest<T>(
 
       return null;
     }
-  }, [requestFn, state.retryCount, maxRetries, baseDelay, maxDelay, onProgress, onError, onSuccess, calculateDelay]);
+  }, [requestFn, state.retryCount, maxRetries, onProgress, onError, onSuccess, calculateDelay]);
 
   const retry = useCallback(async (): Promise<T | null> => {
     if (!state.canRetry) {

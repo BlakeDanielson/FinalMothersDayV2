@@ -36,7 +36,7 @@ export interface RecipeError {
   userMessage: string;
   actionable: string;
   retryable: boolean;
-  details?: any;
+  details?: Record<string, unknown>;
   statusCode?: number;
   timestamp: Date;
 }
@@ -54,7 +54,7 @@ export class RecipeProcessingError extends Error {
   public readonly userMessage: string;
   public readonly actionable: string;
   public readonly retryable: boolean;
-  public readonly details?: any;
+  public readonly details?: Record<string, unknown>;
   public readonly statusCode?: number;
   public readonly timestamp: Date;
 
@@ -116,7 +116,7 @@ export class RecipeProcessingError extends Error {
 }
 
 // Error classification based on status codes and error messages
-export function classifyError(error: any, statusCode?: number): ErrorType {
+export function classifyError(error: unknown, statusCode?: number): ErrorType {
   if (statusCode) {
     switch (statusCode) {
       case 400:
@@ -138,7 +138,10 @@ export function classifyError(error: any, statusCode?: number): ErrorType {
     }
   }
 
-  const errorMessage = error?.message?.toLowerCase() || '';
+  const errorMessage = (error && typeof error === 'object' && 'message' in error 
+    ? String((error as { message: unknown }).message).toLowerCase() 
+    : ''
+  );
   
   // File-related
   if (errorMessage.includes('file too large') || errorMessage.includes('413')) {
