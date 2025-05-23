@@ -9,6 +9,7 @@ interface ScanPhotoButtonProps {
   variant?: "default" | "outline" | "secondary";
   size?: "default" | "sm" | "lg" | "icon";
   buttonText?: string; // Optional prop for button text
+  disabled?: boolean; // Added disabled prop
 }
 
 const ScanPhotoButton: React.FC<ScanPhotoButtonProps> = ({
@@ -17,16 +18,19 @@ const ScanPhotoButton: React.FC<ScanPhotoButtonProps> = ({
   variant = "secondary", // Defaulting to secondary for a less prominent look initially
   size = "lg",        // Defaulting to large for easier tapping on iPad
   buttonText = "Scan Recipe Photo", // Default button text
+  disabled = false, // Default to enabled
 }) => {
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const handleClick = () => {
-    fileInputRef.current?.click();
+    if (!disabled) {
+      fileInputRef.current?.click();
+    }
   };
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
-    if (file) { // onFileSelect is required, so we can call it directly
+    if (file && !disabled) { // onFileSelect is required, so we can call it directly
       onFileSelect(file);
     }
     // Reset the input value to allow selecting the same file again if needed
@@ -41,6 +45,7 @@ const ScanPhotoButton: React.FC<ScanPhotoButtonProps> = ({
         variant={variant}
         size={size}
         onClick={handleClick}
+        disabled={disabled}
         className={cn(
           "relative overflow-hidden transition-all duration-300 hover:shadow-md",
           // Add specific styling for better touch target and appearance if needed
@@ -57,6 +62,7 @@ const ScanPhotoButton: React.FC<ScanPhotoButtonProps> = ({
         className="hidden"
         aria-hidden="true"
         id="recipeImageUpload" // Added an id for potential label association
+        disabled={disabled}
       />
     </div>
   );

@@ -15,9 +15,12 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import RecipeDisplay, { RecipeData } from "@/components/RecipeDisplay";
 import RecipeLoadingProgress from "@/components/ui/RecipeLoadingProgress";
 import ScanPhotoButton from "@/components/ui/ScanPhotoButton";
+import ErrorDisplay from "@/components/ui/ErrorDisplay";
 import { BentoGrid } from "@/components/BentoGrid";
 import { Badge } from "@/components/ui/badge";
 import StatsDashboard from "@/components/StatsDashboard";
+import { useImageProcessing } from "@/hooks/useRetryableRequest";
+import { RecipeProcessingError, ErrorType, logError } from "@/lib/errors";
 
 // Define a local type for placeholder recipes that includes tags, extending the imported RecipeData
 interface PlaceholderRecipe extends RecipeData {
@@ -327,8 +330,76 @@ function MainPage() {
   const [activeImportTab, setActiveImportTab] = useState<'url' | 'photo'>('url');
 
   const [gridTitle, setGridTitle] = useState("Recipe Categories");
-
   const [processedCategories, setProcessedCategories] = useState<{ name: string; count: number; imageUrl?: string | null }[]>([]);
+
+  // Enhanced image processing with retry capability
+  const imageProcessing = useImageProcessing(
+    async (file: File) => {
+      const formData = new FormData();
+      formData.append('image', file);
+      
+      const response = await fetch('/api/scan-recipe', { 
+        method: 'POST', 
+        body: formData 
+      });
+      
+      if (!response.ok) {
+        let errorData;
+        try {
+          errorData = await response.json();
+        } catch {
+          throw new RecipeProcessingError({
+            type: ErrorType.SERVER_ERROR,
+            message: `Server error: ${response.status}`,
+            userMessage: 'Our servers are experiencing issues.',
+            actionable: 'Please try again in a few moments.',
+            retryable: true,
+            statusCode: response.status
+          });
+        }
+        
+        // If the server returned a structured error, throw it
+        if (errorData.type && errorData.error) {
+          throw new RecipeProcessingError({
+            type: errorData.type,
+            message: errorData.error,
+            userMessage: errorData.error,
+            actionable: errorData.details || 'Please try again.',
+            retryable: errorData.retryable ?? true,
+            statusCode: response.status
+          });
+        }
+        
+        throw new RecipeProcessingError({
+          type: ErrorType.SERVER_ERROR,
+          message: errorData.error || 'Unknown server error',
+          userMessage: errorData.error || 'Something went wrong on our end.',
+          actionable: 'Please try again.',
+          retryable: true,
+          statusCode: response.status
+        });
+      }
+      
+      return response.json();
+    },
+    {
+      onProgress: (progress, message) => {
+        setLoadingProgress(progress);
+        setLoadingStepMessage(message);
+      },
+      onError: (error) => {
+        logError(error, { 
+          context: 'homepage-image-processing',
+          fileName: imageProcessing.selectedFile?.name 
+        });
+        toast.error(error.userMessage);
+      },
+      onSuccess: () => {
+        toast.success('Recipe scanned successfully!');
+        setShowAddRecipeModal(false);
+      }
+    }
+  );
 
   useEffect(() => {
     fetchSavedRecipes();
@@ -532,73 +603,80 @@ function MainPage() {
 
   const handleProcessImage = async (file: File) => {
     if (!file) return;
-    setIsLoading(true); setError(null); setUrl(""); 
-    setLoadingProgress(5); setLoadingStepMessage(`Checking image format '${file.name}'... 🧐`);
+    
+    setIsLoading(true);
+    setError(null);
+    setUrl("");
+    setLoadingProgress(5);
+    setLoadingStepMessage(`Checking image format '${file.name}'... 🧐`);
+    
     let fileToProcess = file;
 
-    if (file.type === 'image/heic' || file.type === 'image/heif' || file.name.toLowerCase().endsWith('.heic') || file.name.toLowerCase().endsWith('.heif')) {
+    // HEIC conversion handling
+    if (file.type === 'image/heic' || file.type === 'image/heif' || 
+        file.name.toLowerCase().endsWith('.heic') || file.name.toLowerCase().endsWith('.heif')) {
+      
       setLoadingStepMessage(`Converting '${file.name}' from HEIC to JPEG... ⏳`);
-      toast.info(`It looks like you&apos;ve uploaded an HEIC image. We&apos;ll convert it to JPEG for you!`);
+      toast.info(`Converting HEIC image to JPEG...`);
+      
       try {
         const heic2any = (await import('heic2any')).default;
-
-        const conversionResult = await heic2any({ blob: file, toType: "image/jpeg", quality: 0.8 });
+        const conversionResult = await heic2any({ 
+          blob: file, 
+          toType: "image/jpeg", 
+          quality: 0.8 
+        });
+        
         const convertedBlob = Array.isArray(conversionResult) ? conversionResult[0] : conversionResult;
         const originalNameWithoutExt = file.name.split('.').slice(0, -1).join('.');
         fileToProcess = new File([convertedBlob], `${originalNameWithoutExt}.jpeg`, { type: 'image/jpeg' });
-        toast.success(`'${file.name}' converted to JPEG successfully!`);
-        console.log("HEIC converted to JPEG:", fileToProcess.name);
+        
+        toast.success(`Image converted successfully!`);
       } catch (conversionError: unknown) {
         console.error("Error converting HEIC to JPEG:", conversionError);
-        toast.error(`Failed to convert HEIC image: ${conversionError instanceof Error ? conversionError.message : 'Unknown error'}. Please try a different image or format.`);
-        setIsLoading(false); setLoadingProgress(0); setLoadingStepMessage(""); return;
+        const errorMessage = conversionError instanceof Error ? conversionError.message : 'Unknown error';
+        toast.error(`Failed to convert HEIC image: ${errorMessage}`);
+        setIsLoading(false);
+        setLoadingProgress(0);
+        setLoadingStepMessage("");
+        return;
       }
     }
-    setLoadingProgress(10); setLoadingStepMessage(`Preparing to scan '${fileToProcess.name}'... 🖼️`);
-    const formData = new FormData(); formData.append('image', fileToProcess);
-    try {
-      setLoadingProgress(30); setLoadingStepMessage(`Sending '${fileToProcess.name}' for analysis... 🧠`);
-      const response = await fetch('/api/scan-recipe', { method: 'POST', body: formData });
-      
-      if (!response.ok) {
-        let errorText = await response.text();
-        try {
-          // Attempt to parse as JSON in case the server did send a JSON error despite not being ok
-          const errorData = JSON.parse(errorText);
-          console.error("Error scanning recipe from image - API response not OK (JSON parsed):", errorData);
-          throw new Error(errorData.error || `Failed to process recipe from image. Server responded with status ${response.status}.`);
-        } catch (e) {
-          // If JSON parsing fails, use the raw text (likely HTML or plain text error)
-          console.error("Error scanning recipe from image - API response not OK (Non-JSON response):", errorText);
-          // Truncate long HTML error messages for toast
-          const shortErrorText = errorText.length > 100 ? errorText.substring(0, 97) + "..." : errorText;
-          throw new Error(`Failed to process recipe. Server error: ${shortErrorText} (Status: ${response.status})`);
-        }
-      }
 
-      const responseData = await response.json();
-      setLoadingProgress(80); setLoadingStepMessage("Image processed! Getting recipe details... ✨");
-      const recipeData: RecipeData = responseData;
-      handleViewRecipe(recipeData);
-      toast.success(`Successfully scanned recipe from '${fileToProcess.name}'!`); setLoadingProgress(100);
-      setShowAddRecipeModal(false);
+    try {
+      setLoadingProgress(10);
+      setLoadingStepMessage(`Preparing to scan '${fileToProcess.name}'... 🖼️`);
+      
+      const result = await imageProcessing.processFile(fileToProcess);
+      
+      if (result) {
+        const recipeData: RecipeData = result;
+        handleViewRecipe(recipeData);
+        setLoadingProgress(100);
+      }
     } catch (err: unknown) {
+      // Error handling is managed by the imageProcessing hook
       console.error("Error in handleProcessImage:", err);
-      const errorMsg = err instanceof Error ? err.message : "An unexpected error occurred while processing the image.";
-      setError(errorMsg);
-      toast.error(errorMsg);
-      setLoadingProgress(0); 
-    }
-    finally { 
-      setIsLoading(false); 
-      setLoadingStepMessage(""); 
-      setLoadingProgress(0); 
+      setLoadingProgress(0);
+    } finally {
+      setIsLoading(false);
+      setLoadingStepMessage("");
+      setLoadingProgress(0);
     }
   };
 
-  const handleImageFileSelect = (file: File) => { 
+  const handleImageFileSelect = (file: File) => {
     console.log("Image selected:", file.name, file.type, file.size);
-    handleProcessImage(file); 
+    handleProcessImage(file);
+  };
+
+  const handleRetryImageProcessing = () => {
+    if (imageProcessing.canRetry) {
+      setIsLoading(true);
+      imageProcessing.retry().finally(() => {
+        setIsLoading(false);
+      });
+    }
   };
 
   const handleCategoryClick = (categoryName: string) => {
@@ -837,29 +915,28 @@ function MainPage() {
                   Scan Photo
                 </TabsTrigger>
               </TabsList>
+              
+              {/* URL Import Tab */}
               <TabsContent value="url" className="mt-6">
                 <div className="space-y-4">
                   <div className="text-center mb-4">
-                    <div className="mx-auto w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mb-3">
-                      <Link className="h-8 w-8 text-primary" />
+                    <div className="mx-auto w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mb-3">
+                      <SearchIcon className="h-8 w-8 text-blue-600" />
                     </div>
                     <h3 className="text-lg font-semibold mb-2">Import from URL</h3>
                     <p className="text-sm text-muted-foreground">
-                      Paste any recipe link and we'll extract it for you
+                      Paste a recipe URL and we'll extract all the details
                     </p>
                   </div>
-                  <form onSubmit={handleSubmit} className="space-y-4">
-                    <div className="flex flex-col sm:flex-row gap-3">
+                  <form onSubmit={handleSubmit}>
+                    <div className="space-y-4">
                       <Input
                         type="url"
                         placeholder="https://example.com/recipe"
                         value={url}
                         onChange={(e) => setUrl(e.target.value)}
-                        className="flex-1 text-lg p-4 border-2 border-border focus:border-primary"
-                        required
-                        aria-label="Recipe URL Input"
                         disabled={isLoading}
-                        autoFocus
+                        className="text-lg p-6"
                       />
                       <Button type="submit" disabled={isLoading} size="lg" className="text-lg px-6">
                         {isLoading && !loadingStepMessage.toLowerCase().includes('scan') ? (
@@ -885,6 +962,8 @@ function MainPage() {
                   </form>
                 </div>
               </TabsContent>
+              
+              {/* Photo Scan Tab */}
               <TabsContent value="photo" className="mt-6">
                 <div className="space-y-4">
                   <div className="text-center mb-4">
@@ -896,15 +975,33 @@ function MainPage() {
                       Upload a photo of a recipe and we'll extract the details
                     </p>
                   </div>
-                  <ScanPhotoButton onFileSelect={handleImageFileSelect} />
+                  
+                  {/* Enhanced Error Display for Image Processing */}
+                  {imageProcessing.error && (
+                    <ErrorDisplay 
+                      error={imageProcessing.error}
+                      onRetry={handleRetryImageProcessing}
+                      onDismiss={() => imageProcessing.reset()}
+                      compact={true}
+                      className="mb-4"
+                    />
+                  )}
+                  
+                  <ScanPhotoButton 
+                    onFileSelect={handleImageFileSelect}
+                    disabled={imageProcessing.isLoading}
+                  />
                 </div>
               </TabsContent>
             </Tabs>
 
             {/* Loading Progress */}
-            {isLoading && loadingStepMessage && (
+            {(isLoading || imageProcessing.isLoading) && loadingStepMessage && (
               <div className="mt-6">
-                <RecipeLoadingProgress progress={loadingProgress} statusMessage={loadingStepMessage} />
+                <RecipeLoadingProgress 
+                  progress={loadingProgress} 
+                  statusMessage={loadingStepMessage} 
+                />
               </div>
             )}
           </div>
