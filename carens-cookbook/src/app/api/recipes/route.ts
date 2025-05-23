@@ -86,10 +86,10 @@ export async function GET(req: NextRequest) {
     const { searchParams } = new URL(req.url);
     const category = searchParams.get('category');
 
-    let whereClause: any = { userId };
-    if (category) {
-      whereClause.category = category;
-    }
+    const whereClause = {
+      userId,
+      ...(category && { category })
+    };
 
     const recipes = await prisma.recipe.findMany({
       where: whereClause,

@@ -20,38 +20,39 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <head>
-        <meta name="theme-color" content="#007bff" />
-      </head>
-      <body className={inter.className}>
-        <ClerkProvider
-          publishableKey={process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY}
-          appearance={{
-            elements: {
-              formButtonPrimary: 'bg-primary text-primary-foreground hover:bg-primary/90',
-              card: 'shadow-lg',
-              headerTitle: 'text-primary',
-              socialButtonsBlockButton: 'border-input hover:bg-accent',
-            },
-            variables: {
-              colorPrimary: '#007bff',
-            }
-          }}
-        >
+    <ClerkProvider
+      publishableKey={process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY}
+      appearance={{
+        elements: {
+          formButtonPrimary: 'bg-primary text-primary-foreground hover:bg-primary/90',
+          card: 'shadow-lg',
+          headerTitle: 'text-primary',
+          socialButtonsBlockButton: 'border-input hover:bg-accent',
+        },
+        variables: {
+          colorPrimary: '#007bff',
+        }
+      }}
+    >
+      <html lang="en">
+        <head>
+          <meta name="theme-color" content="#007bff" />
+        </head>
+        <body className={inter.className}>
           <SettingsProvider>
             <Navbar />
             <main className="pt-0">
               {children}
             </main>
             <FloatingSettingsButton />
+            {/* You can add a Footer component here if you have one */}
           </SettingsProvider>
           <Script
             src="/registerServiceWorker.js"
             strategy="lazyOnload"
           />
-        </ClerkProvider>
-      </body>
-    </html>
+        </body>
+      </html>
+    </ClerkProvider>
   );
 }
