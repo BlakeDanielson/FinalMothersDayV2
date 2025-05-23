@@ -301,7 +301,7 @@ export function getErrorDetails(type: ErrorType): {
 }
 
 // Logging utility for errors
-export function logError(error: RecipeProcessingError, additionalContext?: any) {
+export function logError(error: RecipeProcessingError, additionalContext?: Record<string, unknown>) {
   const logData = {
     timestamp: error.timestamp,
     type: error.type,
@@ -317,8 +317,8 @@ export function logError(error: RecipeProcessingError, additionalContext?: any) 
   
   // In production, you might want to send this to an error tracking service
   // like Sentry, LogRocket, or your own analytics
-  if (typeof window !== 'undefined' && (window as any).gtag) {
-    (window as any).gtag('event', 'recipe_processing_error', {
+  if (typeof window !== 'undefined' && 'gtag' in window && typeof (window as unknown as { gtag: (command: string, action: string, parameters?: Record<string, unknown>) => void }).gtag === 'function') {
+    (window as unknown as { gtag: (command: string, action: string, parameters?: Record<string, unknown>) => void }).gtag('event', 'recipe_processing_error', {
       error_type: error.type,
       error_message: error.message,
       retryable: error.retryable

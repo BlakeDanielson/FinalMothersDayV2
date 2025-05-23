@@ -1,6 +1,7 @@
 'use client';
 
 import React from 'react';
+import Image from 'next/image';
 import { useUser } from '@clerk/nextjs';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -36,9 +37,11 @@ export default function ProfilePage() {
           <CardContent className="space-y-4">
             <div className="flex items-center gap-4">
               {user.imageUrl && (
-                <img 
+                <Image 
                   src={user.imageUrl} 
                   alt="Profile" 
+                  width={64}
+                  height={64}
                   className="w-16 h-16 rounded-full"
                 />
               )}
