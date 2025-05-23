@@ -119,7 +119,7 @@ export function useRetryableRequest<T>(
           
           // Recursively retry
           return executeRequest(true);
-        } catch (abortError) {
+        } catch {
           // Request was aborted
           return null;
         }
@@ -127,7 +127,7 @@ export function useRetryableRequest<T>(
 
       return null;
     }
-  }, [requestFn, state.retryCount, maxRetries, baseDelay, maxDelay, onProgress, onError, onSuccess]);
+  }, [requestFn, state.retryCount, maxRetries, baseDelay, maxDelay, onProgress, onError, onSuccess, calculateDelay]);
 
   const retry = useCallback(async (): Promise<T | null> => {
     if (!state.canRetry) {
@@ -168,7 +168,7 @@ export function useRetryableRequest<T>(
 
 // Specialized hook for image processing with specific defaults
 export function useImageProcessing(
-  processFn: (file: File) => Promise<any>,
+  processFn: (file: File) => Promise<unknown>,
   options: Omit<RetryableRequestOptions, 'maxRetries'> & { maxRetries?: number } = {}
 ) {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
@@ -226,7 +226,7 @@ export function useImageProcessing(
     // Small delay to ensure state is updated
     await new Promise(resolve => setTimeout(resolve, 0));
     return retryableRequest.execute();
-  }, [retryableRequest.execute]);
+  }, [retryableRequest]);
 
   return {
     ...retryableRequest,

@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
-import { SearchIcon, HomeIcon, PlusIcon, ShuffleIcon, ShoppingCartIcon, Camera, BarChart3, Link, Upload } from "lucide-react";
+import { SearchIcon, HomeIcon, Camera, BarChart3, Link } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Toaster, toast } from 'sonner';
 import { useRouter } from 'next/navigation';
@@ -697,20 +697,7 @@ function MainPage() {
     setCurrentView('stats');
   };
 
-  const handleRandomRecipe = () => {
-    if (savedRecipes.length === 0) {
-      toast.info("No recipes available yet. Add some recipes first!");
-      return;
-    }
-    const randomIndex = Math.floor(Math.random() * savedRecipes.length);
-    const randomRecipe = savedRecipes[randomIndex];
-    handleViewRecipe(randomRecipe);
-    toast.success(`Here's a random recipe: ${randomRecipe.title}!`);
-  };
-
-  const handleShoppingList = () => {
-    toast.info("Shopping list feature coming soon! 📝");
-  };
+  // Removed unused functions: handleRandomRecipe and handleShoppingList
 
   if (currentView === 'recipe' && selectedRecipe) {
     return (

@@ -43,7 +43,7 @@ export default function Navbar({ className }: NavbarProps) {
           {/* Logo/Brand */}
           <Link href="/" className="flex items-center space-x-2">
             <BookOpen className="h-8 w-8 text-primary" />
-            <span className="text-xl font-bold text-primary">Caren's Cookbook</span>
+            <span className="text-xl font-bold text-primary">Caren&apos;s Cookbook</span>
           </Link>
 
           {/* Desktop Search */}

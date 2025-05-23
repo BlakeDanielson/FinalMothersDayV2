@@ -9,7 +9,7 @@ import {
   Wifi, 
   Server, 
   Clock,
-  Image as ImageIcon,
+
   Brain,
   Shield,
   Info,
