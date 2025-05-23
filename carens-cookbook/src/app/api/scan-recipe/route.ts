@@ -111,11 +111,14 @@ function validateFile(imageFile: File): void {
   }
 }
 
-function handleOpenAIError(error: any): never {
+function handleOpenAIError(error: unknown): never {
   console.error('OpenAI API Error:', error);
 
+  // Type guard for error objects with common properties
+  const errorObj = error as { status?: number; code?: string; message?: string };
+
   // Rate limiting
-  if (error.status === 429 || error.code === 'rate_limit_exceeded') {
+  if (errorObj.status === 429 || errorObj.code === 'rate_limit_exceeded') {
     throw new RecipeProcessingError({
       type: ErrorType.AI_QUOTA_EXCEEDED,
       message: `OpenAI rate limit exceeded: ${error.message}`,

@@ -1,7 +1,7 @@
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { RecipeData } from "@/components/RecipeDisplay";
-import { calculateRecipeStats, RecipeStats } from "@/lib/stats";
+import { calculateRecipeStats } from "@/lib/stats";
 import StatsCard from "./StatsCard";
 import { motion } from "framer-motion";
 import { 
@@ -25,7 +25,6 @@ import {
   YAxis,
   CartesianGrid,
   Tooltip,
-  Legend
 } from 'recharts';
 
 interface StatsDashboardProps {
