@@ -14,6 +14,21 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+// User model for Clerk integration
+model User {
+  id        String   @id // This will be the Clerk user ID
+  email     String   @unique
+  firstName String?
+  lastName  String?
+  imageUrl  String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relations
+  recipes   Recipe[]
+  favorites RecipeFavorite[]
+}
+
 model Recipe {
   id            String   @id @default(cuid()) // Using CUID for IDs as a common Prisma pattern
   title         String
@@ -27,4 +42,26 @@ model Recipe {
   cleanupTime   String
   createdAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt
+
+  // User relation
+  userId        String
+  user          User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  // Relations
+  favorites     RecipeFavorite[]
+
+  @@index([userId])
+}
+
+// Junction table for user favorites
+model RecipeFavorite {
+  id       String @id @default(cuid())
+  userId   String
+  recipeId String
+  createdAt DateTime @default(now())
+
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  recipe Recipe @relation(fields: [recipeId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, recipeId])
 }

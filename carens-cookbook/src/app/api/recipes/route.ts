@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/db';
 import { z } from 'zod';
+import { auth } from '@clerk/nextjs/server';
 
 // Define a Zod schema for incoming recipe data for creation
 // This should match the structure expected from the client when saving a recipe.
@@ -31,22 +32,38 @@ const updateRecipeSchema = z.object({
 
 export async function POST(req: NextRequest) {
   try {
+    const { userId } = await auth();
+    if (!userId) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    }
+
     const body = await req.json();
     const recipeData = createRecipeSchema.parse(body);
 
-    // Check if a recipe with the same title already exists (optional, but good for preventing exact duplicates)
+    // Ensure user exists in database
+    await prisma.user.upsert({
+      where: { id: userId },
+      update: {},
+      create: { id: userId, email: '' } // Email will be updated by webhook
+    });
+
+    // Check if a recipe with the same title already exists for this user
     const existingRecipe = await prisma.recipe.findFirst({
-      where: { title: recipeData.title },
+      where: { 
+        title: recipeData.title,
+        userId: userId
+      },
     });
 
     if (existingRecipe) {
-      // Optionally, you could update the existing recipe or return a specific message/status
-      // For now, let's just return a conflict error if title is exactly the same
-      return NextResponse.json({ error: 'A recipe with this title already exists.' }, { status: 409 });
+      return NextResponse.json({ error: 'A recipe with this title already exists in your collection.' }, { status: 409 });
     }
 
     const newRecipe = await prisma.recipe.create({
-      data: recipeData,
+      data: {
+        ...recipeData,
+        userId: userId
+      },
     });
 
     return NextResponse.json(newRecipe, { status: 201 });
@@ -61,12 +78,17 @@ export async function POST(req: NextRequest) {
 
 export async function GET(req: NextRequest) {
   try {
+    const { userId } = await auth();
+    if (!userId) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    }
+
     const { searchParams } = new URL(req.url);
     const category = searchParams.get('category');
 
-    let whereClause = {};
+    let whereClause: any = { userId };
     if (category) {
-      whereClause = { category };
+      whereClause.category = category;
     }
 
     const recipes = await prisma.recipe.findMany({
@@ -84,6 +106,11 @@ export async function GET(req: NextRequest) {
 
 export async function DELETE(req: NextRequest) {
   try {
+    const { userId } = await auth();
+    if (!userId) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    }
+
     const { searchParams } = new URL(req.url);
     const recipeId = searchParams.get('id');
 
@@ -91,13 +118,16 @@ export async function DELETE(req: NextRequest) {
       return NextResponse.json({ error: 'Recipe ID is required for deletion.' }, { status: 400 });
     }
 
-    // Check if the recipe exists before attempting to delete
-    const existingRecipe = await prisma.recipe.findUnique({
-      where: { id: recipeId },
+    // Check if the recipe exists and belongs to the user
+    const existingRecipe = await prisma.recipe.findFirst({
+      where: { 
+        id: recipeId,
+        userId: userId
+      },
     });
 
     if (!existingRecipe) {
-      return NextResponse.json({ error: 'Recipe not found.' }, { status: 404 });
+      return NextResponse.json({ error: 'Recipe not found or access denied.' }, { status: 404 });
     }
 
     await prisma.recipe.delete({
@@ -113,10 +143,12 @@ export async function DELETE(req: NextRequest) {
 
 export async function PUT(req: NextRequest) {
   try {
+    const { userId } = await auth();
+    if (!userId) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    }
+
     const body = await req.json();
-    // Validate only the parts of the schema that are present in the body
-    // For partial updates, you might use .partial() on your main schema if all fields were optional
-    // or a specific update schema like we have defined.
     const validatedData = updateRecipeSchema.safeParse(body);
 
     if (!validatedData.success) {
@@ -130,36 +162,39 @@ export async function PUT(req: NextRequest) {
       return NextResponse.json({ error: "No update data provided.", details: "Please provide fields to update, e.g., title." }, { status: 400 });
     }
 
-    // Check if the recipe exists
-    const existingRecipe = await prisma.recipe.findUnique({
-      where: { id },
+    // Check if the recipe exists and belongs to the user
+    const existingRecipe = await prisma.recipe.findFirst({
+      where: { 
+        id,
+        userId: userId
+      },
     });
 
     if (!existingRecipe) {
-      return NextResponse.json({ error: 'Recipe not found for update.' }, { status: 404 });
+      return NextResponse.json({ error: 'Recipe not found or access denied.' }, { status: 404 });
     }
 
-    // If updating title, optionally check for title uniqueness again if it's a strict requirement
+    // If updating title, check for title uniqueness within user's recipes
     if (updatePayload.title && updatePayload.title !== existingRecipe.title) {
       const recipeWithSameTitle = await prisma.recipe.findFirst({
         where: { 
           title: updatePayload.title,
-          NOT: { id: id } // Exclude the current recipe from the check
+          userId: userId,
+          NOT: { id: id }
         },
       });
       if (recipeWithSameTitle) {
-        return NextResponse.json({ error: 'Another recipe with this title already exists.' }, { status: 409 });
+        return NextResponse.json({ error: 'Another recipe with this title already exists in your collection.' }, { status: 409 });
       }
     }
 
     const updatedRecipe = await prisma.recipe.update({
       where: { id },
-      data: updatePayload, // Prisma will only update fields present in updatePayload
+      data: updatePayload,
     });
 
     return NextResponse.json(updatedRecipe, { status: 200 });
   } catch (error: unknown) {
-    // ZodError was handled by safeParse, but other errors might occur
     console.error('Error updating recipe:', error instanceof Error ? error.message : String(error));
     return NextResponse.json({ error: 'Failed to update recipe.', details: error instanceof Error ? error.message : String(error) }, { status: 500 });
   }

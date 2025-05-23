@@ -120,6 +120,16 @@ exports.Prisma.TransactionIsolationLevel = makeStrictEnum({
   Serializable: 'Serializable'
 });
 
+exports.Prisma.UserScalarFieldEnum = {
+  id: 'id',
+  email: 'email',
+  firstName: 'firstName',
+  lastName: 'lastName',
+  imageUrl: 'imageUrl',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
 exports.Prisma.RecipeScalarFieldEnum = {
   id: 'id',
   title: 'title',
@@ -132,7 +142,15 @@ exports.Prisma.RecipeScalarFieldEnum = {
   prepTime: 'prepTime',
   cleanupTime: 'cleanupTime',
   createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
+  updatedAt: 'updatedAt',
+  userId: 'userId'
+};
+
+exports.Prisma.RecipeFavoriteScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  recipeId: 'recipeId',
+  createdAt: 'createdAt'
 };
 
 exports.Prisma.SortOrder = {
@@ -152,7 +170,9 @@ exports.Prisma.NullsOrder = {
 
 
 exports.Prisma.ModelName = {
-  Recipe: 'Recipe'
+  User: 'User',
+  Recipe: 'Recipe',
+  RecipeFavorite: 'RecipeFavorite'
 };
 
 /**

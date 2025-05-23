@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
-import { SearchIcon, HomeIcon } from "lucide-react";
+import { SearchIcon, HomeIcon, PlusIcon, ShuffleIcon, ShoppingCartIcon, Camera, BarChart3, Link, Upload } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Toaster, toast } from 'sonner';
 import { useRouter } from 'next/navigation';
@@ -10,10 +10,14 @@ import { useRouter } from 'next/navigation';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card } from "@/components/ui/card";
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import RecipeDisplay, { RecipeData } from "@/components/RecipeDisplay";
 import RecipeLoadingProgress from "@/components/ui/RecipeLoadingProgress";
 import ScanPhotoButton from "@/components/ui/ScanPhotoButton";
 import { BentoGrid } from "@/components/BentoGrid";
+import { Badge } from "@/components/ui/badge";
+import StatsDashboard from "@/components/StatsDashboard";
 
 // Define a local type for placeholder recipes that includes tags, extending the imported RecipeData
 interface PlaceholderRecipe extends RecipeData {
@@ -208,36 +212,106 @@ const CategoryCard = ({
   itemCount: number;
   imageUrl?: string | null;
   onClick: () => void;
-}) => (
-  <Card
-    onClick={onClick}
-    className={cn(
-      "group relative flex flex-col justify-between overflow-hidden rounded-xl h-[250px] cursor-pointer",
-      "bg-background border border-border hover:border-primary/20 transition-all duration-300 hover:shadow-lg"
-    )}
-  >
-    <div className="relative h-2/3 w-full overflow-hidden">
-      {imageUrl ? (
-        <div
-          className="absolute inset-0 bg-cover bg-center transition-transform duration-300 group-hover:scale-105"
-          style={{ backgroundImage: `url(${imageUrl})` }}
-        />
-      ) : (
-        <div className="absolute inset-0 bg-muted flex items-center justify-center">
-          <HomeIcon className="h-12 w-12 text-muted-foreground/50" />
-        </div>
-      )}
-      <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-background via-background/70 to-transparent h-20" />
-    </div>
+}) => {
+  const [isHovered, setIsHovered] = useState(false);
 
-    <div className="absolute bottom-0 left-0 right-0 p-4">
-      <h3 className="text-xl font-semibold text-foreground line-clamp-2">
-        {categoryName}
-      </h3>
-      <p className="text-xs text-muted-foreground">{itemCount} {itemCount === 1 ? 'recipe' : 'recipes'}</p>
+  return (
+    <div
+      className="relative group block w-full h-full cursor-pointer"
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
+      onClick={onClick}
+    >
+      <Card className="h-full overflow-hidden border border-border bg-background transition-all duration-500 hover:shadow-2xl hover:shadow-primary/10 hover:-translate-y-2 hover:border-primary/30">
+        <div className="relative aspect-[4/3] w-full overflow-hidden">
+          {imageUrl ? (
+            <div
+              className="h-full w-full bg-cover bg-center transition-transform duration-700 group-hover:scale-105"
+              style={{ backgroundImage: `url(${imageUrl})` }}
+            />
+          ) : (
+            <div className="h-full w-full bg-gradient-to-br from-primary/20 to-primary/5 flex items-center justify-center">
+              <HomeIcon className="h-20 w-20 text-primary/40" />
+            </div>
+          )}
+          
+          {/* Enhanced gradient overlay */}
+          <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent" />
+          
+          {/* Recipe count badge with better prominence */}
+          <motion.div 
+            className="absolute top-4 right-4"
+            initial={{ scale: 1 }}
+            animate={{ scale: isHovered ? 1.1 : 1 }}
+            transition={{ duration: 0.3 }}
+          >
+            <Badge 
+              className={cn(
+                "bg-white/95 text-gray-900 border-0 font-medium backdrop-blur-sm px-3 py-1 text-sm",
+                "transition-all duration-300 group-hover:bg-primary group-hover:text-primary-foreground group-hover:font-semibold"
+              )}
+            >
+              {itemCount} {itemCount === 1 ? 'recipe' : 'recipes'}
+            </Badge>
+          </motion.div>
+          
+          {/* Category name overlay with enhanced typography */}
+          <div className="absolute bottom-0 left-0 right-0 p-6">
+            <motion.h3 
+              className="text-2xl font-medium text-white mb-2 transition-all duration-300 tracking-wide"
+              initial={{ y: 10, opacity: 0.9 }}
+              animate={{ 
+                y: isHovered ? -8 : 0, 
+                opacity: 1,
+                letterSpacing: isHovered ? "0.025em" : "0"
+              }}
+              transition={{ duration: 0.3 }}
+            >
+              {categoryName}
+            </motion.h3>
+            <motion.div
+              className="h-1 bg-primary rounded-full transition-all duration-500"
+              initial={{ width: "24px" }}
+              animate={{ width: isHovered ? "80px" : "24px" }}
+              transition={{ duration: 0.5, ease: "easeInOut" }}
+            />
+          </div>
+        </div>
+        
+        {/* Progressive disclosure - additional info that appears on hover */}
+        <motion.div 
+          className="bg-background border-t border-border/50"
+          initial={{ height: 0, opacity: 0 }}
+          animate={{ 
+            height: isHovered ? "auto" : 0, 
+            opacity: isHovered ? 1 : 0 
+          }}
+          transition={{ duration: 0.4, ease: "easeInOut" }}
+          style={{ overflow: 'hidden' }}
+        >
+          <div className="p-4">
+            <p className="text-sm text-muted-foreground font-light leading-relaxed">
+              {itemCount === 0 
+                ? `No ${categoryName.toLowerCase()} recipes yet. Start building your collection!`
+                : `Explore ${itemCount} delicious ${categoryName.toLowerCase()} ${itemCount === 1 ? 'recipe' : 'recipes'}`
+              }
+            </p>
+            {itemCount > 0 && (
+              <motion.div 
+                className="mt-3 flex items-center text-xs text-primary font-medium"
+                initial={{ opacity: 0, x: -10 }}
+                animate={{ opacity: isHovered ? 1 : 0, x: isHovered ? 0 : -10 }}
+                transition={{ duration: 0.3, delay: 0.1 }}
+              >
+                Click to explore →
+              </motion.div>
+            )}
+          </div>
+        </motion.div>
+      </Card>
     </div>
-  </Card>
-);
+  );
+};
 
 function MainPage() {
   const router = useRouter();
@@ -247,8 +321,10 @@ function MainPage() {
   const [loadingProgress, setLoadingProgress] = useState(0);
   const [error, setError] = useState<string | null>(null);
   const [savedRecipes, setSavedRecipes] = useState<RecipeData[]>([]);
-  const [currentView, setCurrentView] = useState<'list' | 'recipe' | 'save'>('list');
+  const [currentView, setCurrentView] = useState<'list' | 'recipe' | 'save' | 'stats'>('list');
   const [selectedRecipe, setSelectedRecipe] = useState<RecipeData | null>(null);
+  const [showAddRecipeModal, setShowAddRecipeModal] = useState(false);
+  const [activeImportTab, setActiveImportTab] = useState<'url' | 'photo'>('url');
 
   const [gridTitle, setGridTitle] = useState("Recipe Categories");
 
@@ -418,6 +494,7 @@ function MainPage() {
       setLoadingProgress(90); setLoadingStepMessage("Getting it all plated up for you... ✨");
       handleViewRecipe(recipeData); 
       setUrl(""); setLoadingProgress(100);
+      setShowAddRecipeModal(false);
     } catch (err: unknown) {
       console.error("Error in handleSubmit:", err);
       setError(err instanceof Error ? err.message : "An unexpected error occurred.");
@@ -504,6 +581,7 @@ function MainPage() {
       const recipeData: RecipeData = responseData;
       handleViewRecipe(recipeData);
       toast.success(`Successfully scanned recipe from '${fileToProcess.name}'!`); setLoadingProgress(100);
+      setShowAddRecipeModal(false);
     } catch (err: unknown) {
       console.error("Error in handleProcessImage:", err);
       const errorMsg = err instanceof Error ? err.message : "An unexpected error occurred while processing the image.";
@@ -527,6 +605,35 @@ function MainPage() {
     router.push(`/category/${encodeURIComponent(categoryName)}`);
   };
 
+  const handleQuickImportURL = () => {
+    setActiveImportTab('url');
+    setShowAddRecipeModal(true);
+  };
+
+  const handleQuickScanPhoto = () => {
+    setActiveImportTab('photo');
+    setShowAddRecipeModal(true);
+  };
+
+  const handleShowStats = () => {
+    setCurrentView('stats');
+  };
+
+  const handleRandomRecipe = () => {
+    if (savedRecipes.length === 0) {
+      toast.info("No recipes available yet. Add some recipes first!");
+      return;
+    }
+    const randomIndex = Math.floor(Math.random() * savedRecipes.length);
+    const randomRecipe = savedRecipes[randomIndex];
+    handleViewRecipe(randomRecipe);
+    toast.success(`Here's a random recipe: ${randomRecipe.title}!`);
+  };
+
+  const handleShoppingList = () => {
+    toast.info("Shopping list feature coming soon! 📝");
+  };
+
   if (currentView === 'recipe' && selectedRecipe) {
     return (
       <>
@@ -544,10 +651,10 @@ function MainPage() {
   return (
     <div className="min-h-screen bg-background text-foreground">
       <Toaster richColors position="top-right" />
-      <div className="container mx-auto px-4 py-12">
-        <header className="mb-12 text-center">
+      <div className="container mx-auto px-4 py-8">
+        <header className="mb-10 text-center">
           <motion.h1
-            className="text-5xl md:text-6xl font-bold tracking-tight mb-4 text-primary"
+            className="text-5xl md:text-6xl font-black tracking-tight mb-3 text-primary"
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
@@ -555,118 +662,254 @@ function MainPage() {
             Caren&apos;s Cookbook
           </motion.h1>
           <motion.p
-            className="text-xl text-muted-foreground max-w-2xl mx-auto"
+            className="text-xl md:text-2xl text-muted-foreground max-w-2xl mx-auto font-light"
             initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.2 }}
           >
-            Paste any recipe link below to get started. Your personal cookbook, simplified for you, Mom!
+            Your personal recipe collection
           </motion.p>
         </header>
 
+        {/* Quick Actions Section */}
+        <motion.section
+          className="mb-16"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 0.3 }}
+        >
+          <div className="text-center mb-8">
+            <h2 className="text-2xl font-medium text-foreground mb-2">Quick Actions</h2>
+            <p className="text-muted-foreground font-light">Start your cooking journey</p>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-5xl mx-auto">
+            <Card 
+              className="p-8 cursor-pointer hover:shadow-xl transition-all duration-300 group border-2 hover:border-primary hover:bg-primary/5"
+              onClick={handleQuickImportURL}
+            >
+              <div className="text-center">
+                <div className="mx-auto w-20 h-20 bg-primary rounded-full flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                  <SearchIcon className="h-10 w-10 text-primary-foreground" />
+                </div>
+                <h3 className="text-xl font-medium mb-3 text-primary">Import from URL</h3>
+                <p className="text-muted-foreground text-base font-light">Paste any recipe link to import</p>
+              </div>
+            </Card>
+            
+            <Card 
+              className="p-8 cursor-pointer hover:shadow-xl transition-all duration-300 group border-2 hover:border-emerald-500 hover:bg-emerald-50/50"
+              onClick={handleQuickScanPhoto}
+            >
+              <div className="text-center">
+                <div className="mx-auto w-20 h-20 bg-emerald-500 rounded-full flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                  <Camera className="h-10 w-10 text-white" />
+                </div>
+                <h3 className="text-xl font-medium mb-3 text-emerald-700">Scan Recipe</h3>
+                <p className="text-muted-foreground text-base font-light">Upload a photo to extract recipe</p>
+              </div>
+            </Card>
+            
+            <Card 
+              className="p-8 cursor-pointer hover:shadow-xl transition-all duration-300 group border-2 hover:border-purple-500 hover:bg-purple-50/50"
+              onClick={handleShowStats}
+            >
+              <div className="text-center">
+                <div className="mx-auto w-20 h-20 bg-purple-500 rounded-full flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                  <BarChart3 className="h-10 w-10 text-white" />
+                </div>
+                <h3 className="text-xl font-medium mb-3 text-purple-700">Collection Stats</h3>
+                <p className="text-muted-foreground text-base font-light">View insights about your recipes</p>
+              </div>
+            </Card>
+          </div>
+        </motion.section>
+
         {currentView !== 'list' && (
-          <Button 
-            onClick={() => setCurrentView('list')}
-            variant="outline"
-            className="mb-8 flex items-center gap-2 text-lg p-6 mx-auto sm:mx-0"
+          <motion.div
+            className="mb-12"
+            initial={{ opacity: 0, y: -10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.3 }}
           >
-            <HomeIcon className="h-5 w-5" />
-            Back to Recipe List
-          </Button>
+            <Button 
+              onClick={() => setCurrentView('list')}
+              variant="outline"
+              className="flex items-center gap-3 text-lg p-6 mx-auto sm:mx-0 font-medium hover:bg-primary hover:text-primary-foreground transition-all duration-300 border-primary/30 hover:border-primary"
+            >
+              <HomeIcon className="h-5 w-5" />
+              Back to Recipe List
+            </Button>
+          </motion.div>
         )}
 
         {currentView === 'list' && (
           <motion.div
-            className="max-w-2xl mx-auto mb-16"
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.4 }}
+            className="mb-8"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.5, delay: 0.6 }}
           >
-            <Card className="p-6 shadow-xl border-2 border-primary/20">
-              <form onSubmit={handleSubmit} className="flex flex-col gap-4">
-                <h2 className="text-2xl font-semibold mb-2 text-center text-primary">Add a New Recipe</h2>
-                <div className="flex flex-col sm:flex-row gap-3">
-                  <Input
-                    type="url"
-                    placeholder="Paste your recipe URL here..."
-                    value={url}
-                    onChange={(e) => setUrl(e.target.value)}
-                    className="flex-1 text-lg p-6 border-2 border-border focus:border-primary"
-                    required
-                    aria-label="Recipe URL Input"
-                    disabled={isLoading}
+            <div className="text-center mb-10">
+              <h2 className="text-3xl font-medium text-foreground mb-3">
+                {gridTitle}
+              </h2>
+              <p className="text-lg text-muted-foreground font-light max-w-2xl mx-auto">
+                Browse recipes by category • {savedRecipes.length} total recipes
+              </p>
+            </div>
+
+            <BentoGrid className="gap-8">
+              {processedCategories.map((category, index) => (
+                <motion.div
+                  key={category.name + index}
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.3, delay: 0.1 * index }}
+                  className="h-full min-h-[350px]"
+                >
+                  <CategoryCard 
+                    categoryName={category.name} 
+                    itemCount={category.count}
+                    imageUrl={category.imageUrl}
+                    onClick={() => handleCategoryClick(category.name)} 
                   />
-                  <Button type="submit" disabled={isLoading} size="lg" className="text-lg p-6">
-                    {isLoading && !loadingStepMessage.toLowerCase().includes('scan') ? (
-                      <span className="flex items-center gap-2">
-                        <motion.div
-                          animate={{ rotate: 360 }}
-                          transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
-                          className="h-5 w-5 border-2 border-primary-foreground border-t-transparent rounded-full"
-                        />
-                        Processing...
-                      </span>
-                    ) : (
-                      <span className="flex items-center gap-2">
-                        <SearchIcon className="h-5 w-5" />
-                        Get Recipe
-                      </span>
+                </motion.div>
+              ))}
+            </BentoGrid>
+          </motion.div>
+        )}
+
+        {currentView === 'save' && (
+          <motion.div
+            key="save-recipe"
+            initial={{ opacity: 0, x: 20 }}
+            animate={{ opacity: 1, x: 0 }}
+            exit={{ opacity: 0, x: -20 }}
+            transition={{ duration: 0.3 }}
+          >
+            <div className="text-center py-16">
+              <p className="text-muted-foreground font-light text-lg">Save functionality not implemented yet</p>
+            </div>
+          </motion.div>
+        )}
+
+        {currentView === 'stats' && (
+          <motion.div
+            key="stats-dashboard"
+            initial={{ opacity: 0, x: 20 }}
+            animate={{ opacity: 1, x: 0 }}
+            exit={{ opacity: 0, x: -20 }}
+            transition={{ duration: 0.3 }}
+            className="max-w-7xl mx-auto"
+          >
+            <div className="text-center mb-10">
+              <h2 className="text-3xl font-light text-foreground mb-3">Collection Insights</h2>
+              <p className="text-lg text-muted-foreground font-light max-w-2xl mx-auto">
+                Discover patterns and trends in your recipe collection
+              </p>
+            </div>
+            <StatsDashboard recipes={savedRecipes} />
+          </motion.div>
+        )}
+      </div>
+
+      {/* Recipe Import Modal */}
+      <Dialog open={showAddRecipeModal} onOpenChange={setShowAddRecipeModal}>
+        <DialogContent className="max-w-2xl">
+          <DialogHeader>
+            <DialogTitle className="text-2xl font-semibold text-primary">
+              Recipe Import
+            </DialogTitle>
+            <DialogDescription>
+              Choose a method to import a new recipe
+            </DialogDescription>
+          </DialogHeader>
+          
+          <div className="space-y-6">
+            <Tabs value={activeImportTab} onValueChange={(value) => setActiveImportTab(value as 'url' | 'photo')} className="w-full">
+              <TabsList className="grid w-full grid-cols-2 h-12">
+                <TabsTrigger value="url" className="flex items-center gap-2 text-sm font-medium">
+                  <Link className="h-4 w-4" />
+                  Import from URL
+                </TabsTrigger>
+                <TabsTrigger value="photo" className="flex items-center gap-2 text-sm font-medium">
+                  <Camera className="h-4 w-4" />
+                  Scan Photo
+                </TabsTrigger>
+              </TabsList>
+              <TabsContent value="url" className="mt-6">
+                <div className="space-y-4">
+                  <div className="text-center mb-4">
+                    <div className="mx-auto w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mb-3">
+                      <Link className="h-8 w-8 text-primary" />
+                    </div>
+                    <h3 className="text-lg font-semibold mb-2">Import from URL</h3>
+                    <p className="text-sm text-muted-foreground">
+                      Paste any recipe link and we'll extract it for you
+                    </p>
+                  </div>
+                  <form onSubmit={handleSubmit} className="space-y-4">
+                    <div className="flex flex-col sm:flex-row gap-3">
+                      <Input
+                        type="url"
+                        placeholder="https://example.com/recipe"
+                        value={url}
+                        onChange={(e) => setUrl(e.target.value)}
+                        className="flex-1 text-lg p-4 border-2 border-border focus:border-primary"
+                        required
+                        aria-label="Recipe URL Input"
+                        disabled={isLoading}
+                        autoFocus
+                      />
+                      <Button type="submit" disabled={isLoading} size="lg" className="text-lg px-6">
+                        {isLoading && !loadingStepMessage.toLowerCase().includes('scan') ? (
+                          <span className="flex items-center gap-2">
+                            <motion.div
+                              animate={{ rotate: 360 }}
+                              transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
+                              className="h-5 w-5 border-2 border-primary-foreground border-t-transparent rounded-full"
+                            />
+                            Processing...
+                          </span>
+                        ) : (
+                          <span className="flex items-center gap-2">
+                            <SearchIcon className="h-5 w-5" />
+                            Import Recipe
+                          </span>
+                        )}
+                      </Button>
+                    </div>
+                    {error && !isLoading && (
+                      <p className="text-sm text-red-600 mt-2">{error}</p>
                     )}
-                  </Button>
+                  </form>
                 </div>
-                {error && !isLoading && (
-                  <p className="text-sm text-red-600 text-center mt-2">{error}</p>
-                )}
-                {!isLoading && (
-                  <p className="text-sm text-muted-foreground text-center">
-                    Enter the web address of any recipe, and we&apos;ll import it for you!
-                  </p>
-                )}
-                <div className="my-4 text-center text-muted-foreground">
-                  <p>OR</p>
+              </TabsContent>
+              <TabsContent value="photo" className="mt-6">
+                <div className="space-y-4">
+                  <div className="text-center mb-4">
+                    <div className="mx-auto w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mb-3">
+                      <Camera className="h-8 w-8 text-blue-600" />
+                    </div>
+                    <h3 className="text-lg font-semibold mb-2">Scan Recipe Photo</h3>
+                    <p className="text-sm text-muted-foreground">
+                      Upload a photo of a recipe and we'll extract the details
+                    </p>
+                  </div>
+                  <ScanPhotoButton onFileSelect={handleImageFileSelect} />
                 </div>
-                <ScanPhotoButton onFileSelect={handleImageFileSelect} />
-              </form>
-            </Card>
+              </TabsContent>
+            </Tabs>
+
+            {/* Loading Progress */}
             {isLoading && loadingStepMessage && (
               <div className="mt-6">
                 <RecipeLoadingProgress progress={loadingProgress} statusMessage={loadingStepMessage} />
               </div>
             )}
-          </motion.div>
-        )}
-
-        <motion.div
-          className="mb-8"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.5, delay: 0.6 }}
-        >
-          <div className="flex justify-between items-center mb-6">
-            <h2 className="text-3xl font-semibold text-primary">
-              {gridTitle}
-            </h2>
           </div>
-
-          <BentoGrid>
-            {processedCategories.map((category, index) => (
-              <motion.div
-                key={category.name + index}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.3, delay: 0.1 * index }}
-              >
-                <CategoryCard 
-                  categoryName={category.name} 
-                  itemCount={category.count}
-                  imageUrl={category.imageUrl}
-                  onClick={() => handleCategoryClick(category.name)} 
-                />
-              </motion.div>
-            ))}
-          </BentoGrid>
-        </motion.div>
-      </div>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }
