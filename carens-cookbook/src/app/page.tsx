@@ -12,6 +12,7 @@ import { Input } from "@/components/ui/input";
 import { Card } from "@/components/ui/card";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import RecipeDisplay, { RecipeData } from "@/components/RecipeDisplay";
 import RecipeLoadingProgress from "@/components/ui/RecipeLoadingProgress";
 import ScanPhotoButton from "@/components/ui/ScanPhotoButton";
@@ -319,6 +320,7 @@ const CategoryCard = ({
 function MainPage() {
   const router = useRouter();
   const [url, setUrl] = useState("");
+  const [processingMethod, setProcessingMethod] = useState<'openai' | 'hyperbrowser'>('hyperbrowser'); // Default to Hyperbrowser
   const [isLoading, setIsLoading] = useState(false);
   const [loadingStepMessage, setLoadingStepMessage] = useState("");
   const [loadingProgress, setLoadingProgress] = useState(0);
@@ -553,7 +555,7 @@ function MainPage() {
       const response = await fetch(`/api/fetch-recipe`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ url }),
+        body: JSON.stringify({ url, processing_method: processingMethod }),
       });
       if (!response.ok) {
         const errorData = await response.json().catch(() => ({}));
@@ -561,7 +563,8 @@ function MainPage() {
         throw new Error(errorData.error || 'Failed to fetch recipe from API');
       }
       setLoadingProgress(75); setLoadingStepMessage("Asking the chef (AI) to read the recipe... 🧐");
-      const recipeData: RecipeData = await response.json();
+      const responseData = await response.json();
+      const recipeData: RecipeData = responseData.recipe;
       setLoadingProgress(90); setLoadingStepMessage("Getting it all plated up for you... ✨");
       handleViewRecipe(recipeData); 
       setUrl(""); setLoadingProgress(100);
@@ -925,6 +928,46 @@ function MainPage() {
                         disabled={isLoading}
                         className="text-lg p-6"
                       />
+                      
+                      {/* Processing Method Selector */}
+                      <div className="space-y-2">
+                        <label className="text-sm font-medium text-muted-foreground">
+                          Processing Method
+                        </label>
+                        <Select
+                          value={processingMethod}
+                          onValueChange={(value: 'openai' | 'hyperbrowser') => setProcessingMethod(value)}
+                          disabled={isLoading}
+                        >
+                          <SelectTrigger className="text-lg p-6">
+                            <SelectValue />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value="hyperbrowser">
+                              <div className="flex flex-col items-start">
+                                <span className="font-semibold">🚀 Hyperbrowser (Recommended)</span>
+                                <span className="text-xs text-muted-foreground">Faster, more accurate extraction</span>
+                              </div>
+                            </SelectItem>
+                            <SelectItem value="openai">
+                              <div className="flex flex-col items-start">
+                                <span className="font-semibold">🤖 OpenAI</span>
+                                <span className="text-xs text-muted-foreground">AI-powered traditional extraction</span>
+                              </div>
+                            </SelectItem>
+                          </SelectContent>
+                        </Select>
+                        
+                        {/* Info about selected method */}
+                        <div className="text-xs text-muted-foreground p-2 rounded-md bg-muted/50">
+                          {processingMethod === 'hyperbrowser' ? (
+                            <>⚡ <strong>Hyperbrowser:</strong> Professional web scraping with 95%+ accuracy, faster processing</>
+                          ) : (
+                            <>🧠 <strong>OpenAI:</strong> AI interpretation of web content, may have occasional parsing issues</>
+                          )}
+                        </div>
+                      </div>
+                      
                       <Button type="submit" disabled={isLoading} size="lg" className="text-lg px-6">
                         {isLoading && !loadingStepMessage.toLowerCase().includes('scan') ? (
                           <span className="flex items-center gap-2">
