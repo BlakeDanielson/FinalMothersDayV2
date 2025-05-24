@@ -35,7 +35,7 @@ export function validateProviderSupport(provider: AIProvider, file: File): boole
   }
   
   // Check MIME type
-  if (!config.supportedFormats.includes(file.type.toLowerCase() as any)) {
+  if (!(config.supportedFormats as readonly string[]).includes(file.type.toLowerCase())) {
     return false;
   }
   

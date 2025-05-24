@@ -25,7 +25,7 @@ import { Badge } from "@/components/ui/badge";
 import StatsDashboard from "@/components/StatsDashboard";
 import { useImageProcessing } from "@/hooks/useRetryableRequest";
 import { useMultipleImageProcessing } from "@/hooks/useMultipleImageProcessing";
-import { RecipeProcessingError, ErrorType, logError } from "@/lib/errors";
+import { logError } from "@/lib/errors";
 
 // Define a local type for placeholder recipes that includes tags, extending the imported RecipeData
 interface PlaceholderRecipe extends RecipeData {

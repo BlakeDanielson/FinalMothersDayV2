@@ -3,7 +3,7 @@ import OpenAI from 'openai';
 import { GoogleGenerativeAI } from '@google/generative-ai';
 import { z } from 'zod';
 import { RecipeProcessingError, ErrorType, logError } from '@/lib/errors';
-import { AIProvider, getProviderConfig, validateProviderSupport } from '@/lib/ai-providers';
+import { AIProvider, getProviderConfig } from '@/lib/ai-providers';
 
 // Zod schema for recipe data parsed from an image
 const scanRecipeZodSchema = z.object({
@@ -99,7 +99,7 @@ function validateFile(imageFile: File, provider: AIProvider = 'openai'): void {
   const fileName = imageFile.name.toLowerCase();
   const mimeType = imageFile.type.toLowerCase();
   
-  const isValidMimeType = config.supportedFormats.includes(mimeType as any);
+  const isValidMimeType = (config.supportedFormats as readonly string[]).includes(mimeType);
   const isValidExtension = SUPPORTED_EXTENSIONS.some(ext => fileName.endsWith(ext));
   
   if (!isValidMimeType && !isValidExtension) {

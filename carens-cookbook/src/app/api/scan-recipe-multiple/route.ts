@@ -133,7 +133,7 @@ function validateFiles(imageFiles: File[], provider: AIProvider = 'openai'): voi
     const fileName = file.name.toLowerCase();
     const mimeType = file.type.toLowerCase();
     
-    const isValidMimeType = config.supportedFormats.includes(mimeType as any);
+    const isValidMimeType = (config.supportedFormats as readonly string[]).includes(mimeType);
     const isValidExtension = SUPPORTED_EXTENSIONS.some(ext => fileName.endsWith(ext));
     
     if (!isValidMimeType && !isValidExtension) {
