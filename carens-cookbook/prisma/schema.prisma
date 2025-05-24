@@ -35,7 +35,7 @@ model Recipe {
   description   String
   ingredients   String[] // Postgres array of strings
   steps         String[] // Postgres array of strings
-  image         String?  // Nullable
+  image         String?  // Keep for backward compatibility, will be primary image
   cuisine       String
   category      String
   prepTime      String
@@ -49,8 +49,27 @@ model Recipe {
 
   // Relations
   favorites     RecipeFavorite[]
+  images        RecipeImage[]
 
   @@index([userId])
+}
+
+// New model for multiple recipe images
+model RecipeImage {
+  id        String   @id @default(cuid())
+  url       String   // Image URL or path
+  alt       String?  // Alt text for accessibility
+  isPrimary Boolean  @default(false) // Primary image for recipe
+  order     Int      @default(0) // Order for displaying images
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Recipe relation
+  recipeId  String
+  recipe    Recipe   @relation(fields: [recipeId], references: [id], onDelete: Cascade)
+
+  @@index([recipeId])
+  @@index([recipeId, order])
 }
 
 // Junction table for user favorites
