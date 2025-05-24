@@ -1,20 +1,20 @@
 {
   "models": {
     "main": {
-      "provider": "openai",
-      "modelId": "gpt-4.1",
+      "provider": "anthropic",
+      "modelId": "claude-sonnet-4-20250514",
       "maxTokens": 120000,
       "temperature": 0.2
     },
     "research": {
-      "provider": "openai",
-      "modelId": "gpt-4.1",
+      "provider": "anthropic",
+      "modelId": "claude-sonnet-4-20250514",
       "maxTokens": 8700,
       "temperature": 0.1
     },
     "fallback": {
-      "provider": "anthropic",
-      "modelId": "claude-3.5-sonnet-20240620",
+      "provider": "perplexity",
+      "modelId": "sonar-pro",
       "maxTokens": 120000,
       "temperature": 0.1
     }

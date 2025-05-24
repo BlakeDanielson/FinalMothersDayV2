@@ -16,11 +16,13 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import RecipeDisplay, { RecipeData } from "@/components/RecipeDisplay";
 import RecipeLoadingProgress from "@/components/ui/RecipeLoadingProgress";
 import ScanPhotoButton from "@/components/ui/ScanPhotoButton";
+import ScanMultiplePhotoButton from "@/components/ui/ScanMultiplePhotoButton";
 import ErrorDisplay from "@/components/ui/ErrorDisplay";
 import { BentoGrid } from "@/components/BentoGrid";
 import { Badge } from "@/components/ui/badge";
 import StatsDashboard from "@/components/StatsDashboard";
 import { useImageProcessing } from "@/hooks/useRetryableRequest";
+import { useMultipleImageProcessing } from "@/hooks/useMultipleImageProcessing";
 import { RecipeProcessingError, ErrorType, logError } from "@/lib/errors";
 
 // Define a local type for placeholder recipes that includes tags, extending the imported RecipeData
@@ -403,6 +405,76 @@ function MainPage() {
     }
   );
 
+  // Multiple image processing
+  const multipleImageProcessing = useMultipleImageProcessing(
+    async (files: File[]) => {
+      const formData = new FormData();
+      files.forEach((file, index) => {
+        formData.append(`image${index}`, file);
+      });
+      
+      const response = await fetch('/api/scan-recipe-multiple', { 
+        method: 'POST', 
+        body: formData 
+      });
+      
+      if (!response.ok) {
+        let errorData;
+        try {
+          errorData = await response.json();
+        } catch {
+          throw new RecipeProcessingError({
+            type: ErrorType.SERVER_ERROR,
+            message: `Server error: ${response.status}`,
+            userMessage: 'Our servers are experiencing issues.',
+            actionable: 'Please try again in a few moments.',
+            retryable: true,
+            statusCode: response.status
+          });
+        }
+        
+        if (errorData.type && errorData.error) {
+          throw new RecipeProcessingError({
+            type: errorData.type,
+            message: errorData.error,
+            userMessage: errorData.error,
+            actionable: errorData.details || 'Please try again.',
+            retryable: errorData.retryable ?? true,
+            statusCode: response.status
+          });
+        }
+        
+        throw new RecipeProcessingError({
+          type: ErrorType.SERVER_ERROR,
+          message: errorData.error || 'Unknown server error',
+          userMessage: errorData.error || 'Something went wrong on our end.',
+          actionable: 'Please try again.',
+          retryable: true,
+          statusCode: response.status
+        });
+      }
+      
+      return response.json();
+    },
+    {
+      onProgress: (progress, message) => {
+        setLoadingProgress(progress);
+        setLoadingStepMessage(message);
+      },
+      onError: (error) => {
+        logError(error, { 
+          context: 'homepage-multiple-image-processing',
+          fileCount: multipleImageProcessing.selectedFiles?.length 
+        });
+        toast.error(error.userMessage);
+      },
+      onSuccess: () => {
+        toast.success('Multiple recipe photos processed successfully!');
+        setShowAddRecipeModal(false);
+      }
+    }
+  );
+
   useEffect(() => {
     fetchSavedRecipes();
 
@@ -677,6 +749,42 @@ function MainPage() {
     if (imageProcessing.canRetry) {
       setIsLoading(true);
       imageProcessing.retry().finally(() => {
+        setIsLoading(false);
+      });
+    }
+  };
+
+  const handleMultipleImageFileSelect = async (files: File[]) => {
+    console.log("Multiple images selected:", files.map(f => ({ name: f.name, type: f.type, size: f.size })));
+    
+    setIsLoading(true);
+    setError(null);
+    setUrl("");
+    setLoadingProgress(5);
+    setLoadingStepMessage(`Preparing to scan ${files.length} images...`);
+
+    try {
+      const result = await multipleImageProcessing.processFiles(files);
+      
+      if (result && typeof result === 'object' && 'title' in result && 'ingredients' in result && 'steps' in result) {
+        const recipeData: RecipeData = result as RecipeData;
+        handleViewRecipe(recipeData);
+        setLoadingProgress(100);
+      }
+    } catch (err: unknown) {
+      console.error("Error in handleMultipleImageFileSelect:", err);
+      setLoadingProgress(0);
+    } finally {
+      setIsLoading(false);
+      setLoadingStepMessage("");
+      setLoadingProgress(0);
+    }
+  };
+
+  const handleRetryMultipleImageProcessing = () => {
+    if (multipleImageProcessing.canRetry) {
+      setIsLoading(true);
+      multipleImageProcessing.retry().finally(() => {
         setIsLoading(false);
       });
     }
@@ -995,14 +1103,14 @@ function MainPage() {
               
               {/* Photo Scan Tab */}
               <TabsContent value="photo" className="mt-6">
-                <div className="space-y-4">
+                <div className="space-y-6">
                   <div className="text-center mb-4">
                     <div className="mx-auto w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mb-3">
                       <Camera className="h-8 w-8 text-blue-600" />
                     </div>
-                    <h3 className="text-lg font-semibold mb-2">Scan Recipe Photo</h3>
+                    <h3 className="text-lg font-semibold mb-2">Scan Recipe Photo(s)</h3>
                     <p className="text-sm text-muted-foreground">
-                      Upload a photo of a recipe and we&apos;ll extract the details
+                      Upload one or multiple photos of a recipe and we&apos;ll extract the details
                     </p>
                   </div>
                   
@@ -1016,17 +1124,60 @@ function MainPage() {
                       className="mb-4"
                     />
                   )}
+
+                  {/* Enhanced Error Display for Multiple Image Processing */}
+                  {multipleImageProcessing.error && (
+                    <ErrorDisplay 
+                      error={multipleImageProcessing.error}
+                      onRetry={handleRetryMultipleImageProcessing}
+                      onDismiss={() => multipleImageProcessing.reset()}
+                      compact={true}
+                      className="mb-4"
+                    />
+                  )}
                   
-                  <ScanPhotoButton 
-                    onFileSelect={handleImageFileSelect}
-                    disabled={imageProcessing.isLoading}
-                  />
+                  {/* Single Image Upload */}
+                  <div className="border rounded-lg p-4">
+                    <div className="flex items-center gap-2 mb-3">
+                      <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
+                      <h4 className="font-medium text-sm">Single Photo Scan</h4>
+                    </div>
+                    <p className="text-xs text-muted-foreground mb-3">
+                      Perfect for simple recipes or single-page cookbook photos
+                    </p>
+                    <ScanPhotoButton 
+                      onFileSelect={handleImageFileSelect}
+                      disabled={imageProcessing.isLoading || multipleImageProcessing.isLoading}
+                      buttonText="Scan Single Photo"
+                      size="default"
+                    />
+                  </div>
+
+                  {/* Multiple Image Upload */}
+                  <div className="border rounded-lg p-4">
+                    <div className="flex items-center gap-2 mb-3">
+                      <div className="w-2 h-2 bg-emerald-500 rounded-full"></div>
+                      <h4 className="font-medium text-sm">Multiple Photos Scan</h4>
+                      <Badge variant="secondary" className="text-xs">Recommended</Badge>
+                    </div>
+                    <p className="text-xs text-muted-foreground mb-3">
+                      Upload multiple photos showing different parts of your recipe (ingredients, steps, etc.)
+                    </p>
+                    <ScanMultiplePhotoButton 
+                      onFilesSelect={handleMultipleImageFileSelect}
+                      disabled={imageProcessing.isLoading || multipleImageProcessing.isLoading}
+                      buttonText="Scan Multiple Photos"
+                      variant="secondary"
+                      size="default"
+                      maxFiles={5}
+                    />
+                  </div>
                 </div>
               </TabsContent>
             </Tabs>
 
             {/* Loading Progress */}
-            {(isLoading || imageProcessing.isLoading) && loadingStepMessage && (
+            {(isLoading || imageProcessing.isLoading || multipleImageProcessing.isLoading) && loadingStepMessage && (
               <div className="mt-6">
                 <RecipeLoadingProgress 
                   progress={loadingProgress} 
