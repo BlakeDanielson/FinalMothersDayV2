@@ -35,21 +35,28 @@ const ScanMultiplePhotoButton: React.FC<ScanMultiplePhotoButtonProps> = ({
   };
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const files = Array.from(e.target.files || []);
+    const newFiles = Array.from(e.target.files || []);
     
-    if (files.length === 0) return;
+    if (newFiles.length === 0) return;
 
-    // Limit to maxFiles
-    const limitedFiles = files.slice(0, maxFiles);
+    // Combine existing files with new files, respecting maxFiles limit
+    const combinedFiles = [...selectedFiles, ...newFiles];
+    const limitedFiles = combinedFiles.slice(0, maxFiles);
     
-    // Create preview URLs
-    const urls = limitedFiles.map(file => URL.createObjectURL(file));
+    // Create preview URLs for new files only
+    const newUrls = newFiles.slice(0, maxFiles - selectedFiles.length).map(file => URL.createObjectURL(file));
     
-    // Clean up previous URLs
-    previewUrls.forEach(url => URL.revokeObjectURL(url));
+    // Combine existing URLs with new URLs
+    const combinedUrls = [...previewUrls, ...newUrls];
+    const limitedUrls = combinedUrls.slice(0, maxFiles);
+    
+    // Clean up any excess URLs if we exceeded maxFiles
+    if (combinedUrls.length > maxFiles) {
+      combinedUrls.slice(maxFiles).forEach(url => URL.revokeObjectURL(url));
+    }
     
     setSelectedFiles(limitedFiles);
-    setPreviewUrls(urls);
+    setPreviewUrls(limitedUrls);
     
     // Reset the input value to allow selecting the same files again if needed
     if (e.target) {
@@ -86,8 +93,9 @@ const ScanMultiplePhotoButton: React.FC<ScanMultiplePhotoButtonProps> = ({
 
   // Clean up URLs when component unmounts
   React.useEffect(() => {
+    const currentUrls = previewUrls;
     return () => {
-      previewUrls.forEach(url => URL.revokeObjectURL(url));
+      currentUrls.forEach(url => URL.revokeObjectURL(url));
     };
   }, [previewUrls]);
 
@@ -118,7 +126,7 @@ const ScanMultiplePhotoButton: React.FC<ScanMultiplePhotoButtonProps> = ({
               className="flex items-center gap-1"
             >
               <Plus size={16} />
-              Add More ({selectedFiles.length}/{maxFiles})
+              Add {maxFiles - selectedFiles.length} More ({selectedFiles.length}/{maxFiles})
             </Button>
           )}
           <Button
