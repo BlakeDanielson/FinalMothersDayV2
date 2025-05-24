@@ -167,6 +167,7 @@ const RecipeDisplay = ({
   const [isEditingTitle, setIsEditingTitle] = useState(false);
   const [currentEditableTitle, setCurrentEditableTitle] = useState(recipe.title);
   const titleInputRef = useRef<HTMLInputElement>(null);
+  const [imageError, setImageError] = useState(false);
   const [scaleFactor, setScaleFactor] = useState(1);
   const [showShareOptionsModal, setShowShareOptionsModal] = useState(false);
   const [saveStatus, setSaveStatus] = useState<'idle' | 'saving' | 'saved'>('idle');
@@ -189,7 +190,8 @@ const RecipeDisplay = ({
     setCurrentEditableTitle(recipe.title);
     setIsEditingTitle(false);
     setSaveStatus('idle');
-  }, [recipe.title]);
+    setImageError(false); // Reset image error when recipe changes
+  }, [recipe.title, recipe.image]);
 
   useEffect(() => {
     if (isEditingTitle && titleInputRef.current) {
@@ -391,12 +393,30 @@ const RecipeDisplay = ({
         {showImages ? (
           <CardHeader className="p-0">
             <div className="relative h-72 md:h-96 w-full bg-gray-100">
-              {recipe.image ? (
-                <Image src={recipe.image} alt={recipe.title} layout="fill" objectFit="cover" priority />
+              {recipe.image && !imageError ? (
+                <Image 
+                  src={recipe.image} 
+                  alt={recipe.title} 
+                  layout="fill" 
+                  objectFit="cover" 
+                  priority
+                  onError={() => {
+                    console.warn('Failed to load image:', recipe.image);
+                    setImageError(true);
+                  }}
+                  onLoad={() => setImageError(false)}
+                />
               ) : (
                 <div className="w-full h-full flex flex-col items-center justify-center text-gray-400 bg-gray-50">
                   <ImageOff size={64} />
-                  <p className="mt-2 text-lg">No Image Available</p>
+                  <p className="mt-2 text-lg">
+                    {imageError ? "Failed to load image" : "No Image Available"}
+                  </p>
+                  {imageError && recipe.image && (
+                    <p className="mt-1 text-sm text-gray-500 max-w-xs text-center break-all">
+                      Image URL: {recipe.image.length > 50 ? `${recipe.image.substring(0, 50)}...` : recipe.image}
+                    </p>
+                  )}
                 </div>
               )}
               <div className="absolute bottom-0 left-0 w-full bg-gradient-to-t from-black/80 to-transparent p-6 md:p-8">
