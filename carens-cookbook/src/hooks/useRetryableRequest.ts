@@ -168,10 +168,11 @@ export function useRetryableRequest<T>(
 
 // Specialized hook for image processing with specific defaults
 export function useImageProcessing(
-  processFn: (file: File) => Promise<unknown>,
+  processFn: (file: File, provider?: string) => Promise<unknown>,
   options: Omit<RetryableRequestOptions, 'maxRetries'> & { maxRetries?: number } = {}
 ) {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const [selectedProvider, setSelectedProvider] = useState<string>('openai');
 
   const requestFn = useCallback(async () => {
     if (!selectedFile) {
@@ -212,8 +213,8 @@ export function useImageProcessing(
       });
     }
 
-    return processFn(selectedFile);
-  }, [processFn, selectedFile]);
+    return processFn(selectedFile, selectedProvider);
+  }, [processFn, selectedFile, selectedProvider]);
 
   const retryableRequest = useRetryableRequest(requestFn, {
     maxRetries: 2, // Lower retry count for image processing
@@ -221,8 +222,9 @@ export function useImageProcessing(
     ...options
   });
 
-  const processFile = useCallback(async (file: File) => {
+  const processFile = useCallback(async (file: File, provider: string = 'openai') => {
     setSelectedFile(file);
+    setSelectedProvider(provider);
     // Small delay to ensure state is updated
     await new Promise(resolve => setTimeout(resolve, 0));
     return retryableRequest.execute();

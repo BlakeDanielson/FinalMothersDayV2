@@ -6,6 +6,8 @@ import { SearchIcon, HomeIcon, Camera, BarChart3, Link } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Toaster, toast } from 'sonner';
 import { useRouter } from 'next/navigation';
+import { AIProvider } from '@/lib/ai-providers';
+import { processSingleImage, processMultipleImages } from '@/lib/api-client';
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -338,53 +340,8 @@ function MainPage() {
 
   // Enhanced image processing with retry capability
   const imageProcessing = useImageProcessing(
-    async (file: File) => {
-      const formData = new FormData();
-      formData.append('image', file);
-      
-      const response = await fetch('/api/scan-recipe', { 
-        method: 'POST', 
-        body: formData 
-      });
-      
-      if (!response.ok) {
-        let errorData;
-        try {
-          errorData = await response.json();
-        } catch {
-          throw new RecipeProcessingError({
-            type: ErrorType.SERVER_ERROR,
-            message: `Server error: ${response.status}`,
-            userMessage: 'Our servers are experiencing issues.',
-            actionable: 'Please try again in a few moments.',
-            retryable: true,
-            statusCode: response.status
-          });
-        }
-        
-        // If the server returned a structured error, throw it
-        if (errorData.type && errorData.error) {
-          throw new RecipeProcessingError({
-            type: errorData.type,
-            message: errorData.error,
-            userMessage: errorData.error,
-            actionable: errorData.details || 'Please try again.',
-            retryable: errorData.retryable ?? true,
-            statusCode: response.status
-          });
-        }
-        
-        throw new RecipeProcessingError({
-          type: ErrorType.SERVER_ERROR,
-          message: errorData.error || 'Unknown server error',
-          userMessage: errorData.error || 'Something went wrong on our end.',
-          actionable: 'Please try again.',
-          retryable: true,
-          statusCode: response.status
-        });
-      }
-      
-      return response.json();
+    async (file: File, provider?: string) => {
+      return processSingleImage(file, (provider as AIProvider) || 'openai');
     },
     {
       onProgress: (progress, message) => {
@@ -407,54 +364,8 @@ function MainPage() {
 
   // Multiple image processing
   const multipleImageProcessing = useMultipleImageProcessing(
-    async (files: File[]) => {
-      const formData = new FormData();
-      files.forEach((file, index) => {
-        formData.append(`image${index}`, file);
-      });
-      
-      const response = await fetch('/api/scan-recipe-multiple', { 
-        method: 'POST', 
-        body: formData 
-      });
-      
-      if (!response.ok) {
-        let errorData;
-        try {
-          errorData = await response.json();
-        } catch {
-          throw new RecipeProcessingError({
-            type: ErrorType.SERVER_ERROR,
-            message: `Server error: ${response.status}`,
-            userMessage: 'Our servers are experiencing issues.',
-            actionable: 'Please try again in a few moments.',
-            retryable: true,
-            statusCode: response.status
-          });
-        }
-        
-        if (errorData.type && errorData.error) {
-          throw new RecipeProcessingError({
-            type: errorData.type,
-            message: errorData.error,
-            userMessage: errorData.error,
-            actionable: errorData.details || 'Please try again.',
-            retryable: errorData.retryable ?? true,
-            statusCode: response.status
-          });
-        }
-        
-        throw new RecipeProcessingError({
-          type: ErrorType.SERVER_ERROR,
-          message: errorData.error || 'Unknown server error',
-          userMessage: errorData.error || 'Something went wrong on our end.',
-          actionable: 'Please try again.',
-          retryable: true,
-          statusCode: response.status
-        });
-      }
-      
-      return response.json();
+    async (files: File[], provider?: string) => {
+      return processMultipleImages(files, (provider as AIProvider) || 'openai');
     },
     {
       onProgress: (progress, message) => {
@@ -676,7 +587,7 @@ function MainPage() {
     }
   };
 
-  const handleProcessImage = async (file: File) => {
+  const handleProcessImage = async (file: File, provider: AIProvider = 'openai') => {
     if (!file) return;
     
     setIsLoading(true);
@@ -722,7 +633,7 @@ function MainPage() {
       setLoadingProgress(10);
       setLoadingStepMessage(`Preparing to scan '${fileToProcess.name}'... 🖼️`);
       
-      const result = await imageProcessing.processFile(fileToProcess);
+      const result = await imageProcessing.processFile(fileToProcess, provider);
       
       if (result && typeof result === 'object' && 'title' in result && 'ingredients' in result && 'steps' in result) {
         const recipeData: RecipeData = result as RecipeData;
@@ -740,9 +651,9 @@ function MainPage() {
     }
   };
 
-  const handleImageFileSelect = (file: File) => {
-    console.log("Image selected:", file.name, file.type, file.size);
-    handleProcessImage(file);
+  const handleImageFileSelect = (file: File, provider: AIProvider) => {
+    console.log("Image selected:", file.name, file.type, file.size, "Provider:", provider);
+    handleProcessImage(file, provider);
   };
 
   const handleRetryImageProcessing = () => {
@@ -754,7 +665,7 @@ function MainPage() {
     }
   };
 
-  const handleMultipleImageFileSelect = async (files: File[]) => {
+  const handleMultipleImageFileSelect = async (files: File[], provider: AIProvider = 'openai') => {
     console.log("Multiple images selected:", files.map(f => ({ name: f.name, type: f.type, size: f.size })));
     
     setIsLoading(true);
@@ -764,7 +675,7 @@ function MainPage() {
     setLoadingStepMessage(`Preparing to scan ${files.length} images...`);
 
     try {
-      const result = await multipleImageProcessing.processFiles(files);
+      const result = await multipleImageProcessing.processFiles(files, provider);
       
       if (result && typeof result === 'object' && 'title' in result && 'ingredients' in result && 'steps' in result) {
         const recipeData: RecipeData = result as RecipeData;
