@@ -9,11 +9,12 @@ interface MultipleImageProcessingOptions {
 }
 
 export function useMultipleImageProcessing(
-  processFn: (files: File[]) => Promise<unknown>,
+  processFn: (files: File[], provider?: string) => Promise<unknown>,
   options: MultipleImageProcessingOptions = {}
 ) {
   const [isLoading, setIsLoading] = useState(false);
   const [selectedFiles, setSelectedFiles] = useState<File[] | null>(null);
+  const [selectedProvider, setSelectedProvider] = useState<string>('openai');
   const [error, setError] = useState<RecipeProcessingError | null>(null);
   const [retryCount, setRetryCount] = useState(0);
   const maxRetries = options.maxRetries ?? 2;
@@ -83,7 +84,7 @@ export function useMultipleImageProcessing(
     });
   }, []);
 
-  const processFiles = useCallback(async (files: File[]) => {
+  const processFiles = useCallback(async (files: File[], provider: string = 'openai') => {
     try {
       setIsLoading(true);
       setError(null);
@@ -137,11 +138,12 @@ export function useMultipleImageProcessing(
       
       options.onProgress?.(50, `Processing ${processedFiles.length} images with AI...`);
       
-      // Store the files for potential retry
+      // Store the files and provider for potential retry
       setSelectedFiles(processedFiles);
+      setSelectedProvider(provider);
       
       // Call the processing function
-      const result = await processFn(processedFiles);
+      const result = await processFn(processedFiles, provider);
       
       options.onProgress?.(100, 'Successfully processed all images!');
       options.onSuccess?.();
@@ -178,13 +180,14 @@ export function useMultipleImageProcessing(
     }
 
     setRetryCount(prev => prev + 1);
-    return processFiles(selectedFiles);
-  }, [selectedFiles, retryCount, maxRetries, processFiles]);
+    return processFiles(selectedFiles, selectedProvider);
+  }, [selectedFiles, selectedProvider, retryCount, maxRetries, processFiles]);
 
   const reset = useCallback(() => {
     setIsLoading(false);
     setError(null);
     setSelectedFiles(null);
+    setSelectedProvider('openai');
     setRetryCount(0);
   }, []);
 

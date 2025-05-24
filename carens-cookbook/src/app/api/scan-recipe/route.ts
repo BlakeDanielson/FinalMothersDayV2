@@ -1,7 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server';
 import OpenAI from 'openai';
+import { GoogleGenerativeAI } from '@google/generative-ai';
 import { z } from 'zod';
 import { RecipeProcessingError, ErrorType, logError } from '@/lib/errors';
+import { AIProvider, getProviderConfig, validateProviderSupport } from '@/lib/ai-providers';
 
 // Zod schema for recipe data parsed from an image
 const scanRecipeZodSchema = z.object({
@@ -16,15 +18,25 @@ const scanRecipeZodSchema = z.object({
   cleanupTime: z.string().min(1, "Cleanup time is required and should be AI-generated based on image content."),
 });
 
-// Initialize OpenAI client (ensure OPENAI_API_KEY is in .env)
+// Initialize AI clients
 const openaiClient = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
 });
 
+// Initialize Google AI client
+let googleAI: GoogleGenerativeAI | null = null;
+function getGoogleAI() {
+  if (!googleAI) {
+    if (!process.env.GOOGLE_API_KEY) {
+      throw new Error('GOOGLE_API_KEY is not set.');
+    }
+    googleAI = new GoogleGenerativeAI(process.env.GOOGLE_API_KEY);
+  }
+  return googleAI;
+}
+
 // File validation constants
-const MAX_FILE_SIZE = 10 * 1024 * 1024; // 10MB
-const SUPPORTED_MIME_TYPES = ['image/jpeg', 'image/jpg', 'image/png', 'image/heic', 'image/heif'];
-const SUPPORTED_EXTENSIONS = ['.jpg', '.jpeg', '.png', '.heic', '.heif'];
+const SUPPORTED_EXTENSIONS = ['.jpg', '.jpeg', '.png', '.heic', '.heif', '.webp'];
 
 const getImageSystemPrompt = (schemaString: string) => `You are an expert recipe analysis assistant specializing in interpreting images of recipes (e.g., photos of cookbook pages, recipe cards, or handwritten notes). Your task is to extract detailed recipe information directly from the provided image and then generate supplementary details.
 
@@ -53,7 +65,8 @@ ${schemaString}
 **Important:** If the image does not contain a clear, readable recipe with visible ingredients and steps, you must return an empty object {} to indicate that no recipe was detected.
 `;
 
-function validateFile(imageFile: File): void {
+// Provider-specific validation function
+function validateFile(imageFile: File, provider: AIProvider = 'openai'): void {
   // Check if file exists
   if (!imageFile) {
     throw new RecipeProcessingError({
@@ -66,16 +79,19 @@ function validateFile(imageFile: File): void {
     });
   }
 
+  // Use provider-specific validation
+  const config = getProviderConfig(provider);
+  
   // Check file size
-  if (imageFile.size > MAX_FILE_SIZE) {
+  if (imageFile.size > config.maxFileSize) {
     throw new RecipeProcessingError({
       type: ErrorType.FILE_TOO_LARGE,
-      message: `File size ${imageFile.size} exceeds maximum ${MAX_FILE_SIZE}`,
-      userMessage: 'The image file is too large to process.',
-      actionable: 'Please use an image smaller than 10MB.',
+      message: `File size ${imageFile.size} exceeds maximum ${config.maxFileSize}`,
+      userMessage: `The image file is too large for ${config.name}.`,
+      actionable: `Please use an image smaller than ${Math.round(config.maxFileSize / (1024 * 1024))}MB.`,
       retryable: false,
       statusCode: 413,
-      details: { fileSize: imageFile.size, maxSize: MAX_FILE_SIZE }
+      details: { fileSize: imageFile.size, maxSize: config.maxFileSize, provider }
     });
   }
 
@@ -83,18 +99,19 @@ function validateFile(imageFile: File): void {
   const fileName = imageFile.name.toLowerCase();
   const mimeType = imageFile.type.toLowerCase();
   
-  const isValidMimeType = SUPPORTED_MIME_TYPES.includes(mimeType);
+  const isValidMimeType = config.supportedFormats.includes(mimeType as any);
   const isValidExtension = SUPPORTED_EXTENSIONS.some(ext => fileName.endsWith(ext));
   
   if (!isValidMimeType && !isValidExtension) {
+    const formatList = config.supportedFormats.map(fmt => fmt.replace('image/', '')).join(', ').toUpperCase();
     throw new RecipeProcessingError({
       type: ErrorType.FILE_FORMAT_UNSUPPORTED,
-      message: `Unsupported file format: ${mimeType} (${fileName})`,
-      userMessage: 'This image format is not supported.',
-      actionable: 'Please use JPG, PNG, or HEIC format.',
+      message: `Unsupported file format: ${mimeType} (${fileName}) for ${config.name}`,
+      userMessage: `This image format is not supported by ${config.name}.`,
+      actionable: `Please use ${formatList} format.`,
       retryable: false,
       statusCode: 400,
-      details: { fileName, mimeType, supportedFormats: SUPPORTED_MIME_TYPES }
+      details: { fileName, mimeType, supportedFormats: config.supportedFormats, provider }
     });
   }
 
@@ -181,21 +198,139 @@ function handleOpenAIError(error: unknown): never {
   });
 }
 
+function handleGeminiError(error: unknown): never {
+  console.error('Gemini API Error:', error);
+
+  // Type guard for error objects with common properties
+  const errorObj = error as { status?: number; code?: string; message?: string; name?: string };
+
+  // Rate limiting
+  if (errorObj.status === 429 || errorObj.code === 'RATE_LIMIT_EXCEEDED' || errorObj.message?.includes('quota exceeded')) {
+    throw new RecipeProcessingError({
+      type: ErrorType.AI_QUOTA_EXCEEDED,
+      message: `Gemini rate limit exceeded: ${errorObj.message}`,
+      userMessage: 'We\'ve reached our processing limit for now.',
+      actionable: 'Please try again in a few minutes.',
+      retryable: true,
+      statusCode: 429,
+      details: { geminiError: error }
+    });
+  }
+
+  // Content policy violations
+  if (errorObj.code === 'SAFETY' || errorObj.message?.includes('safety') || errorObj.message?.includes('policy')) {
+    throw new RecipeProcessingError({
+      type: ErrorType.AI_CONTENT_POLICY,
+      message: `Content policy violation: ${errorObj.message}`,
+      userMessage: 'The image content violates our processing policies.',
+      actionable: 'Please try a different image.',
+      retryable: false,
+      statusCode: 400,
+      details: { geminiError: error }
+    });
+  }
+
+  // Authentication errors
+  if (errorObj.status === 401 || errorObj.status === 403 || errorObj.code === 'UNAUTHENTICATED' || errorObj.code === 'PERMISSION_DENIED') {
+    throw new RecipeProcessingError({
+      type: ErrorType.SERVER_ERROR,
+      message: `Gemini authentication error: ${errorObj.message}`,
+      userMessage: 'Our AI service is temporarily unavailable.',
+      actionable: 'Please try again later.',
+      retryable: true,
+      statusCode: 503,
+      details: { geminiError: error }
+    });
+  }
+
+  // Timeout errors
+  if (errorObj.code === 'DEADLINE_EXCEEDED' || errorObj.message?.includes('timeout') || errorObj.message?.includes('deadline')) {
+    throw new RecipeProcessingError({
+      type: ErrorType.REQUEST_TIMEOUT,
+      message: `Gemini request timeout: ${errorObj.message}`,
+      userMessage: 'The image processing took too long.',
+      actionable: 'Please try again with a clearer or smaller image.',
+      retryable: true,
+      statusCode: 408,
+      details: { geminiError: error }
+    });
+  }
+
+  // Invalid argument errors (usually file format or size issues)
+  if (errorObj.code === 'INVALID_ARGUMENT' || errorObj.status === 400) {
+    throw new RecipeProcessingError({
+      type: ErrorType.INVALID_RECIPE_DATA,
+      message: `Gemini invalid argument: ${errorObj.message}`,
+      userMessage: 'There was an issue with the image format or content.',
+      actionable: 'Please try a different image format or smaller file size.',
+      retryable: false,
+      statusCode: 400,
+      details: { geminiError: error }
+    });
+  }
+
+  // Generic Gemini errors
+  throw new RecipeProcessingError({
+    type: ErrorType.AI_PROCESSING_FAILED,
+    message: `Gemini processing failed: ${errorObj.message || 'Unknown error'}`,
+    userMessage: 'Our recipe analysis system encountered an issue.',
+    actionable: 'Please try again in a moment.',
+    retryable: true,
+    statusCode: errorObj.status || 500,
+    details: { geminiError: error }
+  });
+}
+
+async function processImageWithOpenAI(imageBase64: string, imageMimeType: string, systemPrompt: string) {
+  const chatCompletion = await openaiClient.chat.completions.create({
+    model: "gpt-4o",
+    messages: [
+      {
+        role: "user",
+        content: [
+          { type: "text", text: systemPrompt },
+          {
+            type: "image_url",
+            image_url: {
+              url: `data:${imageMimeType};base64,${imageBase64}`,
+              detail: "high",
+            },
+          },
+        ],
+      },
+    ],
+    response_format: { type: "json_object" },
+    max_tokens: 2000,
+  });
+
+  return chatCompletion.choices[0]?.message?.content;
+}
+
+async function processImageWithGemini(imageBase64: string, imageMimeType: string, systemPrompt: string) {
+  const googleAI = getGoogleAI();
+  const model = googleAI.getGenerativeModel({ 
+    model: "gemini-2.0-flash-exp",
+    generationConfig: {
+      maxOutputTokens: 2000,
+      temperature: 0.1,
+      responseMimeType: "application/json"
+    }
+  });
+
+  const imagePart = {
+    inlineData: {
+      data: imageBase64,
+      mimeType: imageMimeType,
+    },
+  };
+
+  const result = await model.generateContent([systemPrompt, imagePart]);
+  const response = await result.response;
+  return response.text();
+}
+
 export async function POST(req: NextRequest) {
   try {
-    // Check OpenAI API key configuration
-    if (!process.env.OPENAI_API_KEY) {
-      console.error('OPENAI_API_KEY is not set for image processing.');
-      throw new RecipeProcessingError({
-        type: ErrorType.SERVER_ERROR,
-        message: 'OpenAI API key not configured',
-        userMessage: 'Our AI service is not properly configured.',
-        actionable: 'Please contact support.',
-        retryable: false,
-        statusCode: 500
-      });
-    }
-
     // Parse form data
     let formData: FormData;
     try {
@@ -213,9 +348,34 @@ export async function POST(req: NextRequest) {
     }
 
     const imageFile = formData.get('image') as File | null;
+    const providerParam = formData.get('provider') as string | null;
+    const provider: AIProvider = (providerParam === 'gemini') ? 'gemini' : 'openai';
+
+    // Check API key configuration for the selected provider
+    if (provider === 'openai' && !process.env.OPENAI_API_KEY) {
+      throw new RecipeProcessingError({
+        type: ErrorType.SERVER_ERROR,
+        message: 'OpenAI API key not configured',
+        userMessage: 'OpenAI service is not properly configured.',
+        actionable: 'Please try using Gemini or contact support.',
+        retryable: false,
+        statusCode: 500
+      });
+    }
+
+    if (provider === 'gemini' && !process.env.GOOGLE_API_KEY) {
+      throw new RecipeProcessingError({
+        type: ErrorType.SERVER_ERROR,
+        message: 'Google API key not configured',
+        userMessage: 'Gemini service is not properly configured.',
+        actionable: 'Please try using OpenAI or contact support.',
+        retryable: false,
+        statusCode: 500
+      });
+    }
     
-    // Validate the uploaded file
-    validateFile(imageFile!);
+    // Validate the uploaded file with provider-specific limits
+    validateFile(imageFile!, provider);
 
     // Convert image file to base64
     let imageBuffer: ArrayBuffer;
@@ -240,39 +400,29 @@ export async function POST(req: NextRequest) {
     const schemaString = JSON.stringify(scanRecipeZodSchema.shape);
     const systemPrompt = getImageSystemPrompt(schemaString);
 
-    // Call OpenAI API with timeout
-    let chatCompletion: OpenAI.Chat.Completions.ChatCompletion;
+    // Process image with selected AI provider
+    let responseContent: string | null = null;
     
     try {
-      chatCompletion = await openaiClient.chat.completions.create({
-        model: "gpt-4o",
-        messages: [
-          {
-            role: "user",
-            content: [
-              { type: "text", text: systemPrompt },
-              {
-                type: "image_url",
-                image_url: {
-                  url: `data:${imageMimeType};base64,${imageBase64}`,
-                  detail: "high",
-                },
-              },
-            ],
-          },
-        ],
-        response_format: { type: "json_object" },
-        max_tokens: 2000,
-      });
+      if (provider === 'openai') {
+        responseContent = await processImageWithOpenAI(imageBase64, imageMimeType, systemPrompt);
+      } else {
+        responseContent = await processImageWithGemini(imageBase64, imageMimeType, systemPrompt);
+      }
     } catch (error: unknown) {
-      handleOpenAIError(error);
+      if (provider === 'openai') {
+        handleOpenAIError(error);
+      } else {
+        handleGeminiError(error);
+      }
     }
 
-    // Validate OpenAI response
-    if (!chatCompletion.choices[0]?.message?.content) {
+    // Validate AI response
+    if (!responseContent) {
+      const providerName = getProviderConfig(provider).name;
       throw new RecipeProcessingError({
         type: ErrorType.AI_PROCESSING_FAILED,
-        message: 'OpenAI returned empty response',
+        message: `${providerName} returned empty response`,
         userMessage: 'The AI couldn\'t process your image.',
         actionable: 'Please try again with a clearer image.',
         retryable: true,
@@ -283,16 +433,17 @@ export async function POST(req: NextRequest) {
     // Parse and validate the JSON response
     let parsedJson: unknown;
     try {
-      parsedJson = JSON.parse(chatCompletion.choices[0].message.content);
+      parsedJson = JSON.parse(responseContent);
     } catch {
+      const providerName = getProviderConfig(provider).name;
       throw new RecipeProcessingError({
         type: ErrorType.AI_PROCESSING_FAILED,
-        message: 'OpenAI returned invalid JSON',
+        message: `${providerName} returned invalid JSON`,
         userMessage: 'The AI response was malformed.',
         actionable: 'Please try again.',
         retryable: true,
         statusCode: 502,
-        details: { responseContent: chatCompletion.choices[0].message.content }
+        details: { responseContent }
       });
     }
 

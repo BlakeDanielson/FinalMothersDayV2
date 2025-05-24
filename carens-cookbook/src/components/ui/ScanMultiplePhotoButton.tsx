@@ -1,18 +1,21 @@
 import React, { useRef, useState } from "react";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
-import { Camera, X, Plus, FileImage } from "lucide-react";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Camera, X, Plus, FileImage, Zap, Brain } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Badge } from "@/components/ui/badge";
+import { AIProvider, AI_PROVIDERS } from "@/lib/ai-providers";
 
 interface ScanMultiplePhotoButtonProps {
-  onFilesSelect: (files: File[]) => void;
+  onFilesSelect: (files: File[], provider: AIProvider) => void;
   className?: string;
   variant?: "default" | "outline" | "secondary";
   size?: "default" | "sm" | "lg" | "icon";
   buttonText?: string;
   disabled?: boolean;
   maxFiles?: number;
+  defaultProvider?: AIProvider;
 }
 
 const ScanMultiplePhotoButton: React.FC<ScanMultiplePhotoButtonProps> = ({
@@ -23,10 +26,12 @@ const ScanMultiplePhotoButton: React.FC<ScanMultiplePhotoButtonProps> = ({
   buttonText = "Scan Multiple Recipe Photos",
   disabled = false,
   maxFiles = 5,
+  defaultProvider = "openai",
 }) => {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
   const [previewUrls, setPreviewUrls] = useState<string[]>([]);
+  const [selectedProvider, setSelectedProvider] = useState<AIProvider>(defaultProvider);
 
   const handleClick = () => {
     if (!disabled) {
@@ -77,12 +82,23 @@ const ScanMultiplePhotoButton: React.FC<ScanMultiplePhotoButtonProps> = ({
 
   const processImages = () => {
     if (selectedFiles.length > 0 && !disabled) {
-      onFilesSelect(selectedFiles);
+      onFilesSelect(selectedFiles, selectedProvider);
       // Clean up preview URLs after processing
       previewUrls.forEach(url => URL.revokeObjectURL(url));
       setSelectedFiles([]);
       setPreviewUrls([]);
     }
+  };
+
+  const getProviderIcon = (provider: AIProvider) => {
+    return provider === 'openai' ? Brain : Zap;
+  };
+
+  const getProviderInfo = (provider: AIProvider) => {
+    const config = AI_PROVIDERS[provider];
+    const maxSizeMB = Math.round(config.maxFileSize / (1024 * 1024));
+    const formats = config.supportedFormats.map(fmt => fmt.replace('image/', '')).join(', ').toUpperCase();
+    return { ...config, maxSizeMB, formats };
   };
 
   const addMoreFiles = () => {
@@ -101,6 +117,43 @@ const ScanMultiplePhotoButton: React.FC<ScanMultiplePhotoButtonProps> = ({
 
   return (
     <div className={cn("flex flex-col items-center space-y-4", className)}>
+      {/* AI Provider Selection */}
+      <div className="w-full max-w-sm space-y-2">
+        <label htmlFor="ai-provider-multiple" className="text-sm font-medium text-gray-700">
+          Choose AI Provider
+        </label>
+        <Select value={selectedProvider} onValueChange={(value) => setSelectedProvider(value as AIProvider)}>
+          <SelectTrigger id="ai-provider-multiple" className="w-full">
+            <SelectValue placeholder="Select AI provider" />
+          </SelectTrigger>
+          <SelectContent>
+            {Object.entries(AI_PROVIDERS).map(([key, config]) => {
+              const provider = key as AIProvider;
+              const Icon = getProviderIcon(provider);
+              const info = getProviderInfo(provider);
+              return (
+                <SelectItem key={provider} value={provider}>
+                  <div className="flex items-center gap-2">
+                    <Icon className="h-4 w-4" />
+                    <div className="flex flex-col">
+                      <span className="font-medium">{config.name}</span>
+                      <span className="text-xs text-gray-500">
+                        Max {info.maxSizeMB}MB • {info.formats}
+                      </span>
+                    </div>
+                  </div>
+                </SelectItem>
+              );
+            })}
+          </SelectContent>
+        </Select>
+        
+        {/* Provider Description */}
+        <p className="text-xs text-gray-600">
+          {AI_PROVIDERS[selectedProvider].description}
+        </p>
+      </div>
+
       {/* Main Button or Add More Button */}
       {selectedFiles.length === 0 ? (
         <Button
