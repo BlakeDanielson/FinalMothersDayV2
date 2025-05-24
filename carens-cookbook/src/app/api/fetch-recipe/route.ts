@@ -268,7 +268,7 @@ Extract the recipe information from the HTML and return ONLY the JSON object abo
     console.log('Response finish reason:', chatCompletion.choices[0].finish_reason);
     
     let parsedJson;
-    let rawContent = chatCompletion.choices[0].message.content;
+    const rawContent = chatCompletion.choices[0].message.content;
     
     try {
       parsedJson = JSON.parse(rawContent);
@@ -307,7 +307,7 @@ Extract the recipe information from the HTML and return ONLY the JSON object abo
                parsedJson = JSON.parse(attempt);
                console.log('Successfully fixed truncated JSON');
                break;
-             } catch (fixAttemptError) {
+             } catch {
                // Continue to next attempt
              }
            }
@@ -320,7 +320,7 @@ Extract the recipe information from the HTML and return ONLY the JSON object abo
            parsedJson = JSON.parse(fixedContent);
            console.log('Successfully parsed JSON after fixing');
          }
-      } catch (finalError) {
+      } catch {
         throw new Error(`OpenAI returned invalid JSON: ${jsonError instanceof Error ? jsonError.message : String(jsonError)}`);
       }
     }
