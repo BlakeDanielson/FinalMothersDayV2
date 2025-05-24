@@ -15,12 +15,12 @@ const isPublicRoute = createRouteMatcher([
 
 // Define routes that should be ignored by Clerk
 // This is usually for static assets or specific API routes that handle their own auth
-const ignoredRoutes = createRouteMatcher([
-  '/static/(.*)', // Ignore static assets
-  '/_next/(.*)', // Ignore Next.js internal routes
-  '/favicon.ico',
-  // Add any other routes that Clerk should completely ignore
-]);
+// const ignoredRoutes = createRouteMatcher([
+//   '/static/(.*)', // Ignore static assets
+//   '/_next/(.*)', // Ignore Next.js internal routes
+//   '/favicon.ico',
+//   // Add any other routes that Clerk should completely ignore
+// ]);
 
 // Make the middleware callback async and use auth.protect() directly
 export default clerkMiddleware(async (auth, req) => {
