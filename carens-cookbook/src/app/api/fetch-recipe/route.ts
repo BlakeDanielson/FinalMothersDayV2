@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import OpenAI from 'openai';
+import { GoogleGenerativeAI } from '@google/generative-ai';
 import { z } from "zod";
 
 // Helper function to fix relative URLs
@@ -33,72 +34,82 @@ function fixImageUrl(url: string | null, baseUrl: string): string | null {
 
 // Zod schema for recipe validation (forgiving version)
 const RecipeSchema = z.object({
-  title: z.string().default("Recipe"),
+  title: z.string().nullable().default("Recipe"),
   ingredients: z.array(z.string()).default([]),
   steps: z.array(z.string()).default([]),
   image: z.string().nullable().default(null),
-  description: z.string().default(""),
-  cuisine: z.string().default(""),
-  category: z.string().default(""),
-  prepTime: z.string().default(""),
-  cleanupTime: z.string().default("")
-});
+  description: z.string().nullable().default(""),
+  cuisine: z.string().nullable().default(""),
+  category: z.string().nullable().default(""),
+  prepTime: z.string().nullable().default(""),
+  cleanupTime: z.string().nullable().default("")
+}).transform(data => ({
+  ...data,
+  title: data.title || "Recipe",
+  description: data.description || "",
+  cuisine: data.cuisine || "",
+  category: data.category || "",
+  prepTime: data.prepTime || "",
+  cleanupTime: data.cleanupTime || ""
+}));
 
-// Simple HTML cleaning function
-function cleanHtml(html: string): string {
-  // Very basic cleaning - remove scripts, styles, and excessive whitespace
-  return html
-    .replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, '')
-    .replace(/<style\b[^<]*(?:(?!<\/style>)<[^<]*)*<\/style>/gi, '')
-    .replace(/\s+/g, ' ')
-    .trim()
-    .substring(0, 100000); // Hard limit to 100K characters
+// Extract recipe-specific content for Gemini
+function extractRecipeContent(html: string): string {
+  // Look for JSON-LD structured data first (most reliable)
+  const jsonLdMatches = html.match(/<script[^>]*type=["']application\/ld\+json["'][^>]*>(.*?)<\/script>/gi);
+  if (jsonLdMatches) {
+    for (const match of jsonLdMatches) {
+      const jsonContent = match.replace(/<script[^>]*>/, '').replace(/<\/script>/, '');
+      if (jsonContent.includes('Recipe') || jsonContent.includes('recipe')) {
+        return `JSON-LD Recipe Data: ${jsonContent}`;
+      }
+    }
+  }
+
+  // Look for recipe-specific sections
+  const recipeKeywords = ['recipe-card', 'recipe-content', 'recipe-instructions', 'ingredients', 'directions', 'recipe-summary'];
+  let recipeContent = '';
+  
+  for (const keyword of recipeKeywords) {
+    const regex = new RegExp(`<[^>]*class=[^>]*${keyword}[^>]*>([\\s\\S]*?)<\/[^>]+>`, 'gi');
+    const matches = html.match(regex);
+    if (matches) {
+      recipeContent += matches.join(' ');
+    }
+  }
+
+  // If we found recipe-specific content, use it
+  if (recipeContent.length > 1000) {
+    return recipeContent.substring(0, 25000);
+  }
+
+  // Fallback to general cleaning
+  return cleanHtml(html, true);
 }
 
-export async function POST(request: NextRequest) {
-  try {
-    const { url } = await request.json();
+// Simple HTML cleaning function with more aggressive cleaning for Gemini
+function cleanHtml(html: string, forGemini: boolean = false): string {
+  let cleaned = html
+    .replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, '')
+    .replace(/<style\b[^<]*(?:(?!<\/style>)<[^<]*)*<\/style>/gi, '')
+    .replace(/<nav\b[^<]*(?:(?!<\/nav>)<[^<]*)*<\/nav>/gi, '') // Remove navigation
+    .replace(/<footer\b[^<]*(?:(?!<\/footer>)<[^<]*)*<\/footer>/gi, '') // Remove footer
+    .replace(/<header\b[^<]*(?:(?!<\/header>)<[^<]*)*<\/header>/gi, '') // Remove header
+    .replace(/<!--[\s\S]*?-->/g, '') // Remove comments
+    .replace(/\s+/g, ' ')
+    .trim();
+  
+  // More aggressive trimming for Gemini to improve performance
+  const maxLength = forGemini ? 50000 : 100000;
+  return cleaned.substring(0, maxLength);
+}
 
-    if (!url) {
-      return NextResponse.json(
-        { success: false, error: 'URL is required' },
-        { status: 400 }
-      );
-    }
+async function extractWithOpenAI(cleanedHtml: string): Promise<any> {
+  const openai = new OpenAI({
+    apiKey: process.env.OPENAI_API_KEY,
+  });
 
-    console.log(`Processing URL: ${url}`);
-
-    // Fetch the webpage
-    const response = await fetch(url, {
-      headers: {
-        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36'
-      }
-    });
-
-    if (!response.ok) {
-      throw new Error(`Failed to fetch webpage: ${response.status} ${response.statusText}`);
-    }
-
-    const htmlContent = await response.text();
-    console.log(`Raw HTML length: ${htmlContent.length}`);
-
-    // Simple HTML cleaning
-    const cleanedHtml = cleanHtml(htmlContent);
-    console.log(`Cleaned HTML length: ${cleanedHtml.length}`);
-
-    // Check for recipe keywords
-    const hasRecipeKeywords = ['recipe', 'ingredient', 'instruction', 'direction'].some(keyword => 
-      cleanedHtml.toLowerCase().includes(keyword)
-    );
-    console.log(`Contains recipe keywords: ${hasRecipeKeywords}`);
-
-    // Initialize OpenAI
-    const openai = new OpenAI({
-      apiKey: process.env.OPENAI_API_KEY,
-    });
-
-    // Simple prompt
-    const prompt = `Extract recipe information from this HTML and return ONLY a JSON object with these exact fields:
+  const prompt = `Extract recipe information from this HTML and return ONLY a JSON object with these exact fields:
 {
   "title": "recipe name",
   "ingredients": ["ingredient 1", "ingredient 2"],
@@ -114,38 +125,155 @@ export async function POST(request: NextRequest) {
 HTML content:
 ${cleanedHtml}`;
 
-    console.log(`Sending to OpenAI, prompt length: ${prompt.length}`);
+  console.log(`Sending to OpenAI, prompt length: ${prompt.length}`);
 
-    const completion = await openai.chat.completions.create({
-      model: "gpt-4o-mini",
-      messages: [
-        {
-          role: "user",
-          content: prompt
-        }
-      ],
-      max_tokens: 1000,
+  const completion = await openai.chat.completions.create({
+    model: "gpt-4o-mini",
+    messages: [
+      {
+        role: "user",
+        content: prompt
+      }
+    ],
+    max_tokens: 1000,
+    temperature: 0.1,
+  });
+
+  const content = completion.choices[0]?.message?.content;
+  if (!content) {
+    throw new Error('No response from OpenAI');
+  }
+
+  console.log('OpenAI response received');
+  return content;
+}
+
+async function extractWithGemini(url: string, rawHtml: string): Promise<any> {
+  const genAI = new GoogleGenerativeAI(process.env.GOOGLE_API_KEY!);
+  const model = genAI.getGenerativeModel({ 
+    model: "gemini-2.5-flash-preview-05-20",
+    generationConfig: {
+      maxOutputTokens: 1000,
       temperature: 0.1,
-    });
+    }
+  });
 
-    const content = completion.choices[0]?.message?.content;
-    if (!content) {
-      throw new Error('No response from OpenAI');
+  // Extract recipe-specific content to reduce payload size
+  const recipeContent = extractRecipeContent(rawHtml);
+  
+  const prompt = `Extract recipe information from this content and return ONLY a JSON object with these exact fields:
+{
+  "title": "recipe name",
+  "ingredients": ["ingredient 1", "ingredient 2"],
+  "steps": ["step 1", "step 2"],
+  "image": "image_url_or_null",
+  "description": "brief description",
+  "cuisine": "cuisine type",
+  "category": "recipe category", 
+  "prepTime": "prep time",
+  "cleanupTime": "cleanup time"
+}
+
+Recipe content from ${url}:
+${recipeContent}`;
+
+  console.log(`Sending optimized content to Gemini, length: ${recipeContent.length}`);
+
+  // Add timeout to prevent hanging
+  const timeoutPromise = new Promise((_, reject) => {
+    setTimeout(() => reject(new Error('Gemini request timed out after 60 seconds')), 60000);
+  });
+
+  const geminiPromise = model.generateContent(prompt);
+  const result = await Promise.race([geminiPromise, timeoutPromise]) as any;
+  const response = await result.response;
+  const content = response.text();
+
+  if (!content) {
+    throw new Error('No response from Gemini');
+  }
+
+  console.log('Gemini response received');
+  return content;
+}
+
+export async function POST(request: NextRequest) {
+  try {
+    const { url, processing_method = 'openai' } = await request.json();
+
+    if (!url) {
+      return NextResponse.json(
+        { success: false, error: 'URL is required' },
+        { status: 400 }
+      );
     }
 
-    console.log('OpenAI response received');
+    // Validate processing method
+    if (!['openai', 'gemini'].includes(processing_method)) {
+      return NextResponse.json(
+        { success: false, error: 'Invalid processing method. Must be "openai" or "gemini"' },
+        { status: 400 }
+      );
+    }
+
+    console.log(`Processing URL: ${url} with ${processing_method}`);
+
+    // Fetch the webpage
+    const response = await fetch(url, {
+      headers: {
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36'
+      }
+    });
+
+    if (!response.ok) {
+      throw new Error(`Failed to fetch webpage: ${response.status} ${response.statusText}`);
+    }
+
+    const htmlContent = await response.text();
+    console.log(`Raw HTML length: ${htmlContent.length}`);
+
+    // Simple HTML cleaning (more aggressive for Gemini)
+    const isGemini = processing_method === 'gemini';
+    const cleanedHtml = cleanHtml(htmlContent, isGemini);
+    console.log(`Cleaned HTML length: ${cleanedHtml.length}`);
+
+    // Check for recipe keywords
+    const hasRecipeKeywords = ['recipe', 'ingredient', 'instruction', 'direction'].some(keyword => 
+      cleanedHtml.toLowerCase().includes(keyword)
+    );
+    console.log(`Contains recipe keywords: ${hasRecipeKeywords}`);
+
+    // Extract with chosen method
+    let content;
+    try {
+      if (processing_method === 'gemini') {
+        content = await extractWithGemini(url, htmlContent);
+      } else {
+        content = await extractWithOpenAI(cleanedHtml);
+      }
+    } catch (apiError) {
+      console.error(`${processing_method} extraction failed:`, apiError);
+      throw new Error(`${processing_method} extraction failed: ${apiError instanceof Error ? apiError.message : 'Unknown error'}`);
+    }
 
     // Parse JSON response
     let parsedRecipe;
     try {
+      // Extract JSON from response (handle markdown code blocks and extra text)
+      let jsonString = content;
+      
+      // Remove markdown code blocks if present (common with Gemini)
+      jsonString = jsonString.replace(/```json\s*/g, '').replace(/```\s*$/g, '');
+      
       // Extract JSON from response (in case there's extra text)
-      const jsonMatch = content.match(/\{[\s\S]*\}/);
-      const jsonString = jsonMatch ? jsonMatch[0] : content;
+      const jsonMatch = jsonString.match(/\{[\s\S]*\}/);
+      jsonString = jsonMatch ? jsonMatch[0] : jsonString;
+      
       parsedRecipe = JSON.parse(jsonString);
     } catch (parseError) {
-      console.error('Failed to parse OpenAI response as JSON:', parseError);
+      console.error(`Failed to parse ${processing_method} response as JSON:`, parseError);
       console.log('Raw response:', content);
-      throw new Error('Invalid JSON response from OpenAI');
+      throw new Error(`Invalid JSON response from ${processing_method}`);
     }
 
     // Validate and fix the recipe
@@ -156,13 +284,13 @@ ${cleanedHtml}`;
       validatedRecipe.image = fixImageUrl(validatedRecipe.image, url);
     }
 
-    console.log('Recipe extraction successful');
+    console.log(`Recipe extraction successful using ${processing_method}`);
 
     return NextResponse.json({
       success: true,
       recipe: validatedRecipe,
-      processing_method: "openai",
-      message: "Recipe extracted successfully using OpenAI"
+      processing_method: processing_method,
+      message: `Recipe extracted successfully using ${processing_method === 'gemini' ? 'Gemini 2.5 Flash' : 'OpenAI GPT-4o'}`
     });
 
   } catch (error) {
@@ -172,7 +300,7 @@ ${cleanedHtml}`;
       { 
         success: false, 
         error: error instanceof Error ? error.message : 'Unknown error occurred',
-        processing_method: "openai"
+        processing_method: "unknown"
       },
       { status: 500 }
     );

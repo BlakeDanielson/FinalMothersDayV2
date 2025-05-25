@@ -254,7 +254,7 @@ async function testRecipeExtraction(url) {
   try {
     const startTime = Date.now();
     
-    const response = await fetch('http://localhost:3000/api/fetch-recipe', {
+    const response = await fetch('http://localhost:3001/api/fetch-recipe', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
