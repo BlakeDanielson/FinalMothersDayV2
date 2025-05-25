@@ -416,9 +416,46 @@ function MainPage() {
       }
       const categoriesData: { name: string; count: number }[] = await response.json();
       
-      // Transform to include image URLs using the same logic as before
+      // Transform to basic format - images will be added separately via updateCategoryImages
       const processedCategoriesData = categoriesData.map(categoryData => {
         let imageUrl = null;
+        
+        // Fallback to placeholder recipe image (static, no savedRecipes dependency)
+        const placeholder = placeholderRecipes.find(p => p.category === categoryData.name);
+        if (placeholder && placeholder.image) {
+          imageUrl = placeholder.image;
+        }
+
+        // Fallback to predefined default image
+        if (!imageUrl) {
+          const predefinedCategory = ALL_POSSIBLE_CATEGORIES.find(c => c.name === categoryData.name);
+          if (predefinedCategory) {
+            imageUrl = predefinedCategory.defaultImageUrl;
+          }
+        }
+
+        return {
+          name: categoryData.name,
+          count: categoryData.count,
+          imageUrl: imageUrl,
+        };
+      });
+      
+      setProcessedCategories(processedCategoriesData);
+    } catch (err: unknown) {
+      console.error("Error fetching categories:", err);
+      setCategoriesError(`Could not load categories: ${err instanceof Error ? err.message : String(err)}`);
+      toast.error(`Could not load categories: ${err instanceof Error ? err.message : String(err)}`);
+    } finally {
+      setCategoriesLoading(false);
+    }
+      }, []); // Remove savedRecipes dependency to break the circular dependency
+
+  // Update category images when savedRecipes change (separate from API fetch)
+  const updateCategoryImages = useCallback(() => {
+    setProcessedCategories(prevCategories => 
+      prevCategories.map(categoryData => {
+        let imageUrl = categoryData.imageUrl; // Keep existing image as fallback
         
         // If category has recipes, try to find an image from saved recipes
         if (categoryData.count > 0) {
@@ -446,23 +483,14 @@ function MainPage() {
         }
 
         return {
-          name: categoryData.name,
-          count: categoryData.count,
+          ...categoryData,
           imageUrl: imageUrl,
         };
-      });
-      
-      setProcessedCategories(processedCategoriesData);
-    } catch (err: unknown) {
-      console.error("Error fetching categories:", err);
-      setCategoriesError(`Could not load categories: ${err instanceof Error ? err.message : String(err)}`);
-      toast.error(`Could not load categories: ${err instanceof Error ? err.message : String(err)}`);
-    } finally {
-      setCategoriesLoading(false);
-    }
+      })
+    );
   }, [savedRecipes]);
 
-  // Effects that depend on the callback functions - moved after function declarations
+  // Initial load - fetch both recipes and categories
   useEffect(() => {
     fetchSavedRecipes();
     fetchCategoriesWithCounts();
@@ -475,12 +503,12 @@ function MainPage() {
     }
   }, [fetchSavedRecipes, fetchCategoriesWithCounts]);
 
-  // Refresh categories when saved recipes change to update images and counts
+  // Update category images when saved recipes change (without refetching categories API)
   useEffect(() => {
-    if (savedRecipes.length > 0) {
-      fetchCategoriesWithCounts();
+    if (savedRecipes.length > 0 && processedCategories.length > 0) {
+      updateCategoryImages();
     }
-  }, [savedRecipes, fetchCategoriesWithCounts]);
+  }, [savedRecipes, updateCategoryImages, processedCategories.length]); // Use .length to avoid circular dependency
 
   // Handle displaying a recipe if recipeId is in URL and recipes are loaded
   useEffect(() => {
