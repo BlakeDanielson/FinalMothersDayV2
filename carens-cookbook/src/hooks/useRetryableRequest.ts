@@ -171,26 +171,17 @@ export function useImageProcessing(
   processFn: (file: File, provider?: string) => Promise<unknown>,
   options: Omit<RetryableRequestOptions, 'maxRetries'> & { maxRetries?: number } = {}
 ) {
-  const [selectedFile, setSelectedFile] = useState<File | null>(null);
-  const [selectedProvider, setSelectedProvider] = useState<string>('openai');
+  const [lastProcessedFile, setLastProcessedFile] = useState<File | null>(null);
+  const [lastUsedProvider, setLastUsedProvider] = useState<string>('openai');
 
-  const requestFn = useCallback(async () => {
-    if (!selectedFile) {
-      throw new RecipeProcessingError({
-        type: ErrorType.INVALID_RECIPE_DATA,
-        message: 'No file selected for processing',
-        userMessage: 'Please select an image file.',
-        actionable: 'Choose an image file to process.',
-        retryable: false
-      });
-    }
-
+  // Create a function that validates and processes the file
+  const validateAndProcessFile = useCallback(async (file: File, provider: string) => {
     // File size validation (10MB limit)
     const MAX_FILE_SIZE = 10 * 1024 * 1024; // 10MB
-    if (selectedFile.size > MAX_FILE_SIZE) {
+    if (file.size > MAX_FILE_SIZE) {
       throw new RecipeProcessingError({
         type: ErrorType.FILE_TOO_LARGE,
-        message: `File size ${selectedFile.size} exceeds maximum ${MAX_FILE_SIZE}`,
+        message: `File size ${file.size} exceeds maximum ${MAX_FILE_SIZE}`,
         userMessage: 'The image file is too large.',
         actionable: 'Please use an image smaller than 10MB.',
         retryable: false
@@ -200,39 +191,78 @@ export function useImageProcessing(
     // File format validation
     const supportedFormats = ['image/jpeg', 'image/jpg', 'image/png', 'image/heic', 'image/heif'];
     const isValidFormat = supportedFormats.some(format => 
-      selectedFile.type === format || selectedFile.name.toLowerCase().endsWith(format.split('/')[1])
+      file.type === format || file.name.toLowerCase().endsWith(format.split('/')[1])
     );
     
     if (!isValidFormat) {
       throw new RecipeProcessingError({
         type: ErrorType.FILE_FORMAT_UNSUPPORTED,
-        message: `Unsupported file format: ${selectedFile.type}`,
+        message: `Unsupported file format: ${file.type}`,
         userMessage: 'This image format is not supported.',
         actionable: 'Please use JPG, PNG, or HEIC format.',
         retryable: false
       });
     }
 
-    return processFn(selectedFile, selectedProvider);
-  }, [processFn, selectedFile, selectedProvider]);
+    return processFn(file, provider);
+  }, [processFn]);
 
-  const retryableRequest = useRetryableRequest(requestFn, {
+  // Create a retry function that reuses the last file and provider
+  const retryFn = useCallback(async () => {
+    if (!lastProcessedFile) {
+      throw new RecipeProcessingError({
+        type: ErrorType.INVALID_RECIPE_DATA,
+        message: 'No file available for retry',
+        userMessage: 'Please select an image file.',
+        actionable: 'Choose an image file to process.',
+        retryable: false
+      });
+    }
+    return validateAndProcessFile(lastProcessedFile, lastUsedProvider);
+  }, [validateAndProcessFile, lastProcessedFile, lastUsedProvider]);
+
+  const retryableRequest = useRetryableRequest(retryFn, {
     maxRetries: 2, // Lower retry count for image processing
     baseDelay: 2000, // Longer base delay for AI processing
     ...options
   });
 
   const processFile = useCallback(async (file: File, provider: string = 'openai') => {
-    setSelectedFile(file);
-    setSelectedProvider(provider);
-    // Small delay to ensure state is updated
-    await new Promise(resolve => setTimeout(resolve, 0));
+    // Store the file and provider for potential retries
+    setLastProcessedFile(file);
+    setLastUsedProvider(provider);
+    
+    // Process directly to avoid state dependency timing issues
+    try {
+      return await validateAndProcessFile(file, provider);
+    } catch (error) {
+      // Store for retry and rethrow
+      throw error;
+    }
+  }, [validateAndProcessFile]);
+
+  const retry = useCallback(async () => {
+    if (!lastProcessedFile) {
+      throw new RecipeProcessingError({
+        type: ErrorType.INVALID_RECIPE_DATA,
+        message: 'No file available for retry',
+        userMessage: 'Please select an image file.',
+        actionable: 'Choose an image file to process.',
+        retryable: false
+      });
+    }
     return retryableRequest.execute();
-  }, [retryableRequest]);
+  }, [retryableRequest, lastProcessedFile]);
 
   return {
-    ...retryableRequest,
+    isLoading: retryableRequest.isLoading,
+    error: retryableRequest.error,
+    retryCount: retryableRequest.retryCount,
+    canRetry: retryableRequest.canRetry && !!lastProcessedFile,
     processFile,
-    selectedFile
+    retry,
+    cancel: retryableRequest.cancel,
+    reset: retryableRequest.reset,
+    selectedFile: lastProcessedFile
   };
 } 

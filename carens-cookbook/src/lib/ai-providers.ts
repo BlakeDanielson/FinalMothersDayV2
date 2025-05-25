@@ -14,9 +14,9 @@ export const AI_PROVIDERS = {
     supportedFormats: ['image/jpeg', 'image/jpg', 'image/png', 'image/heic', 'image/heif']
   },
   gemini: {
-    name: 'Google Gemini Flash 2.5',
-    description: 'Fast processing with multimodal capabilities',
-    model: 'gemini-2.0-flash-exp',
+    name: 'Google Gemini 2.5 Flash',
+    description: 'Latest fast processing with enhanced multimodal capabilities',
+    model: 'gemini-2.5-flash-preview-05-20',
     maxFileSize: 20 * 1024 * 1024, // 20MB
     supportedFormats: ['image/jpeg', 'image/jpg', 'image/png', 'image/webp', 'image/heic', 'image/heif']
   }

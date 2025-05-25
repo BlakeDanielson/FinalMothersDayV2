@@ -587,49 +587,57 @@ function MainPage() {
     }
   };
 
-  const handleProcessImage = async (file: File, provider: AIProvider = 'openai') => {
-    if (!file) return;
-    
-    setIsLoading(true);
-    setError(null);
-    setUrl("");
-    setLoadingProgress(5);
-    setLoadingStepMessage(`Checking image format '${file.name}'... 🧐`);
-    
-    let fileToProcess = file;
 
-    // HEIC conversion handling
-    if (file.type === 'image/heic' || file.type === 'image/heif' || 
-        file.name.toLowerCase().endsWith('.heic') || file.name.toLowerCase().endsWith('.heif')) {
-      
-      setLoadingStepMessage(`Converting '${file.name}' from HEIC to JPEG... ⏳`);
-      toast.info(`Converting HEIC image to JPEG...`);
-      
-      try {
-        const heic2any = (await import('heic2any')).default;
-        const conversionResult = await heic2any({ 
-          blob: file, 
-          toType: "image/jpeg", 
-          quality: 0.8 
-        });
-        
-        const convertedBlob = Array.isArray(conversionResult) ? conversionResult[0] : conversionResult;
-        const originalNameWithoutExt = file.name.split('.').slice(0, -1).join('.');
-        fileToProcess = new File([convertedBlob], `${originalNameWithoutExt}.jpeg`, { type: 'image/jpeg' });
-        
-        toast.success(`Image converted successfully!`);
-      } catch (conversionError: unknown) {
-        console.error("Error converting HEIC to JPEG:", conversionError);
-        const errorMessage = conversionError instanceof Error ? conversionError.message : 'Unknown error';
-        toast.error(`Failed to convert HEIC image: ${errorMessage}`);
-        setIsLoading(false);
-        setLoadingProgress(0);
-        setLoadingStepMessage("");
-        return;
-      }
+
+  const handleImageFileSelect = async (file: File, provider: AIProvider) => {
+    console.log("Image selected:", file.name, file.type, file.size, "Provider:", provider);
+    
+    if (!file) {
+      toast.error('Please select an image file.');
+      return;
     }
-
+    
+    // Use the imageProcessing hook directly instead of handleProcessImage
     try {
+      setIsLoading(true);
+      setError(null);
+      setUrl("");
+      setLoadingProgress(5);
+      setLoadingStepMessage(`Checking image format '${file.name}'... 🧐`);
+      
+      let fileToProcess = file;
+
+      // HEIC conversion handling
+      if (file.type === 'image/heic' || file.type === 'image/heif' || 
+          file.name.toLowerCase().endsWith('.heic') || file.name.toLowerCase().endsWith('.heif')) {
+        
+        setLoadingStepMessage(`Converting '${file.name}' from HEIC to JPEG... ⏳`);
+        toast.info(`Converting HEIC image to JPEG...`);
+        
+        try {
+          const heic2any = (await import('heic2any')).default;
+          const conversionResult = await heic2any({ 
+            blob: file, 
+            toType: "image/jpeg", 
+            quality: 0.8 
+          });
+          
+          const convertedBlob = Array.isArray(conversionResult) ? conversionResult[0] : conversionResult;
+          const originalNameWithoutExt = file.name.split('.').slice(0, -1).join('.');
+          fileToProcess = new File([convertedBlob], `${originalNameWithoutExt}.jpeg`, { type: 'image/jpeg' });
+          
+          toast.success(`Image converted successfully!`);
+        } catch (conversionError: unknown) {
+          console.error("Error converting HEIC to JPEG:", conversionError);
+          const errorMessage = conversionError instanceof Error ? conversionError.message : 'Unknown error';
+          toast.error(`Failed to convert HEIC image: ${errorMessage}`);
+          setIsLoading(false);
+          setLoadingProgress(0);
+          setLoadingStepMessage("");
+          return;
+        }
+      }
+
       setLoadingProgress(10);
       setLoadingStepMessage(`Preparing to scan '${fileToProcess.name}'... 🖼️`);
       
@@ -642,18 +650,13 @@ function MainPage() {
       }
     } catch (err: unknown) {
       // Error handling is managed by the imageProcessing hook
-      console.error("Error in handleProcessImage:", err);
+      console.error("Error in handleImageFileSelect:", err);
       setLoadingProgress(0);
     } finally {
       setIsLoading(false);
       setLoadingStepMessage("");
       setLoadingProgress(0);
     }
-  };
-
-  const handleImageFileSelect = (file: File, provider: AIProvider) => {
-    console.log("Image selected:", file.name, file.type, file.size, "Provider:", provider);
-    handleProcessImage(file, provider);
   };
 
   const handleRetryImageProcessing = () => {
