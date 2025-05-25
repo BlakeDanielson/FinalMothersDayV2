@@ -1,0 +1,104 @@
+# Product Requirements Document: Hybrid Recipe Category Management System
+
+## Project Overview
+Fix the recipe category system in Caren's Cookbook to prevent orphaned recipes and create a smart, adaptive category management system that combines predefined categories with user-generated ones.
+
+## Problem Statement
+Currently, when users scan recipes, there's a mismatch between the AI-suggested categories and the predefined UI categories. This causes "orphaned recipes" that are saved to the database but don't appear in any category on the main page, creating a silent failure where recipes become inaccessible through the UI.
+
+## Current Technical Issues
+1. **Category Definition Mismatch**: AI prompt categories vs UI categories are inconsistent
+2. **Orphaned Recipes**: Recipes with non-UI categories become "lost" 
+3. **Silent Failures**: Users don't know their recipes are inaccessible
+4. **Manual Recovery**: Users must guess URLs to find orphaned recipes
+
+## Solution: Hybrid Category Management System
+
+### Core Features
+
+#### 1. Smart Category Assignment Service
+- Create a centralized CategoryService to handle all category logic
+- Implement fuzzy matching to assign recipes to existing similar categories
+- Use semantic matching to find best-fit categories
+- Only create new categories when no good match exists
+
+#### 2. Dynamic Category Discovery
+- For new users: Show clean predefined categories as defaults
+- For existing users: Display all categories that contain recipes
+- Remove empty predefined categories once user starts uploading recipes
+- Progressive enhancement from defaults to personalized categories
+
+#### 3. Intelligent Category Matching
+- First attempt exact match with existing user categories
+- Second attempt fuzzy match (e.g., "Beverages" -> "Drinks")
+- Third attempt semantic match based on recipe content
+- Last resort: create new category with clear naming
+
+#### 4. Enhanced Recipe Scanning
+- Query user's existing categories before saving new recipes
+- Apply smart matching algorithm to find best category fit
+- Update AI prompt to be aware of user's existing categories
+- Ensure category consistency across all recipe sources
+
+#### 5. Category Management Interface
+- Display all user categories with recipe counts
+- Highlight non-standard/user-generated categories
+- Provide merge and rename capabilities for categories
+- Show suggestions for consolidating similar categories
+
+## Technical Implementation
+
+### Phase 1: Data Safety & Discovery
+- Audit existing database for orphaned recipes
+- Create temporary safety net to display ALL categories with recipes
+- Ensure no existing user data becomes inaccessible
+
+### Phase 2: Category Service Implementation
+- Create src/lib/categories.ts with CategoryService class
+- Implement fuzzy matching algorithms
+- Create category merging and prioritization logic
+- Move predefined categories to centralized location
+
+### Phase 3: Smart Recipe Processing
+- Update scan-recipe API to use CategoryService
+- Modify AI prompt to include user's existing categories
+- Add category validation before database save
+- Implement fallback logic for edge cases
+
+### Phase 4: UI Enhancement
+- Update main page to use dynamic category resolution
+- Implement progressive category display logic
+- Add category management components
+- Create user-friendly category organization tools
+
+## Success Criteria
+1. Zero orphaned recipes - all recipes accessible through UI
+2. Consistent category assignment across all recipe import methods
+3. Smart category suggestions that reduce duplicate categories
+4. Smooth user experience from new user to power user
+5. Ability to manage and organize categories post-creation
+
+## Technical Stack
+- Next.js app router architecture
+- Prisma ORM with PostgreSQL database
+- AI integration (OpenAI/Gemini) for recipe scanning
+- TypeScript for type safety
+- Existing component library and UI patterns
+
+## Dependencies
+- Existing recipe scanning functionality (scan-recipe API)
+- Database schema (Recipe model with category field)
+- Main page category display logic
+- Category page routing ([categoryName])
+
+## Risk Mitigation
+- Implement changes incrementally to avoid breaking existing functionality
+- Maintain backward compatibility with existing recipe data
+- Add comprehensive error handling for category operations
+- Test with existing user data to ensure no data loss
+
+## Performance Considerations
+- Cache category calculations for better performance
+- Minimize database queries when resolving categories
+- Implement efficient fuzzy matching algorithms
+- Consider pagination for users with many categories 
