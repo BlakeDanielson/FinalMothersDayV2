@@ -89,7 +89,7 @@ function extractRecipeContent(html: string): string {
 
 // Simple HTML cleaning function with more aggressive cleaning for Gemini
 function cleanHtml(html: string, forGemini: boolean = false): string {
-  let cleaned = html
+  const cleaned = html
     .replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, '')
     .replace(/<style\b[^<]*(?:(?!<\/style>)<[^<]*)*<\/style>/gi, '')
     .replace(/<nav\b[^<]*(?:(?!<\/nav>)<[^<]*)*<\/nav>/gi, '') // Remove navigation
@@ -104,7 +104,7 @@ function cleanHtml(html: string, forGemini: boolean = false): string {
   return cleaned.substring(0, maxLength);
 }
 
-async function extractWithOpenAI(cleanedHtml: string): Promise<any> {
+async function extractWithOpenAI(cleanedHtml: string): Promise<unknown> {
   const openai = new OpenAI({
     apiKey: process.env.OPENAI_API_KEY,
   });
@@ -148,7 +148,7 @@ ${cleanedHtml}`;
   return content;
 }
 
-async function extractWithGemini(url: string, rawHtml: string): Promise<any> {
+async function extractWithGemini(url: string, rawHtml: string): Promise<unknown> {
   const genAI = new GoogleGenerativeAI(process.env.GOOGLE_API_KEY!);
   const model = genAI.getGenerativeModel({ 
     model: "gemini-2.5-flash-preview-05-20",
@@ -180,12 +180,12 @@ ${recipeContent}`;
   console.log(`Sending optimized content to Gemini, length: ${recipeContent.length}`);
 
   // Add timeout to prevent hanging
-  const timeoutPromise = new Promise((_, reject) => {
+  const timeoutPromise = new Promise<never>((_, reject) => {
     setTimeout(() => reject(new Error('Gemini request timed out after 60 seconds')), 60000);
   });
 
   const geminiPromise = model.generateContent(prompt);
-  const result = await Promise.race([geminiPromise, timeoutPromise]) as any;
+  const result = await Promise.race([geminiPromise, timeoutPromise]);
   const response = await result.response;
   const content = response.text();
 
@@ -260,7 +260,7 @@ export async function POST(request: NextRequest) {
     let parsedRecipe;
     try {
       // Extract JSON from response (handle markdown code blocks and extra text)
-      let jsonString = content;
+      let jsonString = typeof content === 'string' ? content : String(content);
       
       // Remove markdown code blocks if present (common with Gemini)
       jsonString = jsonString.replace(/```json\s*/g, '').replace(/```\s*$/g, '');
