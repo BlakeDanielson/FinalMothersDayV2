@@ -29,13 +29,20 @@ model User {
   favorites RecipeFavorite[]
 }
 
+// Enum for category source tracking
+enum CategorySource {
+  PREDEFINED // Category was matched to a predefined category
+  AI_GENERATED // Category was suggested by AI and kept as-is
+  USER_CREATED // Category was created by user or represents a new category
+}
+
 model Recipe {
   id          String   @id @default(cuid()) // Using CUID for IDs as a common Prisma pattern
   title       String
   description String
   ingredients String[] // Postgres array of strings
   steps       String[] // Postgres array of strings
-  image       String? // Nullable
+  image       String? // Keep for backward compatibility, will be primary image
   cuisine     String
   category    String
   prepTime    String
@@ -43,14 +50,40 @@ model Recipe {
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 
+  // Enhanced category metadata
+  categorySource     CategorySource? // How the category was determined
+  categoryConfidence Float? // Confidence score from category matching (0.0-1.0)
+  originalCategory   String? // Original AI-suggested category before resolution
+
   // User relation
   userId String
   user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   // Relations
   favorites RecipeFavorite[]
+  images    RecipeImage[]
 
   @@index([userId])
+  @@index([userId, category]) // Performance index for category queries
+  @@index([categorySource]) // Index for analytics queries
+}
+
+// New model for multiple recipe images
+model RecipeImage {
+  id        String   @id @default(cuid())
+  url       String // Image URL or path
+  alt       String? // Alt text for accessibility
+  isPrimary Boolean  @default(false) // Primary image for recipe
+  order     Int      @default(0) // Order for displaying images
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Recipe relation
+  recipeId String
+  recipe   Recipe @relation(fields: [recipeId], references: [id], onDelete: Cascade)
+
+  @@index([recipeId])
+  @@index([recipeId, order])
 }
 
 // Junction table for user favorites

@@ -29,6 +29,13 @@ model User {
   favorites RecipeFavorite[]
 }
 
+// Enum for category source tracking
+enum CategorySource {
+  PREDEFINED    // Category was matched to a predefined category
+  AI_GENERATED  // Category was suggested by AI and kept as-is
+  USER_CREATED  // Category was created by user or represents a new category
+}
+
 model Recipe {
   id            String   @id @default(cuid()) // Using CUID for IDs as a common Prisma pattern
   title         String
@@ -43,6 +50,11 @@ model Recipe {
   createdAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt
 
+  // Enhanced category metadata
+  categorySource     CategorySource? // How the category was determined
+  categoryConfidence Float?          // Confidence score from category matching (0.0-1.0)
+  originalCategory   String?         // Original AI-suggested category before resolution
+
   // User relation
   userId        String
   user          User     @relation(fields: [userId], references: [id], onDelete: Cascade)
@@ -52,6 +64,8 @@ model Recipe {
   images        RecipeImage[]
 
   @@index([userId])
+  @@index([userId, category]) // Performance index for category queries
+  @@index([categorySource])   // Index for analytics queries
 }
 
 // New model for multiple recipe images

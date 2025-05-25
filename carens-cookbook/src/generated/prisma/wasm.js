@@ -143,7 +143,21 @@ exports.Prisma.RecipeScalarFieldEnum = {
   cleanupTime: 'cleanupTime',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
+  categorySource: 'categorySource',
+  categoryConfidence: 'categoryConfidence',
+  originalCategory: 'originalCategory',
   userId: 'userId'
+};
+
+exports.Prisma.RecipeImageScalarFieldEnum = {
+  id: 'id',
+  url: 'url',
+  alt: 'alt',
+  isPrimary: 'isPrimary',
+  order: 'order',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  recipeId: 'recipeId'
 };
 
 exports.Prisma.RecipeFavoriteScalarFieldEnum = {
@@ -167,11 +181,16 @@ exports.Prisma.NullsOrder = {
   first: 'first',
   last: 'last'
 };
-
+exports.CategorySource = exports.$Enums.CategorySource = {
+  PREDEFINED: 'PREDEFINED',
+  AI_GENERATED: 'AI_GENERATED',
+  USER_CREATED: 'USER_CREATED'
+};
 
 exports.Prisma.ModelName = {
   User: 'User',
   Recipe: 'Recipe',
+  RecipeImage: 'RecipeImage',
   RecipeFavorite: 'RecipeFavorite'
 };
 

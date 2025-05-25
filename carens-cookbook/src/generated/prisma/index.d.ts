@@ -24,10 +24,33 @@ export type User = $Result.DefaultSelection<Prisma.$UserPayload>
  */
 export type Recipe = $Result.DefaultSelection<Prisma.$RecipePayload>
 /**
+ * Model RecipeImage
+ * 
+ */
+export type RecipeImage = $Result.DefaultSelection<Prisma.$RecipeImagePayload>
+/**
  * Model RecipeFavorite
  * 
  */
 export type RecipeFavorite = $Result.DefaultSelection<Prisma.$RecipeFavoritePayload>
+
+/**
+ * Enums
+ */
+export namespace $Enums {
+  export const CategorySource: {
+  PREDEFINED: 'PREDEFINED',
+  AI_GENERATED: 'AI_GENERATED',
+  USER_CREATED: 'USER_CREATED'
+};
+
+export type CategorySource = (typeof CategorySource)[keyof typeof CategorySource]
+
+}
+
+export type CategorySource = $Enums.CategorySource
+
+export const CategorySource: typeof $Enums.CategorySource
 
 /**
  * ##  Prisma Client ʲˢ
@@ -173,6 +196,16 @@ export class PrismaClient<
     * ```
     */
   get recipe(): Prisma.RecipeDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.recipeImage`: Exposes CRUD operations for the **RecipeImage** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more RecipeImages
+    * const recipeImages = await prisma.recipeImage.findMany()
+    * ```
+    */
+  get recipeImage(): Prisma.RecipeImageDelegate<ExtArgs, ClientOptions>;
 
   /**
    * `prisma.recipeFavorite`: Exposes CRUD operations for the **RecipeFavorite** model.
@@ -625,6 +658,7 @@ export namespace Prisma {
   export const ModelName: {
     User: 'User',
     Recipe: 'Recipe',
+    RecipeImage: 'RecipeImage',
     RecipeFavorite: 'RecipeFavorite'
   };
 
@@ -644,7 +678,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "user" | "recipe" | "recipeFavorite"
+      modelProps: "user" | "recipe" | "recipeImage" | "recipeFavorite"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -793,6 +827,80 @@ export namespace Prisma {
           count: {
             args: Prisma.RecipeCountArgs<ExtArgs>
             result: $Utils.Optional<RecipeCountAggregateOutputType> | number
+          }
+        }
+      }
+      RecipeImage: {
+        payload: Prisma.$RecipeImagePayload<ExtArgs>
+        fields: Prisma.RecipeImageFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.RecipeImageFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$RecipeImagePayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.RecipeImageFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$RecipeImagePayload>
+          }
+          findFirst: {
+            args: Prisma.RecipeImageFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$RecipeImagePayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.RecipeImageFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$RecipeImagePayload>
+          }
+          findMany: {
+            args: Prisma.RecipeImageFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$RecipeImagePayload>[]
+          }
+          create: {
+            args: Prisma.RecipeImageCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$RecipeImagePayload>
+          }
+          createMany: {
+            args: Prisma.RecipeImageCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.RecipeImageCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$RecipeImagePayload>[]
+          }
+          delete: {
+            args: Prisma.RecipeImageDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$RecipeImagePayload>
+          }
+          update: {
+            args: Prisma.RecipeImageUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$RecipeImagePayload>
+          }
+          deleteMany: {
+            args: Prisma.RecipeImageDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.RecipeImageUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.RecipeImageUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$RecipeImagePayload>[]
+          }
+          upsert: {
+            args: Prisma.RecipeImageUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$RecipeImagePayload>
+          }
+          aggregate: {
+            args: Prisma.RecipeImageAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateRecipeImage>
+          }
+          groupBy: {
+            args: Prisma.RecipeImageGroupByArgs<ExtArgs>
+            result: $Utils.Optional<RecipeImageGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.RecipeImageCountArgs<ExtArgs>
+            result: $Utils.Optional<RecipeImageCountAggregateOutputType> | number
           }
         }
       }
@@ -956,6 +1064,7 @@ export namespace Prisma {
   export type GlobalOmitConfig = {
     user?: UserOmit
     recipe?: RecipeOmit
+    recipeImage?: RecipeImageOmit
     recipeFavorite?: RecipeFavoriteOmit
   }
 
@@ -1092,10 +1201,12 @@ export namespace Prisma {
 
   export type RecipeCountOutputType = {
     favorites: number
+    images: number
   }
 
   export type RecipeCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     favorites?: boolean | RecipeCountOutputTypeCountFavoritesArgs
+    images?: boolean | RecipeCountOutputTypeCountImagesArgs
   }
 
   // Custom InputTypes
@@ -1114,6 +1225,13 @@ export namespace Prisma {
    */
   export type RecipeCountOutputTypeCountFavoritesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: RecipeFavoriteWhereInput
+  }
+
+  /**
+   * RecipeCountOutputType without action
+   */
+  export type RecipeCountOutputTypeCountImagesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: RecipeImageWhereInput
   }
 
 
@@ -2251,8 +2369,18 @@ export namespace Prisma {
 
   export type AggregateRecipe = {
     _count: RecipeCountAggregateOutputType | null
+    _avg: RecipeAvgAggregateOutputType | null
+    _sum: RecipeSumAggregateOutputType | null
     _min: RecipeMinAggregateOutputType | null
     _max: RecipeMaxAggregateOutputType | null
+  }
+
+  export type RecipeAvgAggregateOutputType = {
+    categoryConfidence: number | null
+  }
+
+  export type RecipeSumAggregateOutputType = {
+    categoryConfidence: number | null
   }
 
   export type RecipeMinAggregateOutputType = {
@@ -2266,6 +2394,9 @@ export namespace Prisma {
     cleanupTime: string | null
     createdAt: Date | null
     updatedAt: Date | null
+    categorySource: $Enums.CategorySource | null
+    categoryConfidence: number | null
+    originalCategory: string | null
     userId: string | null
   }
 
@@ -2280,6 +2411,9 @@ export namespace Prisma {
     cleanupTime: string | null
     createdAt: Date | null
     updatedAt: Date | null
+    categorySource: $Enums.CategorySource | null
+    categoryConfidence: number | null
+    originalCategory: string | null
     userId: string | null
   }
 
@@ -2296,10 +2430,21 @@ export namespace Prisma {
     cleanupTime: number
     createdAt: number
     updatedAt: number
+    categorySource: number
+    categoryConfidence: number
+    originalCategory: number
     userId: number
     _all: number
   }
 
+
+  export type RecipeAvgAggregateInputType = {
+    categoryConfidence?: true
+  }
+
+  export type RecipeSumAggregateInputType = {
+    categoryConfidence?: true
+  }
 
   export type RecipeMinAggregateInputType = {
     id?: true
@@ -2312,6 +2457,9 @@ export namespace Prisma {
     cleanupTime?: true
     createdAt?: true
     updatedAt?: true
+    categorySource?: true
+    categoryConfidence?: true
+    originalCategory?: true
     userId?: true
   }
 
@@ -2326,6 +2474,9 @@ export namespace Prisma {
     cleanupTime?: true
     createdAt?: true
     updatedAt?: true
+    categorySource?: true
+    categoryConfidence?: true
+    originalCategory?: true
     userId?: true
   }
 
@@ -2342,6 +2493,9 @@ export namespace Prisma {
     cleanupTime?: true
     createdAt?: true
     updatedAt?: true
+    categorySource?: true
+    categoryConfidence?: true
+    originalCategory?: true
     userId?: true
     _all?: true
   }
@@ -2384,6 +2538,18 @@ export namespace Prisma {
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
      * 
+     * Select which fields to average
+    **/
+    _avg?: RecipeAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: RecipeSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
      * Select which fields to find the minimum value
     **/
     _min?: RecipeMinAggregateInputType
@@ -2414,6 +2580,8 @@ export namespace Prisma {
     take?: number
     skip?: number
     _count?: RecipeCountAggregateInputType | true
+    _avg?: RecipeAvgAggregateInputType
+    _sum?: RecipeSumAggregateInputType
     _min?: RecipeMinAggregateInputType
     _max?: RecipeMaxAggregateInputType
   }
@@ -2431,8 +2599,13 @@ export namespace Prisma {
     cleanupTime: string
     createdAt: Date
     updatedAt: Date
+    categorySource: $Enums.CategorySource | null
+    categoryConfidence: number | null
+    originalCategory: string | null
     userId: string
     _count: RecipeCountAggregateOutputType | null
+    _avg: RecipeAvgAggregateOutputType | null
+    _sum: RecipeSumAggregateOutputType | null
     _min: RecipeMinAggregateOutputType | null
     _max: RecipeMaxAggregateOutputType | null
   }
@@ -2464,9 +2637,13 @@ export namespace Prisma {
     cleanupTime?: boolean
     createdAt?: boolean
     updatedAt?: boolean
+    categorySource?: boolean
+    categoryConfidence?: boolean
+    originalCategory?: boolean
     userId?: boolean
     user?: boolean | UserDefaultArgs<ExtArgs>
     favorites?: boolean | Recipe$favoritesArgs<ExtArgs>
+    images?: boolean | Recipe$imagesArgs<ExtArgs>
     _count?: boolean | RecipeCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["recipe"]>
 
@@ -2483,6 +2660,9 @@ export namespace Prisma {
     cleanupTime?: boolean
     createdAt?: boolean
     updatedAt?: boolean
+    categorySource?: boolean
+    categoryConfidence?: boolean
+    originalCategory?: boolean
     userId?: boolean
     user?: boolean | UserDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["recipe"]>
@@ -2500,6 +2680,9 @@ export namespace Prisma {
     cleanupTime?: boolean
     createdAt?: boolean
     updatedAt?: boolean
+    categorySource?: boolean
+    categoryConfidence?: boolean
+    originalCategory?: boolean
     userId?: boolean
     user?: boolean | UserDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["recipe"]>
@@ -2517,13 +2700,17 @@ export namespace Prisma {
     cleanupTime?: boolean
     createdAt?: boolean
     updatedAt?: boolean
+    categorySource?: boolean
+    categoryConfidence?: boolean
+    originalCategory?: boolean
     userId?: boolean
   }
 
-  export type RecipeOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "title" | "description" | "ingredients" | "steps" | "image" | "cuisine" | "category" | "prepTime" | "cleanupTime" | "createdAt" | "updatedAt" | "userId", ExtArgs["result"]["recipe"]>
+  export type RecipeOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "title" | "description" | "ingredients" | "steps" | "image" | "cuisine" | "category" | "prepTime" | "cleanupTime" | "createdAt" | "updatedAt" | "categorySource" | "categoryConfidence" | "originalCategory" | "userId", ExtArgs["result"]["recipe"]>
   export type RecipeInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     user?: boolean | UserDefaultArgs<ExtArgs>
     favorites?: boolean | Recipe$favoritesArgs<ExtArgs>
+    images?: boolean | Recipe$imagesArgs<ExtArgs>
     _count?: boolean | RecipeCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type RecipeIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -2538,6 +2725,7 @@ export namespace Prisma {
     objects: {
       user: Prisma.$UserPayload<ExtArgs>
       favorites: Prisma.$RecipeFavoritePayload<ExtArgs>[]
+      images: Prisma.$RecipeImagePayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -2552,6 +2740,9 @@ export namespace Prisma {
       cleanupTime: string
       createdAt: Date
       updatedAt: Date
+      categorySource: $Enums.CategorySource | null
+      categoryConfidence: number | null
+      originalCategory: string | null
       userId: string
     }, ExtArgs["result"]["recipe"]>
     composites: {}
@@ -2949,6 +3140,7 @@ export namespace Prisma {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     user<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     favorites<T extends Recipe$favoritesArgs<ExtArgs> = {}>(args?: Subset<T, Recipe$favoritesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$RecipeFavoritePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    images<T extends Recipe$imagesArgs<ExtArgs> = {}>(args?: Subset<T, Recipe$imagesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$RecipeImagePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -2990,6 +3182,9 @@ export namespace Prisma {
     readonly cleanupTime: FieldRef<"Recipe", 'String'>
     readonly createdAt: FieldRef<"Recipe", 'DateTime'>
     readonly updatedAt: FieldRef<"Recipe", 'DateTime'>
+    readonly categorySource: FieldRef<"Recipe", 'CategorySource'>
+    readonly categoryConfidence: FieldRef<"Recipe", 'Float'>
+    readonly originalCategory: FieldRef<"Recipe", 'String'>
     readonly userId: FieldRef<"Recipe", 'String'>
   }
     
@@ -3411,6 +3606,30 @@ export namespace Prisma {
   }
 
   /**
+   * Recipe.images
+   */
+  export type Recipe$imagesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the RecipeImage
+     */
+    select?: RecipeImageSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the RecipeImage
+     */
+    omit?: RecipeImageOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: RecipeImageInclude<ExtArgs> | null
+    where?: RecipeImageWhereInput
+    orderBy?: RecipeImageOrderByWithRelationInput | RecipeImageOrderByWithRelationInput[]
+    cursor?: RecipeImageWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: RecipeImageScalarFieldEnum | RecipeImageScalarFieldEnum[]
+  }
+
+  /**
    * Recipe without action
    */
   export type RecipeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -3426,6 +3645,1137 @@ export namespace Prisma {
      * Choose, which related nodes to fetch as well
      */
     include?: RecipeInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model RecipeImage
+   */
+
+  export type AggregateRecipeImage = {
+    _count: RecipeImageCountAggregateOutputType | null
+    _avg: RecipeImageAvgAggregateOutputType | null
+    _sum: RecipeImageSumAggregateOutputType | null
+    _min: RecipeImageMinAggregateOutputType | null
+    _max: RecipeImageMaxAggregateOutputType | null
+  }
+
+  export type RecipeImageAvgAggregateOutputType = {
+    order: number | null
+  }
+
+  export type RecipeImageSumAggregateOutputType = {
+    order: number | null
+  }
+
+  export type RecipeImageMinAggregateOutputType = {
+    id: string | null
+    url: string | null
+    alt: string | null
+    isPrimary: boolean | null
+    order: number | null
+    createdAt: Date | null
+    updatedAt: Date | null
+    recipeId: string | null
+  }
+
+  export type RecipeImageMaxAggregateOutputType = {
+    id: string | null
+    url: string | null
+    alt: string | null
+    isPrimary: boolean | null
+    order: number | null
+    createdAt: Date | null
+    updatedAt: Date | null
+    recipeId: string | null
+  }
+
+  export type RecipeImageCountAggregateOutputType = {
+    id: number
+    url: number
+    alt: number
+    isPrimary: number
+    order: number
+    createdAt: number
+    updatedAt: number
+    recipeId: number
+    _all: number
+  }
+
+
+  export type RecipeImageAvgAggregateInputType = {
+    order?: true
+  }
+
+  export type RecipeImageSumAggregateInputType = {
+    order?: true
+  }
+
+  export type RecipeImageMinAggregateInputType = {
+    id?: true
+    url?: true
+    alt?: true
+    isPrimary?: true
+    order?: true
+    createdAt?: true
+    updatedAt?: true
+    recipeId?: true
+  }
+
+  export type RecipeImageMaxAggregateInputType = {
+    id?: true
+    url?: true
+    alt?: true
+    isPrimary?: true
+    order?: true
+    createdAt?: true
+    updatedAt?: true
+    recipeId?: true
+  }
+
+  export type RecipeImageCountAggregateInputType = {
+    id?: true
+    url?: true
+    alt?: true
+    isPrimary?: true
+    order?: true
+    createdAt?: true
+    updatedAt?: true
+    recipeId?: true
+    _all?: true
+  }
+
+  export type RecipeImageAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which RecipeImage to aggregate.
+     */
+    where?: RecipeImageWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of RecipeImages to fetch.
+     */
+    orderBy?: RecipeImageOrderByWithRelationInput | RecipeImageOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: RecipeImageWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` RecipeImages from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` RecipeImages.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned RecipeImages
+    **/
+    _count?: true | RecipeImageCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: RecipeImageAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: RecipeImageSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: RecipeImageMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: RecipeImageMaxAggregateInputType
+  }
+
+  export type GetRecipeImageAggregateType<T extends RecipeImageAggregateArgs> = {
+        [P in keyof T & keyof AggregateRecipeImage]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateRecipeImage[P]>
+      : GetScalarType<T[P], AggregateRecipeImage[P]>
+  }
+
+
+
+
+  export type RecipeImageGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: RecipeImageWhereInput
+    orderBy?: RecipeImageOrderByWithAggregationInput | RecipeImageOrderByWithAggregationInput[]
+    by: RecipeImageScalarFieldEnum[] | RecipeImageScalarFieldEnum
+    having?: RecipeImageScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: RecipeImageCountAggregateInputType | true
+    _avg?: RecipeImageAvgAggregateInputType
+    _sum?: RecipeImageSumAggregateInputType
+    _min?: RecipeImageMinAggregateInputType
+    _max?: RecipeImageMaxAggregateInputType
+  }
+
+  export type RecipeImageGroupByOutputType = {
+    id: string
+    url: string
+    alt: string | null
+    isPrimary: boolean
+    order: number
+    createdAt: Date
+    updatedAt: Date
+    recipeId: string
+    _count: RecipeImageCountAggregateOutputType | null
+    _avg: RecipeImageAvgAggregateOutputType | null
+    _sum: RecipeImageSumAggregateOutputType | null
+    _min: RecipeImageMinAggregateOutputType | null
+    _max: RecipeImageMaxAggregateOutputType | null
+  }
+
+  type GetRecipeImageGroupByPayload<T extends RecipeImageGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<RecipeImageGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof RecipeImageGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], RecipeImageGroupByOutputType[P]>
+            : GetScalarType<T[P], RecipeImageGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type RecipeImageSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    url?: boolean
+    alt?: boolean
+    isPrimary?: boolean
+    order?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    recipeId?: boolean
+    recipe?: boolean | RecipeDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["recipeImage"]>
+
+  export type RecipeImageSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    url?: boolean
+    alt?: boolean
+    isPrimary?: boolean
+    order?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    recipeId?: boolean
+    recipe?: boolean | RecipeDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["recipeImage"]>
+
+  export type RecipeImageSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    url?: boolean
+    alt?: boolean
+    isPrimary?: boolean
+    order?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    recipeId?: boolean
+    recipe?: boolean | RecipeDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["recipeImage"]>
+
+  export type RecipeImageSelectScalar = {
+    id?: boolean
+    url?: boolean
+    alt?: boolean
+    isPrimary?: boolean
+    order?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    recipeId?: boolean
+  }
+
+  export type RecipeImageOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "url" | "alt" | "isPrimary" | "order" | "createdAt" | "updatedAt" | "recipeId", ExtArgs["result"]["recipeImage"]>
+  export type RecipeImageInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    recipe?: boolean | RecipeDefaultArgs<ExtArgs>
+  }
+  export type RecipeImageIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    recipe?: boolean | RecipeDefaultArgs<ExtArgs>
+  }
+  export type RecipeImageIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    recipe?: boolean | RecipeDefaultArgs<ExtArgs>
+  }
+
+  export type $RecipeImagePayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "RecipeImage"
+    objects: {
+      recipe: Prisma.$RecipePayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      url: string
+      alt: string | null
+      isPrimary: boolean
+      order: number
+      createdAt: Date
+      updatedAt: Date
+      recipeId: string
+    }, ExtArgs["result"]["recipeImage"]>
+    composites: {}
+  }
+
+  type RecipeImageGetPayload<S extends boolean | null | undefined | RecipeImageDefaultArgs> = $Result.GetResult<Prisma.$RecipeImagePayload, S>
+
+  type RecipeImageCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<RecipeImageFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: RecipeImageCountAggregateInputType | true
+    }
+
+  export interface RecipeImageDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['RecipeImage'], meta: { name: 'RecipeImage' } }
+    /**
+     * Find zero or one RecipeImage that matches the filter.
+     * @param {RecipeImageFindUniqueArgs} args - Arguments to find a RecipeImage
+     * @example
+     * // Get one RecipeImage
+     * const recipeImage = await prisma.recipeImage.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends RecipeImageFindUniqueArgs>(args: SelectSubset<T, RecipeImageFindUniqueArgs<ExtArgs>>): Prisma__RecipeImageClient<$Result.GetResult<Prisma.$RecipeImagePayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one RecipeImage that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {RecipeImageFindUniqueOrThrowArgs} args - Arguments to find a RecipeImage
+     * @example
+     * // Get one RecipeImage
+     * const recipeImage = await prisma.recipeImage.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends RecipeImageFindUniqueOrThrowArgs>(args: SelectSubset<T, RecipeImageFindUniqueOrThrowArgs<ExtArgs>>): Prisma__RecipeImageClient<$Result.GetResult<Prisma.$RecipeImagePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first RecipeImage that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {RecipeImageFindFirstArgs} args - Arguments to find a RecipeImage
+     * @example
+     * // Get one RecipeImage
+     * const recipeImage = await prisma.recipeImage.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends RecipeImageFindFirstArgs>(args?: SelectSubset<T, RecipeImageFindFirstArgs<ExtArgs>>): Prisma__RecipeImageClient<$Result.GetResult<Prisma.$RecipeImagePayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first RecipeImage that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {RecipeImageFindFirstOrThrowArgs} args - Arguments to find a RecipeImage
+     * @example
+     * // Get one RecipeImage
+     * const recipeImage = await prisma.recipeImage.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends RecipeImageFindFirstOrThrowArgs>(args?: SelectSubset<T, RecipeImageFindFirstOrThrowArgs<ExtArgs>>): Prisma__RecipeImageClient<$Result.GetResult<Prisma.$RecipeImagePayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more RecipeImages that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {RecipeImageFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all RecipeImages
+     * const recipeImages = await prisma.recipeImage.findMany()
+     * 
+     * // Get first 10 RecipeImages
+     * const recipeImages = await prisma.recipeImage.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const recipeImageWithIdOnly = await prisma.recipeImage.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends RecipeImageFindManyArgs>(args?: SelectSubset<T, RecipeImageFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$RecipeImagePayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a RecipeImage.
+     * @param {RecipeImageCreateArgs} args - Arguments to create a RecipeImage.
+     * @example
+     * // Create one RecipeImage
+     * const RecipeImage = await prisma.recipeImage.create({
+     *   data: {
+     *     // ... data to create a RecipeImage
+     *   }
+     * })
+     * 
+     */
+    create<T extends RecipeImageCreateArgs>(args: SelectSubset<T, RecipeImageCreateArgs<ExtArgs>>): Prisma__RecipeImageClient<$Result.GetResult<Prisma.$RecipeImagePayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many RecipeImages.
+     * @param {RecipeImageCreateManyArgs} args - Arguments to create many RecipeImages.
+     * @example
+     * // Create many RecipeImages
+     * const recipeImage = await prisma.recipeImage.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends RecipeImageCreateManyArgs>(args?: SelectSubset<T, RecipeImageCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many RecipeImages and returns the data saved in the database.
+     * @param {RecipeImageCreateManyAndReturnArgs} args - Arguments to create many RecipeImages.
+     * @example
+     * // Create many RecipeImages
+     * const recipeImage = await prisma.recipeImage.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many RecipeImages and only return the `id`
+     * const recipeImageWithIdOnly = await prisma.recipeImage.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends RecipeImageCreateManyAndReturnArgs>(args?: SelectSubset<T, RecipeImageCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$RecipeImagePayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a RecipeImage.
+     * @param {RecipeImageDeleteArgs} args - Arguments to delete one RecipeImage.
+     * @example
+     * // Delete one RecipeImage
+     * const RecipeImage = await prisma.recipeImage.delete({
+     *   where: {
+     *     // ... filter to delete one RecipeImage
+     *   }
+     * })
+     * 
+     */
+    delete<T extends RecipeImageDeleteArgs>(args: SelectSubset<T, RecipeImageDeleteArgs<ExtArgs>>): Prisma__RecipeImageClient<$Result.GetResult<Prisma.$RecipeImagePayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one RecipeImage.
+     * @param {RecipeImageUpdateArgs} args - Arguments to update one RecipeImage.
+     * @example
+     * // Update one RecipeImage
+     * const recipeImage = await prisma.recipeImage.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends RecipeImageUpdateArgs>(args: SelectSubset<T, RecipeImageUpdateArgs<ExtArgs>>): Prisma__RecipeImageClient<$Result.GetResult<Prisma.$RecipeImagePayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more RecipeImages.
+     * @param {RecipeImageDeleteManyArgs} args - Arguments to filter RecipeImages to delete.
+     * @example
+     * // Delete a few RecipeImages
+     * const { count } = await prisma.recipeImage.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends RecipeImageDeleteManyArgs>(args?: SelectSubset<T, RecipeImageDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more RecipeImages.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {RecipeImageUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many RecipeImages
+     * const recipeImage = await prisma.recipeImage.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends RecipeImageUpdateManyArgs>(args: SelectSubset<T, RecipeImageUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more RecipeImages and returns the data updated in the database.
+     * @param {RecipeImageUpdateManyAndReturnArgs} args - Arguments to update many RecipeImages.
+     * @example
+     * // Update many RecipeImages
+     * const recipeImage = await prisma.recipeImage.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more RecipeImages and only return the `id`
+     * const recipeImageWithIdOnly = await prisma.recipeImage.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends RecipeImageUpdateManyAndReturnArgs>(args: SelectSubset<T, RecipeImageUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$RecipeImagePayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one RecipeImage.
+     * @param {RecipeImageUpsertArgs} args - Arguments to update or create a RecipeImage.
+     * @example
+     * // Update or create a RecipeImage
+     * const recipeImage = await prisma.recipeImage.upsert({
+     *   create: {
+     *     // ... data to create a RecipeImage
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the RecipeImage we want to update
+     *   }
+     * })
+     */
+    upsert<T extends RecipeImageUpsertArgs>(args: SelectSubset<T, RecipeImageUpsertArgs<ExtArgs>>): Prisma__RecipeImageClient<$Result.GetResult<Prisma.$RecipeImagePayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of RecipeImages.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {RecipeImageCountArgs} args - Arguments to filter RecipeImages to count.
+     * @example
+     * // Count the number of RecipeImages
+     * const count = await prisma.recipeImage.count({
+     *   where: {
+     *     // ... the filter for the RecipeImages we want to count
+     *   }
+     * })
+    **/
+    count<T extends RecipeImageCountArgs>(
+      args?: Subset<T, RecipeImageCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], RecipeImageCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a RecipeImage.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {RecipeImageAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends RecipeImageAggregateArgs>(args: Subset<T, RecipeImageAggregateArgs>): Prisma.PrismaPromise<GetRecipeImageAggregateType<T>>
+
+    /**
+     * Group by RecipeImage.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {RecipeImageGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends RecipeImageGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: RecipeImageGroupByArgs['orderBy'] }
+        : { orderBy?: RecipeImageGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, RecipeImageGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetRecipeImageGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the RecipeImage model
+   */
+  readonly fields: RecipeImageFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for RecipeImage.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__RecipeImageClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    recipe<T extends RecipeDefaultArgs<ExtArgs> = {}>(args?: Subset<T, RecipeDefaultArgs<ExtArgs>>): Prisma__RecipeClient<$Result.GetResult<Prisma.$RecipePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the RecipeImage model
+   */
+  interface RecipeImageFieldRefs {
+    readonly id: FieldRef<"RecipeImage", 'String'>
+    readonly url: FieldRef<"RecipeImage", 'String'>
+    readonly alt: FieldRef<"RecipeImage", 'String'>
+    readonly isPrimary: FieldRef<"RecipeImage", 'Boolean'>
+    readonly order: FieldRef<"RecipeImage", 'Int'>
+    readonly createdAt: FieldRef<"RecipeImage", 'DateTime'>
+    readonly updatedAt: FieldRef<"RecipeImage", 'DateTime'>
+    readonly recipeId: FieldRef<"RecipeImage", 'String'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * RecipeImage findUnique
+   */
+  export type RecipeImageFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the RecipeImage
+     */
+    select?: RecipeImageSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the RecipeImage
+     */
+    omit?: RecipeImageOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: RecipeImageInclude<ExtArgs> | null
+    /**
+     * Filter, which RecipeImage to fetch.
+     */
+    where: RecipeImageWhereUniqueInput
+  }
+
+  /**
+   * RecipeImage findUniqueOrThrow
+   */
+  export type RecipeImageFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the RecipeImage
+     */
+    select?: RecipeImageSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the RecipeImage
+     */
+    omit?: RecipeImageOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: RecipeImageInclude<ExtArgs> | null
+    /**
+     * Filter, which RecipeImage to fetch.
+     */
+    where: RecipeImageWhereUniqueInput
+  }
+
+  /**
+   * RecipeImage findFirst
+   */
+  export type RecipeImageFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the RecipeImage
+     */
+    select?: RecipeImageSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the RecipeImage
+     */
+    omit?: RecipeImageOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: RecipeImageInclude<ExtArgs> | null
+    /**
+     * Filter, which RecipeImage to fetch.
+     */
+    where?: RecipeImageWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of RecipeImages to fetch.
+     */
+    orderBy?: RecipeImageOrderByWithRelationInput | RecipeImageOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for RecipeImages.
+     */
+    cursor?: RecipeImageWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` RecipeImages from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` RecipeImages.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of RecipeImages.
+     */
+    distinct?: RecipeImageScalarFieldEnum | RecipeImageScalarFieldEnum[]
+  }
+
+  /**
+   * RecipeImage findFirstOrThrow
+   */
+  export type RecipeImageFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the RecipeImage
+     */
+    select?: RecipeImageSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the RecipeImage
+     */
+    omit?: RecipeImageOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: RecipeImageInclude<ExtArgs> | null
+    /**
+     * Filter, which RecipeImage to fetch.
+     */
+    where?: RecipeImageWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of RecipeImages to fetch.
+     */
+    orderBy?: RecipeImageOrderByWithRelationInput | RecipeImageOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for RecipeImages.
+     */
+    cursor?: RecipeImageWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` RecipeImages from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` RecipeImages.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of RecipeImages.
+     */
+    distinct?: RecipeImageScalarFieldEnum | RecipeImageScalarFieldEnum[]
+  }
+
+  /**
+   * RecipeImage findMany
+   */
+  export type RecipeImageFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the RecipeImage
+     */
+    select?: RecipeImageSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the RecipeImage
+     */
+    omit?: RecipeImageOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: RecipeImageInclude<ExtArgs> | null
+    /**
+     * Filter, which RecipeImages to fetch.
+     */
+    where?: RecipeImageWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of RecipeImages to fetch.
+     */
+    orderBy?: RecipeImageOrderByWithRelationInput | RecipeImageOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing RecipeImages.
+     */
+    cursor?: RecipeImageWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` RecipeImages from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` RecipeImages.
+     */
+    skip?: number
+    distinct?: RecipeImageScalarFieldEnum | RecipeImageScalarFieldEnum[]
+  }
+
+  /**
+   * RecipeImage create
+   */
+  export type RecipeImageCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the RecipeImage
+     */
+    select?: RecipeImageSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the RecipeImage
+     */
+    omit?: RecipeImageOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: RecipeImageInclude<ExtArgs> | null
+    /**
+     * The data needed to create a RecipeImage.
+     */
+    data: XOR<RecipeImageCreateInput, RecipeImageUncheckedCreateInput>
+  }
+
+  /**
+   * RecipeImage createMany
+   */
+  export type RecipeImageCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many RecipeImages.
+     */
+    data: RecipeImageCreateManyInput | RecipeImageCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * RecipeImage createManyAndReturn
+   */
+  export type RecipeImageCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the RecipeImage
+     */
+    select?: RecipeImageSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the RecipeImage
+     */
+    omit?: RecipeImageOmit<ExtArgs> | null
+    /**
+     * The data used to create many RecipeImages.
+     */
+    data: RecipeImageCreateManyInput | RecipeImageCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: RecipeImageIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * RecipeImage update
+   */
+  export type RecipeImageUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the RecipeImage
+     */
+    select?: RecipeImageSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the RecipeImage
+     */
+    omit?: RecipeImageOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: RecipeImageInclude<ExtArgs> | null
+    /**
+     * The data needed to update a RecipeImage.
+     */
+    data: XOR<RecipeImageUpdateInput, RecipeImageUncheckedUpdateInput>
+    /**
+     * Choose, which RecipeImage to update.
+     */
+    where: RecipeImageWhereUniqueInput
+  }
+
+  /**
+   * RecipeImage updateMany
+   */
+  export type RecipeImageUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update RecipeImages.
+     */
+    data: XOR<RecipeImageUpdateManyMutationInput, RecipeImageUncheckedUpdateManyInput>
+    /**
+     * Filter which RecipeImages to update
+     */
+    where?: RecipeImageWhereInput
+    /**
+     * Limit how many RecipeImages to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * RecipeImage updateManyAndReturn
+   */
+  export type RecipeImageUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the RecipeImage
+     */
+    select?: RecipeImageSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the RecipeImage
+     */
+    omit?: RecipeImageOmit<ExtArgs> | null
+    /**
+     * The data used to update RecipeImages.
+     */
+    data: XOR<RecipeImageUpdateManyMutationInput, RecipeImageUncheckedUpdateManyInput>
+    /**
+     * Filter which RecipeImages to update
+     */
+    where?: RecipeImageWhereInput
+    /**
+     * Limit how many RecipeImages to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: RecipeImageIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * RecipeImage upsert
+   */
+  export type RecipeImageUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the RecipeImage
+     */
+    select?: RecipeImageSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the RecipeImage
+     */
+    omit?: RecipeImageOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: RecipeImageInclude<ExtArgs> | null
+    /**
+     * The filter to search for the RecipeImage to update in case it exists.
+     */
+    where: RecipeImageWhereUniqueInput
+    /**
+     * In case the RecipeImage found by the `where` argument doesn't exist, create a new RecipeImage with this data.
+     */
+    create: XOR<RecipeImageCreateInput, RecipeImageUncheckedCreateInput>
+    /**
+     * In case the RecipeImage was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<RecipeImageUpdateInput, RecipeImageUncheckedUpdateInput>
+  }
+
+  /**
+   * RecipeImage delete
+   */
+  export type RecipeImageDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the RecipeImage
+     */
+    select?: RecipeImageSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the RecipeImage
+     */
+    omit?: RecipeImageOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: RecipeImageInclude<ExtArgs> | null
+    /**
+     * Filter which RecipeImage to delete.
+     */
+    where: RecipeImageWhereUniqueInput
+  }
+
+  /**
+   * RecipeImage deleteMany
+   */
+  export type RecipeImageDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which RecipeImages to delete
+     */
+    where?: RecipeImageWhereInput
+    /**
+     * Limit how many RecipeImages to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * RecipeImage without action
+   */
+  export type RecipeImageDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the RecipeImage
+     */
+    select?: RecipeImageSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the RecipeImage
+     */
+    omit?: RecipeImageOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: RecipeImageInclude<ExtArgs> | null
   }
 
 
@@ -4522,10 +5872,27 @@ export namespace Prisma {
     cleanupTime: 'cleanupTime',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt',
+    categorySource: 'categorySource',
+    categoryConfidence: 'categoryConfidence',
+    originalCategory: 'originalCategory',
     userId: 'userId'
   };
 
   export type RecipeScalarFieldEnum = (typeof RecipeScalarFieldEnum)[keyof typeof RecipeScalarFieldEnum]
+
+
+  export const RecipeImageScalarFieldEnum: {
+    id: 'id',
+    url: 'url',
+    alt: 'alt',
+    isPrimary: 'isPrimary',
+    order: 'order',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt',
+    recipeId: 'recipeId'
+  };
+
+  export type RecipeImageScalarFieldEnum = (typeof RecipeImageScalarFieldEnum)[keyof typeof RecipeImageScalarFieldEnum]
 
 
   export const RecipeFavoriteScalarFieldEnum: {
@@ -4592,6 +5959,41 @@ export namespace Prisma {
    * Reference to a field of type 'DateTime[]'
    */
   export type ListDateTimeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'DateTime[]'>
+    
+
+
+  /**
+   * Reference to a field of type 'CategorySource'
+   */
+  export type EnumCategorySourceFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'CategorySource'>
+    
+
+
+  /**
+   * Reference to a field of type 'CategorySource[]'
+   */
+  export type ListEnumCategorySourceFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'CategorySource[]'>
+    
+
+
+  /**
+   * Reference to a field of type 'Float'
+   */
+  export type FloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Float'>
+    
+
+
+  /**
+   * Reference to a field of type 'Float[]'
+   */
+  export type ListFloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Float[]'>
+    
+
+
+  /**
+   * Reference to a field of type 'Boolean'
+   */
+  export type BooleanFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Boolean'>
     
 
 
@@ -4696,9 +6098,13 @@ export namespace Prisma {
     cleanupTime?: StringFilter<"Recipe"> | string
     createdAt?: DateTimeFilter<"Recipe"> | Date | string
     updatedAt?: DateTimeFilter<"Recipe"> | Date | string
+    categorySource?: EnumCategorySourceNullableFilter<"Recipe"> | $Enums.CategorySource | null
+    categoryConfidence?: FloatNullableFilter<"Recipe"> | number | null
+    originalCategory?: StringNullableFilter<"Recipe"> | string | null
     userId?: StringFilter<"Recipe"> | string
     user?: XOR<UserScalarRelationFilter, UserWhereInput>
     favorites?: RecipeFavoriteListRelationFilter
+    images?: RecipeImageListRelationFilter
   }
 
   export type RecipeOrderByWithRelationInput = {
@@ -4714,9 +6120,13 @@ export namespace Prisma {
     cleanupTime?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+    categorySource?: SortOrderInput | SortOrder
+    categoryConfidence?: SortOrderInput | SortOrder
+    originalCategory?: SortOrderInput | SortOrder
     userId?: SortOrder
     user?: UserOrderByWithRelationInput
     favorites?: RecipeFavoriteOrderByRelationAggregateInput
+    images?: RecipeImageOrderByRelationAggregateInput
   }
 
   export type RecipeWhereUniqueInput = Prisma.AtLeast<{
@@ -4735,9 +6145,13 @@ export namespace Prisma {
     cleanupTime?: StringFilter<"Recipe"> | string
     createdAt?: DateTimeFilter<"Recipe"> | Date | string
     updatedAt?: DateTimeFilter<"Recipe"> | Date | string
+    categorySource?: EnumCategorySourceNullableFilter<"Recipe"> | $Enums.CategorySource | null
+    categoryConfidence?: FloatNullableFilter<"Recipe"> | number | null
+    originalCategory?: StringNullableFilter<"Recipe"> | string | null
     userId?: StringFilter<"Recipe"> | string
     user?: XOR<UserScalarRelationFilter, UserWhereInput>
     favorites?: RecipeFavoriteListRelationFilter
+    images?: RecipeImageListRelationFilter
   }, "id">
 
   export type RecipeOrderByWithAggregationInput = {
@@ -4753,10 +6167,15 @@ export namespace Prisma {
     cleanupTime?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+    categorySource?: SortOrderInput | SortOrder
+    categoryConfidence?: SortOrderInput | SortOrder
+    originalCategory?: SortOrderInput | SortOrder
     userId?: SortOrder
     _count?: RecipeCountOrderByAggregateInput
+    _avg?: RecipeAvgOrderByAggregateInput
     _max?: RecipeMaxOrderByAggregateInput
     _min?: RecipeMinOrderByAggregateInput
+    _sum?: RecipeSumOrderByAggregateInput
   }
 
   export type RecipeScalarWhereWithAggregatesInput = {
@@ -4775,7 +6194,82 @@ export namespace Prisma {
     cleanupTime?: StringWithAggregatesFilter<"Recipe"> | string
     createdAt?: DateTimeWithAggregatesFilter<"Recipe"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"Recipe"> | Date | string
+    categorySource?: EnumCategorySourceNullableWithAggregatesFilter<"Recipe"> | $Enums.CategorySource | null
+    categoryConfidence?: FloatNullableWithAggregatesFilter<"Recipe"> | number | null
+    originalCategory?: StringNullableWithAggregatesFilter<"Recipe"> | string | null
     userId?: StringWithAggregatesFilter<"Recipe"> | string
+  }
+
+  export type RecipeImageWhereInput = {
+    AND?: RecipeImageWhereInput | RecipeImageWhereInput[]
+    OR?: RecipeImageWhereInput[]
+    NOT?: RecipeImageWhereInput | RecipeImageWhereInput[]
+    id?: StringFilter<"RecipeImage"> | string
+    url?: StringFilter<"RecipeImage"> | string
+    alt?: StringNullableFilter<"RecipeImage"> | string | null
+    isPrimary?: BoolFilter<"RecipeImage"> | boolean
+    order?: IntFilter<"RecipeImage"> | number
+    createdAt?: DateTimeFilter<"RecipeImage"> | Date | string
+    updatedAt?: DateTimeFilter<"RecipeImage"> | Date | string
+    recipeId?: StringFilter<"RecipeImage"> | string
+    recipe?: XOR<RecipeScalarRelationFilter, RecipeWhereInput>
+  }
+
+  export type RecipeImageOrderByWithRelationInput = {
+    id?: SortOrder
+    url?: SortOrder
+    alt?: SortOrderInput | SortOrder
+    isPrimary?: SortOrder
+    order?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    recipeId?: SortOrder
+    recipe?: RecipeOrderByWithRelationInput
+  }
+
+  export type RecipeImageWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: RecipeImageWhereInput | RecipeImageWhereInput[]
+    OR?: RecipeImageWhereInput[]
+    NOT?: RecipeImageWhereInput | RecipeImageWhereInput[]
+    url?: StringFilter<"RecipeImage"> | string
+    alt?: StringNullableFilter<"RecipeImage"> | string | null
+    isPrimary?: BoolFilter<"RecipeImage"> | boolean
+    order?: IntFilter<"RecipeImage"> | number
+    createdAt?: DateTimeFilter<"RecipeImage"> | Date | string
+    updatedAt?: DateTimeFilter<"RecipeImage"> | Date | string
+    recipeId?: StringFilter<"RecipeImage"> | string
+    recipe?: XOR<RecipeScalarRelationFilter, RecipeWhereInput>
+  }, "id">
+
+  export type RecipeImageOrderByWithAggregationInput = {
+    id?: SortOrder
+    url?: SortOrder
+    alt?: SortOrderInput | SortOrder
+    isPrimary?: SortOrder
+    order?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    recipeId?: SortOrder
+    _count?: RecipeImageCountOrderByAggregateInput
+    _avg?: RecipeImageAvgOrderByAggregateInput
+    _max?: RecipeImageMaxOrderByAggregateInput
+    _min?: RecipeImageMinOrderByAggregateInput
+    _sum?: RecipeImageSumOrderByAggregateInput
+  }
+
+  export type RecipeImageScalarWhereWithAggregatesInput = {
+    AND?: RecipeImageScalarWhereWithAggregatesInput | RecipeImageScalarWhereWithAggregatesInput[]
+    OR?: RecipeImageScalarWhereWithAggregatesInput[]
+    NOT?: RecipeImageScalarWhereWithAggregatesInput | RecipeImageScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"RecipeImage"> | string
+    url?: StringWithAggregatesFilter<"RecipeImage"> | string
+    alt?: StringNullableWithAggregatesFilter<"RecipeImage"> | string | null
+    isPrimary?: BoolWithAggregatesFilter<"RecipeImage"> | boolean
+    order?: IntWithAggregatesFilter<"RecipeImage"> | number
+    createdAt?: DateTimeWithAggregatesFilter<"RecipeImage"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"RecipeImage"> | Date | string
+    recipeId?: StringWithAggregatesFilter<"RecipeImage"> | string
   }
 
   export type RecipeFavoriteWhereInput = {
@@ -4923,8 +6417,12 @@ export namespace Prisma {
     cleanupTime: string
     createdAt?: Date | string
     updatedAt?: Date | string
+    categorySource?: $Enums.CategorySource | null
+    categoryConfidence?: number | null
+    originalCategory?: string | null
     user: UserCreateNestedOneWithoutRecipesInput
     favorites?: RecipeFavoriteCreateNestedManyWithoutRecipeInput
+    images?: RecipeImageCreateNestedManyWithoutRecipeInput
   }
 
   export type RecipeUncheckedCreateInput = {
@@ -4940,8 +6438,12 @@ export namespace Prisma {
     cleanupTime: string
     createdAt?: Date | string
     updatedAt?: Date | string
+    categorySource?: $Enums.CategorySource | null
+    categoryConfidence?: number | null
+    originalCategory?: string | null
     userId: string
     favorites?: RecipeFavoriteUncheckedCreateNestedManyWithoutRecipeInput
+    images?: RecipeImageUncheckedCreateNestedManyWithoutRecipeInput
   }
 
   export type RecipeUpdateInput = {
@@ -4957,8 +6459,12 @@ export namespace Prisma {
     cleanupTime?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    categorySource?: NullableEnumCategorySourceFieldUpdateOperationsInput | $Enums.CategorySource | null
+    categoryConfidence?: NullableFloatFieldUpdateOperationsInput | number | null
+    originalCategory?: NullableStringFieldUpdateOperationsInput | string | null
     user?: UserUpdateOneRequiredWithoutRecipesNestedInput
     favorites?: RecipeFavoriteUpdateManyWithoutRecipeNestedInput
+    images?: RecipeImageUpdateManyWithoutRecipeNestedInput
   }
 
   export type RecipeUncheckedUpdateInput = {
@@ -4974,8 +6480,12 @@ export namespace Prisma {
     cleanupTime?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    categorySource?: NullableEnumCategorySourceFieldUpdateOperationsInput | $Enums.CategorySource | null
+    categoryConfidence?: NullableFloatFieldUpdateOperationsInput | number | null
+    originalCategory?: NullableStringFieldUpdateOperationsInput | string | null
     userId?: StringFieldUpdateOperationsInput | string
     favorites?: RecipeFavoriteUncheckedUpdateManyWithoutRecipeNestedInput
+    images?: RecipeImageUncheckedUpdateManyWithoutRecipeNestedInput
   }
 
   export type RecipeCreateManyInput = {
@@ -4991,6 +6501,9 @@ export namespace Prisma {
     cleanupTime: string
     createdAt?: Date | string
     updatedAt?: Date | string
+    categorySource?: $Enums.CategorySource | null
+    categoryConfidence?: number | null
+    originalCategory?: string | null
     userId: string
   }
 
@@ -5007,6 +6520,9 @@ export namespace Prisma {
     cleanupTime?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    categorySource?: NullableEnumCategorySourceFieldUpdateOperationsInput | $Enums.CategorySource | null
+    categoryConfidence?: NullableFloatFieldUpdateOperationsInput | number | null
+    originalCategory?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type RecipeUncheckedUpdateManyInput = {
@@ -5022,7 +6538,86 @@ export namespace Prisma {
     cleanupTime?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    categorySource?: NullableEnumCategorySourceFieldUpdateOperationsInput | $Enums.CategorySource | null
+    categoryConfidence?: NullableFloatFieldUpdateOperationsInput | number | null
+    originalCategory?: NullableStringFieldUpdateOperationsInput | string | null
     userId?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type RecipeImageCreateInput = {
+    id?: string
+    url: string
+    alt?: string | null
+    isPrimary?: boolean
+    order?: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    recipe: RecipeCreateNestedOneWithoutImagesInput
+  }
+
+  export type RecipeImageUncheckedCreateInput = {
+    id?: string
+    url: string
+    alt?: string | null
+    isPrimary?: boolean
+    order?: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    recipeId: string
+  }
+
+  export type RecipeImageUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    url?: StringFieldUpdateOperationsInput | string
+    alt?: NullableStringFieldUpdateOperationsInput | string | null
+    isPrimary?: BoolFieldUpdateOperationsInput | boolean
+    order?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    recipe?: RecipeUpdateOneRequiredWithoutImagesNestedInput
+  }
+
+  export type RecipeImageUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    url?: StringFieldUpdateOperationsInput | string
+    alt?: NullableStringFieldUpdateOperationsInput | string | null
+    isPrimary?: BoolFieldUpdateOperationsInput | boolean
+    order?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    recipeId?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type RecipeImageCreateManyInput = {
+    id?: string
+    url: string
+    alt?: string | null
+    isPrimary?: boolean
+    order?: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    recipeId: string
+  }
+
+  export type RecipeImageUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    url?: StringFieldUpdateOperationsInput | string
+    alt?: NullableStringFieldUpdateOperationsInput | string | null
+    isPrimary?: BoolFieldUpdateOperationsInput | boolean
+    order?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type RecipeImageUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    url?: StringFieldUpdateOperationsInput | string
+    alt?: NullableStringFieldUpdateOperationsInput | string | null
+    isPrimary?: BoolFieldUpdateOperationsInput | boolean
+    order?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    recipeId?: StringFieldUpdateOperationsInput | string
   }
 
   export type RecipeFavoriteCreateInput = {
@@ -5226,9 +6821,37 @@ export namespace Prisma {
     isEmpty?: boolean
   }
 
+  export type EnumCategorySourceNullableFilter<$PrismaModel = never> = {
+    equals?: $Enums.CategorySource | EnumCategorySourceFieldRefInput<$PrismaModel> | null
+    in?: $Enums.CategorySource[] | ListEnumCategorySourceFieldRefInput<$PrismaModel> | null
+    notIn?: $Enums.CategorySource[] | ListEnumCategorySourceFieldRefInput<$PrismaModel> | null
+    not?: NestedEnumCategorySourceNullableFilter<$PrismaModel> | $Enums.CategorySource | null
+  }
+
+  export type FloatNullableFilter<$PrismaModel = never> = {
+    equals?: number | FloatFieldRefInput<$PrismaModel> | null
+    in?: number[] | ListFloatFieldRefInput<$PrismaModel> | null
+    notIn?: number[] | ListFloatFieldRefInput<$PrismaModel> | null
+    lt?: number | FloatFieldRefInput<$PrismaModel>
+    lte?: number | FloatFieldRefInput<$PrismaModel>
+    gt?: number | FloatFieldRefInput<$PrismaModel>
+    gte?: number | FloatFieldRefInput<$PrismaModel>
+    not?: NestedFloatNullableFilter<$PrismaModel> | number | null
+  }
+
   export type UserScalarRelationFilter = {
     is?: UserWhereInput
     isNot?: UserWhereInput
+  }
+
+  export type RecipeImageListRelationFilter = {
+    every?: RecipeImageWhereInput
+    some?: RecipeImageWhereInput
+    none?: RecipeImageWhereInput
+  }
+
+  export type RecipeImageOrderByRelationAggregateInput = {
+    _count?: SortOrder
   }
 
   export type RecipeCountOrderByAggregateInput = {
@@ -5244,7 +6867,14 @@ export namespace Prisma {
     cleanupTime?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+    categorySource?: SortOrder
+    categoryConfidence?: SortOrder
+    originalCategory?: SortOrder
     userId?: SortOrder
+  }
+
+  export type RecipeAvgOrderByAggregateInput = {
+    categoryConfidence?: SortOrder
   }
 
   export type RecipeMaxOrderByAggregateInput = {
@@ -5258,6 +6888,9 @@ export namespace Prisma {
     cleanupTime?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+    categorySource?: SortOrder
+    categoryConfidence?: SortOrder
+    originalCategory?: SortOrder
     userId?: SortOrder
   }
 
@@ -5272,12 +6905,126 @@ export namespace Prisma {
     cleanupTime?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+    categorySource?: SortOrder
+    categoryConfidence?: SortOrder
+    originalCategory?: SortOrder
     userId?: SortOrder
+  }
+
+  export type RecipeSumOrderByAggregateInput = {
+    categoryConfidence?: SortOrder
+  }
+
+  export type EnumCategorySourceNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.CategorySource | EnumCategorySourceFieldRefInput<$PrismaModel> | null
+    in?: $Enums.CategorySource[] | ListEnumCategorySourceFieldRefInput<$PrismaModel> | null
+    notIn?: $Enums.CategorySource[] | ListEnumCategorySourceFieldRefInput<$PrismaModel> | null
+    not?: NestedEnumCategorySourceNullableWithAggregatesFilter<$PrismaModel> | $Enums.CategorySource | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedEnumCategorySourceNullableFilter<$PrismaModel>
+    _max?: NestedEnumCategorySourceNullableFilter<$PrismaModel>
+  }
+
+  export type FloatNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: number | FloatFieldRefInput<$PrismaModel> | null
+    in?: number[] | ListFloatFieldRefInput<$PrismaModel> | null
+    notIn?: number[] | ListFloatFieldRefInput<$PrismaModel> | null
+    lt?: number | FloatFieldRefInput<$PrismaModel>
+    lte?: number | FloatFieldRefInput<$PrismaModel>
+    gt?: number | FloatFieldRefInput<$PrismaModel>
+    gte?: number | FloatFieldRefInput<$PrismaModel>
+    not?: NestedFloatNullableWithAggregatesFilter<$PrismaModel> | number | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _avg?: NestedFloatNullableFilter<$PrismaModel>
+    _sum?: NestedFloatNullableFilter<$PrismaModel>
+    _min?: NestedFloatNullableFilter<$PrismaModel>
+    _max?: NestedFloatNullableFilter<$PrismaModel>
+  }
+
+  export type BoolFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
+    not?: NestedBoolFilter<$PrismaModel> | boolean
+  }
+
+  export type IntFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel>
+    in?: number[] | ListIntFieldRefInput<$PrismaModel>
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel>
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntFilter<$PrismaModel> | number
   }
 
   export type RecipeScalarRelationFilter = {
     is?: RecipeWhereInput
     isNot?: RecipeWhereInput
+  }
+
+  export type RecipeImageCountOrderByAggregateInput = {
+    id?: SortOrder
+    url?: SortOrder
+    alt?: SortOrder
+    isPrimary?: SortOrder
+    order?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    recipeId?: SortOrder
+  }
+
+  export type RecipeImageAvgOrderByAggregateInput = {
+    order?: SortOrder
+  }
+
+  export type RecipeImageMaxOrderByAggregateInput = {
+    id?: SortOrder
+    url?: SortOrder
+    alt?: SortOrder
+    isPrimary?: SortOrder
+    order?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    recipeId?: SortOrder
+  }
+
+  export type RecipeImageMinOrderByAggregateInput = {
+    id?: SortOrder
+    url?: SortOrder
+    alt?: SortOrder
+    isPrimary?: SortOrder
+    order?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    recipeId?: SortOrder
+  }
+
+  export type RecipeImageSumOrderByAggregateInput = {
+    order?: SortOrder
+  }
+
+  export type BoolWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
+    not?: NestedBoolWithAggregatesFilter<$PrismaModel> | boolean
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedBoolFilter<$PrismaModel>
+    _max?: NestedBoolFilter<$PrismaModel>
+  }
+
+  export type IntWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel>
+    in?: number[] | ListIntFieldRefInput<$PrismaModel>
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel>
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntWithAggregatesFilter<$PrismaModel> | number
+    _count?: NestedIntFilter<$PrismaModel>
+    _avg?: NestedFloatFilter<$PrismaModel>
+    _sum?: NestedIntFilter<$PrismaModel>
+    _min?: NestedIntFilter<$PrismaModel>
+    _max?: NestedIntFilter<$PrismaModel>
   }
 
   export type RecipeFavoriteUserIdRecipeIdCompoundUniqueInput = {
@@ -5423,11 +7170,25 @@ export namespace Prisma {
     connect?: RecipeFavoriteWhereUniqueInput | RecipeFavoriteWhereUniqueInput[]
   }
 
+  export type RecipeImageCreateNestedManyWithoutRecipeInput = {
+    create?: XOR<RecipeImageCreateWithoutRecipeInput, RecipeImageUncheckedCreateWithoutRecipeInput> | RecipeImageCreateWithoutRecipeInput[] | RecipeImageUncheckedCreateWithoutRecipeInput[]
+    connectOrCreate?: RecipeImageCreateOrConnectWithoutRecipeInput | RecipeImageCreateOrConnectWithoutRecipeInput[]
+    createMany?: RecipeImageCreateManyRecipeInputEnvelope
+    connect?: RecipeImageWhereUniqueInput | RecipeImageWhereUniqueInput[]
+  }
+
   export type RecipeFavoriteUncheckedCreateNestedManyWithoutRecipeInput = {
     create?: XOR<RecipeFavoriteCreateWithoutRecipeInput, RecipeFavoriteUncheckedCreateWithoutRecipeInput> | RecipeFavoriteCreateWithoutRecipeInput[] | RecipeFavoriteUncheckedCreateWithoutRecipeInput[]
     connectOrCreate?: RecipeFavoriteCreateOrConnectWithoutRecipeInput | RecipeFavoriteCreateOrConnectWithoutRecipeInput[]
     createMany?: RecipeFavoriteCreateManyRecipeInputEnvelope
     connect?: RecipeFavoriteWhereUniqueInput | RecipeFavoriteWhereUniqueInput[]
+  }
+
+  export type RecipeImageUncheckedCreateNestedManyWithoutRecipeInput = {
+    create?: XOR<RecipeImageCreateWithoutRecipeInput, RecipeImageUncheckedCreateWithoutRecipeInput> | RecipeImageCreateWithoutRecipeInput[] | RecipeImageUncheckedCreateWithoutRecipeInput[]
+    connectOrCreate?: RecipeImageCreateOrConnectWithoutRecipeInput | RecipeImageCreateOrConnectWithoutRecipeInput[]
+    createMany?: RecipeImageCreateManyRecipeInputEnvelope
+    connect?: RecipeImageWhereUniqueInput | RecipeImageWhereUniqueInput[]
   }
 
   export type RecipeUpdateingredientsInput = {
@@ -5438,6 +7199,18 @@ export namespace Prisma {
   export type RecipeUpdatestepsInput = {
     set?: string[]
     push?: string | string[]
+  }
+
+  export type NullableEnumCategorySourceFieldUpdateOperationsInput = {
+    set?: $Enums.CategorySource | null
+  }
+
+  export type NullableFloatFieldUpdateOperationsInput = {
+    set?: number | null
+    increment?: number
+    decrement?: number
+    multiply?: number
+    divide?: number
   }
 
   export type UserUpdateOneRequiredWithoutRecipesNestedInput = {
@@ -5462,6 +7235,20 @@ export namespace Prisma {
     deleteMany?: RecipeFavoriteScalarWhereInput | RecipeFavoriteScalarWhereInput[]
   }
 
+  export type RecipeImageUpdateManyWithoutRecipeNestedInput = {
+    create?: XOR<RecipeImageCreateWithoutRecipeInput, RecipeImageUncheckedCreateWithoutRecipeInput> | RecipeImageCreateWithoutRecipeInput[] | RecipeImageUncheckedCreateWithoutRecipeInput[]
+    connectOrCreate?: RecipeImageCreateOrConnectWithoutRecipeInput | RecipeImageCreateOrConnectWithoutRecipeInput[]
+    upsert?: RecipeImageUpsertWithWhereUniqueWithoutRecipeInput | RecipeImageUpsertWithWhereUniqueWithoutRecipeInput[]
+    createMany?: RecipeImageCreateManyRecipeInputEnvelope
+    set?: RecipeImageWhereUniqueInput | RecipeImageWhereUniqueInput[]
+    disconnect?: RecipeImageWhereUniqueInput | RecipeImageWhereUniqueInput[]
+    delete?: RecipeImageWhereUniqueInput | RecipeImageWhereUniqueInput[]
+    connect?: RecipeImageWhereUniqueInput | RecipeImageWhereUniqueInput[]
+    update?: RecipeImageUpdateWithWhereUniqueWithoutRecipeInput | RecipeImageUpdateWithWhereUniqueWithoutRecipeInput[]
+    updateMany?: RecipeImageUpdateManyWithWhereWithoutRecipeInput | RecipeImageUpdateManyWithWhereWithoutRecipeInput[]
+    deleteMany?: RecipeImageScalarWhereInput | RecipeImageScalarWhereInput[]
+  }
+
   export type RecipeFavoriteUncheckedUpdateManyWithoutRecipeNestedInput = {
     create?: XOR<RecipeFavoriteCreateWithoutRecipeInput, RecipeFavoriteUncheckedCreateWithoutRecipeInput> | RecipeFavoriteCreateWithoutRecipeInput[] | RecipeFavoriteUncheckedCreateWithoutRecipeInput[]
     connectOrCreate?: RecipeFavoriteCreateOrConnectWithoutRecipeInput | RecipeFavoriteCreateOrConnectWithoutRecipeInput[]
@@ -5474,6 +7261,46 @@ export namespace Prisma {
     update?: RecipeFavoriteUpdateWithWhereUniqueWithoutRecipeInput | RecipeFavoriteUpdateWithWhereUniqueWithoutRecipeInput[]
     updateMany?: RecipeFavoriteUpdateManyWithWhereWithoutRecipeInput | RecipeFavoriteUpdateManyWithWhereWithoutRecipeInput[]
     deleteMany?: RecipeFavoriteScalarWhereInput | RecipeFavoriteScalarWhereInput[]
+  }
+
+  export type RecipeImageUncheckedUpdateManyWithoutRecipeNestedInput = {
+    create?: XOR<RecipeImageCreateWithoutRecipeInput, RecipeImageUncheckedCreateWithoutRecipeInput> | RecipeImageCreateWithoutRecipeInput[] | RecipeImageUncheckedCreateWithoutRecipeInput[]
+    connectOrCreate?: RecipeImageCreateOrConnectWithoutRecipeInput | RecipeImageCreateOrConnectWithoutRecipeInput[]
+    upsert?: RecipeImageUpsertWithWhereUniqueWithoutRecipeInput | RecipeImageUpsertWithWhereUniqueWithoutRecipeInput[]
+    createMany?: RecipeImageCreateManyRecipeInputEnvelope
+    set?: RecipeImageWhereUniqueInput | RecipeImageWhereUniqueInput[]
+    disconnect?: RecipeImageWhereUniqueInput | RecipeImageWhereUniqueInput[]
+    delete?: RecipeImageWhereUniqueInput | RecipeImageWhereUniqueInput[]
+    connect?: RecipeImageWhereUniqueInput | RecipeImageWhereUniqueInput[]
+    update?: RecipeImageUpdateWithWhereUniqueWithoutRecipeInput | RecipeImageUpdateWithWhereUniqueWithoutRecipeInput[]
+    updateMany?: RecipeImageUpdateManyWithWhereWithoutRecipeInput | RecipeImageUpdateManyWithWhereWithoutRecipeInput[]
+    deleteMany?: RecipeImageScalarWhereInput | RecipeImageScalarWhereInput[]
+  }
+
+  export type RecipeCreateNestedOneWithoutImagesInput = {
+    create?: XOR<RecipeCreateWithoutImagesInput, RecipeUncheckedCreateWithoutImagesInput>
+    connectOrCreate?: RecipeCreateOrConnectWithoutImagesInput
+    connect?: RecipeWhereUniqueInput
+  }
+
+  export type BoolFieldUpdateOperationsInput = {
+    set?: boolean
+  }
+
+  export type IntFieldUpdateOperationsInput = {
+    set?: number
+    increment?: number
+    decrement?: number
+    multiply?: number
+    divide?: number
+  }
+
+  export type RecipeUpdateOneRequiredWithoutImagesNestedInput = {
+    create?: XOR<RecipeCreateWithoutImagesInput, RecipeUncheckedCreateWithoutImagesInput>
+    connectOrCreate?: RecipeCreateOrConnectWithoutImagesInput
+    upsert?: RecipeUpsertWithoutImagesInput
+    connect?: RecipeWhereUniqueInput
+    update?: XOR<XOR<RecipeUpdateToOneWithWhereWithoutImagesInput, RecipeUpdateWithoutImagesInput>, RecipeUncheckedUpdateWithoutImagesInput>
   }
 
   export type UserCreateNestedOneWithoutFavoritesInput = {
@@ -5613,6 +7440,90 @@ export namespace Prisma {
     _max?: NestedDateTimeFilter<$PrismaModel>
   }
 
+  export type NestedEnumCategorySourceNullableFilter<$PrismaModel = never> = {
+    equals?: $Enums.CategorySource | EnumCategorySourceFieldRefInput<$PrismaModel> | null
+    in?: $Enums.CategorySource[] | ListEnumCategorySourceFieldRefInput<$PrismaModel> | null
+    notIn?: $Enums.CategorySource[] | ListEnumCategorySourceFieldRefInput<$PrismaModel> | null
+    not?: NestedEnumCategorySourceNullableFilter<$PrismaModel> | $Enums.CategorySource | null
+  }
+
+  export type NestedFloatNullableFilter<$PrismaModel = never> = {
+    equals?: number | FloatFieldRefInput<$PrismaModel> | null
+    in?: number[] | ListFloatFieldRefInput<$PrismaModel> | null
+    notIn?: number[] | ListFloatFieldRefInput<$PrismaModel> | null
+    lt?: number | FloatFieldRefInput<$PrismaModel>
+    lte?: number | FloatFieldRefInput<$PrismaModel>
+    gt?: number | FloatFieldRefInput<$PrismaModel>
+    gte?: number | FloatFieldRefInput<$PrismaModel>
+    not?: NestedFloatNullableFilter<$PrismaModel> | number | null
+  }
+
+  export type NestedEnumCategorySourceNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.CategorySource | EnumCategorySourceFieldRefInput<$PrismaModel> | null
+    in?: $Enums.CategorySource[] | ListEnumCategorySourceFieldRefInput<$PrismaModel> | null
+    notIn?: $Enums.CategorySource[] | ListEnumCategorySourceFieldRefInput<$PrismaModel> | null
+    not?: NestedEnumCategorySourceNullableWithAggregatesFilter<$PrismaModel> | $Enums.CategorySource | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedEnumCategorySourceNullableFilter<$PrismaModel>
+    _max?: NestedEnumCategorySourceNullableFilter<$PrismaModel>
+  }
+
+  export type NestedFloatNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: number | FloatFieldRefInput<$PrismaModel> | null
+    in?: number[] | ListFloatFieldRefInput<$PrismaModel> | null
+    notIn?: number[] | ListFloatFieldRefInput<$PrismaModel> | null
+    lt?: number | FloatFieldRefInput<$PrismaModel>
+    lte?: number | FloatFieldRefInput<$PrismaModel>
+    gt?: number | FloatFieldRefInput<$PrismaModel>
+    gte?: number | FloatFieldRefInput<$PrismaModel>
+    not?: NestedFloatNullableWithAggregatesFilter<$PrismaModel> | number | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _avg?: NestedFloatNullableFilter<$PrismaModel>
+    _sum?: NestedFloatNullableFilter<$PrismaModel>
+    _min?: NestedFloatNullableFilter<$PrismaModel>
+    _max?: NestedFloatNullableFilter<$PrismaModel>
+  }
+
+  export type NestedBoolFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
+    not?: NestedBoolFilter<$PrismaModel> | boolean
+  }
+
+  export type NestedBoolWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
+    not?: NestedBoolWithAggregatesFilter<$PrismaModel> | boolean
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedBoolFilter<$PrismaModel>
+    _max?: NestedBoolFilter<$PrismaModel>
+  }
+
+  export type NestedIntWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel>
+    in?: number[] | ListIntFieldRefInput<$PrismaModel>
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel>
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntWithAggregatesFilter<$PrismaModel> | number
+    _count?: NestedIntFilter<$PrismaModel>
+    _avg?: NestedFloatFilter<$PrismaModel>
+    _sum?: NestedIntFilter<$PrismaModel>
+    _min?: NestedIntFilter<$PrismaModel>
+    _max?: NestedIntFilter<$PrismaModel>
+  }
+
+  export type NestedFloatFilter<$PrismaModel = never> = {
+    equals?: number | FloatFieldRefInput<$PrismaModel>
+    in?: number[] | ListFloatFieldRefInput<$PrismaModel>
+    notIn?: number[] | ListFloatFieldRefInput<$PrismaModel>
+    lt?: number | FloatFieldRefInput<$PrismaModel>
+    lte?: number | FloatFieldRefInput<$PrismaModel>
+    gt?: number | FloatFieldRefInput<$PrismaModel>
+    gte?: number | FloatFieldRefInput<$PrismaModel>
+    not?: NestedFloatFilter<$PrismaModel> | number
+  }
+
   export type RecipeCreateWithoutUserInput = {
     id?: string
     title: string
@@ -5626,7 +7537,11 @@ export namespace Prisma {
     cleanupTime: string
     createdAt?: Date | string
     updatedAt?: Date | string
+    categorySource?: $Enums.CategorySource | null
+    categoryConfidence?: number | null
+    originalCategory?: string | null
     favorites?: RecipeFavoriteCreateNestedManyWithoutRecipeInput
+    images?: RecipeImageCreateNestedManyWithoutRecipeInput
   }
 
   export type RecipeUncheckedCreateWithoutUserInput = {
@@ -5642,7 +7557,11 @@ export namespace Prisma {
     cleanupTime: string
     createdAt?: Date | string
     updatedAt?: Date | string
+    categorySource?: $Enums.CategorySource | null
+    categoryConfidence?: number | null
+    originalCategory?: string | null
     favorites?: RecipeFavoriteUncheckedCreateNestedManyWithoutRecipeInput
+    images?: RecipeImageUncheckedCreateNestedManyWithoutRecipeInput
   }
 
   export type RecipeCreateOrConnectWithoutUserInput = {
@@ -5709,6 +7628,9 @@ export namespace Prisma {
     cleanupTime?: StringFilter<"Recipe"> | string
     createdAt?: DateTimeFilter<"Recipe"> | Date | string
     updatedAt?: DateTimeFilter<"Recipe"> | Date | string
+    categorySource?: EnumCategorySourceNullableFilter<"Recipe"> | $Enums.CategorySource | null
+    categoryConfidence?: FloatNullableFilter<"Recipe"> | number | null
+    originalCategory?: StringNullableFilter<"Recipe"> | string | null
     userId?: StringFilter<"Recipe"> | string
   }
 
@@ -5787,6 +7709,36 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
+  export type RecipeImageCreateWithoutRecipeInput = {
+    id?: string
+    url: string
+    alt?: string | null
+    isPrimary?: boolean
+    order?: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type RecipeImageUncheckedCreateWithoutRecipeInput = {
+    id?: string
+    url: string
+    alt?: string | null
+    isPrimary?: boolean
+    order?: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type RecipeImageCreateOrConnectWithoutRecipeInput = {
+    where: RecipeImageWhereUniqueInput
+    create: XOR<RecipeImageCreateWithoutRecipeInput, RecipeImageUncheckedCreateWithoutRecipeInput>
+  }
+
+  export type RecipeImageCreateManyRecipeInputEnvelope = {
+    data: RecipeImageCreateManyRecipeInput | RecipeImageCreateManyRecipeInput[]
+    skipDuplicates?: boolean
+  }
+
   export type UserUpsertWithoutRecipesInput = {
     update: XOR<UserUpdateWithoutRecipesInput, UserUncheckedUpdateWithoutRecipesInput>
     create: XOR<UserCreateWithoutRecipesInput, UserUncheckedCreateWithoutRecipesInput>
@@ -5836,6 +7788,132 @@ export namespace Prisma {
     data: XOR<RecipeFavoriteUpdateManyMutationInput, RecipeFavoriteUncheckedUpdateManyWithoutRecipeInput>
   }
 
+  export type RecipeImageUpsertWithWhereUniqueWithoutRecipeInput = {
+    where: RecipeImageWhereUniqueInput
+    update: XOR<RecipeImageUpdateWithoutRecipeInput, RecipeImageUncheckedUpdateWithoutRecipeInput>
+    create: XOR<RecipeImageCreateWithoutRecipeInput, RecipeImageUncheckedCreateWithoutRecipeInput>
+  }
+
+  export type RecipeImageUpdateWithWhereUniqueWithoutRecipeInput = {
+    where: RecipeImageWhereUniqueInput
+    data: XOR<RecipeImageUpdateWithoutRecipeInput, RecipeImageUncheckedUpdateWithoutRecipeInput>
+  }
+
+  export type RecipeImageUpdateManyWithWhereWithoutRecipeInput = {
+    where: RecipeImageScalarWhereInput
+    data: XOR<RecipeImageUpdateManyMutationInput, RecipeImageUncheckedUpdateManyWithoutRecipeInput>
+  }
+
+  export type RecipeImageScalarWhereInput = {
+    AND?: RecipeImageScalarWhereInput | RecipeImageScalarWhereInput[]
+    OR?: RecipeImageScalarWhereInput[]
+    NOT?: RecipeImageScalarWhereInput | RecipeImageScalarWhereInput[]
+    id?: StringFilter<"RecipeImage"> | string
+    url?: StringFilter<"RecipeImage"> | string
+    alt?: StringNullableFilter<"RecipeImage"> | string | null
+    isPrimary?: BoolFilter<"RecipeImage"> | boolean
+    order?: IntFilter<"RecipeImage"> | number
+    createdAt?: DateTimeFilter<"RecipeImage"> | Date | string
+    updatedAt?: DateTimeFilter<"RecipeImage"> | Date | string
+    recipeId?: StringFilter<"RecipeImage"> | string
+  }
+
+  export type RecipeCreateWithoutImagesInput = {
+    id?: string
+    title: string
+    description: string
+    ingredients?: RecipeCreateingredientsInput | string[]
+    steps?: RecipeCreatestepsInput | string[]
+    image?: string | null
+    cuisine: string
+    category: string
+    prepTime: string
+    cleanupTime: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    categorySource?: $Enums.CategorySource | null
+    categoryConfidence?: number | null
+    originalCategory?: string | null
+    user: UserCreateNestedOneWithoutRecipesInput
+    favorites?: RecipeFavoriteCreateNestedManyWithoutRecipeInput
+  }
+
+  export type RecipeUncheckedCreateWithoutImagesInput = {
+    id?: string
+    title: string
+    description: string
+    ingredients?: RecipeCreateingredientsInput | string[]
+    steps?: RecipeCreatestepsInput | string[]
+    image?: string | null
+    cuisine: string
+    category: string
+    prepTime: string
+    cleanupTime: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    categorySource?: $Enums.CategorySource | null
+    categoryConfidence?: number | null
+    originalCategory?: string | null
+    userId: string
+    favorites?: RecipeFavoriteUncheckedCreateNestedManyWithoutRecipeInput
+  }
+
+  export type RecipeCreateOrConnectWithoutImagesInput = {
+    where: RecipeWhereUniqueInput
+    create: XOR<RecipeCreateWithoutImagesInput, RecipeUncheckedCreateWithoutImagesInput>
+  }
+
+  export type RecipeUpsertWithoutImagesInput = {
+    update: XOR<RecipeUpdateWithoutImagesInput, RecipeUncheckedUpdateWithoutImagesInput>
+    create: XOR<RecipeCreateWithoutImagesInput, RecipeUncheckedCreateWithoutImagesInput>
+    where?: RecipeWhereInput
+  }
+
+  export type RecipeUpdateToOneWithWhereWithoutImagesInput = {
+    where?: RecipeWhereInput
+    data: XOR<RecipeUpdateWithoutImagesInput, RecipeUncheckedUpdateWithoutImagesInput>
+  }
+
+  export type RecipeUpdateWithoutImagesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    description?: StringFieldUpdateOperationsInput | string
+    ingredients?: RecipeUpdateingredientsInput | string[]
+    steps?: RecipeUpdatestepsInput | string[]
+    image?: NullableStringFieldUpdateOperationsInput | string | null
+    cuisine?: StringFieldUpdateOperationsInput | string
+    category?: StringFieldUpdateOperationsInput | string
+    prepTime?: StringFieldUpdateOperationsInput | string
+    cleanupTime?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    categorySource?: NullableEnumCategorySourceFieldUpdateOperationsInput | $Enums.CategorySource | null
+    categoryConfidence?: NullableFloatFieldUpdateOperationsInput | number | null
+    originalCategory?: NullableStringFieldUpdateOperationsInput | string | null
+    user?: UserUpdateOneRequiredWithoutRecipesNestedInput
+    favorites?: RecipeFavoriteUpdateManyWithoutRecipeNestedInput
+  }
+
+  export type RecipeUncheckedUpdateWithoutImagesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    description?: StringFieldUpdateOperationsInput | string
+    ingredients?: RecipeUpdateingredientsInput | string[]
+    steps?: RecipeUpdatestepsInput | string[]
+    image?: NullableStringFieldUpdateOperationsInput | string | null
+    cuisine?: StringFieldUpdateOperationsInput | string
+    category?: StringFieldUpdateOperationsInput | string
+    prepTime?: StringFieldUpdateOperationsInput | string
+    cleanupTime?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    categorySource?: NullableEnumCategorySourceFieldUpdateOperationsInput | $Enums.CategorySource | null
+    categoryConfidence?: NullableFloatFieldUpdateOperationsInput | number | null
+    originalCategory?: NullableStringFieldUpdateOperationsInput | string | null
+    userId?: StringFieldUpdateOperationsInput | string
+    favorites?: RecipeFavoriteUncheckedUpdateManyWithoutRecipeNestedInput
+  }
+
   export type UserCreateWithoutFavoritesInput = {
     id: string
     email: string
@@ -5876,7 +7954,11 @@ export namespace Prisma {
     cleanupTime: string
     createdAt?: Date | string
     updatedAt?: Date | string
+    categorySource?: $Enums.CategorySource | null
+    categoryConfidence?: number | null
+    originalCategory?: string | null
     user: UserCreateNestedOneWithoutRecipesInput
+    images?: RecipeImageCreateNestedManyWithoutRecipeInput
   }
 
   export type RecipeUncheckedCreateWithoutFavoritesInput = {
@@ -5892,7 +7974,11 @@ export namespace Prisma {
     cleanupTime: string
     createdAt?: Date | string
     updatedAt?: Date | string
+    categorySource?: $Enums.CategorySource | null
+    categoryConfidence?: number | null
+    originalCategory?: string | null
     userId: string
+    images?: RecipeImageUncheckedCreateNestedManyWithoutRecipeInput
   }
 
   export type RecipeCreateOrConnectWithoutFavoritesInput = {
@@ -5957,7 +8043,11 @@ export namespace Prisma {
     cleanupTime?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    categorySource?: NullableEnumCategorySourceFieldUpdateOperationsInput | $Enums.CategorySource | null
+    categoryConfidence?: NullableFloatFieldUpdateOperationsInput | number | null
+    originalCategory?: NullableStringFieldUpdateOperationsInput | string | null
     user?: UserUpdateOneRequiredWithoutRecipesNestedInput
+    images?: RecipeImageUpdateManyWithoutRecipeNestedInput
   }
 
   export type RecipeUncheckedUpdateWithoutFavoritesInput = {
@@ -5973,7 +8063,11 @@ export namespace Prisma {
     cleanupTime?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    categorySource?: NullableEnumCategorySourceFieldUpdateOperationsInput | $Enums.CategorySource | null
+    categoryConfidence?: NullableFloatFieldUpdateOperationsInput | number | null
+    originalCategory?: NullableStringFieldUpdateOperationsInput | string | null
     userId?: StringFieldUpdateOperationsInput | string
+    images?: RecipeImageUncheckedUpdateManyWithoutRecipeNestedInput
   }
 
   export type RecipeCreateManyUserInput = {
@@ -5989,6 +8083,9 @@ export namespace Prisma {
     cleanupTime: string
     createdAt?: Date | string
     updatedAt?: Date | string
+    categorySource?: $Enums.CategorySource | null
+    categoryConfidence?: number | null
+    originalCategory?: string | null
   }
 
   export type RecipeFavoriteCreateManyUserInput = {
@@ -6010,7 +8107,11 @@ export namespace Prisma {
     cleanupTime?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    categorySource?: NullableEnumCategorySourceFieldUpdateOperationsInput | $Enums.CategorySource | null
+    categoryConfidence?: NullableFloatFieldUpdateOperationsInput | number | null
+    originalCategory?: NullableStringFieldUpdateOperationsInput | string | null
     favorites?: RecipeFavoriteUpdateManyWithoutRecipeNestedInput
+    images?: RecipeImageUpdateManyWithoutRecipeNestedInput
   }
 
   export type RecipeUncheckedUpdateWithoutUserInput = {
@@ -6026,7 +8127,11 @@ export namespace Prisma {
     cleanupTime?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    categorySource?: NullableEnumCategorySourceFieldUpdateOperationsInput | $Enums.CategorySource | null
+    categoryConfidence?: NullableFloatFieldUpdateOperationsInput | number | null
+    originalCategory?: NullableStringFieldUpdateOperationsInput | string | null
     favorites?: RecipeFavoriteUncheckedUpdateManyWithoutRecipeNestedInput
+    images?: RecipeImageUncheckedUpdateManyWithoutRecipeNestedInput
   }
 
   export type RecipeUncheckedUpdateManyWithoutUserInput = {
@@ -6042,6 +8147,9 @@ export namespace Prisma {
     cleanupTime?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    categorySource?: NullableEnumCategorySourceFieldUpdateOperationsInput | $Enums.CategorySource | null
+    categoryConfidence?: NullableFloatFieldUpdateOperationsInput | number | null
+    originalCategory?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type RecipeFavoriteUpdateWithoutUserInput = {
@@ -6068,6 +8176,16 @@ export namespace Prisma {
     createdAt?: Date | string
   }
 
+  export type RecipeImageCreateManyRecipeInput = {
+    id?: string
+    url: string
+    alt?: string | null
+    isPrimary?: boolean
+    order?: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
   export type RecipeFavoriteUpdateWithoutRecipeInput = {
     id?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -6084,6 +8202,36 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     userId?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type RecipeImageUpdateWithoutRecipeInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    url?: StringFieldUpdateOperationsInput | string
+    alt?: NullableStringFieldUpdateOperationsInput | string | null
+    isPrimary?: BoolFieldUpdateOperationsInput | boolean
+    order?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type RecipeImageUncheckedUpdateWithoutRecipeInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    url?: StringFieldUpdateOperationsInput | string
+    alt?: NullableStringFieldUpdateOperationsInput | string | null
+    isPrimary?: BoolFieldUpdateOperationsInput | boolean
+    order?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type RecipeImageUncheckedUpdateManyWithoutRecipeInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    url?: StringFieldUpdateOperationsInput | string
+    alt?: NullableStringFieldUpdateOperationsInput | string | null
+    isPrimary?: BoolFieldUpdateOperationsInput | boolean
+    order?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
 
