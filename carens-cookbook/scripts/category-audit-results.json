@@ -1,0 +1,65 @@
+{
+  "totalRecipes": 4,
+  "totalUsers": 1,
+  "categoryDistribution": [
+    {
+      "category": "Pasta",
+      "count": 1,
+      "users": 1,
+      "isOrphaned": false,
+      "inAIPrompt": true,
+      "inUI": true
+    },
+    {
+      "category": "Main Courses",
+      "count": 1,
+      "users": 1,
+      "isOrphaned": true,
+      "inAIPrompt": false,
+      "inUI": false
+    },
+    {
+      "category": "Bread",
+      "count": 1,
+      "users": 1,
+      "isOrphaned": true,
+      "inAIPrompt": false,
+      "inUI": false
+    },
+    {
+      "category": "Main Course",
+      "count": 1,
+      "users": 1,
+      "isOrphaned": true,
+      "inAIPrompt": false,
+      "inUI": false
+    }
+  ],
+  "orphanedRecipes": {
+    "count": 3,
+    "categories": [
+      "Main Courses",
+      "Bread",
+      "Main Course"
+    ],
+    "affectedUsers": 1
+  },
+  "mismatches": {
+    "aiPromptOnly": [
+      "Vegetables"
+    ],
+    "uiOnly": [
+      "Beverage",
+      "Breakfast",
+      "Sauce",
+      "Side Dish",
+      "Vegetable"
+    ]
+  },
+  "recommendations": [
+    "🚨 3 recipes (75.0%) are orphaned and may not be visible in the UI",
+    "⚠️  AI prompt includes categories not in UI: Vegetables",
+    "⚠️  UI includes categories not in UI prompt: Beverage, Breakfast, Sauce, Side Dish, Vegetable",
+    "🔄 Potential duplicate categories detected: Main Course"
+  ]
+}

@@ -1,6 +1,6 @@
 "use client"
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { motion } from "framer-motion";
 import { SearchIcon, HomeIcon, Camera, BarChart3, Link } from "lucide-react";
 import { cn } from "@/lib/utils";
@@ -337,8 +337,10 @@ function MainPage() {
   const [showAddRecipeModal, setShowAddRecipeModal] = useState(false);
   const [activeImportTab, setActiveImportTab] = useState<'url' | 'photo'>('url');
 
-  const [gridTitle, setGridTitle] = useState("Recipe Categories");
+  const [gridTitle] = useState("Recipe Categories");
   const [processedCategories, setProcessedCategories] = useState<{ name: string; count: number; imageUrl?: string | null }[]>([]);
+  const [categoriesLoading, setCategoriesLoading] = useState(true);
+  const [categoriesError, setCategoriesError] = useState<string | null>(null);
 
   // Enhanced image processing with retry capability
   const imageProcessing = useImageProcessing(
@@ -388,71 +390,7 @@ function MainPage() {
     }
   );
 
-  useEffect(() => {
-    fetchSavedRecipes();
-
-    const params = new URLSearchParams(window.location.search);
-    const recipeIdFromUrl = params.get('recipeId');
-
-    if (recipeIdFromUrl) {
-      // const loadRecipeFromUrl = async () => { // Remove this declaration
-      // };
-      // loadRecipeFromUrl();
-    }
-  }, []);
-
-  useEffect(() => {
-    const categoryData = ALL_POSSIBLE_CATEGORIES.map(masterCategory => {
-      const recipesInThisCategory = savedRecipes.filter(r => r.category === masterCategory.name);
-      const count = recipesInThisCategory.length;
-
-      let imageUrl = null;
-      if (count > 0) {
-        const recipeWithImage = recipesInThisCategory.find(r => r.image);
-        if (recipeWithImage) {
-          imageUrl = recipeWithImage.image;
-        }
-      }
-      
-      if (!imageUrl) { // If no saved recipe image, try placeholder
-        const placeholder = placeholderRecipes.find(p => p.category === masterCategory.name);
-        if (placeholder && placeholder.image) {
-          imageUrl = placeholder.image;
-        }
-      }
-
-      if (!imageUrl) { // If still no image, use default from master list
-        imageUrl = masterCategory.defaultImageUrl;
-      }
-
-      return {
-        name: masterCategory.name,
-        count: count,
-        imageUrl: imageUrl,
-      };
-    });
-    
-    setProcessedCategories(categoryData);
-    setGridTitle("Recipe Categories"); // Always show this title
-
-  }, [savedRecipes]);
-
-  // New useEffect to handle displaying a recipe if recipeId is in URL and recipes are loaded
-  useEffect(() => {
-    const params = new URLSearchParams(window.location.search);
-    const recipeIdFromUrl = params.get('recipeId');
-
-    if (recipeIdFromUrl && savedRecipes.length > 0) {
-      const recipeToDisplay = savedRecipes.find(r => r.id === recipeIdFromUrl);
-      if (recipeToDisplay) {
-        handleViewRecipe(recipeToDisplay);
-      } else {
-        toast.error("The shared recipe could not be found.");
-      }
-    }
-  }, [savedRecipes, router]); // Rely on router being stable, or add it as a dependency if it can change and affect logic
-
-  const fetchSavedRecipes = async () => {
+  const fetchSavedRecipes = useCallback(async () => {
     try {
       const response = await fetch('/api/recipes');
       if (!response.ok) {
@@ -465,7 +403,99 @@ function MainPage() {
       console.error("Error fetching saved recipes:", err);
       toast.error(`Could not load your saved recipes: ${err instanceof Error ? err.message : String(err)}`);
     }
-  };
+  }, []);
+
+  const fetchCategoriesWithCounts = useCallback(async () => {
+    setCategoriesLoading(true);
+    setCategoriesError(null);
+    try {
+      const response = await fetch('/api/categories');
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({}));
+        throw new Error(errorData.error || 'Failed to fetch categories');
+      }
+      const categoriesData: { name: string; count: number }[] = await response.json();
+      
+      // Transform to include image URLs using the same logic as before
+      const processedCategoriesData = categoriesData.map(categoryData => {
+        let imageUrl = null;
+        
+        // If category has recipes, try to find an image from saved recipes
+        if (categoryData.count > 0) {
+          const recipesInThisCategory = savedRecipes.filter(r => r.category === categoryData.name);
+          const recipeWithImage = recipesInThisCategory.find(r => r.image);
+          if (recipeWithImage) {
+            imageUrl = recipeWithImage.image;
+          }
+        }
+        
+        // Fallback to placeholder recipe image
+        if (!imageUrl) {
+          const placeholder = placeholderRecipes.find(p => p.category === categoryData.name);
+          if (placeholder && placeholder.image) {
+            imageUrl = placeholder.image;
+          }
+        }
+
+        // Fallback to predefined default image
+        if (!imageUrl) {
+          const predefinedCategory = ALL_POSSIBLE_CATEGORIES.find(c => c.name === categoryData.name);
+          if (predefinedCategory) {
+            imageUrl = predefinedCategory.defaultImageUrl;
+          }
+        }
+
+        return {
+          name: categoryData.name,
+          count: categoryData.count,
+          imageUrl: imageUrl,
+        };
+      });
+      
+      setProcessedCategories(processedCategoriesData);
+    } catch (err: unknown) {
+      console.error("Error fetching categories:", err);
+      setCategoriesError(`Could not load categories: ${err instanceof Error ? err.message : String(err)}`);
+      toast.error(`Could not load categories: ${err instanceof Error ? err.message : String(err)}`);
+    } finally {
+      setCategoriesLoading(false);
+    }
+  }, [savedRecipes]);
+
+  // Effects that depend on the callback functions - moved after function declarations
+  useEffect(() => {
+    fetchSavedRecipes();
+    fetchCategoriesWithCounts();
+
+    const params = new URLSearchParams(window.location.search);
+    const recipeIdFromUrl = params.get('recipeId');
+
+    if (recipeIdFromUrl) {
+      // URL recipe loading logic would go here if needed
+    }
+  }, [fetchSavedRecipes, fetchCategoriesWithCounts]);
+
+  // Refresh categories when saved recipes change to update images and counts
+  useEffect(() => {
+    if (savedRecipes.length > 0) {
+      fetchCategoriesWithCounts();
+    }
+  }, [savedRecipes, fetchCategoriesWithCounts]);
+
+  // Handle displaying a recipe if recipeId is in URL and recipes are loaded
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const recipeIdFromUrl = params.get('recipeId');
+
+    if (recipeIdFromUrl && savedRecipes.length > 0) {
+      const recipeToDisplay = savedRecipes.find(r => r.id === recipeIdFromUrl);
+      if (recipeToDisplay) {
+        handleViewRecipe(recipeToDisplay);
+      } else {
+        toast.error("The shared recipe could not be found.");
+      }
+    }
+  }, [savedRecipes]);
 
   const handleViewRecipe = (recipe: RecipeData) => {
     setSelectedRecipe(recipe);
@@ -850,24 +880,75 @@ function MainPage() {
               </p>
             </div>
 
-            <BentoGrid className="gap-8">
-              {processedCategories.map((category, index) => (
+            {/* Loading State */}
+            {categoriesLoading && (
+              <div className="text-center py-16">
                 <motion.div
-                  key={category.name + index}
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.3, delay: 0.1 * index }}
-                  className="h-full min-h-[350px]"
-                >
-                  <CategoryCard 
-                    categoryName={category.name} 
-                    itemCount={category.count}
-                    imageUrl={category.imageUrl}
-                    onClick={() => handleCategoryClick(category.name)} 
-                  />
-                </motion.div>
-              ))}
-            </BentoGrid>
+                  animate={{ rotate: 360 }}
+                  transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
+                  className="h-12 w-12 border-4 border-primary border-t-transparent rounded-full mx-auto mb-4"
+                />
+                <p className="text-lg text-muted-foreground font-light">Loading your recipe categories...</p>
+              </div>
+            )}
+
+            {/* Error State */}
+            {categoriesError && !categoriesLoading && (
+              <div className="text-center py-16">
+                <div className="bg-red-50 border border-red-200 rounded-lg p-6 max-w-md mx-auto">
+                  <p className="text-red-800 font-medium mb-2">Unable to load categories</p>
+                  <p className="text-red-600 text-sm mb-4">{categoriesError}</p>
+                  <Button 
+                    onClick={fetchCategoriesWithCounts}
+                    variant="outline"
+                    className="border-red-300 text-red-700 hover:bg-red-50"
+                  >
+                    Try Again
+                  </Button>
+                </div>
+              </div>
+            )}
+
+            {/* Categories Grid */}
+            {!categoriesLoading && !categoriesError && (
+              <BentoGrid className="gap-8">
+                {processedCategories.map((category, index) => (
+                  <motion.div
+                    key={category.name + index}
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.3, delay: 0.1 * index }}
+                    className="h-full min-h-[350px]"
+                  >
+                    <CategoryCard 
+                      categoryName={category.name} 
+                      itemCount={category.count}
+                      imageUrl={category.imageUrl}
+                      onClick={() => handleCategoryClick(category.name)} 
+                    />
+                  </motion.div>
+                ))}
+              </BentoGrid>
+            )}
+
+            {/* Empty State for when no categories are loaded */}
+            {!categoriesLoading && !categoriesError && processedCategories.length === 0 && (
+              <div className="text-center py-16">
+                <div className="bg-muted/30 border border-muted rounded-lg p-8 max-w-md mx-auto">
+                  <Camera className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
+                  <p className="text-lg font-medium mb-2">No categories yet</p>
+                  <p className="text-muted-foreground text-sm mb-4">
+                    Start by importing your first recipe to see categories here
+                  </p>
+                  <Button onClick={handleQuickImportURL} className="mr-2">
+                    Import Recipe
+                  </Button>
+                  <Button onClick={handleQuickScanPhoto} variant="outline">
+                    Scan Photo
+                  </Button>
+                </div>
+              </div>
+            )}
           </motion.div>
         )}
 

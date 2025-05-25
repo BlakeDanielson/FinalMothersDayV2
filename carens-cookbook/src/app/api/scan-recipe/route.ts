@@ -4,6 +4,9 @@ import { GoogleGenerativeAI } from '@google/generative-ai';
 import { z } from 'zod';
 import { RecipeProcessingError, ErrorType, logError } from '@/lib/errors';
 import { AIProvider, getProviderConfig } from '@/lib/ai-providers';
+import { categoryService, categoryResolver } from '@/lib/categories';
+import { auth } from '@clerk/nextjs/server';
+import { CategorySource } from '@/generated/prisma';
 
 // Zod schema for recipe data parsed from an image
 const scanRecipeZodSchema = z.object({
@@ -38,7 +41,12 @@ function getGoogleAI() {
 // File validation constants
 const SUPPORTED_EXTENSIONS = ['.jpg', '.jpeg', '.png', '.heic', '.heif', '.webp'];
 
-const getImageSystemPrompt = (schemaString: string) => `You are an expert recipe analysis assistant specializing in interpreting images of recipes (e.g., photos of cookbook pages, recipe cards, or handwritten notes). Your task is to extract detailed recipe information directly from the provided image and then generate supplementary details.
+const getImageSystemPrompt = (schemaString: string, userCategories: string[] = []) => {
+  const categoryGuidance = userCategories.length > 0 
+    ? `Based on the overall nature of the recipe from the extracted content, determine and state a suitable meal category. The user has these existing categories: [${userCategories.join(', ')}]. Please assign to one of these if appropriate, or suggest a new category that best fits the recipe. If none of the existing categories are suitable, choose from these standard categories: Chicken, Beef, Vegetable, Salad, Appetizer, Seafood, Thanksgiving, Lamb, Pork, Soup, Pasta, Dessert, Drinks, Sauces & Seasoning, Breakfast, Side Dish.`
+    : `Based on the overall nature of the recipe from the extracted content, determine and state a suitable meal category from this list: Chicken, Beef, Vegetable, Salad, Appetizer, Seafood, Thanksgiving, Lamb, Pork, Soup, Pasta, Dessert, Drinks, Sauces & Seasoning, Breakfast, Side Dish.`;
+
+  return `You are an expert recipe analysis assistant specializing in interpreting images of recipes (e.g., photos of cookbook pages, recipe cards, or handwritten notes). Your task is to extract detailed recipe information directly from the provided image and then generate supplementary details.
 
 **Stage 1: Content Extraction from Image**
 Carefully analyze the provided image. From the visual content of the image, you are REQUIRED to extract:
@@ -53,7 +61,7 @@ These fields (\`title\`, \`ingredients\`, \`steps\`, and setting \`image\` to \`
 Once you have successfully extracted the \`title\`, \`ingredients\`, and \`steps\` from the image, you will then use THIS EXTRACTED INFORMATION to intelligently generate and provide plausible values for the following fields. These generated fields should be contextually relevant to the extracted recipe content:
 *   \`description\`: Based on the extracted \`title\`, \`ingredients\`, and \`steps\`, write a concise and appealing summary of the recipe (typically 1-3 sentences).
 *   \`cuisine\`: Based on the extracted \`ingredients\` and cooking \`steps\`, determine and state the most appropriate primary cuisine type (e.g., "Italian", "Mexican", "Indian", "American Comfort Food", "Mediterranean").
-*   \`category\`: Based on the overall nature of the recipe from the extracted content, determine and state a suitable meal category from this list: Chicken, Beef, Vegetables, Salad, Appetizer, Seafood, Thanksgiving, Lamb, Pork, Soup, Pasta, Dessert, Drinks, Sauces & Seasoning.
+*   \`category\`: ${categoryGuidance}
 *   \`prepTime\`: Based on the extracted \`ingredients\` (e.g., amount of chopping) and \`steps\`, estimate the active preparation time required before cooking begins. Provide a string like "Approx. X minutes" or "X hours Y minutes".
 *   \`cleanupTime\`: Based on the extracted \`ingredients\` and cooking \`steps\` (e.g., number of bowls/pans used), estimate the time needed for cleanup after cooking. Provide a string like "Approx. X minutes".
 
@@ -64,6 +72,7 @@ ${schemaString}
 
 **Important:** If the image does not contain a clear, readable recipe with visible ingredients and steps, you must return an empty object {} to indicate that no recipe was detected.
 `;
+};
 
 // Provider-specific validation function
 function validateFile(imageFile: File, provider: AIProvider = 'openai'): void {
@@ -331,6 +340,23 @@ async function processImageWithGemini(imageBase64: string, imageMimeType: string
 
 export async function POST(req: NextRequest) {
   try {
+    // Get user context for category suggestions
+    let userId: string | null = null;
+    let userCategories: string[] = [];
+    
+    try {
+      const { userId: authUserId } = await auth();
+      userId = authUserId;
+      
+      if (userId) {
+        // Get user's existing categories for AI prompt
+        userCategories = await categoryResolver.getAIPromptCategories(userId);
+      }
+    } catch (error) {
+      console.warn('Could not get user context for category suggestions:', error);
+      // Continue without user context - will use default categories
+    }
+
     // Parse form data
     let formData: FormData;
     try {
@@ -398,7 +424,7 @@ export async function POST(req: NextRequest) {
 
     const imageMimeType = imageFile!.type || 'image/jpeg';
     const schemaString = JSON.stringify(scanRecipeZodSchema.shape);
-    const systemPrompt = getImageSystemPrompt(schemaString);
+    const systemPrompt = getImageSystemPrompt(schemaString, userCategories);
 
     // Process image with selected AI provider
     let responseContent: string | null = null;
@@ -482,7 +508,71 @@ export async function POST(req: NextRequest) {
       throw error;
     }
 
-    return NextResponse.json(validatedRecipeData, { status: 200 });
+    // Apply intelligent category resolution and track metadata
+    const categoryMetadata: {
+      categorySource: CategorySource;
+      categoryConfidence: number;
+      originalCategory: string | null;
+    } = {
+      categorySource: CategorySource.AI_GENERATED,
+      categoryConfidence: 0.8, // Default confidence for AI suggestions
+      originalCategory: null
+    };
+
+    try {
+      const originalCategory = validatedRecipeData.category;
+      const categoryAnalysis = await categoryService.findBestCategory(
+        validatedRecipeData.category,
+        userId || undefined,
+        { allowNewCategories: true, preferUserCategories: true }
+      );
+      
+      // Use the resolved category with highest confidence
+      if (categoryAnalysis.bestMatch) {
+        const previousCategory = validatedRecipeData.category;
+        validatedRecipeData.category = categoryAnalysis.bestMatch.category;
+        
+        // Update metadata based on resolution
+        categoryMetadata.categorySource = CategorySource.PREDEFINED;
+        categoryMetadata.categoryConfidence = categoryAnalysis.bestMatch.confidence;
+        categoryMetadata.originalCategory = previousCategory !== categoryAnalysis.bestMatch.category ? previousCategory : null;
+        
+        // Log category resolution for debugging
+        const matchType = categoryAnalysis.bestMatch.isExact ? 'exact' : 
+                         categoryAnalysis.bestMatch.isFuzzy ? 'fuzzy' : 
+                         categoryAnalysis.bestMatch.isSemantic ? 'semantic' : 'unknown';
+        console.log(`Category resolved: "${originalCategory}" -> "${categoryAnalysis.bestMatch.category}" (${categoryAnalysis.bestMatch.confidence.toFixed(2)} confidence, ${matchType} match)`);
+      } else if (categoryAnalysis.shouldCreateNew) {
+        // Keep the original category if we should create a new one
+        categoryMetadata.categorySource = CategorySource.USER_CREATED;
+        categoryMetadata.categoryConfidence = 0.9; // High confidence for new categories
+        categoryMetadata.originalCategory = null; // No resolution needed
+        console.log(`Creating new category: "${originalCategory}"`);
+      } else {
+        // Fallback to 'Uncategorized' if no good match found and shouldn't create new
+        console.warn(`No good category match found for "${originalCategory}", using fallback`);
+        categoryMetadata.originalCategory = originalCategory;
+        validatedRecipeData.category = 'Uncategorized';
+        categoryMetadata.categorySource = CategorySource.PREDEFINED;
+        categoryMetadata.categoryConfidence = 0.5; // Low confidence for fallback
+      }
+    } catch (error) {
+      console.error('Category resolution failed:', error);
+      // Continue with original category if resolution fails
+      categoryMetadata.categorySource = CategorySource.AI_GENERATED;
+      categoryMetadata.categoryConfidence = 0.7; // Lower confidence due to resolution failure
+      categoryMetadata.originalCategory = null;
+      console.log(`Using original AI-suggested category: "${validatedRecipeData.category}"`);
+    }
+
+    // Add metadata to response for potential database storage
+    const responseData = {
+      ...validatedRecipeData,
+      // Include metadata for client-side database operations
+      _categoryMetadata: categoryMetadata
+    };
+
+    return NextResponse.json(responseData, { status: 200 });
 
   } catch (error: unknown) {
     let recipeError: RecipeProcessingError;
