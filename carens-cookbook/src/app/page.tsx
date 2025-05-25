@@ -15,6 +15,7 @@ import { Card } from "@/components/ui/card";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+
 import RecipeDisplay, { RecipeData } from "@/components/RecipeDisplay";
 import RecipeLoadingProgress from "@/components/ui/RecipeLoadingProgress";
 import ScanPhotoButton from "@/components/ui/ScanPhotoButton";
@@ -324,7 +325,8 @@ const CategoryCard = ({
 function MainPage() {
   const router = useRouter();
   const [url, setUrl] = useState("");
-  const [processingMethod, setProcessingMethod] = useState<'openai' | 'hyperbrowser'>('hyperbrowser'); // Default to Hyperbrowser
+  const [urlProcessingMethod, setUrlProcessingMethod] = useState<'openai' | 'gemini'>('openai');
+
   const [isLoading, setIsLoading] = useState(false);
   const [loadingStepMessage, setLoadingStepMessage] = useState("");
   const [loadingProgress, setLoadingProgress] = useState(0);
@@ -538,7 +540,7 @@ function MainPage() {
       const response = await fetch(`/api/fetch-recipe`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ url, processing_method: processingMethod }),
+        body: JSON.stringify({ url, processing_method: urlProcessingMethod }),
       });
       if (!response.ok) {
         const errorData = await response.json().catch(() => ({}));
@@ -957,35 +959,35 @@ function MainPage() {
                           Processing Method
                         </label>
                         <Select
-                          value={processingMethod}
-                          onValueChange={(value: 'openai' | 'hyperbrowser') => setProcessingMethod(value)}
+                          value={urlProcessingMethod}
+                          onValueChange={(value: 'openai' | 'gemini') => setUrlProcessingMethod(value)}
                           disabled={isLoading}
                         >
                           <SelectTrigger className="text-lg p-6">
                             <SelectValue />
                           </SelectTrigger>
                           <SelectContent>
-                            <SelectItem value="hyperbrowser">
-                              <div className="flex flex-col items-start">
-                                <span className="font-semibold">🚀 Hyperbrowser (Recommended)</span>
-                                <span className="text-xs text-muted-foreground">Faster, more accurate extraction</span>
-                              </div>
-                            </SelectItem>
                             <SelectItem value="openai">
                               <div className="flex flex-col items-start">
-                                <span className="font-semibold">🤖 OpenAI</span>
-                                <span className="text-xs text-muted-foreground">AI-powered traditional extraction</span>
+                                <span className="font-medium">OpenAI GPT-4o Mini</span>
+                                <span className="text-xs text-muted-foreground">Reliable and accurate recipe extraction</span>
+                              </div>
+                            </SelectItem>
+                            <SelectItem value="gemini">
+                              <div className="flex flex-col items-start">
+                                <span className="font-medium">Google Gemini 2.5 Flash</span>
+                                <span className="text-xs text-muted-foreground">Fast processing with enhanced multimodal capabilities</span>
                               </div>
                             </SelectItem>
                           </SelectContent>
                         </Select>
                         
                         {/* Info about selected method */}
-                        <div className="text-xs text-muted-foreground p-2 rounded-md bg-muted/50">
-                          {processingMethod === 'hyperbrowser' ? (
-                            <>⚡ <strong>Hyperbrowser:</strong> Professional web scraping with 95%+ accuracy, faster processing</>
+                        <div className="text-xs text-muted-foreground p-3 rounded-md bg-muted/50 border">
+                          {urlProcessingMethod === 'openai' ? (
+                            <>🧠 <strong>OpenAI:</strong> AI-powered recipe extraction with intelligent content parsing</>
                           ) : (
-                            <>🧠 <strong>OpenAI:</strong> AI interpretation of web content, may have occasional parsing issues</>
+                            <>⚡ <strong>Gemini:</strong> Fast and efficient AI processing with enhanced understanding</>
                           )}
                         </div>
                       </div>
