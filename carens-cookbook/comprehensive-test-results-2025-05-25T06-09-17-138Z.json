@@ -1,0 +1,1875 @@
+{
+  "timestamp": "2025-05-25T06:09:17.145Z",
+  "summary": {
+    "totalTests": 75,
+    "successCount": 36,
+    "realDataCount": 33,
+    "successRate": 48,
+    "realDataRate": 44,
+    "avgDuration": 10489,
+    "minDuration": 4991,
+    "maxDuration": 19547
+  },
+  "siteResults": {
+    "AllRecipes": {
+      "total": 3,
+      "success": 2,
+      "realData": 2,
+      "durations": [
+        9845,
+        11296
+      ],
+      "errors": [
+        "API Error (500): Failed to fetch webpage: 404 Not Found"
+      ]
+    },
+    "Bon Appétit": {
+      "total": 3,
+      "success": 2,
+      "realData": 2,
+      "durations": [
+        19547,
+        12559
+      ],
+      "errors": [
+        "API Error (500): Failed to fetch webpage: 404 Not Found"
+      ]
+    },
+    "King Arthur Baking": {
+      "total": 3,
+      "success": 3,
+      "realData": 2,
+      "durations": [
+        6635,
+        4991,
+        5759
+      ],
+      "errors": []
+    },
+    "Delish": {
+      "total": 3,
+      "success": 2,
+      "realData": 2,
+      "durations": [
+        8895,
+        17932
+      ],
+      "errors": [
+        "API Error (500): [\n  {\n    \"code\": \"invalid_type\",\n    \"expected\": \"string\",\n    \"received\": \"null\",\n    \"path\": [\n      \"cuisine\"\n    ],\n    \"message\": \"Expected string, received null\"\n  },\n  {\n    \"code\": \"invalid_type\",\n    \"expected\": \"string\",\n    \"received\": \"null\",\n    \"path\": [\n      \"prepTime\"\n    ],\n    \"message\": \"Expected string, received null\"\n  },\n  {\n    \"code\": \"invalid_type\",\n    \"expected\": \"string\",\n    \"received\": \"null\",\n    \"path\": [\n      \"cleanupTime\"\n    ],\n    \"message\": \"Expected string, received null\"\n  }\n]"
+      ]
+    },
+    "Taste of Home": {
+      "total": 3,
+      "success": 1,
+      "realData": 1,
+      "durations": [
+        14606
+      ],
+      "errors": [
+        "API Error (500): Failed to fetch webpage: 404 Not Found",
+        "API Error (500): Failed to fetch webpage: 404 Not Found"
+      ]
+    },
+    "Simply Recipes": {
+      "total": 3,
+      "success": 1,
+      "realData": 1,
+      "durations": [
+        9567
+      ],
+      "errors": [
+        "API Error (500): Failed to fetch webpage: 404 Not Found",
+        "API Error (500): Failed to fetch webpage: 404 Not Found"
+      ]
+    },
+    "Food & Wine": {
+      "total": 3,
+      "success": 0,
+      "realData": 0,
+      "durations": [],
+      "errors": [
+        "API Error (500): Failed to fetch webpage: 404 Not Found",
+        "API Error (500): Failed to fetch webpage: 404 Not Found",
+        "API Error (500): Failed to fetch webpage: 404 Not Found"
+      ]
+    },
+    "Epicurious": {
+      "total": 3,
+      "success": 0,
+      "realData": 0,
+      "durations": [],
+      "errors": [
+        "API Error (500): Failed to fetch webpage: 404 Not Found",
+        "API Error (500): Failed to fetch webpage: 404 Not Found",
+        "API Error (500): Failed to fetch webpage: 404 Not Found"
+      ]
+    },
+    "BBC Good Food": {
+      "total": 3,
+      "success": 1,
+      "realData": 0,
+      "durations": [
+        5603
+      ],
+      "errors": [
+        "API Error (500): Failed to fetch webpage: 404 Not Found",
+        "API Error (500): Failed to fetch webpage: 404 Not Found"
+      ]
+    },
+    "Jamie Oliver": {
+      "total": 3,
+      "success": 2,
+      "realData": 1,
+      "durations": [
+        9292,
+        5308
+      ],
+      "errors": [
+        "API Error (500): [\n  {\n    \"code\": \"invalid_type\",\n    \"expected\": \"string\",\n    \"received\": \"null\",\n    \"path\": [\n      \"cuisine\"\n    ],\n    \"message\": \"Expected string, received null\"\n  },\n  {\n    \"code\": \"invalid_type\",\n    \"expected\": \"string\",\n    \"received\": \"null\",\n    \"path\": [\n      \"category\"\n    ],\n    \"message\": \"Expected string, received null\"\n  },\n  {\n    \"code\": \"invalid_type\",\n    \"expected\": \"string\",\n    \"received\": \"null\",\n    \"path\": [\n      \"prepTime\"\n    ],\n    \"message\": \"Expected string, received null\"\n  },\n  {\n    \"code\": \"invalid_type\",\n    \"expected\": \"string\",\n    \"received\": \"null\",\n    \"path\": [\n      \"cleanupTime\"\n    ],\n    \"message\": \"Expected string, received null\"\n  }\n]"
+      ]
+    },
+    "Martha Stewart": {
+      "total": 3,
+      "success": 2,
+      "realData": 2,
+      "durations": [
+        7731,
+        8231
+      ],
+      "errors": [
+        "API Error (500): Failed to fetch webpage: 404 Not Found"
+      ]
+    },
+    "Food Network": {
+      "total": 3,
+      "success": 0,
+      "realData": 0,
+      "durations": [],
+      "errors": [
+        "API Error (500): Failed to fetch webpage: 403 Forbidden",
+        "API Error (500): Failed to fetch webpage: 403 Forbidden",
+        "API Error (500): Failed to fetch webpage: 403 Forbidden"
+      ]
+    },
+    "Serious Eats": {
+      "total": 3,
+      "success": 2,
+      "realData": 2,
+      "durations": [
+        12901,
+        7561
+      ],
+      "errors": [
+        "API Error (500): Failed to fetch webpage: 404 Not Found"
+      ]
+    },
+    "Cookie and Kate": {
+      "total": 3,
+      "success": 1,
+      "realData": 1,
+      "durations": [
+        11044
+      ],
+      "errors": [
+        "API Error (500): Failed to fetch webpage: 404 Not Found",
+        "API Error (500): Failed to fetch webpage: 404 Not Found"
+      ]
+    },
+    "Sally's Baking Addiction": {
+      "total": 3,
+      "success": 2,
+      "realData": 2,
+      "durations": [
+        14949,
+        10503
+      ],
+      "errors": [
+        "API Error (500): Failed to fetch webpage: 404 Not Found"
+      ]
+    },
+    "The Pioneer Woman": {
+      "total": 3,
+      "success": 3,
+      "realData": 3,
+      "durations": [
+        12772,
+        9742,
+        10336
+      ],
+      "errors": []
+    },
+    "Minimalist Baker": {
+      "total": 3,
+      "success": 1,
+      "realData": 1,
+      "durations": [
+        10377
+      ],
+      "errors": [
+        "API Error (500): Failed to fetch webpage: 404 Not Found",
+        "API Error (500): Failed to fetch webpage: 404 Not Found"
+      ]
+    },
+    "Love and Lemons": {
+      "total": 3,
+      "success": 1,
+      "realData": 1,
+      "durations": [
+        9134
+      ],
+      "errors": [
+        "API Error (500): Failed to fetch webpage: 404 Not Found",
+        "API Error (500): Failed to fetch webpage: 404 Not Found"
+      ]
+    },
+    "Half Baked Harvest": {
+      "total": 3,
+      "success": 1,
+      "realData": 1,
+      "durations": [
+        14596
+      ],
+      "errors": [
+        "API Error (500): Failed to fetch webpage: 404 Not Found",
+        "API Error (500): Failed to fetch webpage: 404 Not Found"
+      ]
+    },
+    "Gimme Some Oven": {
+      "total": 3,
+      "success": 2,
+      "realData": 2,
+      "durations": [
+        10864,
+        8480
+      ],
+      "errors": [
+        "API Error (500): Failed to fetch webpage: 404 Not Found"
+      ]
+    },
+    "Spend with Pennies": {
+      "total": 3,
+      "success": 2,
+      "realData": 2,
+      "durations": [
+        12164,
+        11758
+      ],
+      "errors": [
+        "API Error (500): Failed to fetch webpage: 404 Not Found"
+      ]
+    },
+    "The Recipe Critic": {
+      "total": 3,
+      "success": 2,
+      "realData": 2,
+      "durations": [
+        6131,
+        10929
+      ],
+      "errors": [
+        "API Error (500): Failed to fetch webpage: 404 Not Found"
+      ]
+    },
+    "Cafe Delites": {
+      "total": 3,
+      "success": 0,
+      "realData": 0,
+      "durations": [],
+      "errors": [
+        "API Error (500): Failed to fetch webpage: 404 Not Found",
+        "API Error (500): Failed to fetch webpage: 404 Not Found",
+        "API Error (500): Failed to fetch webpage: 404 Not Found"
+      ]
+    },
+    "Natasha's Kitchen": {
+      "total": 3,
+      "success": 2,
+      "realData": 2,
+      "durations": [
+        16451,
+        7926
+      ],
+      "errors": [
+        "API Error (500): Failed to fetch webpage: 404 Not Found"
+      ]
+    },
+    "Dinner at the Zoo": {
+      "total": 3,
+      "success": 1,
+      "realData": 1,
+      "durations": [
+        11198
+      ],
+      "errors": [
+        "API Error (500): Failed to fetch webpage: 404 Not Found",
+        "API Error (500): Failed to fetch webpage: 404 Not Found"
+      ]
+    }
+  },
+  "results": [
+    {
+      "site": "AllRecipes",
+      "url": "https://www.allrecipes.com/recipe/16354/easy-meatloaf",
+      "success": true,
+      "duration": 9845,
+      "recipe": {
+        "title": "Easy Meatloaf Recipe (with Video)",
+        "ingredients": [
+          "1 1/2 pounds ground beef",
+          "1 cup milk",
+          "1 cup bread crumbs",
+          "1/2 cup chopped onion",
+          "1/2 cup ketchup",
+          "2 eggs",
+          "1 teaspoon salt",
+          "1/2 teaspoon ground black pepper",
+          "1/2 teaspoon garlic powder"
+        ],
+        "steps": [
+          "Preheat the oven to 350°F (175°C).",
+          "In a large bowl, combine all ingredients and mix well.",
+          "Shape the mixture into a loaf and place it in a baking dish.",
+          "Bake for 1 hour or until the internal temperature reaches 160°F (70°C).",
+          "Let it rest for 10 minutes before slicing."
+        ],
+        "image": "https://www.allrecipes.com/thmb/iLAfLvIq4cqfEB3pA8AoNCGxrwE=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/16354-easy-meatloaf-DDMFS-0036-5186-hero-2x1-36abc71abb0b436b9ce8eebef460f3f8.jpg",
+        "description": "This meatloaf recipe is easy to make and doesn't take long to prep. It's one of our best recipes that's been made over 8,000 times and never disappoints!",
+        "cuisine": "American",
+        "category": "Main Dishes",
+        "prepTime": "15 minutes",
+        "cleanupTime": "10 minutes"
+      },
+      "hasRealData": true
+    },
+    {
+      "site": "AllRecipes",
+      "url": "https://www.allrecipes.com/recipe/231506/simple-macaroni-and-cheese",
+      "success": false,
+      "duration": 0,
+      "error": "API Error (500): Failed to fetch webpage: 404 Not Found",
+      "hasRealData": false
+    },
+    {
+      "site": "AllRecipes",
+      "url": "https://www.allrecipes.com/recipe/10813/best-chocolate-chip-cookies",
+      "success": true,
+      "duration": 11296,
+      "recipe": {
+        "title": "Best Chocolate Chip Cookies",
+        "ingredients": [
+          "2 1/4 cups all-purpose flour",
+          "1/2 teaspoon baking soda",
+          "1 cup unsalted butter, at room temperature",
+          "1/2 cup granulated sugar",
+          "1 cup packed light-brown sugar",
+          "1 teaspoon coarse salt",
+          "2 teaspoons pure vanilla extract",
+          "2 large eggs",
+          "2 cups semisweet and/or milk chocolate chips"
+        ],
+        "steps": [
+          "Preheat oven to 350°F (180°C).",
+          "In a small bowl, whisk together flour and baking soda; set aside.",
+          "In a large bowl, using an electric mixer, cream butter and sugars on medium speed until light and fluffy, about 2 minutes.",
+          "Add salt, vanilla, and eggs; beat until well combined.",
+          "Gradually add flour mixture; mix until just combined.",
+          "Stir in chocolate chips.",
+          "Drop dough by rounded tablespoons onto baking sheets, spacing them about 2 inches apart.",
+          "Bake until cookies are golden brown, about 12-15 minutes.",
+          "Let cool on baking sheets for 5 minutes before transferring to wire racks to cool completely."
+        ],
+        "image": "https://www.allrecipes.com/thmb/tE0hu3yYOGBJpQ9X_govmxWcTGY=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/4462051_Best-Chocolate-Chip-Cookies-2x1-1-b196424f3d6c441c94e22c5cd58303c0.jpg",
+        "description": "This classic chocolate chip cookie recipe makes deliciously buttery cookies with crisp edges, chewy middles, and gooey chocolate chips in every bite.",
+        "cuisine": "American",
+        "category": "Dessert",
+        "prepTime": "15 minutes",
+        "cleanupTime": "10 minutes"
+      },
+      "hasRealData": true
+    },
+    {
+      "site": "Bon Appétit",
+      "url": "https://www.bonappetit.com/recipe/bas-best-chocolate-chip-cookies",
+      "success": true,
+      "duration": 19547,
+      "recipe": {
+        "title": "BA’s Best Chocolate Chip Cookies",
+        "ingredients": [
+          "1½ cups plus 1 Tbsp. (200 g) all-purpose flour",
+          "1¼ tsp. (4 g) Diamond Crystal or ¾ tsp. (4 g) Morton kosher salt",
+          "¾ tsp. (4 g) baking soda",
+          "¾ cup (1½ sticks; 169 g) unsalted butter, divided",
+          "1 cup (200 g) (packed) dark brown sugar",
+          "¼ cup (50 g) granulated sugar",
+          "1 large egg",
+          "2 large egg yolks",
+          "2 tsp. vanilla extract",
+          "6 oz. (170 g) bittersweet chocolate (60%–70% cacao), coarsely chopped, or semisweet chocolate chips"
+        ],
+        "steps": [
+          "Place racks in upper and lower thirds of oven; preheat to 375°. Whisk 1½ cups plus 1 Tbsp. (200 g) all-purpose flour, 1¼ tsp. (4 g) Diamond Crystal or ¾ tsp. (4 g) Morton kosher salt, and ¾ tsp. (4 g) baking soda in a small bowl; set flour mixture aside.",
+          "Cook ½ cup (1 stick; 113 g) unsalted butter in a large saucepan over medium heat, swirling often and scraping bottom of pan with a heatproof rubber spatula, until butter foams, then browns, about 4 minutes. Scrape melted butter and any brown bits to a large heatproof mixing bowl and let cool 1 minute. Cut remaining ¼ cup (½ stick; 56 g) unsalted butter into small pieces and add to brown butter (it should start to melt but not foam and sizzle, so test with one piece before adding the rest).",
+          "Once butter is melted, add 1 cup (200 g) (packed) dark brown sugar and ¼ cup (50 g) granulated sugar and whisk, breaking up any clumps, until sugar is incorporated and no lumps remain. Add 1 large egg and 2 large egg yolks and whisk until sugar dissolves and mixture is smooth, about 30 seconds. Whisk in 2 tsp. vanilla extract. Using rubber spatula, fold reserved dry ingredients into butter mixture just until no dry spots remain, then fold in 6 oz. (170 g) bittersweet chocolate (60%–70% cacao), coarsely chopped, or semisweet chocolate chips (the cookie dough will be soft but should hold its shape once scooped; if it slumps or oozes after being scooped, stir dough back together several times and let rest 5–10 minutes until scoops hold their shape as the flour hydrates).",
+          "Using a 1½-oz. scoop (3 Tbsp.), portion out 16 balls of dough and divide between 2 parchment-paper-lined rimmed baking sheets. Bake cookies, rotating sheets if cookies are browning very unevenly (otherwise, just leave them alone), until deep golden brown and firm around the edges, 8–10 minutes. Let cool on baking sheets."
+        ],
+        "image": "https://assets.bonappetit.com/photos/5ca534485e96521ff23b382b/1:1/w_2560,c_limit/chocolate-chip-cookie.jpg",
+        "description": "This recipe for brown-butter chocolate chip cookies delivers on a promise of crispy edges, a chewy center, and plenty of chocolate chunks in every bite.",
+        "cuisine": "American",
+        "category": "Dessert",
+        "prepTime": "40 minutes",
+        "cleanupTime": "null"
+      },
+      "hasRealData": true
+    },
+    {
+      "site": "Bon Appétit",
+      "url": "https://www.bonappetit.com/recipe/perfect-buttermilk-pancakes",
+      "success": false,
+      "duration": 0,
+      "error": "API Error (500): Failed to fetch webpage: 404 Not Found",
+      "hasRealData": false
+    },
+    {
+      "site": "Bon Appétit",
+      "url": "https://www.bonappetit.com/recipe/classic-caesar-salad",
+      "success": true,
+      "duration": 12559,
+      "recipe": {
+        "title": "Classic Caesar Salad",
+        "ingredients": [
+          "6 anchovy fillets packed in oil, drained",
+          "1 small garlic clove",
+          "Kosher salt",
+          "2 large egg yolks",
+          "2 Tbsp. fresh lemon juice, plus more",
+          "¾ tsp. Dijon mustard",
+          "2 Tbsp. extra-virgin olive oil",
+          "½ cup vegetable oil",
+          "3 Tbsp. finely grated Parmesan",
+          "Freshly ground black pepper",
+          "3 cups torn 1\" pieces country bread, with crusts",
+          "3 Tbsp. extra-virgin olive oil",
+          "Kosher salt, freshly ground black pepper",
+          "3 romaine hearts, leaves separated",
+          "Parmesan, for serving"
+        ],
+        "steps": [
+          "Chop together 6 anchovy fillets, 1 small garlic clove, and a pinch of kosher salt. Use the side of a knife blade to mash into an anchovy paste, then scrape into a medium bowl. Whisk in 2 large egg yolks, 2 Tbsp. fresh lemon juice, and ¾ tsp. Dijon mustard. Gradually whisk in 2 Tbsp. extra-virgin olive oil, then ½ cup vegetable oil; whisk until dressing is thick and glossy. Whisk in 3 Tbsp. finely grated Parmesan. Season with salt, freshly ground pepper, and more lemon juice, if desired.",
+          "Preheat oven to 375°. Toss 3 cups torn 1\" pieces country bread with 3 Tbsp. extra-virgin olive oil on a baking sheet; season with kosher salt and freshly ground pepper. Bake, tossing occasionally, until golden, 10–15 minutes.",
+          "Place 3 romaine hearts in a large bowl. Use a vegetable peeler to thinly shave Parmesan on a plate. Use your hands to gently toss together the lettuce, croutons, and dressing. Top with the shaved Parmesan."
+        ],
+        "image": "https://assets.bonappetit.com/photos/624215f8a76f02a99b29518f/1:1/w_2560,c_limit/0328-ceasar-salad-lede.jpg",
+        "description": "A great Caesar salad recipe like this one gets its swagger from cold and crisp greens, a creamy and briny dressing, and freshly made croutons.",
+        "cuisine": "Italian American",
+        "category": "Salad",
+        "prepTime": "20 minutes",
+        "cleanupTime": "null"
+      },
+      "hasRealData": true
+    },
+    {
+      "site": "King Arthur Baking",
+      "url": "https://www.kingarthurbaking.com/recipes/chocolate-chip-cookies-recipe",
+      "success": true,
+      "duration": 6635,
+      "recipe": {
+        "title": "Classic Chocolate Chip Cookies",
+        "ingredients": [
+          "butter",
+          "sugar",
+          "brown sugar",
+          "eggs",
+          "vanilla extract",
+          "all-purpose flour",
+          "baking soda",
+          "salt",
+          "chocolate chips"
+        ],
+        "steps": [
+          "Preheat the oven to 350°F (175°C).",
+          "In a bowl, cream together the butter, sugar, and brown sugar until smooth.",
+          "Beat in the eggs one at a time, then stir in the vanilla.",
+          "Combine the flour, baking soda, and salt; gradually blend into the creamed mixture.",
+          "Stir in the chocolate chips.",
+          "Drop by rounded spoonfuls onto ungreased pans.",
+          "Bake for 12 minutes or until edges are golden.",
+          "Cool on wire racks."
+        ],
+        "image": "https://www.kingarthurbaking.com/sites/default/files/recipe_legacy/6-3-large.jpg",
+        "description": "These homemade chocolate chip cookies are packed with chips and loaded with buttery flavor. They walk the line nicely between crunchy and chewy: the edges are crisp, while the center is 'bendy.'",
+        "cuisine": "American",
+        "category": "Cookies",
+        "prepTime": "12 mins",
+        "cleanupTime": "12 mins"
+      },
+      "hasRealData": true
+    },
+    {
+      "site": "King Arthur Baking",
+      "url": "https://www.kingarthurbaking.com/recipes/classic-sandwich-bread-recipe",
+      "success": true,
+      "duration": 4991,
+      "recipe": {
+        "title": "Classic Sandwich Bread",
+        "ingredients": [
+          "butter",
+          "milk",
+          "high-quality flour"
+        ],
+        "steps": [
+          "Combine all ingredients and knead the dough.",
+          "Let the dough rise until doubled in size.",
+          "Shape the dough into a loaf and place it in a pan.",
+          "Let it rise again before baking.",
+          "Bake in the oven until golden brown."
+        ],
+        "image": "https://www.kingarthurbaking.com/sites/default/files/2019-08/classic-sandwich-bread.jpg",
+        "description": "Made with all of the ingredients that make homemade white bread superior to storebought — butter, milk, and high-quality flour — this sandwich bread recipe is our version of a classic, perfected.",
+        "cuisine": "American",
+        "category": "Bread",
+        "prepTime": "12 mins",
+        "cleanupTime": "30 mins"
+      },
+      "hasRealData": true
+    },
+    {
+      "site": "King Arthur Baking",
+      "url": "https://www.kingarthurbaking.com/recipes/perfectly-pillowy-cinnamon-rolls-recipe",
+      "success": true,
+      "duration": 5759,
+      "recipe": {
+        "title": "Perfectly Pillowy Cinnamon Rolls",
+        "ingredients": [],
+        "steps": [],
+        "image": "https://www.kingarthurbaking.com/sites/default/files/2020-12/perfectly-pillowy-cinnamon-rolls.jpg",
+        "description": "Paired with classic bold cinnamon flavor and rich vanilla icing, the result is truly the ultimate cinnamon rolls. Make this cinnamon roll recipe with King Arthur Baking Company today.",
+        "cuisine": "American",
+        "category": "Buns & Rolls",
+        "prepTime": "30 mins",
+        "cleanupTime": "15 to 18 mins"
+      },
+      "hasRealData": false
+    },
+    {
+      "site": "Delish",
+      "url": "https://www.delish.com/cooking/recipe-ideas/a19636089/best-chocolate-chip-cookies-recipe",
+      "success": true,
+      "duration": 8895,
+      "recipe": {
+        "title": "Creamy Tuscan Chicken",
+        "ingredients": [
+          "1 Tbsp. extra-virgin olive oil",
+          "4 boneless skinless chicken breasts",
+          "Kosher salt",
+          "Freshly ground black pepper",
+          "1 tsp. dried oregano",
+          "3 Tbsp. butter",
+          "3 cloves garlic, minced",
+          "1 1/2 cups cherry tomatoes, halved",
+          "3 cups baby spinach",
+          "1/2 cup heavy cream",
+          "1/4 cup freshly grated Parmesan",
+          "Lemon wedges, for serving"
+        ],
+        "steps": [
+          "In a skillet over medium heat, heat oil. Add chicken and season with salt, pepper, and oregano. Cook until golden and no longer pink, 8 minutes per side. Remove from skillet and set aside.",
+          "In the same skillet over medium heat, melt butter. Stir in garlic and cook until fragrant, about 1 minute. Add cherry tomatoes and season with salt and pepper. Cook until tomatoes are beginning to burst then add spinach and cook until spinach is beginning to wilt.",
+          "Stir in heavy cream and parmesan and bring mixture to a simmer. Reduce heat to low and simmer until sauce is slightly reduced, about 3 minutes. Return chicken to skillet and cook until heated through, 5 to 7 minutes.",
+          "Serve with lemon wedges."
+        ],
+        "image": "https://hips.hearstapps.com/hmg-prod/images/creamy-tuscan-chicken-index-6583ac66027fc.jpeg?crop=1.00xw:0.892xh;0,0.0369xh&resize=1200:*",
+        "description": "This skillet chicken dinner pairs chicken breasts with a bright and creamy sauce, spinach, and baby tomatoes for a quick and easy dinner dream.",
+        "cuisine": "Italian",
+        "category": "Dinner",
+        "prepTime": "5 mins",
+        "cleanupTime": "40 mins"
+      },
+      "hasRealData": true
+    },
+    {
+      "site": "Delish",
+      "url": "https://www.delish.com/cooking/recipe-ideas/a26950912/chicken-parmesan-recipe",
+      "success": true,
+      "duration": 17932,
+      "recipe": {
+        "title": "Spicy Salmon Bowls",
+        "ingredients": [
+          "4 garlic cloves, minced",
+          "1/3 cup extra-virgin olive oil",
+          "1/3 cup reduced-sodium soy sauce",
+          "1/4 cup chili garlic sauce",
+          "Juice of 1 lime",
+          "2 Tbsp. honey",
+          "4 (4-oz.) salmon fillets",
+          "1/2 cup rice vinegar or rice wine vinegar",
+          "1 Tbsp. granulated sugar",
+          "1 tsp. kosher salt",
+          "2 tsp. toasted sesame oil",
+          "3 Persian cucumbers, thinly sliced",
+          "1/2 cup mayonnaise",
+          "2 Tbsp. Sriracha",
+          "2 tsp. toasted sesame oil",
+          "4 cups cooked brown rice",
+          "1 avocado, thinly sliced",
+          "1 medium carrot, finely grated",
+          "1/2 red onion, thinly sliced",
+          "Torn fresh cilantro leaves and toasted sesame seeds, for serving"
+        ],
+        "steps": [
+          "Arrange a rack in center of oven; preheat to 350°. Line a large baking sheet with foil. In a medium bowl, whisk garlic, soy sauce, olive oil, chili garlic sauce, lime juice, honey, and garlic. Add salmon and gently toss to combine. Place on a large foil-lined baking sheet.",
+          "Bake salmon until fork-tender, 20 to 25 minutes.",
+          "In a medium heatproof bowl or jar, microwave vinegar, sugar, and salt until sugar and salt are dissolved, about 2 minutes.",
+          "Stir in sesame oil, then add cucumbers and shake to combine. Cover with a tight-fitting lid or plastic wrap and let sit at room temperature until ready to use.",
+          "In a small bowl, combine mayonnaise, Sriracha, and sesame oil.",
+          "Divide rice among bowls. Top with salmon, pickled cucumbers, avocado, carrot, onion, cilantro, and sesame seeds. Drizzle with spicy mayo."
+        ],
+        "image": "https://hips.hearstapps.com/hmg-prod/images/spicy-salmon-bowl-index-664d1c1c79fbe.jpeg?crop=1xw:0.8884150675195451xh;center,top&resize=1200:*",
+        "description": "With plenty of veggies and spicy mayo, this spicy salmon bowl is the most stunning and nutritious lunch (or dinner) you could imagine.",
+        "cuisine": "Asian",
+        "category": "Main Course",
+        "prepTime": "20 mins",
+        "cleanupTime": "null"
+      },
+      "hasRealData": true
+    },
+    {
+      "site": "Delish",
+      "url": "https://www.delish.com/cooking/recipe-ideas/a54848/banana-bread-recipe",
+      "success": false,
+      "duration": 0,
+      "error": "API Error (500): [\n  {\n    \"code\": \"invalid_type\",\n    \"expected\": \"string\",\n    \"received\": \"null\",\n    \"path\": [\n      \"cuisine\"\n    ],\n    \"message\": \"Expected string, received null\"\n  },\n  {\n    \"code\": \"invalid_type\",\n    \"expected\": \"string\",\n    \"received\": \"null\",\n    \"path\": [\n      \"prepTime\"\n    ],\n    \"message\": \"Expected string, received null\"\n  },\n  {\n    \"code\": \"invalid_type\",\n    \"expected\": \"string\",\n    \"received\": \"null\",\n    \"path\": [\n      \"cleanupTime\"\n    ],\n    \"message\": \"Expected string, received null\"\n  }\n]",
+      "hasRealData": false
+    },
+    {
+      "site": "Taste of Home",
+      "url": "https://www.tasteofhome.com/recipes/chocolate-chip-cookies",
+      "success": false,
+      "duration": 0,
+      "error": "API Error (500): Failed to fetch webpage: 404 Not Found",
+      "hasRealData": false
+    },
+    {
+      "site": "Taste of Home",
+      "url": "https://www.tasteofhome.com/recipes/classic-beef-stew",
+      "success": true,
+      "duration": 14606,
+      "recipe": {
+        "title": "The Best Beef Stew",
+        "ingredients": [
+          "1-1/2 pounds beef stew meat, cut into 1-inch cubes",
+          "1/2 teaspoon salt, divided",
+          "6 tablespoons all-purpose flour, divided",
+          "1/2 teaspoon smoked paprika",
+          "1 tablespoon canola oil",
+          "3 tablespoons tomato paste",
+          "2 teaspoons herbes de Provence",
+          "2 garlic cloves, minced",
+          "2 cups dry red wine",
+          "2 cups beef broth",
+          "1-1/2 teaspoons minced fresh rosemary, divided",
+          "2 bay leaves",
+          "3 cups cubed peeled potatoes",
+          "3 cups coarsely chopped onions (about 2 large)",
+          "2 cups sliced carrots",
+          "2 tablespoons cold water",
+          "2 tablespoons balsamic or red wine vinegar",
+          "1 cup fresh or frozen peas",
+          "Additional fresh rosemary, optional"
+        ],
+        "steps": [
+          "In a small bowl, toss beef and 1/4 teaspoon salt. In a large bowl, combine 4 tablespoons flour and paprika. Add beef, a few pieces at a time, and toss to coat.",
+          "In a Dutch oven, brown beef in oil over medium heat. Stir in tomato paste, herbes de Provence and garlic; cook until fragrant and color starts to darken slightly. Add wine and cook until mixture just comes to a boil. Simmer until reduced by half, about 5 minutes. Stir in broth, 1 teaspoon rosemary and bay leaves. Bring to a boil. Reduce heat; cover and simmer until meat is almost tender, about 1-1/2 hours.",
+          "Add potatoes, onions and carrots. Cover; simmer until meat and vegetables are tender, about 30 minutes longer.",
+          "Discard bay leaves. In a small bowl, combine remaining 1/2 teaspoon rosemary, remaining 1/4 teaspoon salt and remaining 2 tablespoon flour. Add cold water and vinegar; stir until smooth. Stir into stew. Bring to a boil; add peas. Cook, stirring, until thickened, about 2 minutes. If desired, top with additional fresh rosemary."
+        ],
+        "image": "https://www.tasteofhome.com/wp-content/uploads/2024/09/The-Best-Beef-Stew_EXPS_FT24_242973_EC_0823_9.jpg",
+        "description": "Treat yourself to an oh-so-satisfying Sunday dinner with our best beef stew recipe. The secret to this stew's success is the balsamic vinegar, which adds complexity and brightens up the beefy, wine-rich broth.",
+        "cuisine": "American",
+        "category": "Stews",
+        "prepTime": "30 min",
+        "cleanupTime": "2 hours"
+      },
+      "hasRealData": true
+    },
+    {
+      "site": "Taste of Home",
+      "url": "https://www.tasteofhome.com/recipes/homemade-chicken-noodle-soup",
+      "success": false,
+      "duration": 0,
+      "error": "API Error (500): Failed to fetch webpage: 404 Not Found",
+      "hasRealData": false
+    },
+    {
+      "site": "Simply Recipes",
+      "url": "https://www.simplyrecipes.com/recipes/chocolate_chip_cookies",
+      "success": true,
+      "duration": 9567,
+      "recipe": {
+        "title": "Chewy Chocolate Chip Cookies",
+        "ingredients": [
+          "1 cup unsalted butter, softened",
+          "1 cup brown sugar, packed",
+          "1/2 cup granulated sugar",
+          "2 large eggs",
+          "2 teaspoons vanilla extract",
+          "3 cups all-purpose flour",
+          "1 teaspoon baking soda",
+          "1/2 teaspoon salt",
+          "2 cups chocolate chips"
+        ],
+        "steps": [
+          "Preheat the oven to 350°F (175°C).",
+          "In a large bowl, cream together the butter, brown sugar, and granulated sugar until smooth.",
+          "Beat in the eggs one at a time, then stir in the vanilla.",
+          "Combine the flour, baking soda, and salt; gradually blend into the creamed mixture.",
+          "Stir in the chocolate chips.",
+          "Drop by large spoonfuls onto ungreased pans.",
+          "Bake for 10 to 12 minutes in the preheated oven, or until edges are nicely browned."
+        ],
+        "image": "https://www.simplyrecipes.com/thmb/ew6Aq_nxR1iOazMJlG-mnFNtRb4=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/__opt__aboutcom__coeus__resources__content_migration__simply_recipes__uploads__2018__04__2017-06-13-ChocolateChipCookies-16b-794dd62f975047fb873d547b17ac2dcd.jpg",
+        "description": "A special ingredient makes these the chewiest ever!",
+        "cuisine": "American",
+        "category": "Dessert",
+        "prepTime": "15 minutes",
+        "cleanupTime": "10 minutes"
+      },
+      "hasRealData": true
+    },
+    {
+      "site": "Simply Recipes",
+      "url": "https://www.simplyrecipes.com/recipes/basic_pancakes",
+      "success": false,
+      "duration": 0,
+      "error": "API Error (500): Failed to fetch webpage: 404 Not Found",
+      "hasRealData": false
+    },
+    {
+      "site": "Simply Recipes",
+      "url": "https://www.simplyrecipes.com/recipes/perfect_hard_boiled_eggs",
+      "success": false,
+      "duration": 0,
+      "error": "API Error (500): Failed to fetch webpage: 404 Not Found",
+      "hasRealData": false
+    },
+    {
+      "site": "Food & Wine",
+      "url": "https://www.foodandwine.com/recipes/chocolate-chip-cookies",
+      "success": false,
+      "duration": 0,
+      "error": "API Error (500): Failed to fetch webpage: 404 Not Found",
+      "hasRealData": false
+    },
+    {
+      "site": "Food & Wine",
+      "url": "https://www.foodandwine.com/recipes/classic-beef-bourguignon",
+      "success": false,
+      "duration": 0,
+      "error": "API Error (500): Failed to fetch webpage: 404 Not Found",
+      "hasRealData": false
+    },
+    {
+      "site": "Food & Wine",
+      "url": "https://www.foodandwine.com/recipes/perfect-roast-chicken",
+      "success": false,
+      "duration": 0,
+      "error": "API Error (500): Failed to fetch webpage: 404 Not Found",
+      "hasRealData": false
+    },
+    {
+      "site": "Epicurious",
+      "url": "https://www.epicurious.com/recipes/food/views/chocolate-chip-cookies-109567",
+      "success": false,
+      "duration": 0,
+      "error": "API Error (500): Failed to fetch webpage: 404 Not Found",
+      "hasRealData": false
+    },
+    {
+      "site": "Epicurious",
+      "url": "https://www.epicurious.com/recipes/food/views/classic-beef-stew-51160420",
+      "success": false,
+      "duration": 0,
+      "error": "API Error (500): Failed to fetch webpage: 404 Not Found",
+      "hasRealData": false
+    },
+    {
+      "site": "Epicurious",
+      "url": "https://www.epicurious.com/recipes/food/views/perfect-roast-chicken-51164760",
+      "success": false,
+      "duration": 0,
+      "error": "API Error (500): Failed to fetch webpage: 404 Not Found",
+      "hasRealData": false
+    },
+    {
+      "site": "BBC Good Food",
+      "url": "https://www.bbcgoodfood.com/recipes/chocolate-chip-cookies",
+      "success": true,
+      "duration": 5603,
+      "recipe": {
+        "title": "Easy chocolate chip cookies",
+        "ingredients": [],
+        "steps": [],
+        "image": "https://images.immediate.co.uk/production/volatile/sites/30/2020/08/chocolate-chunk-cookies_0-6f27241.jpg?quality=90",
+        "description": "Learn how to make classic chocolate chip cookies and enjoy them still warm from the oven. Perfect for a bake sale or with your afternoon tea.",
+        "cuisine": "Vegetarian",
+        "category": "Dessert",
+        "prepTime": "20 mins",
+        "cleanupTime": "12 mins"
+      },
+      "hasRealData": false
+    },
+    {
+      "site": "BBC Good Food",
+      "url": "https://www.bbcgoodfood.com/recipes/classic-beef-stew",
+      "success": false,
+      "duration": 0,
+      "error": "API Error (500): Failed to fetch webpage: 404 Not Found",
+      "hasRealData": false
+    },
+    {
+      "site": "BBC Good Food",
+      "url": "https://www.bbcgoodfood.com/recipes/perfect-roast-chicken",
+      "success": false,
+      "duration": 0,
+      "error": "API Error (500): Failed to fetch webpage: 404 Not Found",
+      "hasRealData": false
+    },
+    {
+      "site": "Jamie Oliver",
+      "url": "https://www.jamieoliver.com/recipes/chocolate-recipes/chocolate-chip-cookies",
+      "success": true,
+      "duration": 9292,
+      "recipe": {
+        "title": "Easy chocolate chip cookies recipe",
+        "ingredients": [
+          "butter",
+          "sugar",
+          "brown sugar",
+          "vanilla extract",
+          "eggs",
+          "flour",
+          "baking soda",
+          "salt",
+          "chocolate chips"
+        ],
+        "steps": [
+          "Preheat the oven to 180°C (350°F).",
+          "In a bowl, cream together the butter, sugar, and brown sugar until smooth.",
+          "Beat in the vanilla and eggs until fluffy.",
+          "In another bowl, combine the flour, baking soda, and salt.",
+          "Gradually blend the dry ingredients into the wet mixture.",
+          "Stir in the chocolate chips.",
+          "Drop spoonfuls of dough onto a baking sheet.",
+          "Bake for 10-12 minutes or until golden brown."
+        ],
+        "image": "https://cdn.sanity.io/images/cq7w2e71/production/1af19886e4f4a26dd6fefe108c1142f4c30a6554-957x1279.jpg",
+        "description": "A really easy chocolate chip cookies recipe from Jamie Oliver; a go-to favourite dessert, perfect for any occasion.",
+        "cuisine": "American",
+        "category": "Dessert",
+        "prepTime": "15 mins",
+        "cleanupTime": "10 mins"
+      },
+      "hasRealData": true
+    },
+    {
+      "site": "Jamie Oliver",
+      "url": "https://www.jamieoliver.com/recipes/beef-recipes/beef-stew",
+      "success": true,
+      "duration": 5308,
+      "recipe": {
+        "title": "Easy beef stew recipe",
+        "ingredients": [
+          "shallots",
+          "tomatoes",
+          "Worcestershire sauce"
+        ],
+        "steps": [],
+        "image": "https://cdn.sanity.io/images/cq7w2e71/production/c77fdbed3fad083e22369d68714b3d6916f7c0ed-958x1280.png",
+        "description": "An easy beef stew recipe from Jamie magazine, with shallots, tomatoes and Worcestershire sauce. A great slow cooked beef stew recipe for the whole family.",
+        "cuisine": "British",
+        "category": "stew",
+        "prepTime": "1 hr 45 mins",
+        "cleanupTime": "unknown"
+      },
+      "hasRealData": false
+    },
+    {
+      "site": "Jamie Oliver",
+      "url": "https://www.jamieoliver.com/recipes/chicken-recipes/perfect-roast-chicken",
+      "success": false,
+      "duration": 0,
+      "error": "API Error (500): [\n  {\n    \"code\": \"invalid_type\",\n    \"expected\": \"string\",\n    \"received\": \"null\",\n    \"path\": [\n      \"cuisine\"\n    ],\n    \"message\": \"Expected string, received null\"\n  },\n  {\n    \"code\": \"invalid_type\",\n    \"expected\": \"string\",\n    \"received\": \"null\",\n    \"path\": [\n      \"category\"\n    ],\n    \"message\": \"Expected string, received null\"\n  },\n  {\n    \"code\": \"invalid_type\",\n    \"expected\": \"string\",\n    \"received\": \"null\",\n    \"path\": [\n      \"prepTime\"\n    ],\n    \"message\": \"Expected string, received null\"\n  },\n  {\n    \"code\": \"invalid_type\",\n    \"expected\": \"string\",\n    \"received\": \"null\",\n    \"path\": [\n      \"cleanupTime\"\n    ],\n    \"message\": \"Expected string, received null\"\n  }\n]",
+      "hasRealData": false
+    },
+    {
+      "site": "Martha Stewart",
+      "url": "https://www.marthastewart.com/recipe/chocolate-chip-cookies",
+      "success": true,
+      "duration": 7731,
+      "recipe": {
+        "title": "Soft and Chewy Chocolate Chip Cookies",
+        "ingredients": [
+          "unsalted butter",
+          "brown sugar",
+          "granulated sugar",
+          "chocolate chips"
+        ],
+        "steps": [
+          "Preheat the oven and prepare the baking sheets.",
+          "Mix the butter and sugars until creamy, then add eggs and vanilla.",
+          "Combine the dry ingredients and gradually mix into the wet ingredients.",
+          "Fold in the chocolate chips.",
+          "Scoop the dough onto the prepared baking sheets.",
+          "Bake until golden brown and let cool."
+        ],
+        "image": "https://www.marthastewart.com/thmb/9iXs_arsr0B46BIPUksHskMVcP4=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/soft-chewy-chocolate-chip-cookies-horiz-3-0723-4ac1fb6c9b274fa29677731366a36ec3.jpg",
+        "description": "This easy chocolate chip cookie recipe is sure to become your go-to. Our recipe makes the most irresistible, chewy, and soft chocolate chip cookies.",
+        "cuisine": "American",
+        "category": "Dessert",
+        "prepTime": "20 mins",
+        "cleanupTime": "10 mins"
+      },
+      "hasRealData": true
+    },
+    {
+      "site": "Martha Stewart",
+      "url": "https://www.marthastewart.com/recipe/classic-beef-stew",
+      "success": false,
+      "duration": 0,
+      "error": "API Error (500): Failed to fetch webpage: 404 Not Found",
+      "hasRealData": false
+    },
+    {
+      "site": "Martha Stewart",
+      "url": "https://www.marthastewart.com/recipe/perfect-roast-chicken",
+      "success": true,
+      "duration": 8231,
+      "recipe": {
+        "title": "Perfect Roast Chicken",
+        "ingredients": [
+          "1 whole chicken",
+          "Salt",
+          "Pepper",
+          "Olive oil",
+          "Herbs (optional)"
+        ],
+        "steps": [
+          "Preheat the oven to 425°F (220°C).",
+          "Season the chicken with salt and pepper, and drizzle with olive oil.",
+          "Place the chicken in a roasting pan and roast for about 1 hour, or until the internal temperature reaches 165°F (75°C).",
+          "Let the chicken rest for 10-15 minutes before carving."
+        ],
+        "image": "https://www.marthastewart.com/thmb/iOLZs67uFNrQx_34WATK7FuoJfc=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/MSL-356165-perfect-roast-chicken-hero-horiz-0723jpg-b006c10772a7474db113e0c7766591b1.jpg",
+        "description": "This roast chicken recipe is a classic for a reason: It’s simple, succulent, comforting, and versatile, with golden-brown crackling skin and juicy, tender meat.",
+        "cuisine": "American",
+        "category": "Main Dish",
+        "prepTime": "15 minutes",
+        "cleanupTime": "10 minutes"
+      },
+      "hasRealData": true
+    },
+    {
+      "site": "Food Network",
+      "url": "https://www.foodnetwork.com/recipes/food-network-kitchen/chocolate-chip-cookies-recipe-2107719",
+      "success": false,
+      "duration": 0,
+      "error": "API Error (500): Failed to fetch webpage: 403 Forbidden",
+      "hasRealData": false
+    },
+    {
+      "site": "Food Network",
+      "url": "https://www.foodnetwork.com/recipes/tyler-florence/beef-stew-recipe-1914647",
+      "success": false,
+      "duration": 0,
+      "error": "API Error (500): Failed to fetch webpage: 403 Forbidden",
+      "hasRealData": false
+    },
+    {
+      "site": "Food Network",
+      "url": "https://www.foodnetwork.com/recipes/ina-garten/perfect-roast-chicken-recipe-1940592",
+      "success": false,
+      "duration": 0,
+      "error": "API Error (500): Failed to fetch webpage: 403 Forbidden",
+      "hasRealData": false
+    },
+    {
+      "site": "Serious Eats",
+      "url": "https://www.seriouseats.com/recipes/2013/12/the-food-lab-best-chocolate-chip-cookie-recipe.html",
+      "success": true,
+      "duration": 12901,
+      "recipe": {
+        "title": "The Food Lab's Chocolate Chip Cookies Recipe",
+        "ingredients": [
+          "browned butter",
+          "chocolate chips",
+          "sugar",
+          "brown sugar",
+          "eggs",
+          "vanilla extract",
+          "flour",
+          "baking soda",
+          "salt"
+        ],
+        "steps": [
+          "Preheat the oven to 350°F (175°C).",
+          "In a bowl, mix the browned butter with sugars until smooth.",
+          "Add eggs and vanilla, mixing until combined.",
+          "In another bowl, whisk together flour, baking soda, and salt.",
+          "Gradually add the dry ingredients to the wet ingredients.",
+          "Fold in the chocolate chips.",
+          "Scoop dough onto a baking sheet and bake for 10-12 minutes."
+        ],
+        "image": "https://www.seriouseats.com/thmb/FczZZZ5SRlgoTKm1A9nB54LTPTc=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/__opt__aboutcom__coeus__resources__content_migration__serious_eats__seriouseats.com__recipes__images__2015__12__20131213-chocolate-chip-cookies-food-lab-55-edit-04edd98fcca7457281abbf6eac559bfc.jpg",
+        "description": "Learn the secrets and science behind the best browned butter chocolate chip cookies in this classic recipe from The Food Lab.",
+        "cuisine": "American",
+        "category": "Dessert",
+        "prepTime": "15 minutes",
+        "cleanupTime": "10 minutes"
+      },
+      "hasRealData": true
+    },
+    {
+      "site": "Serious Eats",
+      "url": "https://www.seriouseats.com/recipes/2016/01/all-american-beef-stew-recipe.html",
+      "success": true,
+      "duration": 7561,
+      "recipe": {
+        "title": "All-American Beef Stew",
+        "ingredients": [
+          "tender beef",
+          "rich sauce",
+          "vegetables"
+        ],
+        "steps": [
+          "Coat beef in sauce.",
+          "Add vegetables and simmer."
+        ],
+        "image": "https://www.seriouseats.com/thmb/isPpUc519Z4cOrRbu6nvJTXVWGA=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/__opt__aboutcom__coeus__resources__content_migration__serious_eats__seriouseats.com__recipes__images__2016__01__20160116-american-beef-stew-recipe-34-bafc948f10ba4d49a8bfb1dd6502c911.jpg",
+        "description": "This all-American beef stew recipe includes tender beef coated in a rich, intense sauce and vegetables that bring complementary texture and flavor.",
+        "cuisine": "American",
+        "category": "Beef",
+        "prepTime": "30 minutes",
+        "cleanupTime": "15 minutes"
+      },
+      "hasRealData": true
+    },
+    {
+      "site": "Serious Eats",
+      "url": "https://www.seriouseats.com/recipes/2010/05/perfect-roast-chicken-recipe.html",
+      "success": false,
+      "duration": 0,
+      "error": "API Error (500): Failed to fetch webpage: 404 Not Found",
+      "hasRealData": false
+    },
+    {
+      "site": "Cookie and Kate",
+      "url": "https://cookieandkate.com/chocolate-chip-cookies-recipe",
+      "success": false,
+      "duration": 0,
+      "error": "API Error (500): Failed to fetch webpage: 404 Not Found",
+      "hasRealData": false
+    },
+    {
+      "site": "Cookie and Kate",
+      "url": "https://cookieandkate.com/vegetable-soup-recipe",
+      "success": true,
+      "duration": 11044,
+      "recipe": {
+        "title": "Seriously Good Vegetable Soup",
+        "ingredients": [
+          "4 tablespoons extra-virgin olive oil, divided",
+          "1 medium yellow or white onion, chopped",
+          "3 carrots, peeled and chopped",
+          "2 celery stalks, chopped",
+          "2 cups chopped seasonal vegetables, such as sweet potatoes, green beans, butternut squash, potatoes, bell pepper, zucchini or yellow squash",
+          "1 teaspoon fine sea salt, divided, to taste",
+          "6 cloves garlic, pressed or minced",
+          "1/2 teaspoon curry powder",
+          "1/2 teaspoon dried thyme",
+          "1 large can (28 ounces) diced tomatoes",
+          "4 cups (32 ounces) vegetable broth",
+          "2 cups water",
+          "2 bay leaves",
+          "1/2 teaspoon red pepper flakes, reduce or omit if sensitive to spice",
+          "Freshly ground black pepper, to taste",
+          "2 cups chopped kale or collard greens or chard (thick ribs removed), or spinach",
+          "1 tablespoon lemon juice"
+        ],
+        "steps": [
+          "Warm 3 tablespoons of the olive oil in a large Dutch oven or soup pot over medium heat. Once the oil is shimmering, add the chopped onion, carrot, celery, seasonal vegetables and 1/2 teaspoon of the salt. Cook, stirring often, until the onion has softened and is turning translucent, about 6 to 8 minutes.",
+          "Add the garlic, curry powder and thyme. Cook until fragrant while stirring frequently, about 1 minute. Pour in the diced tomatoes with their juices and cook for a few more minutes, stirring often.",
+          "Pour in the broth and water. Add 1/2 teaspoon more salt, 2 bay leaves and the red pepper flakes. Season generously with freshly ground black pepper. Raise the heat and bring the mixture to a boil, then partially cover the pot and reduce heat to maintain a gentle simmer.",
+          "Cook for 25 minutes, then remove the lid and add the chopped greens. Continue simmering for 5 minutes or more, until the greens have softened to your liking.",
+          "Remove the pot from heat and remove the bay leaves. Stir in the lemon juice and remaining 1 tablespoon of olive oil. Taste and season with more salt, pepper and/or red pepper flakes. (You might need up to 1/2 teaspoon more salt, depending on your vegetable broth and your personal preferences.) Divide into bowls and enjoy."
+        ],
+        "image": "https://cookieandkate.com/images/2019/11/best-vegetable-soup-recipe.jpg",
+        "description": "This vegetable soup recipe is seriously so good! It's easy to make, and full of healthy vegetables and fresh flavor. There's nothing 'blah' about it!",
+        "cuisine": "Mediterranean",
+        "category": "Soup",
+        "prepTime": "15 minutes",
+        "cleanupTime": "45 minutes"
+      },
+      "hasRealData": true
+    },
+    {
+      "site": "Cookie and Kate",
+      "url": "https://cookieandkate.com/best-banana-bread-recipe",
+      "success": false,
+      "duration": 0,
+      "error": "API Error (500): Failed to fetch webpage: 404 Not Found",
+      "hasRealData": false
+    },
+    {
+      "site": "Sally's Baking Addiction",
+      "url": "https://sallysbakingaddiction.com/chocolate-chip-cookies",
+      "success": true,
+      "duration": 14949,
+      "recipe": {
+        "title": "Soft Chocolate Chip Cookies",
+        "ingredients": [
+          "3/4 cup (12 Tbsp; 170g) unsalted butter, softened to room temperature",
+          "3/4 cup (150g) packed light or dark brown sugar",
+          "1/4 cup (50g) granulated sugar",
+          "1 large egg, at room temperature",
+          "2 teaspoons pure vanilla extract",
+          "2 cups (250g) all-purpose flour (spooned & leveled)",
+          "2 teaspoons cornstarch",
+          "1 teaspoon baking soda",
+          "1/2 teaspoon salt",
+          "1 and 1/4 cup (225g) semi-sweet chocolate chips"
+        ],
+        "steps": [
+          "In a large bowl using a handheld mixer or a stand mixer fitted with a paddle attachment, beat the butter, brown sugar, and sugar together on medium speed until combined and creamy, about 2 minutes. Beat in the egg and vanilla. Scrape down the sides and bottom of the bowl as needed.",
+          "In a separate bowl, whisk flour, cornstarch, baking soda, and salt together. Add into the wet ingredients, then beat on low speed until combined. The cookie dough will be slightly thick. On low speed, beat in the chocolate chips.",
+          "Cover dough tightly and chill in the refrigerator for at least 1 hour and up to 3–4 days. Chilling is imperative for this cookie dough.",
+          "Remove cookie dough from the refrigerator and allow to sit at room temperature for 10 minutes. Preheat oven to 350°F (177°C). Line 2 large baking sheets with parchment paper or silicone baking mats. Set aside.",
+          "Once chilled, the dough will be slightly crumbly, but will come together when you work the dough with your hands. Roll cookie dough, about a heaping 1.5 Tablespoons of dough per cookie, and place 3 inches apart on baking sheets.",
+          "Bake for 11–12 minutes, until barely golden brown around the edges. The cookies will look extremely soft when you remove them from the oven. Cool for 5 minutes on the baking sheet. If the cookies are too puffy, try gently pressing down on them with the back of a spoon. They will slightly deflate as you let them cool. If desired, while the cookies are still warm, press a few extra chocolate chips into the tops. This is optional, just for looks.",
+          "Transfer cookies to a cooling rack to cool completely. Cookies stay fresh covered at room temperature for up to 1 week."
+        ],
+        "image": "https://sallysbakingaddiction.com/wp-content/uploads/2012/08/warm-chocolate-chip-cookies.jpg",
+        "description": "I have a few tricks that make these the best soft chocolate chip cookies that you’ll ever try. With hundreds of positive reviews from bakers around the world, I’m confident you’ll fall in love with this chocolate chip cookie recipe too. Chilling the cookie dough is imperative and cornstarch makes them extra soft and thick!",
+        "cuisine": "American",
+        "category": "Dessert",
+        "prepTime": "1 hour, 15 minutes",
+        "cleanupTime": "12 minutes"
+      },
+      "hasRealData": true
+    },
+    {
+      "site": "Sally's Baking Addiction",
+      "url": "https://sallysbakingaddiction.com/homemade-bread",
+      "success": true,
+      "duration": 10503,
+      "recipe": {
+        "title": "Homemade Bread Bowls",
+        "ingredients": [
+          "2 packets Red Star® Active Dry Yeast (4 and 1/2 teaspoons)",
+          "2 and 1/4 cups warm water (110°F – 115°F)",
+          "2 teaspoons granulated sugar",
+          "2 teaspoons salt",
+          "2 Tablespoons olive oil",
+          "6 cups bread flour (spooned & leveled), plus more for hands and surface",
+          "egg wash: 1 large egg beaten with 1 Tablespoon water or milk"
+        ],
+        "steps": [
+          "Pour the warm water over yeast in the bowl of a stand mixer fitted with a dough hook attachment. Whisk together and allow to sit for 5 minutes.",
+          "With the stand mixer running on low speed, add the sugar, salt, olive oil, 4 cups of bread flour, and seasonings. Beat on low speed for 1 minute, then add remaining 2 cups of flour.",
+          "Knead the dough for 5-6 minutes until it is soft and slightly tacky.",
+          "Turn it out onto a lightly floured surface and form into a ball. Place into a greased bowl, cover, and let rise until doubled in size, about 90 minutes.",
+          "Once doubled, punch down the dough to release air bubbles. Cut into 6 even pieces and form each into a ball.",
+          "Place on prepared baking sheets and let rest for 20 minutes.",
+          "Preheat oven to 400°F (204°C). Brush each dough ball with egg wash and score an X into the tops.",
+          "Bake for 30 minutes or until golden brown.",
+          "Cool until ready to handle. Cut a large round out of the top of each bread bowl, scoop out the center, and fill with soup."
+        ],
+        "image": "https://sallysbakingaddiction.com/wp-content/uploads/2018/01/bread-bowl.jpg",
+        "description": "Homemade crusty and soft bread bowls- a delicious basic dinner roll recipe you should hold onto!",
+        "cuisine": "American",
+        "category": "Bread",
+        "prepTime": "2 hours",
+        "cleanupTime": "30 minutes"
+      },
+      "hasRealData": true
+    },
+    {
+      "site": "Sally's Baking Addiction",
+      "url": "https://sallysbakingaddiction.com/vanilla-cupcakes",
+      "success": false,
+      "duration": 0,
+      "error": "API Error (500): Failed to fetch webpage: 404 Not Found",
+      "hasRealData": false
+    },
+    {
+      "site": "The Pioneer Woman",
+      "url": "https://www.thepioneerwoman.com/food-cooking/recipes/a11738/chocolate-chip-cookies",
+      "success": true,
+      "duration": 12772,
+      "recipe": {
+        "title": "Sour Cream Noodle Bake",
+        "ingredients": [
+          "1 1/4 lb. ground chuck",
+          "1 15-oz. can tomato sauce",
+          "1/2 tsp. salt",
+          "Freshly ground black pepper",
+          "8 oz. egg noodles",
+          "1/2 cup sour cream",
+          "1 1/4 cups small curd cottage cheese",
+          "1/2 cup sliced green onions (less to taste)",
+          "1 cup grated sharp cheddar cheese"
+        ],
+        "steps": [
+          "Preheat the oven to 350°F.",
+          "Brown the ground chuck in a large skillet. Drain the fat, then add the tomato sauce, 1/2 teaspoon salt, and plenty of freshly ground black pepper. Stir, then simmer while you prepare the other ingredients.",
+          "Cook the egg noodles until al dente. Drain and set aside.",
+          "In a medium bowl, combine sour cream and cottage cheese. Add plenty of freshly ground black pepper. Add to the noodles and stir. Add the green onion and stir.",
+          "To assemble, add half of the noodles to a baking dish. Top with half of the meat mixture, then sprinkle on half of the grated cheddar. Repeat with the noodles, meat, then a final layer of cheese. Bake for 20 minutes, or until all the cheese is melted. Serve with crusty French bread."
+        ],
+        "image": "https://hips.hearstapps.com/hmg-prod/images/sour-cream-noodle-bake-1597685516.jpg?crop=0.700xw:0.526xh;0.0717xw,0.298xh&resize=1200:*",
+        "description": "Sour cream noodle bake is a great recipe to keep in your back pocket for weeknight dinners. With egg noodles and ground chuck, it's satisfying and delicious.",
+        "cuisine": "American",
+        "category": "Casserole",
+        "prepTime": "10 mins",
+        "cleanupTime": "20 mins"
+      },
+      "hasRealData": true
+    },
+    {
+      "site": "The Pioneer Woman",
+      "url": "https://www.thepioneerwoman.com/food-cooking/recipes/a11757/beef-stew-with-beer",
+      "success": true,
+      "duration": 9742,
+      "recipe": {
+        "title": "Supreme Pizza Burgers",
+        "ingredients": [
+          "1 1/2 lb. Ground Beef",
+          "1/2 lb. Italian Sausage (A Little More Is Fine!)",
+          "1/2 tsp. Italian Seasoning",
+          "8 slices Mozzarella Or Provolone Cheese",
+          "Pepperoni Slices",
+          "8 Tbsp. Jarred Marinara Sauce, Plus A Little More",
+          "Grated Parmesan Cheese",
+          "4 whole Kaiser Rolls Or Good Hamburger Buns",
+          "Thinly Sliced Red Onion",
+          "1 whole Green Bell Pepper, Sliced Thick",
+          "Sliced Black Olives",
+          "Sliced Mushrooms"
+        ],
+        "steps": [
+          "Combine ground beef, Italian sausage, and Italian seasoning in a bowl. Knead it together and form it into four large/thick patties. Fry the burgers on one side for several minutes, then turn the burgers. Lay 2 slices of cheese on each patty, followed by several slices of pepperoni. Add a couple of thin slices of red onion, a slice of green bell pepper, a pile of black olives, and a pile of mushrooms. Spoon a little more marinara sauce on top, then lay another slice of cheese on top of all the fillings. Place the lid on the skillet and allow burger to cook all the way through while the cheese melts and the pepperoni warms.",
+          "Split the rolls and toast them in butter in a skillet until nice and golden and crisp. Spread both halves with marinara sauce and sprinkle the sauce with Parmesan.",
+          "Lay the patties on the bottom buns, then top with the top buns. Serve immediately; hearty appetites are recommended!"
+        ],
+        "image": "https://hips.hearstapps.com/thepioneerwoman/wp-content/uploads/2012/10/burger1.jpg?crop=1xw:0.7517899761336515xh;center,top&resize=1200:*",
+        "description": "Luscious, drippy, divine! Tastes exactly like a supreme pizza...but in burger form.",
+        "cuisine": "American",
+        "category": "Main Courses",
+        "prepTime": "5 mins",
+        "cleanupTime": "15 mins"
+      },
+      "hasRealData": true
+    },
+    {
+      "site": "The Pioneer Woman",
+      "url": "https://www.thepioneerwoman.com/food-cooking/recipes/a11648/perfect-pot-roast",
+      "success": true,
+      "duration": 10336,
+      "recipe": {
+        "title": "Pork Chops with Garlic and Wine",
+        "ingredients": [
+          "6 whole Pork Chops (medium-to-thin)",
+          "2 Tbsp. Olive Oil",
+          "2 Tbsp. Butter",
+          "Salt And Pepper",
+          "1 1/2 cups Red Wine",
+          "1/2 cup Beef Broth (more If Needed)",
+          "1 whole Bay Leaf",
+          "1 Tbsp. Balsamic Vinegar",
+          "18 whole Peeled Garlic Cloves",
+          "1 Tbsp. Butter (additional)"
+        ],
+        "steps": [
+          "Heat oil and butter in a heavy skillet over high heat. Salt and pepper both sides of the pork chops and sear them on both sides until they're nice and golden, about 2 minutes per side. (No need to completely cook the chops at this point.) Remove the chops from the skillet and set aside.",
+          "Reduce the heat to medium-high, then throw in the whole garlic cloves. Stir them around and cook them for several minutes, or until they get nice and golden brown.",
+          "Pour in the red wine, then add the bay leaf. Stir around and let it reduce, raising the heat if necessary. Cook the sauce for several minutes, or until it's nice and reduced and thick.",
+          "Stir in the beef broth (you can add more if it needs the liquid) and add the chops back into the cooking liquid, arranging them so that they're swimming in the sauce. Allow the chops to cook in the liquid for a few minutes, then pour in the balsamic. Shake the pan to get it to distribute, then cook for a couple more minutes, or until the pork chops are done.",
+          "Remove the chops from the pan once more, then let the sauce reduce a little more if needed until it's very thick and rich and the garlic is soft. Swirl in 1 tablespoon of butter and sprinkle in a little salt and pepper.",
+          "Arrange pork chops on a platter, then pour the whole skillet of sauce (including garlic) over the top.",
+          "Serve with a green salad."
+        ],
+        "image": "https://hips.hearstapps.com/thepioneerwoman/wp-content/uploads/2012/02/pork1.jpg?crop=1xw:0.75xh;center,top&resize=1200:*",
+        "description": "Pan-fried pork chops with an unbelievably delicious pan sauce and whole garlic cloves.",
+        "cuisine": "American",
+        "category": "Main Courses",
+        "prepTime": "5 mins",
+        "cleanupTime": "25 mins"
+      },
+      "hasRealData": true
+    },
+    {
+      "site": "Minimalist Baker",
+      "url": "https://minimalistbaker.com/the-best-vegan-chocolate-chip-cookies",
+      "success": false,
+      "duration": 0,
+      "error": "API Error (500): Failed to fetch webpage: 404 Not Found",
+      "hasRealData": false
+    },
+    {
+      "site": "Minimalist Baker",
+      "url": "https://minimalistbaker.com/1-bowl-vegan-banana-bread",
+      "success": false,
+      "duration": 0,
+      "error": "API Error (500): Failed to fetch webpage: 404 Not Found",
+      "hasRealData": false
+    },
+    {
+      "site": "Minimalist Baker",
+      "url": "https://minimalistbaker.com/easy-vegan-fried-rice",
+      "success": true,
+      "duration": 10377,
+      "recipe": {
+        "title": "Easy Vegan Fried Rice",
+        "ingredients": [
+          "1 cup extra-firm tofu",
+          "1 cup long- or short-grain brown rice",
+          "4 cloves garlic (minced)",
+          "1 cup chopped green onion",
+          "1/2 cup peas",
+          "1/2 cup carrots (finely diced)",
+          "3 Tbsp tamari or soy sauce",
+          "1 Tbsp peanut butter",
+          "2-3 Tbsp organic brown sugar, muscovado sugar, or maple syrup",
+          "1 clove garlic (minced)",
+          "1-2 tsp chili garlic sauce",
+          "1 tsp toasted sesame oil (optional)"
+        ],
+        "steps": [
+          "Preheat oven to 400 degrees F (204 C) and line a baking sheet with parchment paper.",
+          "Wrap tofu in a clean towel and press out the liquid.",
+          "Dice tofu into 1/4-inch cubes and bake for 26-30 minutes until golden brown.",
+          "Prepare rice by boiling water, adding rinsed rice, and cooking uncovered for 30 minutes.",
+          "Prepare sauce by whisking all ingredients together.",
+          "Marinate baked tofu in the sauce for 5 minutes.",
+          "Sauté garlic, green onion, peas, and carrots in a skillet for 3-4 minutes.",
+          "Add cooked rice, tofu, and remaining sauce to the skillet and stir.",
+          "Serve immediately with extra chili garlic sauce or sriracha."
+        ],
+        "image": "https://minimalistbaker.com/wp-content/uploads/2015/08/THE-BEST-HEALTHY-Vegan-Fried-Rice-with-Crispy-Tofu-vegan-glutenfree-recipe-chinese-friedrice-plantbased-689x1024-1.jpg",
+        "description": "Easy, 10-ingredient vegan fried rice loaded with vegetables, crispy baked tofu, and tons of flavor! A healthy, satisfying plant-based side dish or entrée.",
+        "cuisine": "Asian-Inspired, Gluten-Free, Vegan",
+        "category": "Entrée, Side",
+        "prepTime": "15 minutes",
+        "cleanupTime": "1 hour"
+      },
+      "hasRealData": true
+    },
+    {
+      "site": "Love and Lemons",
+      "url": "https://www.loveandlemons.com/chocolate-chip-cookies-recipe",
+      "success": false,
+      "duration": 0,
+      "error": "API Error (500): Failed to fetch webpage: 404 Not Found",
+      "hasRealData": false
+    },
+    {
+      "site": "Love and Lemons",
+      "url": "https://www.loveandlemons.com/vegetable-soup-recipe",
+      "success": false,
+      "duration": 0,
+      "error": "API Error (500): Failed to fetch webpage: 404 Not Found",
+      "hasRealData": false
+    },
+    {
+      "site": "Love and Lemons",
+      "url": "https://www.loveandlemons.com/banana-bread-recipe",
+      "success": true,
+      "duration": 9134,
+      "recipe": {
+        "title": "Banana Bread Recipe",
+        "ingredients": [
+          "2 cups mashed very ripe banana (about 4 large)",
+          "½ cup cane sugar or brown sugar",
+          "½ cup melted butter or vegetable oil",
+          "2 large eggs",
+          "1 teaspoon vanilla extract",
+          "1½ cups all-purpose flour",
+          "1 teaspoon baking soda",
+          "½ teaspoon sea salt",
+          "½ teaspoon cinnamon",
+          "¼ teaspoon nutmeg",
+          "½ cup chopped walnuts (plus 2 tablespoons for topping)"
+        ],
+        "steps": [
+          "Preheat the oven to 350°F and grease an 8x4 or 9x5-inch loaf pan.",
+          "In a large bowl, whisk together the mashed banana, sugar, butter, eggs, and vanilla.",
+          "In a medium bowl, whisk together the flour, baking soda, salt, cinnamon, and nutmeg.",
+          "Add the dry ingredients to the wet ingredients and stir until just combined. Don’t overmix. Fold in the ½ cup walnuts.",
+          "Pour the batter into the prepared pan and top with the remaining 2 tablespoons walnuts.",
+          "Bake for 50 to 60 minutes, or until a toothpick inserted comes out clean and the top springs back to the touch. Check the loaf after 40 minutes and cover with foil if the top is golden brown."
+        ],
+        "image": "https://cdn.loveandlemons.com/wp-content/uploads/2023/07/banana-bread.jpg",
+        "description": "This easy banana bread recipe is the BEST way to use ripe bananas! It's moist, delicious, and packed with banana flavor.",
+        "cuisine": "American",
+        "category": "Baking",
+        "prepTime": "15 minutes",
+        "cleanupTime": "55 minutes"
+      },
+      "hasRealData": true
+    },
+    {
+      "site": "Half Baked Harvest",
+      "url": "https://www.halfbakedharvest.com/brown-butter-chocolate-chip-cookies",
+      "success": false,
+      "duration": 0,
+      "error": "API Error (500): Failed to fetch webpage: 404 Not Found",
+      "hasRealData": false
+    },
+    {
+      "site": "Half Baked Harvest",
+      "url": "https://www.halfbakedharvest.com/slow-cooker-beef-stew",
+      "success": false,
+      "duration": 0,
+      "error": "API Error (500): Failed to fetch webpage: 404 Not Found",
+      "hasRealData": false
+    },
+    {
+      "site": "Half Baked Harvest",
+      "url": "https://www.halfbakedharvest.com/honey-garlic-chicken",
+      "success": true,
+      "duration": 14596,
+      "recipe": {
+        "title": "30 Minute Honey Garlic Chicken.",
+        "ingredients": [
+          "Boneless Skinless Chicken breasts or thighs, cut into cubes",
+          "Garlic powder",
+          "Black pepper and Chile flakes",
+          "Flour or gluten free flour",
+          "Extra virgin olive oil",
+          "Broccoli florets or chopped asparagus",
+          "Sesame seeds",
+          "Tamari or soy sauce",
+          "Lemon juice",
+          "Honey",
+          "Garlic",
+          "Chili paste",
+          "Chopped green onion",
+          "Toasted sesame oil"
+        ],
+        "steps": [
+          "Preheat the oven to 450° F. Line a baking sheet with parchment paper or rub with oil.",
+          "On the sheet pan, mix the chicken, garlic powder, pepper, and chile flakes. Add the flour and toss again. Add 2 tablespoons olive oil, tossing to coat. Arrange the chicken to one side of the baking sheet. Add the broccoli/asparagus to the other side. Toss with olive oil, salt, and pepper. Bake for 10-15 minutes until the chicken is cooked through.",
+          "Meanwhile, make the sauce. In a bowl or glass jar, combine all ingredients.",
+          "Remove the vegetables from the sheet pan. Then pour the honey garlic sauce over the chicken and toss the chicken up in the sauce. Bake for another 5 minutes, until the sauce is baked onto the chicken.",
+          "Serve the chicken, vegetables, and honey garlic sauce with green onions and toasted sesame seeds. I love this over rice, but it's also great as an appetizer too!"
+        ],
+        "image": "https://www.halfbakedharvest.com/wp-content/uploads/2024/04/30-Minute-Honey-Garlic-Chicken-1.jpg",
+        "description": "30 Minute Honey Garlic Chicken: A simple sauce, but wow, the flavors are delicious...a fun take-out-style dinner great any night of the week!",
+        "cuisine": "American, Asian",
+        "category": "Main Course",
+        "prepTime": "10 minutes",
+        "cleanupTime": "20 minutes"
+      },
+      "hasRealData": true
+    },
+    {
+      "site": "Gimme Some Oven",
+      "url": "https://www.gimmesomeoven.com/chocolate-chip-cookies-recipe",
+      "success": false,
+      "duration": 0,
+      "error": "API Error (500): Failed to fetch webpage: 404 Not Found",
+      "hasRealData": false
+    },
+    {
+      "site": "Gimme Some Oven",
+      "url": "https://www.gimmesomeoven.com/beef-stew-recipe",
+      "success": true,
+      "duration": 10864,
+      "recipe": {
+        "title": "Beef Stew",
+        "ingredients": [
+          "1 1/2 pounds chuck roast, cut into bite-sized pieces",
+          "sea salt and freshly-cracked black pepper",
+          "1 tablespoon butter or olive oil",
+          "2 1/2 cups beef stock",
+          "1 pound Yukon gold potatoes, cut into bite-sized pieces",
+          "8 ounces baby bella mushrooms, halved or quartered",
+          "1 medium white onion, diced",
+          "2 celery stalks, diced",
+          "2 large carrots, diced",
+          "2 tablespoons tomato paste",
+          "2 tablespoons Worcestershire sauce",
+          "2 bay leaves",
+          "2-3 tablespoons cornstarch (plus 2-3 tablespoons cold water)"
+        ],
+        "steps": [
+          "Sear the steak (optional). Season the steak with salt and pepper. Using either a separate sauté pan or the 'Sauté' feature on the Instant Pot, briefly sauté the beef on all sides in melted butter until seared, working in batches if needed.",
+          "Stir together ingredients. Add the remaining ingredients (minus the cornstarch and water) to the bowl of a large slow cooker or Instant Pot, briefly stir to combine, then cover.",
+          "Cook. For Crock Pot beef stew, slow cook for 4 hours on high or 8 hours on low. For Instant Pot beef stew, cook on high pressure for 40 minutes, followed by a quick release. Remove and discard the bay leaves.",
+          "Add thickener (optional). If you would like to thicken the gravy at this point, make a quick cornstarch slurry by whisking together equal parts cornstarch and cold water. Then stir it into the gravy, a few tablespoons at a time, until it reaches your desired level of thickness.",
+          "Taste, season and serve. Add salt and pepper, to taste. Then serve warm, garnished with some freshly-cracked black pepper if you would like."
+        ],
+        "image": "https://www.gimmesomeoven.com/wp-content/uploads/2019/10/Instant-Pot-Beef-Stew-Recipe-1.jpg",
+        "description": "My favorite cozy, hearty, comforting beef stew recipe — easy to make in the Instant Pot or Crock Pot.",
+        "cuisine": "American",
+        "category": "Main Dishes",
+        "prepTime": "15 mins",
+        "cleanupTime": "1 hour"
+      },
+      "hasRealData": true
+    },
+    {
+      "site": "Gimme Some Oven",
+      "url": "https://www.gimmesomeoven.com/baked-chicken-breast",
+      "success": true,
+      "duration": 8480,
+      "recipe": {
+        "title": "Baked Chicken Breasts",
+        "ingredients": [
+          "4 boneless skinless chicken breasts, pounded to even thickness",
+          "1 tablespoon melted butter or olive oil",
+          "1 teaspoon kosher salt",
+          "1/2 teaspoon freshly-ground black pepper",
+          "1/2 teaspoon garlic powder",
+          "1/2 teaspoon smoked paprika"
+        ],
+        "steps": [
+          "Brine the chicken. Fill a large mixing bowl with 2 cups of lukewarm water and 1/4 cup kosher salt. Stir to combine until most of the salt is absorbed. Add 2 cups of cold water (or a few ice cubes) to lower the temperature of the water. Add the chicken breasts and let them sit in the mixture to brine for 15 minutes. Remove the chicken breasts from the brine, rinse them with cold water, then pat them dry with paper towels.",
+          "Heat the oven. Preheat oven to 450°F.",
+          "Season the chicken. Place the chicken breasts in a single layer in a large baking dish. Brush on both sides with the melted butter or olive oil. In a separate bowl, whisk the salt, pepper, garlic powder, and paprika until combined. Sprinkle the seasoning mixture evenly over the chicken on both sides.",
+          "Bake. Bake for 15-18 minutes, or until the chicken is cooked through and no longer pink. Use a cooking thermometer to ensure the thickest part of the breast measures 165°F.",
+          "Rest the chicken. Once cooked, remove the pan from the oven, transfer the chicken to a clean plate, and loosely tent the plate with aluminum foil. Let the chicken rest for at least 5-10 minutes.",
+          "Serve. Serve warm and enjoy!"
+        ],
+        "image": "https://www.gimmesomeoven.com/wp-content/uploads/2015/05/Oven-Baked-Chicken-Breast-Recipe-3.jpg",
+        "description": "Learn how to make juicy, tender, delicious baked chicken breasts with this simple 5-step method.",
+        "cuisine": "American",
+        "category": "Main Dishes",
+        "prepTime": "20 minutes",
+        "cleanupTime": "15 minutes"
+      },
+      "hasRealData": true
+    },
+    {
+      "site": "Spend with Pennies",
+      "url": "https://www.spendwithpennies.com/chocolate-chip-cookies",
+      "success": true,
+      "duration": 12164,
+      "recipe": {
+        "title": "Perfect Chocolate Chip Cookies",
+        "ingredients": [
+          "1 cup melted unsalted butter, cooled at least 10 minutes",
+          "1 ¼ cup brown sugar, packed",
+          "½ cup granulated sugar",
+          "1 large egg, room temperature preferred",
+          "1 egg yolk, room temperature preferred",
+          "1 ½ teaspoon vanilla extract",
+          "2 ¾ cups all-purpose flour",
+          "2 teaspoons cornstarch",
+          "1 teaspoon baking soda",
+          "¾ teaspoon salt",
+          "1 ¾ cup semisweet chocolate chips, plus additional for tops, optional"
+        ],
+        "steps": [
+          "Combine melted butter and sugars in a large bowl. Stir very well.",
+          "Add egg and egg yolk, stir well. Stir in vanilla extract. Set aside.",
+          "In a medium-sized bowl, whisk together flour, cornstarch, baking soda, and salt.",
+          "Gradually add flour mixture to wet ingredients -- stir well so that all the flour is absorbed. Stir in chocolate chips.",
+          "Place dough in refrigerator and chill for 30 minutes.",
+          "Preheat oven to 350°F (177°C) and prepare cookie sheets by lining with parchment paper.",
+          "Scoop dough by rounded 1 ½ tablespoon onto prepared cookie sheets, placing at least 2\" apart.",
+          "Bake for 11 minutes -- cookies may still seem slightly soft in the centers, that is OK, they will cook completely on the cookie sheets. Don't over-bake or your cookies will be too hard.",
+          "If desired, gently press additional chocolate chips into the tops of the warm cookies.",
+          "Allow to cool completely on cookie sheets."
+        ],
+        "image": "https://www.spendwithpennies.com/wp-content/uploads/2017/02/soft-chewy-chocolate-chip-cookies-1-of-1-2.jpg",
+        "description": "I’m pleased to introduce you to your new favorite chocolate chip cookie recipe! These chocolate chip cookies have been carefully crafted to be perfectly soft, perfectly chewy, and just all around perfectly delectable. You’ll never need another cookie recipe again!",
+        "cuisine": "American",
+        "category": "Dessert",
+        "prepTime": "15 minutes",
+        "cleanupTime": "11 minutes"
+      },
+      "hasRealData": true
+    },
+    {
+      "site": "Spend with Pennies",
+      "url": "https://www.spendwithpennies.com/beef-stew-recipe",
+      "success": true,
+      "duration": 11758,
+      "recipe": {
+        "title": "Beef Stew Recipe",
+        "ingredients": [
+          "2 pounds stewing beef, trimmed and cubed",
+          "3 tablespoons all-purpose flour",
+          "½ teaspoon garlic powder",
+          "½ teaspoon salt",
+          "½ teaspoon black pepper",
+          "3 tablespoons olive oil, more as needed",
+          "1 onion, chopped",
+          "6 cups beef broth",
+          "½ cup red wine, optional",
+          "1 pound potatoes, peeled and cubed",
+          "4 carrots, cut into 1 inch pieces",
+          "4 ribs celery, cut into 1 inch pieces",
+          "3 tablespoons tomato paste",
+          "1 teaspoon dried rosemary or 1 sprig fresh",
+          "2 tablespoons cornstarch or as needed",
+          "2 tablespoons water or as needed",
+          "¾ cup peas"
+        ],
+        "steps": [
+          "Combine flour, garlic powder, salt, and pepper. Toss beef in flour mixture.",
+          "Heat olive oil in a large Dutch oven or pot over medium-high heat. Shake off any excess flour from the beef and brown in small batches. Remove and set aside in a bowl.",
+          "Add the onions to the pot, adding more oil as needed, and cook until they begin to soften, about 3 minutes.",
+          "Add beef broth and red wine while scraping up any brown bits in the pan.",
+          "Stir in browned beef, potatoes, carrots, celery, tomato paste, and rosemary. Reduce heat to medium-low, cover, and simmer 1 hour or until beef is tender (up to 90 minutes).",
+          "Mix equal parts cornstarch and water to create a slurry. Slowly add the slurry to the boiling stew to reach desired consistency (you may not need all of the slurry, if you'd like a thicker stew, you can add extra).",
+          "Stir in peas and simmer 5-10 minutes before serving. Season with salt & pepper to taste."
+        ],
+        "image": "https://www.spendwithpennies.com/wp-content/uploads/2018/09/SpendWithPennies-Homemade-Beef-Stew-24.jpg",
+        "description": "This easy beef stew recipe is a family favorite. Tender veggies and beef in a rich brown broth!",
+        "cuisine": "American",
+        "category": "Beef, Dinner, Entree, Main Course, Soup",
+        "prepTime": "20 minutes",
+        "cleanupTime": "10 minutes"
+      },
+      "hasRealData": true
+    },
+    {
+      "site": "Spend with Pennies",
+      "url": "https://www.spendwithpennies.com/baked-chicken-breast",
+      "success": false,
+      "duration": 0,
+      "error": "API Error (500): Failed to fetch webpage: 404 Not Found",
+      "hasRealData": false
+    },
+    {
+      "site": "The Recipe Critic",
+      "url": "https://therecipecritic.com/chocolate-chip-cookies",
+      "success": false,
+      "duration": 0,
+      "error": "API Error (500): Failed to fetch webpage: 404 Not Found",
+      "hasRealData": false
+    },
+    {
+      "site": "The Recipe Critic",
+      "url": "https://therecipecritic.com/slow-cooker-beef-stew",
+      "success": true,
+      "duration": 6131,
+      "recipe": {
+        "title": "Slow Cooker Beef Stew",
+        "ingredients": [
+          "2 pounds beef stew meat",
+          "5-6 small red potatoes, quartered",
+          "2 cups baby carrots",
+          "1 white or yellow onion, chopped",
+          "1 stalk celery, chopped",
+          "1/2 cup flour",
+          "1 can diced tomatoes (15 ounce)",
+          "2 1/2 cups beef broth",
+          "2 teaspoons Italian seasoning",
+          "salt and pepper to taste"
+        ],
+        "steps": [
+          "Combine beef, potatoes, carrots, onions, and celery in your slow cooker. Sprinkle flour over the top. Add remaining ingredients.",
+          "Cover and cook on low for 6-8 hours. Stir and serve."
+        ],
+        "image": "https://therecipecritic.com/wp-content/uploads/2015/10/beef-stew-2-2.jpg",
+        "description": "A hearty and delicious beef stew that is perfect for the winter!",
+        "cuisine": "American",
+        "category": "Dinner, Main Course, Soup",
+        "prepTime": "15 minutes",
+        "cleanupTime": "6 hours"
+      },
+      "hasRealData": true
+    },
+    {
+      "site": "The Recipe Critic",
+      "url": "https://therecipecritic.com/honey-garlic-chicken",
+      "success": true,
+      "duration": 10929,
+      "recipe": {
+        "title": "Grilled Honey Garlic Chicken",
+        "ingredients": [
+          "2 pounds chicken thighs or chicken breast",
+          "½ cup honey",
+          "¼ cup soy sauce",
+          "1 tablespoon apple cider vinegar",
+          "3 cloves garlic minced",
+          "juice from one small lemon",
+          "sesame seeds and green onions for garnish"
+        ],
+        "steps": [
+          "In a small bowl, whisk ½ cup honey, ¼ cup soy sauce, 1 tablespoon apple cider vinegar, 3 cloves garlic minced and juice from one small lemon. Reserve ¼ cup of the sauce and add the rest of the sauce to 2 pounds chicken thighs in a medium-sized bowl and let it marinate for 30 minutes.",
+          "Preheat the grill to medium-high heat and grill chicken, covered, for 6-8 minutes on each side or until no longer pink. Baste occasionally with reserved marinade during the last 5 minutes. Garnish with sesame seeds and green onions if desired."
+        ],
+        "image": "https://therecipecritic.com/wp-content/uploads/2021/06/honeygarlicchicken-1-300x300.jpg",
+        "description": "This Grilled Honey Garlic Chicken is healthy and delicious with a sweet, sticky garlic glaze. It only takes 5 ingredients to make the marinade and cooks up in less than 10 minutes.",
+        "cuisine": "American, Asian American",
+        "category": "Dinner",
+        "prepTime": "30 minutes",
+        "cleanupTime": "15 minutes"
+      },
+      "hasRealData": true
+    },
+    {
+      "site": "Cafe Delites",
+      "url": "https://cafedelites.com/chocolate-chip-cookies",
+      "success": false,
+      "duration": 0,
+      "error": "API Error (500): Failed to fetch webpage: 404 Not Found",
+      "hasRealData": false
+    },
+    {
+      "site": "Cafe Delites",
+      "url": "https://cafedelites.com/slow-cooker-beef-stew",
+      "success": false,
+      "duration": 0,
+      "error": "API Error (500): Failed to fetch webpage: 404 Not Found",
+      "hasRealData": false
+    },
+    {
+      "site": "Cafe Delites",
+      "url": "https://cafedelites.com/honey-garlic-chicken",
+      "success": false,
+      "duration": 0,
+      "error": "API Error (500): Failed to fetch webpage: 404 Not Found",
+      "hasRealData": false
+    },
+    {
+      "site": "Natasha's Kitchen",
+      "url": "https://natashaskitchen.com/chocolate-chip-cookies-recipe",
+      "success": false,
+      "duration": 0,
+      "error": "API Error (500): Failed to fetch webpage: 404 Not Found",
+      "hasRealData": false
+    },
+    {
+      "site": "Natasha's Kitchen",
+      "url": "https://natashaskitchen.com/beef-stew-recipe",
+      "success": true,
+      "duration": 16451,
+      "recipe": {
+        "title": "Beef Stew Recipe",
+        "ingredients": [
+          "6 oz bacon, chopped into 1/4\" strips",
+          "2 Tbsp olive oil, to sautee",
+          "2 lbs beef stew meat (or beef chuck cut into 1\" pieces)",
+          "2 1/2 tsp sea salt, or to taste, divided",
+          "1 1/2 tsp black pepper, freshly ground, divided",
+          "1/4 cup all-purpose flour",
+          "2 cups good dry red wine",
+          "1 lb mushrooms, thickly sliced",
+          "4 carrots, peeled and cut into 1/2\" thick pieces",
+          "1 medium yellow onion, diced",
+          "4 garlic cloves, minced",
+          "1 Tbsp tomato paste",
+          "4 cups low sodium beef broth, or beef stock",
+          "2 bay leaves",
+          "1/2 tsp dried thyme",
+          "1 lb small potatoes, new potatoes, or fingerling, halved or quartered"
+        ],
+        "steps": [
+          "In a large, oven-proof pot, sauté bacon over medium heat until golden brown and fat is released. Using a slotted spoon, remove bacon to a separate bowl.",
+          "While bacon is cooking, place beef in a large mixing bowl and season with 1 1/2 tsp salt and 1 tsp black pepper. Sprinkle beef with 1/4 cup flour and toss to combine and evenly coat beef. Transfer beef in 2 batches into the hot bacon fat and cook over med/high heat, until beef is browned (3 min per side). Add olive oil if needed. Transfer browned beef to the bowl with bacon.",
+          "Add 2 cups wine to the pot and bring to a boil, scraping the bottom to deglaze the pot. Add sliced mushrooms and simmer over medium heat about 10 min.",
+          "Meanwhile, heat a large non-stick skillet over medium/high heat and add 2 Tbsp olive oil. Add sliced carrots, diced onion, and 4 chopped garlic cloves, and saute 4 min. Add 1 Tbsp tomato paste and saute another minute. Transfer veggies to the soup pot.",
+          "Add 4 cups beef broth, 2 bay leaves, 1/2 tsp dried thyme, 1 tsp salt, and 1/2 tsp pepper. Return beef and bacon to the pot then add potatoes. Stir to combine and make sure potatoes are submerged in liquid. Cover with lid and bake at 325˚F oven for 1 hour and 45 min."
+        ],
+        "image": "https://natashaskitchen.com/wp-content/uploads/2023/01/Beef-Stew-3.jpg",
+        "description": "Every bit of this beef soup is infused with wonderful flavor from slow roasting in the oven. Pair with beef stew recipe with fresh bread or serve it over mashed potatoes.",
+        "cuisine": "American",
+        "category": "Main Course",
+        "prepTime": "30 minutes",
+        "cleanupTime": "2 hours 30 minutes"
+      },
+      "hasRealData": true
+    },
+    {
+      "site": "Natasha's Kitchen",
+      "url": "https://natashaskitchen.com/baked-chicken-breast",
+      "success": true,
+      "duration": 7926,
+      "recipe": {
+        "title": "Baked Chicken Breast",
+        "ingredients": [
+          "2 lb boneless skinless chicken breast",
+          "1 Tbsp garlic salt",
+          "1 tsp paprika",
+          "1 tsp black pepper",
+          "2 Tbsp olive oil"
+        ],
+        "steps": [
+          "Preheat the oven to 400°F with a rack in the center of the oven for even cooking. Place the chicken breast on a parchment-lined baking sheet, leaving a little space between them for the air to circulate.",
+          "Pat dry the chicken again if needed, then brush all sides with oil, melted butter, or use an oil spray.",
+          "In a small bowl, combine the garlic salt, paprika, and ground black pepper and sprinkle all over the chicken.",
+          "Bake at 400˚F for about 20-25 minutes or until chicken reaches 165°F on an instant-read thermometer. Rest for 5 to 10 minutes before slicing."
+        ],
+        "image": "https://natashaskitchen.com/wp-content/uploads/2022/08/Baked-Chicken-Breast-Recipe.jpg",
+        "description": "You'll love this method for Baked Chicken Breast—it delivers tender, juicy, and perfectly seasoned chicken every time! Baked chicken breast keeps well and is great for meal prep.",
+        "cuisine": "American",
+        "category": "Main Course",
+        "prepTime": "5 minutes",
+        "cleanupTime": "20 minutes"
+      },
+      "hasRealData": true
+    },
+    {
+      "site": "Dinner at the Zoo",
+      "url": "https://www.dinneratthezoo.com/chocolate-chip-cookies",
+      "success": false,
+      "duration": 0,
+      "error": "API Error (500): Failed to fetch webpage: 404 Not Found",
+      "hasRealData": false
+    },
+    {
+      "site": "Dinner at the Zoo",
+      "url": "https://www.dinneratthezoo.com/beef-stew-recipe",
+      "success": false,
+      "duration": 0,
+      "error": "API Error (500): Failed to fetch webpage: 404 Not Found",
+      "hasRealData": false
+    },
+    {
+      "site": "Dinner at the Zoo",
+      "url": "https://www.dinneratthezoo.com/honey-garlic-chicken",
+      "success": true,
+      "duration": 11198,
+      "recipe": {
+        "title": "Honey Garlic Chicken Stir Fry",
+        "ingredients": [
+          "1 tablespoon + 1 teaspoon vegetable oil (divided use)",
+          "1 cup thinly sliced peeled carrots",
+          "2 cups broccoli florets",
+          "1 lb boneless skinless chicken breasts, cut into 1 inch pieces",
+          "4 cloves garlic (minced)",
+          "1/4 cup low sodium chicken broth or water",
+          "1/4 cup soy sauce",
+          "3 tablespoons honey",
+          "2 teaspoons cornstarch",
+          "salt and pepper to taste"
+        ],
+        "steps": [
+          "Heat 1 teaspoon of oil in a large pan over medium heat.",
+          "Add the broccoli and carrots and cook for approximately 4 minutes or until vegetables are tender.",
+          "Remove the vegetables from the pan; place them on a plate and cover.",
+          "Wipe the pan clean with a paper towel and turn the heat to high.",
+          "Add the remaining tablespoon of oil.",
+          "Season the chicken pieces with salt and pepper and add them to the pan in a single layer – you may need to do this step in batches. Cook for 3-4 minutes on each side until golden brown and cooked through.",
+          "Add the garlic to the pan and cook for 30 seconds.",
+          "Add the vegetables back to the pan and cook for 2 more minutes or until the vegetables are warmed through.",
+          "In a bowl whisk together the chicken broth, honey and soy sauce.",
+          "In a small bowl mix the cornstarch with a tablespoon of cold water.",
+          "Pour the soy sauce mixture over the chicken and vegetables; cook for 30 seconds.",
+          "Add the cornstarch and bring to a boil; cook for 1 more minute or until sauce has just started to thicken.",
+          "Serve immediately, with rice if desired."
+        ],
+        "image": "https://www.dinneratthezoo.com/wp-content/uploads/2019/12/honey-garlic-chicken-stir-fry-final-1.jpg",
+        "description": "This honey garlic chicken stir fry recipe is chicken and vegetables, cooked to perfection and tossed in a sweet and savory sauce.",
+        "cuisine": "Asian",
+        "category": "Main",
+        "prepTime": "10 minutes",
+        "cleanupTime": "20 minutes"
+      },
+      "hasRealData": true
+    }
+  ]
+}

@@ -1,12 +1,9 @@
 #!/usr/bin/env node
 
 /**
- * Test script for Hyperbrowser recipe extraction
- * Usage: node test-hyperbrowser.js [URL]
- * Example: node test-hyperbrowser.js https://example.com/recipe
+ * Simple Recipe Extraction Test
+ * Tests individual URLs using OpenAI extraction
  */
-
-const readline = require('readline');
 
 // Try to use built-in fetch first, fallback to node-fetch
 let fetch;
@@ -16,10 +13,7 @@ try {
   // If node-fetch is not available, we'll handle it in the function
 }
 
-const rl = readline.createInterface({
-  input: process.stdin,
-  output: process.stdout
-});
+const readline = require('readline');
 
 // Colors for console output
 const colors = {
@@ -37,12 +31,7 @@ function log(message, color = 'reset') {
   console.log(`${colors[color]}${message}${colors.reset}`);
 }
 
-async function testRecipeExtraction(url, method = 'hyperbrowser') {
-  log(`\n🚀 Testing recipe extraction from: ${url}`, 'cyan');
-  log(`📊 Using method: ${method}`, 'blue');
-  log('─'.repeat(60), 'yellow');
-
-  // Ensure we have fetch available
+async function ensureFetch() {
   if (!fetch) {
     try {
       fetch = (await import('node-fetch')).default;
@@ -50,20 +39,22 @@ async function testRecipeExtraction(url, method = 'hyperbrowser') {
       throw new Error('No fetch implementation available. Please install node-fetch: npm install node-fetch');
     }
   }
+}
+
+async function testRecipeExtraction(url) {
+  await ensureFetch();
 
   try {
+    log(`🧪 Testing URL: ${url}`, 'cyan');
     const startTime = Date.now();
     
-    log('📡 Sending request to API...', 'yellow');
-    
-    const response = await fetch('http://localhost:3003/api/fetch-recipe', {
+    const response = await fetch('http://localhost:3000/api/fetch-recipe', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        url: url,
-        processing_method: method
+        url: url
       })
     });
 
@@ -77,140 +68,123 @@ async function testRecipeExtraction(url, method = 'hyperbrowser') {
 
     const data = await response.json();
     
-    log(`\n✅ SUCCESS! Extraction completed in ${duration}ms`, 'green');
-    log('─'.repeat(60), 'yellow');
+    log(`⏱️  Duration: ${duration}ms`, 'yellow');
+    log(`🤖 Method: ${data.processing_method || 'openai'}`, 'blue');
     
-    // Display results
-    if (data.recipe) {
-      const recipe = data.recipe;
+    if (data.success && data.recipe) {
+      log('✅ SUCCESS - Recipe extracted!', 'green');
+      log(`📝 Title: ${data.recipe.title}`, 'cyan');
+      log(`🥘 Ingredients: ${data.recipe.ingredients.length} items`, 'cyan');
+      log(`👩‍🍳 Steps: ${data.recipe.steps.length} steps`, 'cyan');
+      log(`🖼️  Image: ${data.recipe.image ? 'Yes' : 'No'}`, 'cyan');
+      log(`🌍 Cuisine: ${data.recipe.cuisine}`, 'cyan');
+      log(`📂 Category: ${data.recipe.category}`, 'cyan');
       
-      log(`🍽️  TITLE: ${recipe.title}`, 'bright');
-      log(`📝 DESCRIPTION: ${recipe.description}`, 'cyan');
-      log(`🌍 CUISINE: ${recipe.cuisine}`, 'blue');
-      log(`📂 CATEGORY: ${recipe.category}`, 'blue');
-      log(`⏱️  PREP TIME: ${recipe.prepTime}`, 'magenta');
-      log(`🧹 CLEANUP TIME: ${recipe.cleanupTime}`, 'magenta');
-      
-      if (recipe.image) {
-        log(`🖼️  IMAGE: ${recipe.image}`, 'cyan');
-      }
-      
-      log('\n🥗 INGREDIENTS:', 'green');
-      recipe.ingredients.forEach((ingredient, index) => {
-        log(`  ${index + 1}. ${ingredient}`, 'reset');
-      });
-      
-      log('\n👨‍🍳 STEPS:', 'green');
-      recipe.steps.forEach((step, index) => {
-        log(`  ${index + 1}. ${step}`, 'reset');
-      });
-      
-      log('\n📊 EXTRACTION INFO:', 'yellow');
-      log(`  • Processing Method: ${data.processing_method}`, 'reset');
-      log(`  • Success: ${data.success}`, 'reset');
-      log(`  • Message: ${data.message}`, 'reset');
-      
+      return {
+        success: true,
+        duration,
+        recipe: data.recipe
+      };
     } else {
-      log('⚠️  No recipe data returned', 'yellow');
+      throw new Error(data.error || 'No recipe data returned');
     }
     
   } catch (error) {
-    log(`\n❌ ERROR: ${error.message}`, 'red');
-    log('─'.repeat(60), 'yellow');
-    
-    if (error.message.includes('ECONNREFUSED')) {
-      log('💡 Make sure your Next.js development server is running on port 3003', 'yellow');
-      log('   Run: npm run dev', 'yellow');
-    }
-    
-    if (error.message.includes('HYPERBROWSER_API_KEY')) {
-      log('💡 Make sure your HYPERBROWSER_API_KEY is set in your environment', 'yellow');
-    }
+    log(`❌ FAILED: ${error.message}`, 'red');
+    return {
+      success: false,
+      duration: 0,
+      error: error.message
+    };
   }
 }
 
-async function promptForUrl() {
-  return new Promise((resolve) => {
-    rl.question('🔗 Enter recipe URL to test: ', (url) => {
-      resolve(url.trim());
-    });
-  });
-}
-
-async function promptForMethod() {
-  return new Promise((resolve) => {
-    rl.question('⚙️  Choose processing method (hyperbrowser/openai) [hyperbrowser]: ', (method) => {
-      const choice = method.trim().toLowerCase() || 'hyperbrowser';
-      resolve(choice === 'openai' ? 'openai' : 'hyperbrowser');
-    });
-  });
-}
-
-async function main() {
-  log('🧪 Hyperbrowser Recipe Extraction Tester', 'bright');
+async function runInteractiveTest() {
+  log('🧪 RECIPE EXTRACTION TESTER (OpenAI)', 'bright');
   log('═'.repeat(60), 'cyan');
-  
-  // Check if URL was provided as command line argument
-  const url = process.argv[2];
-  const method = process.argv[3] || 'hyperbrowser';
-  
-  if (url) {
-    await testRecipeExtraction(url, method);
-    rl.close();
-    return;
-  }
-  
-  // Interactive mode
-  log('🔄 Interactive Mode - Enter URLs to test extraction', 'blue');
-  log('💡 Tip: Make sure your Next.js server is running (npm run dev)', 'yellow');
+  log('Enter recipe URLs to test (or "quit" to exit)', 'blue');
   log('', 'reset');
-  
+
+  const rl = readline.createInterface({
+    input: process.stdin,
+    output: process.stdout
+  });
+
+  const question = (prompt) => new Promise((resolve) => rl.question(prompt, resolve));
+
   while (true) {
     try {
-      const testUrl = await promptForUrl();
+      const url = await question('\nEnter recipe URL: ');
       
-      if (!testUrl) {
-        log('👋 Goodbye!', 'green');
+      if (url.toLowerCase() === 'quit' || url.toLowerCase() === 'exit' || url.toLowerCase() === 'q') {
         break;
       }
-      
-      if (testUrl.toLowerCase() === 'exit' || testUrl.toLowerCase() === 'quit') {
-        log('👋 Goodbye!', 'green');
-        break;
-      }
-      
-      // Validate URL
-      try {
-        new URL(testUrl);
-      } catch {
-        log('❌ Invalid URL format. Please enter a valid URL.', 'red');
+
+      if (!url.trim()) {
+        log('Please enter a valid URL', 'yellow');
         continue;
       }
-      
-      const testMethod = await promptForMethod();
-      await testRecipeExtraction(testUrl, testMethod);
-      
-      log('\n' + '═'.repeat(60), 'cyan');
+
+      log('', 'reset');
+      await testRecipeExtraction(url.trim());
       
     } catch (error) {
-      log(`❌ Error: ${error.message}`, 'red');
+      log(`Error: ${error.message}`, 'red');
+    }
+  }
+
+  rl.close();
+  log('\n👋 Thanks for testing!', 'green');
+}
+
+// Default test URLs if run without arguments
+const DEFAULT_TEST_URLS = [
+  'https://www.allrecipes.com/recipe/16354/easy-meatloaf/',
+  'https://www.foodnetwork.com/recipes/alton-brown/baked-macaroni-and-cheese-recipe-1939524',
+  'https://www.bonappetit.com/recipe/bas-best-chocolate-chip-cookies'
+];
+
+async function runDefaultTest() {
+  log('🧪 RUNNING DEFAULT RECIPE TESTS (OpenAI)', 'bright');
+  log('═'.repeat(60), 'cyan');
+  
+  for (const [index, url] of DEFAULT_TEST_URLS.entries()) {
+    log(`\n🧪 Test ${index + 1}/${DEFAULT_TEST_URLS.length}`, 'magenta');
+    log('─'.repeat(40), 'yellow');
+    await testRecipeExtraction(url);
+    
+    // Small delay between tests
+    if (index < DEFAULT_TEST_URLS.length - 1) {
+      await new Promise(resolve => setTimeout(resolve, 2000));
     }
   }
   
-  rl.close();
+  log('\n🎉 All tests completed!', 'green');
 }
 
-// Handle Ctrl+C gracefully
-process.on('SIGINT', () => {
-  log('\n👋 Goodbye!', 'green');
-  rl.close();
-  process.exit(0);
-});
-
+// Main execution
 if (require.main === module) {
-  main().catch(error => {
-    log(`❌ Fatal error: ${error.message}`, 'red');
-    rl.close();
-    process.exit(1);
-  });
-} 
+  const args = process.argv.slice(2);
+  
+  if (args.length === 0) {
+    // Interactive mode
+    runInteractiveTest().catch(error => {
+      log(`Error: ${error.message}`, 'red');
+      process.exit(1);
+    });
+  } else if (args[0] === '--default' || args[0] === '-d') {
+    // Run default tests
+    runDefaultTest().catch(error => {
+      log(`Error: ${error.message}`, 'red');
+      process.exit(1);
+    });
+  } else {
+    // Test specific URL
+    testRecipeExtraction(args[0]).catch(error => {
+      log(`Error: ${error.message}`, 'red');
+      process.exit(1);
+    });
+  }
+}
+
+module.exports = { testRecipeExtraction }; 

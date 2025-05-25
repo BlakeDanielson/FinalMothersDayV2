@@ -14,7 +14,7 @@ export function getSanitizedHtml(rawHtml: string): string {
     .trim();
 
   // If still too large, use cheerio for more precise extraction
-  if (optimizedHtml.length > 400000) { // ~80K tokens limit
+  if (optimizedHtml.length > 200000) { // ~40K tokens limit
     try {
       const $ = cheerio.load(optimizedHtml);
 
@@ -72,7 +72,7 @@ export function getSanitizedHtml(rawHtml: string): string {
   }
 
   // Hard limit to prevent context overflow
-  const maxLength = 350000; // ~70K tokens safety margin
+  const maxLength = 150000; // ~30K tokens safety margin for 128K context limit
   if (optimizedHtml.length > maxLength) {
     // Smart truncation: try to keep recipe content
     const recipeKeywords = ['recipe', 'ingredient', 'instruction', 'direction', 'step'];

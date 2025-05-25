@@ -1,8 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import OpenAI from 'openai';
 import { z } from "zod";
-import { getSanitizedHtml } from '@/lib/html-processor';
-import { Hyperbrowser } from "@hyperbrowser/sdk";
 
 // Helper function to fix relative URLs
 function fixImageUrl(url: string | null, baseUrl: string): string | null {
@@ -26,403 +24,157 @@ function fixImageUrl(url: string | null, baseUrl: string): string | null {
     }
     
     // For other cases, try to create absolute URL
-    return new URL(url, baseUrl).toString();
-  } catch {
-    // If URL construction fails, return null
+    return new URL(url, baseUrl).href;
+  } catch (error) {
+    console.warn('Failed to fix image URL:', url, error);
     return null;
   }
 }
 
-// More forgiving Zod schema for high success rate
-const zodRecipeSchema = z.object({
+// Zod schema for recipe validation (forgiving version)
+const RecipeSchema = z.object({
   title: z.string().default("Recipe"),
-  ingredients: z.array(z.string()).default(["Ingredients not specified"]),
-  steps: z.array(z.string()).default(["Instructions not specified"]),
-  image: z.string().url().nullable().default(null),
-  description: z.string().default("A delicious recipe."),
-  cuisine: z.string().default("International"),
-  category: z.string().default("Main Course"),
-  prepTime: z.string().default("Variable"),
-  cleanupTime: z.string().default("Variable"),
+  ingredients: z.array(z.string()).default([]),
+  steps: z.array(z.string()).default([]),
+  image: z.string().nullable().default(null),
+  description: z.string().default(""),
+  cuisine: z.string().default(""),
+  category: z.string().default(""),
+  prepTime: z.string().default(""),
+  cleanupTime: z.string().default("")
 });
 
-// Processing method enum
-const ProcessingMethod = z.enum(["openai", "hyperbrowser"]);
-
-// Request schema with processing method selection
-const requestSchema = z.object({
-  url: z.string().url(),
-  processing_method: ProcessingMethod.optional().default("openai")
-});
-
-// Initialize OpenAI client
-// Ensure your OPENAI_API_KEY is set in your environment variables
-const openaiClient = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY,
-});
-
-// Initialize Hyperbrowser client (will be checked when needed)
-let hyperbrowserClient: Hyperbrowser | null = null;
-
-function getHyperbrowserClient() {
-  if (!hyperbrowserClient) {
-    if (!process.env.HYPERBROWSER_API_KEY) {
-      throw new Error('HYPERBROWSER_API_KEY is not set.');
-    }
-    hyperbrowserClient = new Hyperbrowser({
-      apiKey: process.env.HYPERBROWSER_API_KEY,
-    });
-  }
-  return hyperbrowserClient;
+// Simple HTML cleaning function
+function cleanHtml(html: string): string {
+  // Very basic cleaning - remove scripts, styles, and excessive whitespace
+  return html
+    .replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, '')
+    .replace(/<style\b[^<]*(?:(?!<\/style>)<[^<]*)*<\/style>/gi, '')
+    .replace(/\s+/g, ' ')
+    .trim()
+    .substring(0, 100000); // Hard limit to 100K characters
 }
 
 export async function POST(request: NextRequest) {
-
   try {
-    const body = await request.json();
-    const { url, processing_method } = requestSchema.parse(body);
+    const { url } = await request.json();
 
-    console.log(`Processing recipe from URL: ${url} using method: ${processing_method}`);
-
-    // Validate API keys based on processing method
-    if (processing_method === "hyperbrowser" && !process.env.HYPERBROWSER_API_KEY) {
-      return NextResponse.json({ 
-        success: false,
-        error: 'Server configuration error: Missing Hyperbrowser API key.' 
-      }, { status: 500 });
+    if (!url) {
+      return NextResponse.json(
+        { success: false, error: 'URL is required' },
+        { status: 400 }
+      );
     }
 
-    if (processing_method === "openai" && !process.env.OPENAI_API_KEY) {
-      return NextResponse.json({ 
-        success: false,
-        error: 'Server configuration error: Missing OpenAI API key.' 
-      }, { status: 500 });
-    }
+    console.log(`Processing URL: ${url}`);
 
-    let recipeData;
-    let actualMethod: string = processing_method;
-    let fallbackUsed = false;
-
-    try {
-      if (processing_method === "hyperbrowser") {
-        // Try Hyperbrowser first
-        recipeData = await extractRecipeWithHyperbrowser(url);
-      } else {
-        // Try OpenAI first
-        recipeData = await extractRecipeWithOpenAI(url);
-      }
-    } catch (firstError) {
-      console.log(`Primary method ${processing_method} failed, attempting fallback...`);
-      fallbackUsed = true;
-      
-      try {
-        if (processing_method === "hyperbrowser") {
-          // Fallback to OpenAI
-          actualMethod = "openai (fallback)";
-          recipeData = await extractRecipeWithOpenAI(url);
-        } else {
-          // Fallback to Hyperbrowser
-          actualMethod = "hyperbrowser (fallback)";
-          recipeData = await extractRecipeWithHyperbrowser(url);
-        }
-      } catch (fallbackError) {
-        // Both methods failed
-        throw new Error(`Both extraction methods failed. Primary (${processing_method}): ${firstError instanceof Error ? firstError.message : String(firstError)}. Fallback: ${fallbackError instanceof Error ? fallbackError.message : String(fallbackError)}`);
-      }
-    }
-
-    return NextResponse.json({
-      success: true,
-      recipe: recipeData,
-      processing_method: actualMethod,
-      fallback_used: fallbackUsed,
-      message: `Recipe extracted successfully using ${actualMethod}`
-    });
-
-  } catch (error: unknown) {
-    console.error(`Error in /api/fetch-recipe:`, error instanceof Error ? error.message : String(error));
-    
-    let errorMessage = 'Failed to fetch and parse recipe.';
-    let errorDetails: string | object = error instanceof Error ? error.message : String(error); 
-    let statusCode = 500;
-
-    if (error instanceof z.ZodError) {
-      errorMessage = "Validation error: The recipe data is not in the expected format.";
-      errorDetails = error.format(); 
-      statusCode = 422; 
-    } else if (error instanceof Error) {
-      if (error.message.includes("Failed to fetch URL")) {
-        const statusMatch = error.message.match(/Status: (\d+)/);
-        if (statusMatch && statusMatch[1]) {
-          statusCode = parseInt(statusMatch[1], 10);
-        }
-        errorMessage = `Failed to fetch the recipe URL: ${error.message}`;
-      } else if (error.message.includes("API key")) {
-        errorMessage = "API configuration error. Please check your API keys.";
-        statusCode = 401;
-      } else if (error.message.includes("rate limit") || error.message.includes("quota")) {
-        errorMessage = "API rate limit exceeded. Please try again later.";
-        statusCode = 429;
-      }
-    }
-
-    return NextResponse.json({
-      success: false,
-      error: errorMessage,
-      details: errorDetails
-    }, { status: statusCode });
-  }
-}
-
-async function extractRecipeWithHyperbrowser(url: string) {
-  console.log(`Extracting recipe using Hyperbrowser from: ${url}`);
-  
-  try {
-    const client = getHyperbrowserClient();
-    
-    // Define the recipe schema for Hyperbrowser
-    const recipeSchema = {
-      type: "object",
-      properties: {
-        title: {
-          type: "string",
-          description: "The recipe title"
-        },
-        ingredients: {
-          type: "array",
-          items: { type: "string" },
-          description: "List of ingredients with quantities"
-        },
-        steps: {
-          type: "array", 
-          items: { type: "string" },
-          description: "Step-by-step cooking instructions"
-        },
-        image: {
-          type: "string",
-          description: "URL of the main recipe image"
-        },
-        description: {
-          type: "string",
-          description: "Brief description of the recipe"
-        },
-        cuisine: {
-          type: "string",
-          description: "Type of cuisine"
-        },
-        category: {
-          type: "string",
-          description: "Recipe category (e.g., Main Course, Dessert)"
-        },
-        prepTime: {
-          type: "string",
-          description: "Preparation time"
-        },
-        cleanupTime: {
-          type: "string",
-          description: "Cleanup time estimate"
-        }
-      }
-    };
-
-    // Use Hyperbrowser's extract API with structured schema
-    const result = await client.extract.startAndWait({
-      urls: [url],
-      prompt: `Extract complete recipe information from this webpage. Look for:
-1. TITLE: The main recipe name/title (h1, h2, or title tags)
-2. INGREDIENTS: All ingredients with quantities (look for recipe cards, ingredient lists, structured data)
-3. STEPS: Step-by-step cooking instructions (numbered lists, ordered lists, instruction sections)
-4. IMAGE: Main recipe photo URL (og:image, recipe card images, main content images)
-5. DESCRIPTION: Recipe description or summary
-6. CUISINE: Type of cuisine (analyze ingredients/recipe style)
-7. CATEGORY: Recipe category (appetizer, main course, dessert, etc.)
-8. PREP TIME: Preparation or cooking time mentioned
-9. CLEANUP TIME: Estimate cleanup time based on recipe complexity
-
-Focus on structured recipe data, recipe cards, JSON-LD structured data, and ignore navigation/ads/comments.`,
-      schema: recipeSchema,
-      sessionOptions: {
-        useStealth: true, // Bypass anti-bot measures
-        acceptCookies: true, // Accept cookies to avoid popups
+    // Fetch the webpage
+    const response = await fetch(url, {
+      headers: {
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36'
       }
     });
 
-    if (!result.data) {
-      throw new Error('Hyperbrowser did not return recipe data');
+    if (!response.ok) {
+      throw new Error(`Failed to fetch webpage: ${response.status} ${response.statusText}`);
     }
 
-    console.log('Hyperbrowser extraction successful');
-    console.log('Raw Hyperbrowser data:', JSON.stringify(result.data, null, 2));
-    
-    // Add defaults for missing fields before Zod validation
-    const extractedData = result.data as any; // Type assertion for extracted data
-    const dataWithDefaults = {
-      title: extractedData.title || 'Recipe',
-      ingredients: Array.isArray(extractedData.ingredients) ? extractedData.ingredients : [],
-      steps: Array.isArray(extractedData.steps) ? extractedData.steps : [],
-      image: fixImageUrl(extractedData.image, url),
-      description: extractedData.description || 'A delicious recipe.',
-      cuisine: extractedData.cuisine || 'International',
-      category: extractedData.category || 'Main Course',
-      prepTime: extractedData.prepTime || 'Variable',
-      cleanupTime: extractedData.cleanupTime || 'Variable'
-    };
-    
-    return zodRecipeSchema.parse(dataWithDefaults);
+    const htmlContent = await response.text();
+    console.log(`Raw HTML length: ${htmlContent.length}`);
 
-  } catch (error) {
-    console.error('Hyperbrowser extraction failed:', error);
-    throw new Error(`Hyperbrowser extraction failed: ${error instanceof Error ? error.message : String(error)}`);
-  }
-}
+    // Simple HTML cleaning
+    const cleanedHtml = cleanHtml(htmlContent);
+    console.log(`Cleaned HTML length: ${cleanedHtml.length}`);
 
-async function extractRecipeWithOpenAI(url: string) {
-  console.log(`Extracting recipe using OpenAI from: ${url}`);
-  
-  try {
-    // Fetch and sanitize HTML
-    let fetchResponse;
-    try {
-      fetchResponse = await fetch(url, {
-        headers: {
-          'User-Agent': 'Mozilla/5.0 (compatible; RecipeBot/1.0)',
-        },
-      });
-    } catch (fetchError) {
-      console.error('Failed to fetch URL:', fetchError);
-      throw new Error(`Failed to fetch URL: ${fetchError instanceof Error ? fetchError.message : String(fetchError)}`);
-    }
-    
-    if (!fetchResponse.ok) {
-      throw new Error(`Failed to fetch URL: ${fetchResponse.statusText} (Status: ${fetchResponse.status})`);
-    }
-    
-    const htmlContent = await fetchResponse.text();
-    console.log(`Original HTML length: ${htmlContent.length}`);
-    
-    const sanitizedHtml = getSanitizedHtml(htmlContent);
-    console.log(`Sanitized HTML length: ${sanitizedHtml.length}`);
+    // Check for recipe keywords
+    const hasRecipeKeywords = ['recipe', 'ingredient', 'instruction', 'direction'].some(keyword => 
+      cleanedHtml.toLowerCase().includes(keyword)
+    );
+    console.log(`Contains recipe keywords: ${hasRecipeKeywords}`);
 
-    // Improved prompt for better JSON generation
-    const systemPrompt = `You are a recipe extraction and processing assistant. Your ONLY job is to return a complete JSON object with exactly 9 fields.
+    // Initialize OpenAI
+    const openai = new OpenAI({
+      apiKey: process.env.OPENAI_API_KEY,
+    });
 
-**CRITICAL: YOU MUST RETURN VALID JSON ONLY - NO OTHER TEXT**
-
-Required JSON format:
+    // Simple prompt
+    const prompt = `Extract recipe information from this HTML and return ONLY a JSON object with these exact fields:
 {
-  "title": "Recipe Name",
+  "title": "recipe name",
   "ingredients": ["ingredient 1", "ingredient 2"],
   "steps": ["step 1", "step 2"],
   "image": "image_url_or_null",
-  "description": "Brief description",
-  "cuisine": "Cuisine type",
-  "category": "Recipe category",
-  "prepTime": "Time estimate",
-  "cleanupTime": "Cleanup estimate"
+  "description": "brief description",
+  "cuisine": "cuisine type",
+  "category": "recipe category", 
+  "prepTime": "prep time",
+  "cleanupTime": "cleanup time"
 }
 
-Extract the recipe information from the HTML and return ONLY the JSON object above. No explanations, no markdown, no code blocks - just the raw JSON.`;
+HTML content:
+${cleanedHtml}`;
 
-    const chatCompletion = await openaiClient.chat.completions.create({
+    console.log(`Sending to OpenAI, prompt length: ${prompt.length}`);
+
+    const completion = await openai.chat.completions.create({
       model: "gpt-4o-mini",
       messages: [
-        { role: "system", content: systemPrompt },
-        { role: "user", content: `Here is the HTML content of the recipe page: <html_content>${sanitizedHtml}</html_content>` }
+        {
+          role: "user",
+          content: prompt
+        }
       ],
-      response_format: { type: "json_object" },
-      max_completion_tokens: 2000,
+      max_tokens: 1000,
+      temperature: 0.1,
     });
 
-    if (!chatCompletion.choices[0].message.content) {
-      throw new Error('OpenAI did not return recipe content.');
+    const content = completion.choices[0]?.message?.content;
+    if (!content) {
+      throw new Error('No response from OpenAI');
     }
 
-    // Check if the response was truncated
-    if (chatCompletion.choices[0].finish_reason === 'length') {
-      console.warn('Warning: OpenAI response was truncated due to length limits');
-    } else if (chatCompletion.choices[0].finish_reason === 'content_filter') {
-      console.warn('Warning: OpenAI response was truncated due to content filtering - will attempt to fix JSON');
-    }
+    console.log('OpenAI response received');
 
-    console.log('Raw OpenAI response:', chatCompletion.choices[0].message.content);
-    console.log('Response finish reason:', chatCompletion.choices[0].finish_reason);
-    
-    let parsedJson;
-    const rawContent = chatCompletion.choices[0].message.content;
-    
+    // Parse JSON response
+    let parsedRecipe;
     try {
-      parsedJson = JSON.parse(rawContent);
-    } catch (jsonError) {
-      console.error('JSON parsing failed:', jsonError);
-      console.error('Raw response that failed to parse:', rawContent);
-      
-      // Try to fix common JSON issues
-      let fixedContent = rawContent;
-      
-      // Fix common issues with unescaped quotes in strings
-      fixedContent = fixedContent.replace(/([^\\])"/g, '$1\\"');
-      fixedContent = fixedContent.replace(/^"/, '\\"');
-      
-      try {
-         // Try to extract JSON if it's wrapped in markdown code blocks
-         const jsonMatch = fixedContent.match(/```(?:json)?\s*(\{[\s\S]*\})\s*```/);
-         if (jsonMatch) {
-           fixedContent = jsonMatch[1];
-           console.log('Extracted JSON from code block');
-         }
-         
-         // Try to fix truncated JSON by adding missing closing braces/brackets
-         if (!fixedContent.trim().endsWith('}')) {
-           console.log('Attempting to fix truncated JSON');
-           const attempts = [
-             fixedContent + '}',
-             fixedContent + '"}',
-             fixedContent + '"]',
-             fixedContent + '"]}',
-             fixedContent + '"}]}'
-           ];
-           
-           for (const attempt of attempts) {
-             try {
-               parsedJson = JSON.parse(attempt);
-               console.log('Successfully fixed truncated JSON');
-               break;
-             } catch {
-               // Continue to next attempt
-             }
-           }
-           
-           if (!parsedJson) {
-             throw new Error('Could not fix truncated JSON');
-           }
-         } else {
-           // Try parsing the fixed content
-           parsedJson = JSON.parse(fixedContent);
-           console.log('Successfully parsed JSON after fixing');
-         }
-      } catch {
-        throw new Error(`OpenAI returned invalid JSON: ${jsonError instanceof Error ? jsonError.message : String(jsonError)}`);
-      }
+      // Extract JSON from response (in case there's extra text)
+      const jsonMatch = content.match(/\{[\s\S]*\}/);
+      const jsonString = jsonMatch ? jsonMatch[0] : content;
+      parsedRecipe = JSON.parse(jsonString);
+    } catch (parseError) {
+      console.error('Failed to parse OpenAI response as JSON:', parseError);
+      console.log('Raw response:', content);
+      throw new Error('Invalid JSON response from OpenAI');
     }
 
-    // Add missing fields with sensible defaults if they're not present
-    const recipeDataWithDefaults = {
-      title: parsedJson.title || 'Recipe',
-      ingredients: Array.isArray(parsedJson.ingredients) ? parsedJson.ingredients : [],
-      steps: Array.isArray(parsedJson.steps) ? parsedJson.steps : [],
-      image: fixImageUrl(parsedJson.image, url),
-      description: parsedJson.description || 'A delicious recipe.',
-      cuisine: parsedJson.cuisine || 'International',
-      category: parsedJson.category || 'Main Course',
-      prepTime: parsedJson.prepTime || 'Approx. 30 minutes',
-      cleanupTime: parsedJson.cleanupTime || 'Approx. 15 minutes'
-    };
-    
-    console.log('OpenAI extraction successful');
-    return zodRecipeSchema.parse(recipeDataWithDefaults);
+    // Validate and fix the recipe
+    const validatedRecipe = RecipeSchema.parse(parsedRecipe);
+
+    // Fix image URL if present
+    if (validatedRecipe.image) {
+      validatedRecipe.image = fixImageUrl(validatedRecipe.image, url);
+    }
+
+    console.log('Recipe extraction successful');
+
+    return NextResponse.json({
+      success: true,
+      recipe: validatedRecipe,
+      processing_method: "openai",
+      message: "Recipe extracted successfully using OpenAI"
+    });
 
   } catch (error) {
-    console.error('OpenAI extraction failed:', error);
-    throw new Error(`OpenAI extraction failed: ${error instanceof Error ? error.message : String(error)}`);
+    console.error('Recipe extraction error:', error);
+    
+    return NextResponse.json(
+      { 
+        success: false, 
+        error: error instanceof Error ? error.message : 'Unknown error occurred',
+        processing_method: "openai"
+      },
+      { status: 500 }
+    );
   }
 } 
