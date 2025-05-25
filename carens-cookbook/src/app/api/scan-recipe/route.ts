@@ -339,6 +339,16 @@ async function processImageWithGemini(imageBase64: string, imageMimeType: string
 }
 
 export async function POST(req: NextRequest) {
+  const requestId = Math.random().toString(36).substr(2, 9);
+  const startTime = Date.now();
+  
+  // Enhanced debugging - capture request details
+  console.log(`[${requestId}] 🚀 START: Recipe scan request initiated`);
+  console.log(`[${requestId}] 📱 User-Agent: ${req.headers.get('user-agent')}`);
+  console.log(`[${requestId}] 🌐 Origin: ${req.headers.get('origin')}`);
+  console.log(`[${requestId}] 📊 Content-Length: ${req.headers.get('content-length')}`);
+  console.log(`[${requestId}] 🔧 Content-Type: ${req.headers.get('content-type')}`);
+  
   try {
     // Get user context for category suggestions
     let userId: string | null = null;
@@ -347,21 +357,26 @@ export async function POST(req: NextRequest) {
     try {
       const { userId: authUserId } = await auth();
       userId = authUserId;
+      console.log(`[${requestId}] 👤 User ID: ${userId || 'anonymous'}`);
       
       if (userId) {
         // Get user's existing categories for AI prompt
         userCategories = await categoryResolver.getAIPromptCategories(userId);
+        console.log(`[${requestId}] 📂 User categories count: ${userCategories.length}`);
       }
     } catch (error) {
-      console.warn('Could not get user context for category suggestions:', error);
+      console.warn(`[${requestId}] ⚠️ Could not get user context:`, error);
       // Continue without user context - will use default categories
     }
 
     // Parse form data
     let formData: FormData;
     try {
+      console.log(`[${requestId}] 📦 Parsing form data...`);
       formData = await req.formData();
+      console.log(`[${requestId}] ✅ Form data parsed successfully`);
     } catch (error) {
+      console.error(`[${requestId}] ❌ Failed to parse form data:`, error);
       throw new RecipeProcessingError({
         type: ErrorType.INVALID_RECIPE_DATA,
         message: 'Failed to parse form data',
@@ -376,6 +391,18 @@ export async function POST(req: NextRequest) {
     const imageFile = formData.get('image') as File | null;
     const providerParam = formData.get('provider') as string | null;
     const provider: AIProvider = (providerParam === 'gemini') ? 'gemini' : 'openai';
+    
+    // Enhanced file debugging
+    if (imageFile) {
+      console.log(`[${requestId}] 🖼️ File received:`);
+      console.log(`[${requestId}]   📝 Name: ${imageFile.name}`);
+      console.log(`[${requestId}]   📏 Size: ${imageFile.size} bytes (${(imageFile.size / 1024 / 1024).toFixed(2)} MB)`);
+      console.log(`[${requestId}]   🎭 Type: ${imageFile.type}`);
+      console.log(`[${requestId}]   ⏰ Last Modified: ${new Date(imageFile.lastModified).toISOString()}`);
+      console.log(`[${requestId}] 🤖 Provider: ${provider}`);
+    } else {
+      console.error(`[${requestId}] ❌ No image file found in form data`);
+    }
 
     // Check API key configuration for the selected provider
     if (provider === 'openai' && !process.env.OPENAI_API_KEY) {
@@ -401,16 +428,33 @@ export async function POST(req: NextRequest) {
     }
     
     // Validate the uploaded file with provider-specific limits
-    validateFile(imageFile!, provider);
+    console.log(`[${requestId}] 🔍 Validating file for ${provider}...`);
+    try {
+      validateFile(imageFile!, provider);
+      console.log(`[${requestId}] ✅ File validation passed`);
+    } catch (error) {
+      console.error(`[${requestId}] ❌ File validation failed:`, error);
+      throw error;
+    }
 
     // Convert image file to base64
     let imageBuffer: ArrayBuffer;
     let imageBase64: string;
     
     try {
+      console.log(`[${requestId}] 🔄 Converting to ArrayBuffer...`);
+      const bufferStart = Date.now();
       imageBuffer = await imageFile!.arrayBuffer();
+      const bufferTime = Date.now() - bufferStart;
+      console.log(`[${requestId}] ✅ ArrayBuffer conversion completed in ${bufferTime}ms`);
+      
+      console.log(`[${requestId}] 🔄 Converting to base64...`);
+      const base64Start = Date.now();
       imageBase64 = Buffer.from(imageBuffer).toString('base64');
+      const base64Time = Date.now() - base64Start;
+      console.log(`[${requestId}] ✅ Base64 conversion completed in ${base64Time}ms (${Math.round(imageBase64.length / 1024)}KB)`);
     } catch (error) {
+      console.error(`[${requestId}] ❌ Failed to process image file:`, error);
       throw new RecipeProcessingError({
         type: ErrorType.FILE_CORRUPTED,
         message: 'Failed to process image file',
@@ -426,16 +470,28 @@ export async function POST(req: NextRequest) {
     const schemaString = JSON.stringify(scanRecipeZodSchema.shape);
     const systemPrompt = getImageSystemPrompt(schemaString, userCategories);
 
+    console.log(`[${requestId}] 🎯 Preparing AI processing...`);
+    console.log(`[${requestId}]   🎭 MIME Type: ${imageMimeType}`);
+    console.log(`[${requestId}]   📏 System prompt length: ${systemPrompt.length} chars`);
+
     // Process image with selected AI provider
     let responseContent: string | null = null;
     
     try {
+      console.log(`[${requestId}] 🤖 Starting ${provider.toUpperCase()} processing...`);
+      const aiStart = Date.now();
+      
       if (provider === 'openai') {
         responseContent = await processImageWithOpenAI(imageBase64, imageMimeType, systemPrompt);
       } else {
         responseContent = await processImageWithGemini(imageBase64, imageMimeType, systemPrompt);
       }
+      
+      const aiTime = Date.now() - aiStart;
+      console.log(`[${requestId}] ✅ ${provider.toUpperCase()} processing completed in ${aiTime}ms`);
+      console.log(`[${requestId}] 📤 Response length: ${responseContent?.length || 0} chars`);
     } catch (error: unknown) {
+      console.error(`[${requestId}] ❌ ${provider.toUpperCase()} processing failed:`, error);
       if (provider === 'openai') {
         handleOpenAIError(error);
       } else {
@@ -459,8 +515,13 @@ export async function POST(req: NextRequest) {
     // Parse and validate the JSON response
     let parsedJson: unknown;
     try {
+      console.log(`[${requestId}] 🔍 Parsing JSON response...`);
       parsedJson = JSON.parse(responseContent);
-    } catch {
+      console.log(`[${requestId}] ✅ JSON parsed successfully`);
+      console.log(`[${requestId}] 📋 Response keys: ${Object.keys(parsedJson || {}).join(', ')}`);
+    } catch (parseError) {
+      console.error(`[${requestId}] ❌ JSON parse failed:`, parseError);
+      console.error(`[${requestId}] 📄 Raw response content:`, responseContent?.substring(0, 500));
       const providerName = getProviderConfig(provider).name;
       throw new RecipeProcessingError({
         type: ErrorType.AI_PROCESSING_FAILED,
@@ -572,23 +633,41 @@ export async function POST(req: NextRequest) {
       _categoryMetadata: categoryMetadata
     };
 
+    const totalTime = Date.now() - startTime;
+    console.log(`[${requestId}] 🎉 SUCCESS: Recipe scan completed in ${totalTime}ms`);
+    console.log(`[${requestId}] 📋 Final recipe title: "${validatedRecipeData.title}"`);
+    console.log(`[${requestId}] 📂 Final category: "${validatedRecipeData.category}"`);
+    console.log(`[${requestId}] 🥗 Ingredients count: ${validatedRecipeData.ingredients.length}`);
+    console.log(`[${requestId}] 👩‍🍳 Steps count: ${validatedRecipeData.steps.length}`);
+
     return NextResponse.json(responseData, { status: 200 });
 
   } catch (error: unknown) {
+    const totalTime = Date.now() - startTime;
+    console.error(`[${requestId}] 💥 FAILED: Recipe scan failed after ${totalTime}ms`);
+    console.error(`[${requestId}] ❌ Error details:`, error);
+    
     let recipeError: RecipeProcessingError;
     
     if (error instanceof RecipeProcessingError) {
       recipeError = error;
+      console.error(`[${requestId}] 🏷️ Error type: ${recipeError.type}`);
+      console.error(`[${requestId}] 💬 User message: ${recipeError.userMessage}`);
+      console.error(`[${requestId}] 🔧 Actionable: ${recipeError.actionable}`);
     } else {
       recipeError = RecipeProcessingError.fromUnknown(error, 'scan-recipe-api');
+      console.error(`[${requestId}] 🔄 Converted unknown error to RecipeProcessingError`);
     }
 
     // Log the error for debugging
     logError(recipeError, {
       endpoint: '/api/scan-recipe',
       userAgent: req.headers.get('user-agent'),
-      timestamp: new Date().toISOString()
+      timestamp: new Date().toISOString(),
+      requestId
     });
+
+    console.log(`[${requestId}] 📤 Returning error response with status ${recipeError.statusCode}`);
 
     return NextResponse.json(
       { 
