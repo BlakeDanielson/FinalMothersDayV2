@@ -1,0 +1,922 @@
+{
+  "testRun": {
+    "timestamp": "2025-05-25T05:46:40.062Z",
+    "totalDuration": 75284,
+    "testsPerformed": 75,
+    "method": "openai-only"
+  },
+  "summary": {
+    "totalTests": 75,
+    "successfulTests": 0,
+    "failedTests": 75,
+    "successRate": "0.00",
+    "avgDuration": 0,
+    "minDuration": 0,
+    "maxDuration": 0,
+    "siteStats": {
+      "AllRecipes": {
+        "total": 3,
+        "successful": 0,
+        "successRate": "0.00",
+        "avgDuration": 0
+      },
+      "Food Network": {
+        "total": 3,
+        "successful": 0,
+        "successRate": "0.00",
+        "avgDuration": 0
+      },
+      "Bon Appétit": {
+        "total": 3,
+        "successful": 0,
+        "successRate": "0.00",
+        "avgDuration": 0
+      },
+      "Serious Eats": {
+        "total": 3,
+        "successful": 0,
+        "successRate": "0.00",
+        "avgDuration": 0
+      },
+      "Epicurious": {
+        "total": 3,
+        "successful": 0,
+        "successRate": "0.00",
+        "avgDuration": 0
+      },
+      "Simply Recipes": {
+        "total": 3,
+        "successful": 0,
+        "successRate": "0.00",
+        "avgDuration": 0
+      },
+      "Taste of Home": {
+        "total": 3,
+        "successful": 0,
+        "successRate": "0.00",
+        "avgDuration": 0
+      },
+      "Delish": {
+        "total": 3,
+        "successful": 0,
+        "successRate": "0.00",
+        "avgDuration": 0
+      },
+      "BBC Good Food": {
+        "total": 3,
+        "successful": 0,
+        "successRate": "0.00",
+        "avgDuration": 0
+      },
+      "Martha Stewart": {
+        "total": 3,
+        "successful": 0,
+        "successRate": "0.00",
+        "avgDuration": 0
+      },
+      "Food52": {
+        "total": 3,
+        "successful": 0,
+        "successRate": "0.00",
+        "avgDuration": 0
+      },
+      "King Arthur Baking": {
+        "total": 3,
+        "successful": 0,
+        "successRate": "0.00",
+        "avgDuration": 0
+      },
+      "Yummly": {
+        "total": 3,
+        "successful": 0,
+        "successRate": "0.00",
+        "avgDuration": 0
+      },
+      "The Kitchn": {
+        "total": 3,
+        "successful": 0,
+        "successRate": "0.00",
+        "avgDuration": 0
+      },
+      "Cookie and Kate": {
+        "total": 3,
+        "successful": 0,
+        "successRate": "0.00",
+        "avgDuration": 0
+      },
+      "Betty Crocker": {
+        "total": 3,
+        "successful": 0,
+        "successRate": "0.00",
+        "avgDuration": 0
+      },
+      "Minimalist Baker": {
+        "total": 3,
+        "successful": 0,
+        "successRate": "0.00",
+        "avgDuration": 0
+      },
+      "Eating Well": {
+        "total": 3,
+        "successful": 0,
+        "successRate": "0.00",
+        "avgDuration": 0
+      },
+      "Rachael Ray": {
+        "total": 3,
+        "successful": 0,
+        "successRate": "0.00",
+        "avgDuration": 0
+      },
+      "Pioneer Woman": {
+        "total": 3,
+        "successful": 0,
+        "successRate": "0.00",
+        "avgDuration": 0
+      },
+      "Southern Living": {
+        "total": 3,
+        "successful": 0,
+        "successRate": "0.00",
+        "avgDuration": 0
+      },
+      "Cafe Delites": {
+        "total": 3,
+        "successful": 0,
+        "successRate": "0.00",
+        "avgDuration": 0
+      },
+      "Spend with Pennies": {
+        "total": 3,
+        "successful": 0,
+        "successRate": "0.00",
+        "avgDuration": 0
+      },
+      "Real Simple": {
+        "total": 3,
+        "successful": 0,
+        "successRate": "0.00",
+        "avgDuration": 0
+      },
+      "America's Test Kitchen": {
+        "total": 3,
+        "successful": 0,
+        "successRate": "0.00",
+        "avgDuration": 0
+      }
+    },
+    "totalTestTime": 75284
+  },
+  "detailedResults": [
+    {
+      "site": "AllRecipes",
+      "recipeUrl": "https://www.allrecipes.com/recipe/16354/easy-meatloaf/",
+      "success": false,
+      "duration": 0,
+      "method": "openai",
+      "error": "fetch failed",
+      "recipe": null,
+      "timestamp": "2025-05-25T05:45:24.801Z"
+    },
+    {
+      "site": "AllRecipes",
+      "recipeUrl": "https://www.allrecipes.com/recipe/213742/cheesy-chicken-broccoli-casserole/",
+      "success": false,
+      "duration": 0,
+      "method": "openai",
+      "error": "fetch failed",
+      "recipe": null,
+      "timestamp": "2025-05-25T05:45:25.809Z"
+    },
+    {
+      "site": "AllRecipes",
+      "recipeUrl": "https://www.allrecipes.com/recipe/231506/simple-macaroni-and-cheese/",
+      "success": false,
+      "duration": 0,
+      "method": "openai",
+      "error": "fetch failed",
+      "recipe": null,
+      "timestamp": "2025-05-25T05:45:26.813Z"
+    },
+    {
+      "site": "Food Network",
+      "recipeUrl": "https://www.foodnetwork.com/recipes/alton-brown/baked-macaroni-and-cheese-recipe-1939524",
+      "success": false,
+      "duration": 0,
+      "method": "openai",
+      "error": "fetch failed",
+      "recipe": null,
+      "timestamp": "2025-05-25T05:45:27.815Z"
+    },
+    {
+      "site": "Food Network",
+      "recipeUrl": "https://www.foodnetwork.com/recipes/rachael-ray/spinach-and-mushroom-stuffed-chicken-breasts-recipe-1944651",
+      "success": false,
+      "duration": 0,
+      "method": "openai",
+      "error": "fetch failed",
+      "recipe": null,
+      "timestamp": "2025-05-25T05:45:28.824Z"
+    },
+    {
+      "site": "Food Network",
+      "recipeUrl": "https://www.foodnetwork.com/recipes/emeril-lagasse/banana-cream-pie-recipe-1916010",
+      "success": false,
+      "duration": 0,
+      "method": "openai",
+      "error": "fetch failed",
+      "recipe": null,
+      "timestamp": "2025-05-25T05:45:29.828Z"
+    },
+    {
+      "site": "Bon Appétit",
+      "recipeUrl": "https://www.bonappetit.com/recipe/bas-best-chocolate-chip-cookies",
+      "success": false,
+      "duration": 0,
+      "method": "openai",
+      "error": "fetch failed",
+      "recipe": null,
+      "timestamp": "2025-05-25T05:45:30.831Z"
+    },
+    {
+      "site": "Bon Appétit",
+      "recipeUrl": "https://www.bonappetit.com/recipe/perfect-pan-seared-chicken-thighs",
+      "success": false,
+      "duration": 0,
+      "method": "openai",
+      "error": "fetch failed",
+      "recipe": null,
+      "timestamp": "2025-05-25T05:45:31.834Z"
+    },
+    {
+      "site": "Bon Appétit",
+      "recipeUrl": "https://www.bonappetit.com/recipe/simple-crushed-tomato-pasta",
+      "success": false,
+      "duration": 0,
+      "method": "openai",
+      "error": "fetch failed",
+      "recipe": null,
+      "timestamp": "2025-05-25T05:45:32.846Z"
+    },
+    {
+      "site": "Serious Eats",
+      "recipeUrl": "https://www.seriouseats.com/the-best-chocolate-chip-cookies-recipe",
+      "success": false,
+      "duration": 0,
+      "method": "openai",
+      "error": "fetch failed",
+      "recipe": null,
+      "timestamp": "2025-05-25T05:45:33.851Z"
+    },
+    {
+      "site": "Serious Eats",
+      "recipeUrl": "https://www.seriouseats.com/perfect-pan-seared-pork-chops-recipe",
+      "success": false,
+      "duration": 0,
+      "method": "openai",
+      "error": "fetch failed",
+      "recipe": null,
+      "timestamp": "2025-05-25T05:45:34.854Z"
+    },
+    {
+      "site": "Serious Eats",
+      "recipeUrl": "https://www.seriouseats.com/classic-caesar-salad-recipe",
+      "success": false,
+      "duration": 0,
+      "method": "openai",
+      "error": "fetch failed",
+      "recipe": null,
+      "timestamp": "2025-05-25T05:45:35.871Z"
+    },
+    {
+      "site": "Epicurious",
+      "recipeUrl": "https://www.epicurious.com/recipes/food/views/my-favorite-buttermilk-biscuits-231000",
+      "success": false,
+      "duration": 0,
+      "method": "openai",
+      "error": "fetch failed",
+      "recipe": null,
+      "timestamp": "2025-05-25T05:45:36.879Z"
+    },
+    {
+      "site": "Epicurious",
+      "recipeUrl": "https://www.epicurious.com/recipes/food/views/classic-beef-stew-51161870",
+      "success": false,
+      "duration": 0,
+      "method": "openai",
+      "error": "fetch failed",
+      "recipe": null,
+      "timestamp": "2025-05-25T05:45:37.882Z"
+    },
+    {
+      "site": "Epicurious",
+      "recipeUrl": "https://www.epicurious.com/recipes/food/views/lemon-bars-108125",
+      "success": false,
+      "duration": 0,
+      "method": "openai",
+      "error": "fetch failed",
+      "recipe": null,
+      "timestamp": "2025-05-25T05:45:38.885Z"
+    },
+    {
+      "site": "Simply Recipes",
+      "recipeUrl": "https://www.simplyrecipes.com/recipes/how_to_make_perfect_hard_boiled_eggs/",
+      "success": false,
+      "duration": 0,
+      "method": "openai",
+      "error": "fetch failed",
+      "recipe": null,
+      "timestamp": "2025-05-25T05:45:39.889Z"
+    },
+    {
+      "site": "Simply Recipes",
+      "recipeUrl": "https://www.simplyrecipes.com/recipes/basic_pancakes/",
+      "success": false,
+      "duration": 0,
+      "method": "openai",
+      "error": "fetch failed",
+      "recipe": null,
+      "timestamp": "2025-05-25T05:45:40.892Z"
+    },
+    {
+      "site": "Simply Recipes",
+      "recipeUrl": "https://www.simplyrecipes.com/recipes/chicken_noodle_soup/",
+      "success": false,
+      "duration": 0,
+      "method": "openai",
+      "error": "fetch failed",
+      "recipe": null,
+      "timestamp": "2025-05-25T05:45:41.894Z"
+    },
+    {
+      "site": "Taste of Home",
+      "recipeUrl": "https://www.tasteofhome.com/recipes/makeover-creamy-macaroni-and-cheese/",
+      "success": false,
+      "duration": 0,
+      "method": "openai",
+      "error": "fetch failed",
+      "recipe": null,
+      "timestamp": "2025-05-25T05:45:42.897Z"
+    },
+    {
+      "site": "Taste of Home",
+      "recipeUrl": "https://www.tasteofhome.com/recipes/slow-cooker-chicken-and-dumplings/",
+      "success": false,
+      "duration": 0,
+      "method": "openai",
+      "error": "fetch failed",
+      "recipe": null,
+      "timestamp": "2025-05-25T05:45:43.900Z"
+    },
+    {
+      "site": "Taste of Home",
+      "recipeUrl": "https://www.tasteofhome.com/recipes/classic-chocolate-cake/",
+      "success": false,
+      "duration": 0,
+      "method": "openai",
+      "error": "fetch failed",
+      "recipe": null,
+      "timestamp": "2025-05-25T05:45:44.902Z"
+    },
+    {
+      "site": "Delish",
+      "recipeUrl": "https://www.delish.com/cooking/recipe-ideas/recipes/a54724/perfect-chocolate-chip-cookies-recipe/",
+      "success": false,
+      "duration": 0,
+      "method": "openai",
+      "error": "fetch failed",
+      "recipe": null,
+      "timestamp": "2025-05-25T05:45:45.903Z"
+    },
+    {
+      "site": "Delish",
+      "recipeUrl": "https://www.delish.com/cooking/recipe-ideas/a19636089/best-beef-stew-recipe/",
+      "success": false,
+      "duration": 0,
+      "method": "openai",
+      "error": "fetch failed",
+      "recipe": null,
+      "timestamp": "2025-05-25T05:45:46.906Z"
+    },
+    {
+      "site": "Delish",
+      "recipeUrl": "https://www.delish.com/cooking/recipe-ideas/recipes/a58347/shrimp-scampi-recipe/",
+      "success": false,
+      "duration": 0,
+      "method": "openai",
+      "error": "fetch failed",
+      "recipe": null,
+      "timestamp": "2025-05-25T05:45:47.909Z"
+    },
+    {
+      "site": "BBC Good Food",
+      "recipeUrl": "https://www.bbcgoodfood.com/recipes/ultimate-chocolate-brownie-recipe",
+      "success": false,
+      "duration": 0,
+      "method": "openai",
+      "error": "fetch failed",
+      "recipe": null,
+      "timestamp": "2025-05-25T05:45:48.912Z"
+    },
+    {
+      "site": "BBC Good Food",
+      "recipeUrl": "https://www.bbcgoodfood.com/recipes/best-ever-chocolate-brownies",
+      "success": false,
+      "duration": 0,
+      "method": "openai",
+      "error": "fetch failed",
+      "recipe": null,
+      "timestamp": "2025-05-25T05:45:49.915Z"
+    },
+    {
+      "site": "BBC Good Food",
+      "recipeUrl": "https://www.bbcgoodfood.com/recipes/easy-spaghetti-bolognese-recipe",
+      "success": false,
+      "duration": 0,
+      "method": "openai",
+      "error": "fetch failed",
+      "recipe": null,
+      "timestamp": "2025-05-25T05:45:50.918Z"
+    },
+    {
+      "site": "Martha Stewart",
+      "recipeUrl": "https://www.marthastewart.com/318599/basic-muffins",
+      "success": false,
+      "duration": 0,
+      "method": "openai",
+      "error": "fetch failed",
+      "recipe": null,
+      "timestamp": "2025-05-25T05:45:51.921Z"
+    },
+    {
+      "site": "Martha Stewart",
+      "recipeUrl": "https://www.marthastewart.com/353477/roast-chicken",
+      "success": false,
+      "duration": 0,
+      "method": "openai",
+      "error": "fetch failed",
+      "recipe": null,
+      "timestamp": "2025-05-25T05:45:52.923Z"
+    },
+    {
+      "site": "Martha Stewart",
+      "recipeUrl": "https://www.marthastewart.com/315757/chocolate-chip-cookies",
+      "success": false,
+      "duration": 0,
+      "method": "openai",
+      "error": "fetch failed",
+      "recipe": null,
+      "timestamp": "2025-05-25T05:45:53.924Z"
+    },
+    {
+      "site": "Food52",
+      "recipeUrl": "https://food52.com/recipes/23000-genius-chocolate-chip-cookies",
+      "success": false,
+      "duration": 0,
+      "method": "openai",
+      "error": "fetch failed",
+      "recipe": null,
+      "timestamp": "2025-05-25T05:45:54.926Z"
+    },
+    {
+      "site": "Food52",
+      "recipeUrl": "https://food52.com/recipes/74987-marcella-hazan-s-tomato-sauce",
+      "success": false,
+      "duration": 0,
+      "method": "openai",
+      "error": "fetch failed",
+      "recipe": null,
+      "timestamp": "2025-05-25T05:45:55.929Z"
+    },
+    {
+      "site": "Food52",
+      "recipeUrl": "https://food52.com/recipes/22279-alice-waters-ratatouille",
+      "success": false,
+      "duration": 0,
+      "method": "openai",
+      "error": "fetch failed",
+      "recipe": null,
+      "timestamp": "2025-05-25T05:45:56.931Z"
+    },
+    {
+      "site": "King Arthur Baking",
+      "recipeUrl": "https://www.kingarthurbaking.com/recipes/chocolate-chip-cookies-recipe",
+      "success": false,
+      "duration": 0,
+      "method": "openai",
+      "error": "fetch failed",
+      "recipe": null,
+      "timestamp": "2025-05-25T05:45:57.934Z"
+    },
+    {
+      "site": "King Arthur Baking",
+      "recipeUrl": "https://www.kingarthurbaking.com/recipes/classic-birthday-cake-recipe",
+      "success": false,
+      "duration": 0,
+      "method": "openai",
+      "error": "fetch failed",
+      "recipe": null,
+      "timestamp": "2025-05-25T05:45:58.935Z"
+    },
+    {
+      "site": "King Arthur Baking",
+      "recipeUrl": "https://www.kingarthurbaking.com/recipes/perfectly-pillowy-cinnamon-rolls-recipe",
+      "success": false,
+      "duration": 0,
+      "method": "openai",
+      "error": "fetch failed",
+      "recipe": null,
+      "timestamp": "2025-05-25T05:45:59.938Z"
+    },
+    {
+      "site": "Yummly",
+      "recipeUrl": "https://www.yummly.com/recipe/Slow-Cooker-Chicken-and-Rice-2045052",
+      "success": false,
+      "duration": 0,
+      "method": "openai",
+      "error": "fetch failed",
+      "recipe": null,
+      "timestamp": "2025-05-25T05:46:00.940Z"
+    },
+    {
+      "site": "Yummly",
+      "recipeUrl": "https://www.yummly.com/recipe/Easy-Beef-Stir-Fry-1036572",
+      "success": false,
+      "duration": 0,
+      "method": "openai",
+      "error": "fetch failed",
+      "recipe": null,
+      "timestamp": "2025-05-25T05:46:01.942Z"
+    },
+    {
+      "site": "Yummly",
+      "recipeUrl": "https://www.yummly.com/recipe/Chocolate-Chip-Banana-Bread-2082863",
+      "success": false,
+      "duration": 0,
+      "method": "openai",
+      "error": "fetch failed",
+      "recipe": null,
+      "timestamp": "2025-05-25T05:46:02.945Z"
+    },
+    {
+      "site": "The Kitchn",
+      "recipeUrl": "https://www.thekitchn.com/how-to-make-perfect-chocolate-chip-cookies-cooking-lessons-from-the-kitchn-213352",
+      "success": false,
+      "duration": 0,
+      "method": "openai",
+      "error": "fetch failed",
+      "recipe": null,
+      "timestamp": "2025-05-25T05:46:03.946Z"
+    },
+    {
+      "site": "The Kitchn",
+      "recipeUrl": "https://www.thekitchn.com/how-to-roast-chicken-cooking-lessons-from-the-kitchn-107178",
+      "success": false,
+      "duration": 0,
+      "method": "openai",
+      "error": "fetch failed",
+      "recipe": null,
+      "timestamp": "2025-05-25T05:46:04.953Z"
+    },
+    {
+      "site": "The Kitchn",
+      "recipeUrl": "https://www.thekitchn.com/how-to-make-creamy-tomato-soup-cooking-lessons-from-the-kitchn-102414",
+      "success": false,
+      "duration": 0,
+      "method": "openai",
+      "error": "fetch failed",
+      "recipe": null,
+      "timestamp": "2025-05-25T05:46:05.956Z"
+    },
+    {
+      "site": "Cookie and Kate",
+      "recipeUrl": "https://cookieandkate.com/best-chocolate-chip-cookies-recipe/",
+      "success": false,
+      "duration": 0,
+      "method": "openai",
+      "error": "fetch failed",
+      "recipe": null,
+      "timestamp": "2025-05-25T05:46:06.960Z"
+    },
+    {
+      "site": "Cookie and Kate",
+      "recipeUrl": "https://cookieandkate.com/simple-roasted-chicken-recipe/",
+      "success": false,
+      "duration": 0,
+      "method": "openai",
+      "error": "fetch failed",
+      "recipe": null,
+      "timestamp": "2025-05-25T05:46:07.962Z"
+    },
+    {
+      "site": "Cookie and Kate",
+      "recipeUrl": "https://cookieandkate.com/fresh-tomato-soup-recipe/",
+      "success": false,
+      "duration": 0,
+      "method": "openai",
+      "error": "fetch failed",
+      "recipe": null,
+      "timestamp": "2025-05-25T05:46:08.968Z"
+    },
+    {
+      "site": "Betty Crocker",
+      "recipeUrl": "https://www.bettycrocker.com/recipes/ultimate-chocolate-chip-cookies/77c14e03-d8b0-4844-846d-f19304f61c57",
+      "success": false,
+      "duration": 0,
+      "method": "openai",
+      "error": "fetch failed",
+      "recipe": null,
+      "timestamp": "2025-05-25T05:46:09.971Z"
+    },
+    {
+      "site": "Betty Crocker",
+      "recipeUrl": "https://www.bettycrocker.com/recipes/classic-beef-stew/79eb24e5-9777-48a1-a9fa-5d5c5c1e7c7e",
+      "success": false,
+      "duration": 0,
+      "method": "openai",
+      "error": "fetch failed",
+      "recipe": null,
+      "timestamp": "2025-05-25T05:46:10.973Z"
+    },
+    {
+      "site": "Betty Crocker",
+      "recipeUrl": "https://www.bettycrocker.com/recipes/easy-chicken-and-rice/de44c7b7-e2e3-4a94-ba85-3e84c6c21a8c",
+      "success": false,
+      "duration": 0,
+      "method": "openai",
+      "error": "fetch failed",
+      "recipe": null,
+      "timestamp": "2025-05-25T05:46:11.976Z"
+    },
+    {
+      "site": "Minimalist Baker",
+      "recipeUrl": "https://minimalistbaker.com/the-best-chocolate-chip-cookies/",
+      "success": false,
+      "duration": 0,
+      "method": "openai",
+      "error": "fetch failed",
+      "recipe": null,
+      "timestamp": "2025-05-25T05:46:12.978Z"
+    },
+    {
+      "site": "Minimalist Baker",
+      "recipeUrl": "https://minimalistbaker.com/1-hour-vegan-shepherds-pie/",
+      "success": false,
+      "duration": 0,
+      "method": "openai",
+      "error": "fetch failed",
+      "recipe": null,
+      "timestamp": "2025-05-25T05:46:13.981Z"
+    },
+    {
+      "site": "Minimalist Baker",
+      "recipeUrl": "https://minimalistbaker.com/creamy-roasted-tomato-soup-vegan/",
+      "success": false,
+      "duration": 0,
+      "method": "openai",
+      "error": "fetch failed",
+      "recipe": null,
+      "timestamp": "2025-05-25T05:46:14.983Z"
+    },
+    {
+      "site": "Eating Well",
+      "recipeUrl": "https://www.eatingwell.com/recipe/276799/roasted-chicken-thighs-with-vegetables/",
+      "success": false,
+      "duration": 0,
+      "method": "openai",
+      "error": "fetch failed",
+      "recipe": null,
+      "timestamp": "2025-05-25T05:46:15.985Z"
+    },
+    {
+      "site": "Eating Well",
+      "recipeUrl": "https://www.eatingwell.com/recipe/281110/mediterranean-quinoa-salad/",
+      "success": false,
+      "duration": 0,
+      "method": "openai",
+      "error": "fetch failed",
+      "recipe": null,
+      "timestamp": "2025-05-25T05:46:16.988Z"
+    },
+    {
+      "site": "Eating Well",
+      "recipeUrl": "https://www.eatingwell.com/recipe/280062/healthy-chocolate-chip-cookies/",
+      "success": false,
+      "duration": 0,
+      "method": "openai",
+      "error": "fetch failed",
+      "recipe": null,
+      "timestamp": "2025-05-25T05:46:17.990Z"
+    },
+    {
+      "site": "Rachael Ray",
+      "recipeUrl": "https://www.rachaelray.com/recipes/30-minute-meals/chicken-parm-meatballs",
+      "success": false,
+      "duration": 0,
+      "method": "openai",
+      "error": "fetch failed",
+      "recipe": null,
+      "timestamp": "2025-05-25T05:46:18.994Z"
+    },
+    {
+      "site": "Rachael Ray",
+      "recipeUrl": "https://www.rachaelray.com/recipes/beef-and-mushroom-stroganoff",
+      "success": false,
+      "duration": 0,
+      "method": "openai",
+      "error": "fetch failed",
+      "recipe": null,
+      "timestamp": "2025-05-25T05:46:19.996Z"
+    },
+    {
+      "site": "Rachael Ray",
+      "recipeUrl": "https://www.rachaelray.com/recipes/chocolate-chip-cookies",
+      "success": false,
+      "duration": 0,
+      "method": "openai",
+      "error": "fetch failed",
+      "recipe": null,
+      "timestamp": "2025-05-25T05:46:20.999Z"
+    },
+    {
+      "site": "Pioneer Woman",
+      "recipeUrl": "https://www.thepioneerwoman.com/food-cooking/recipes/a32120/chocolate-sheet-cake/",
+      "success": false,
+      "duration": 0,
+      "method": "openai",
+      "error": "fetch failed",
+      "recipe": null,
+      "timestamp": "2025-05-25T05:46:22.001Z"
+    },
+    {
+      "site": "Pioneer Woman",
+      "recipeUrl": "https://www.thepioneerwoman.com/food-cooking/recipes/a11873/chicken-fried-steak/",
+      "success": false,
+      "duration": 0,
+      "method": "openai",
+      "error": "fetch failed",
+      "recipe": null,
+      "timestamp": "2025-05-25T05:46:23.002Z"
+    },
+    {
+      "site": "Pioneer Woman",
+      "recipeUrl": "https://www.thepioneerwoman.com/food-cooking/recipes/a87971/16-minute-beef-and-broccoli/",
+      "success": false,
+      "duration": 0,
+      "method": "openai",
+      "error": "fetch failed",
+      "recipe": null,
+      "timestamp": "2025-05-25T05:46:24.003Z"
+    },
+    {
+      "site": "Southern Living",
+      "recipeUrl": "https://www.southernliving.com/recipes/classic-chocolate-chip-cookies",
+      "success": false,
+      "duration": 0,
+      "method": "openai",
+      "error": "fetch failed",
+      "recipe": null,
+      "timestamp": "2025-05-25T05:46:25.008Z"
+    },
+    {
+      "site": "Southern Living",
+      "recipeUrl": "https://www.southernliving.com/recipes/buttermilk-biscuits-recipe",
+      "success": false,
+      "duration": 0,
+      "method": "openai",
+      "error": "fetch failed",
+      "recipe": null,
+      "timestamp": "2025-05-25T05:46:26.010Z"
+    },
+    {
+      "site": "Southern Living",
+      "recipeUrl": "https://www.southernliving.com/recipes/fried-chicken-recipe",
+      "success": false,
+      "duration": 0,
+      "method": "openai",
+      "error": "fetch failed",
+      "recipe": null,
+      "timestamp": "2025-05-25T05:46:27.012Z"
+    },
+    {
+      "site": "Cafe Delites",
+      "recipeUrl": "https://cafedelites.com/best-chocolate-chip-cookies/",
+      "success": false,
+      "duration": 0,
+      "method": "openai",
+      "error": "fetch failed",
+      "recipe": null,
+      "timestamp": "2025-05-25T05:46:28.014Z"
+    },
+    {
+      "site": "Cafe Delites",
+      "recipeUrl": "https://cafedelites.com/crispy-chicken-thighs/",
+      "success": false,
+      "duration": 0,
+      "method": "openai",
+      "error": "fetch failed",
+      "recipe": null,
+      "timestamp": "2025-05-25T05:46:29.017Z"
+    },
+    {
+      "site": "Cafe Delites",
+      "recipeUrl": "https://cafedelites.com/creamy-tomato-soup/",
+      "success": false,
+      "duration": 0,
+      "method": "openai",
+      "error": "fetch failed",
+      "recipe": null,
+      "timestamp": "2025-05-25T05:46:30.019Z"
+    },
+    {
+      "site": "Spend with Pennies",
+      "recipeUrl": "https://www.spendwithpennies.com/chocolate-chip-cookies/",
+      "success": false,
+      "duration": 0,
+      "method": "openai",
+      "error": "fetch failed",
+      "recipe": null,
+      "timestamp": "2025-05-25T05:46:31.022Z"
+    },
+    {
+      "site": "Spend with Pennies",
+      "recipeUrl": "https://www.spendwithpennies.com/easy-beef-stew/",
+      "success": false,
+      "duration": 0,
+      "method": "openai",
+      "error": "fetch failed",
+      "recipe": null,
+      "timestamp": "2025-05-25T05:46:32.024Z"
+    },
+    {
+      "site": "Spend with Pennies",
+      "recipeUrl": "https://www.spendwithpennies.com/chicken-noodle-soup/",
+      "success": false,
+      "duration": 0,
+      "method": "openai",
+      "error": "fetch failed",
+      "recipe": null,
+      "timestamp": "2025-05-25T05:46:33.026Z"
+    },
+    {
+      "site": "Real Simple",
+      "recipeUrl": "https://www.realsimple.com/food-recipes/browse-all-recipes/chocolate-chip-cookies",
+      "success": false,
+      "duration": 0,
+      "method": "openai",
+      "error": "fetch failed",
+      "recipe": null,
+      "timestamp": "2025-05-25T05:46:34.030Z"
+    },
+    {
+      "site": "Real Simple",
+      "recipeUrl": "https://www.realsimple.com/food-recipes/browse-all-recipes/roast-chicken",
+      "success": false,
+      "duration": 0,
+      "method": "openai",
+      "error": "fetch failed",
+      "recipe": null,
+      "timestamp": "2025-05-25T05:46:35.032Z"
+    },
+    {
+      "site": "Real Simple",
+      "recipeUrl": "https://www.realsimple.com/food-recipes/browse-all-recipes/pasta-with-tomatoes",
+      "success": false,
+      "duration": 0,
+      "method": "openai",
+      "error": "fetch failed",
+      "recipe": null,
+      "timestamp": "2025-05-25T05:46:36.038Z"
+    },
+    {
+      "site": "America's Test Kitchen",
+      "recipeUrl": "https://www.americastestkitchen.com/recipes/8564-thick-and-chewy-chocolate-chip-cookies",
+      "success": false,
+      "duration": 0,
+      "method": "openai",
+      "error": "fetch failed",
+      "recipe": null,
+      "timestamp": "2025-05-25T05:46:37.040Z"
+    },
+    {
+      "site": "America's Test Kitchen",
+      "recipeUrl": "https://www.americastestkitchen.com/recipes/9053-perfect-roast-chicken",
+      "success": false,
+      "duration": 0,
+      "method": "openai",
+      "error": "fetch failed",
+      "recipe": null,
+      "timestamp": "2025-05-25T05:46:38.043Z"
+    },
+    {
+      "site": "America's Test Kitchen",
+      "recipeUrl": "https://www.americastestkitchen.com/recipes/8745-classic-beef-stew",
+      "success": false,
+      "duration": 0,
+      "method": "openai",
+      "error": "fetch failed",
+      "recipe": null,
+      "timestamp": "2025-05-25T05:46:39.045Z"
+    }
+  ]
+}
