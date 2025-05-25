@@ -8,6 +8,7 @@ const isPublicRoute = createRouteMatcher([
   '/api/fetch-recipe(.*)', // Public API for fetching recipes
   '/api/recipes(.*)', // Public API for recipes (if some parts are public)
   '/api/scan-recipe(.*)', // Public API for scanning recipes
+  '/api/categories', // Public API for categories (returns default for non-authenticated users)
   '/category/(.*)', // Category pages
   // Add any other specific public routes or patterns here
   // For example, if you have public recipe view pages: '/recipe/:id'

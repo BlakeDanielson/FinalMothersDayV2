@@ -1,16 +1,22 @@
 import { NextResponse } from 'next/server';
 import { auth } from '@clerk/nextjs/server';
-import { PrismaClient } from '@/generated/prisma';
-// import { categoryResolver } from '@/lib/categories'; // Currently unused
-import { PREDEFINED_CATEGORIES } from '@/lib/constants/categories';
+import { PrismaClient } from '../../../generated/prisma';
+// import { categoryResolver } from '../../../lib/categories'; // Currently unused
+import { PREDEFINED_CATEGORIES } from '../../../lib/constants/categories';
 
 const prisma = new PrismaClient();
 
 export async function GET() {
   try {
     const { userId } = await auth();
+    
+    // If user is not logged in, return predefined categories with zero counts
     if (!userId) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+      const defaultCategories = PREDEFINED_CATEGORIES.map(category => ({
+        name: category,
+        count: 0
+      }));
+      return NextResponse.json(defaultCategories);
     }
 
     // Get user's categories with recipe counts
