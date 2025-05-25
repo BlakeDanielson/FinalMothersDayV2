@@ -1,0 +1,38 @@
+# Test Recipe URLs for Hyperbrowser Extraction
+
+## Popular Recipe Sites (Good for Testing)
+https://www.allrecipes.com/recipe/213742/cheesy-chicken-broccoli-casserole/
+https://www.food.com/recipe/creamy-chicken-and-rice-casserole-40952
+https://www.epicurious.com/recipes/food/views/perfect-chocolate-chip-cookies
+https://www.bonappetit.com/recipe/basically-chicken-marsala
+https://www.delish.com/cooking/recipe-ideas/recipes/a58479/best-beef-stew-recipe/
+
+## Food Network Recipes
+https://www.foodnetwork.com/recipes/alton-brown/baked-macaroni-and-cheese-recipe-1939524
+https://www.foodnetwork.com/recipes/ree-drummond/chicken-fried-steak-recipe-2107832
+
+## Serious Eats (Known for detailed recipes)
+https://www.seriouseats.com/best-chocolate-chip-cookies-recipe
+https://www.seriouseats.com/perfect-pan-pizza-recipe
+
+## AllRecipes (Very structured)
+https://www.allrecipes.com/recipe/16354/easy-meatloaf/
+https://www.allrecipes.com/recipe/25202/simple-macaroni-and-cheese/
+
+## Tasty (BuzzFeed)
+https://tasty.co/recipe/one-pan-lemon-herb-salmon-and-veggies
+
+## King Arthur Baking (Great for baking recipes)
+https://www.kingarthurbaking.com/recipes/chocolate-chip-cookies-recipe
+
+## NYT Cooking (Subscription site - good test case)
+https://cooking.nytimes.com/recipes/1017089-chocolate-chip-cookies
+
+## Recipe Tin Eats (Popular food blog)
+https://www.recipetineats.com/beef-stew-recipe/
+
+## Notes:
+- Hyperbrowser should work better with most of these
+- Some sites may have anti-bot protection
+- NYT Cooking requires subscription - good test for paywall handling
+- Test both methods (hyperbrowser vs openai) to compare results 
