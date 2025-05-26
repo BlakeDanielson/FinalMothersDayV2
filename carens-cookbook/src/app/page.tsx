@@ -640,10 +640,15 @@ function MainPage() {
         const errorMessage = responseData.error || 'Failed to save recipe. Please try again.';
         toast.error(`Error saving recipe: ${errorMessage}`);
         console.error("Error saving recipe - API response not OK:", responseData);
+        // Throw an error so the UI can properly handle the failed save
+        throw new Error(errorMessage);
       }
     } catch (err: unknown) {
-      toast.error('An unexpected error occurred while saving. Please check your connection and try again.');
+      const errorMessage = err instanceof Error ? err.message : 'An unexpected error occurred while saving. Please check your connection and try again.';
+      toast.error(errorMessage);
       console.error("Error in handleSaveRecipe catch block:", err);
+      // Re-throw the error so the UI can reset the save status
+      throw err;
     }
   };
 
