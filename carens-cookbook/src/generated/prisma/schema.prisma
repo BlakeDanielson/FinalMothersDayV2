@@ -14,6 +14,33 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+// Enums for user preferences
+enum CookingSkillLevel {
+  BEGINNER
+  INTERMEDIATE
+  ADVANCED
+}
+
+enum DietaryPreference {
+  NONE
+  VEGETARIAN
+  VEGAN
+  GLUTEN_FREE
+  DAIRY_FREE
+  KETO
+  PALEO
+  LOW_CARB
+  LOW_SODIUM
+  NUT_FREE
+  KOSHER
+  HALAL
+}
+
+enum ProcessingMethod {
+  OPENAI
+  GEMINI
+}
+
 // User model for Clerk integration
 model User {
   id        String   @id // This will be the Clerk user ID
@@ -23,6 +50,22 @@ model User {
   imageUrl  String?
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  // Onboarding status
+  onboardingCompleted Boolean @default(false)
+  onboardingStep      Int? // Track current onboarding step
+
+  // User preferences
+  cookingSkillLevel       CookingSkillLevel?
+  dietaryPreferences      DietaryPreference[] // Multiple dietary preferences allowed
+  favoriteCuisines        String[] // Array of cuisine types
+  householdSize           Int? // Number of people in household
+  defaultProcessingMethod ProcessingMethod    @default(OPENAI)
+
+  // Additional preference fields
+  preferredCategories String[] // User's preferred recipe categories
+  timezone            String? // User's timezone
+  measurementSystem   String? // Imperial/Metric preference
 
   // Relations
   recipes   Recipe[]

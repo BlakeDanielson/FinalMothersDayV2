@@ -127,7 +127,17 @@ exports.Prisma.UserScalarFieldEnum = {
   lastName: 'lastName',
   imageUrl: 'imageUrl',
   createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
+  updatedAt: 'updatedAt',
+  onboardingCompleted: 'onboardingCompleted',
+  onboardingStep: 'onboardingStep',
+  cookingSkillLevel: 'cookingSkillLevel',
+  dietaryPreferences: 'dietaryPreferences',
+  favoriteCuisines: 'favoriteCuisines',
+  householdSize: 'householdSize',
+  defaultProcessingMethod: 'defaultProcessingMethod',
+  preferredCategories: 'preferredCategories',
+  timezone: 'timezone',
+  measurementSystem: 'measurementSystem'
 };
 
 exports.Prisma.RecipeScalarFieldEnum = {
@@ -181,6 +191,32 @@ exports.Prisma.NullsOrder = {
   first: 'first',
   last: 'last'
 };
+exports.CookingSkillLevel = exports.$Enums.CookingSkillLevel = {
+  BEGINNER: 'BEGINNER',
+  INTERMEDIATE: 'INTERMEDIATE',
+  ADVANCED: 'ADVANCED'
+};
+
+exports.ProcessingMethod = exports.$Enums.ProcessingMethod = {
+  OPENAI: 'OPENAI',
+  GEMINI: 'GEMINI'
+};
+
+exports.DietaryPreference = exports.$Enums.DietaryPreference = {
+  NONE: 'NONE',
+  VEGETARIAN: 'VEGETARIAN',
+  VEGAN: 'VEGAN',
+  GLUTEN_FREE: 'GLUTEN_FREE',
+  DAIRY_FREE: 'DAIRY_FREE',
+  KETO: 'KETO',
+  PALEO: 'PALEO',
+  LOW_CARB: 'LOW_CARB',
+  LOW_SODIUM: 'LOW_SODIUM',
+  NUT_FREE: 'NUT_FREE',
+  KOSHER: 'KOSHER',
+  HALAL: 'HALAL'
+};
+
 exports.CategorySource = exports.$Enums.CategorySource = {
   PREDEFINED: 'PREDEFINED',
   AI_GENERATED: 'AI_GENERATED',

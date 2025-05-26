@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
 import OpenAI from 'openai';
-import { GoogleGenerativeAI } from '@google/generative-ai';
 import type { ChatCompletionContentPart } from 'openai/resources/chat/completions';
 import { z } from 'zod';
 import { RecipeProcessingError, ErrorType, logError } from '@/lib/errors';
@@ -24,17 +23,7 @@ const openaiClient = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
 });
 
-// Initialize Google AI client
-let googleAI: GoogleGenerativeAI | null = null;
-function getGoogleAI() {
-  if (!googleAI) {
-    if (!process.env.GOOGLE_API_KEY) {
-      throw new Error('GOOGLE_API_KEY is not set.');
-    }
-    googleAI = new GoogleGenerativeAI(process.env.GOOGLE_API_KEY);
-  }
-  return googleAI;
-}
+
 
 // File validation constants
 const MAX_FILES = 5; // Maximum 5 images per recipe
@@ -232,88 +221,7 @@ function handleOpenAIError(error: unknown): never {
   });
 }
 
-function handleGeminiError(error: unknown): never {
-  console.error('Gemini API Error:', error);
 
-  // Type guard for error objects with common properties
-  const errorObj = error as { status?: number; code?: string; message?: string; name?: string };
-
-  // Rate limiting
-  if (errorObj.status === 429 || errorObj.code === 'RATE_LIMIT_EXCEEDED' || errorObj.message?.includes('quota exceeded')) {
-    throw new RecipeProcessingError({
-      type: ErrorType.AI_QUOTA_EXCEEDED,
-      message: `Gemini rate limit exceeded: ${errorObj.message}`,
-      userMessage: 'We\'ve reached our processing limit for now.',
-      actionable: 'Please try again in a few minutes.',
-      retryable: true,
-      statusCode: 429,
-      details: { geminiError: error }
-    });
-  }
-
-  // Content policy violations
-  if (errorObj.code === 'SAFETY' || errorObj.message?.includes('safety') || errorObj.message?.includes('policy')) {
-    throw new RecipeProcessingError({
-      type: ErrorType.AI_CONTENT_POLICY,
-      message: `Content policy violation: ${errorObj.message}`,
-      userMessage: 'The image content violates our processing policies.',
-      actionable: 'Please try different images.',
-      retryable: false,
-      statusCode: 400,
-      details: { geminiError: error }
-    });
-  }
-
-  // Authentication errors
-  if (errorObj.status === 401 || errorObj.status === 403 || errorObj.code === 'UNAUTHENTICATED' || errorObj.code === 'PERMISSION_DENIED') {
-    throw new RecipeProcessingError({
-      type: ErrorType.SERVER_ERROR,
-      message: `Gemini authentication error: ${errorObj.message}`,
-      userMessage: 'Our AI service is temporarily unavailable.',
-      actionable: 'Please try again later.',
-      retryable: true,
-      statusCode: 503,
-      details: { geminiError: error }
-    });
-  }
-
-  // Timeout errors
-  if (errorObj.code === 'DEADLINE_EXCEEDED' || errorObj.message?.includes('timeout') || errorObj.message?.includes('deadline')) {
-    throw new RecipeProcessingError({
-      type: ErrorType.REQUEST_TIMEOUT,
-      message: `Gemini request timeout: ${errorObj.message}`,
-      userMessage: 'The image processing took too long.',
-      actionable: 'Please try again with clearer or smaller images.',
-      retryable: true,
-      statusCode: 408,
-      details: { geminiError: error }
-    });
-  }
-
-  // Invalid argument errors (usually file format or size issues)
-  if (errorObj.code === 'INVALID_ARGUMENT' || errorObj.status === 400) {
-    throw new RecipeProcessingError({
-      type: ErrorType.INVALID_RECIPE_DATA,
-      message: `Gemini invalid argument: ${errorObj.message}`,
-      userMessage: 'There was an issue with the image format or content.',
-      actionable: 'Please try different image formats or smaller file sizes.',
-      retryable: false,
-      statusCode: 400,
-      details: { geminiError: error }
-    });
-  }
-
-  // Generic Gemini errors
-  throw new RecipeProcessingError({
-    type: ErrorType.AI_PROCESSING_FAILED,
-    message: `Gemini processing failed: ${errorObj.message || 'Unknown error'}`,
-    userMessage: 'Our recipe analysis system encountered an issue.',
-    actionable: 'Please try again in a moment.',
-    retryable: true,
-    statusCode: errorObj.status || 500,
-    details: { geminiError: error }
-  });
-}
 
 async function processMultipleImagesWithOpenAI(
   imageData: Array<{ base64: string; mimeType: string; fileName: string }>, 
@@ -336,7 +244,7 @@ async function processMultipleImagesWithOpenAI(
   });
 
   const chatCompletion = await openaiClient.chat.completions.create({
-    model: "gpt-4o",
+    model: "gpt-4.1-mini-2025-04-14",
     messages: [
       {
         role: "user",
@@ -350,34 +258,39 @@ async function processMultipleImagesWithOpenAI(
   return chatCompletion.choices[0]?.message?.content;
 }
 
-async function processMultipleImagesWithGemini(
+async function processMultipleImagesWithGPTMini(
   imageData: Array<{ base64: string; mimeType: string; fileName: string }>, 
   systemPrompt: string
 ) {
-  const googleAI = getGoogleAI();
-  const model = googleAI.getGenerativeModel({ 
-    model: "gemini-2.0-flash-exp",
-    generationConfig: {
-      maxOutputTokens: 3000,
-      temperature: 0.1,
-      responseMimeType: "application/json"
-    }
-  });
-
-  // Prepare parts array with system prompt and all images
-  const parts = [
-    { text: systemPrompt },
-    ...imageData.map((img) => ({
-      inlineData: {
-        data: img.base64,
-        mimeType: img.mimeType,
-      },
-    }))
+  // Prepare content array for OpenAI with proper typing
+  const content: ChatCompletionContentPart[] = [
+    { type: "text", text: systemPrompt }
   ];
 
-  const result = await model.generateContent(parts);
-  const response = await result.response;
-  return response.text();
+  // Add all images to the content
+  imageData.forEach((img) => {
+    content.push({
+      type: "image_url",
+      image_url: {
+        url: `data:${img.mimeType};base64,${img.base64}`,
+        detail: "high",
+      },
+    });
+  });
+
+  const chatCompletion = await openaiClient.chat.completions.create({
+    model: "gpt-4o-mini-2024-07-18",
+    messages: [
+      {
+        role: "user",
+        content: content,
+      },
+    ],
+    response_format: { type: "json_object" },
+    max_tokens: 3000, // Increased for multiple images
+  });
+
+  return chatCompletion.choices[0]?.message?.content;
 }
 
 export async function POST(req: NextRequest) {
@@ -474,14 +387,14 @@ export async function POST(req: NextRequest) {
       if (provider === 'openai') {
         responseContent = await processMultipleImagesWithOpenAI(imageData, systemPrompt);
       } else if (provider === 'gemini') {
-        responseContent = await processMultipleImagesWithGemini(imageData, systemPrompt);
+        responseContent = await processMultipleImagesWithGPTMini(imageData, systemPrompt);
       }
     } catch (error: unknown) {
-      if (provider === 'openai') {
-        handleOpenAIError(error);
-      } else if (provider === 'gemini') {
-        handleGeminiError(error);
-      } else {
+              if (provider === 'openai') {
+          handleOpenAIError(error);
+        } else if (provider === 'gemini') {
+          handleOpenAIError(error);
+        } else {
         throw error;
       }
     }
