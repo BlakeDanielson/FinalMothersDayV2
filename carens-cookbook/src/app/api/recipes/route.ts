@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/db';
 import { z } from 'zod';
 import { auth } from '@clerk/nextjs/server';
+import { withOnboardingGuard } from '@/lib/middleware/onboarding-guard';
 
 // Define a Zod schema for incoming recipe data for creation
 // This should match the structure expected from the client when saving a recipe.
@@ -30,7 +31,7 @@ const updateRecipeSchema = z.object({
   // etc.
 });
 
-export async function POST(req: NextRequest) {
+export const POST = withOnboardingGuard(async (req: NextRequest) => {
   try {
     const { userId } = await auth();
     if (!userId) {
@@ -74,9 +75,9 @@ export async function POST(req: NextRequest) {
     console.error('Error creating recipe:', error instanceof Error ? error.message : String(error));
     return NextResponse.json({ error: 'Failed to save recipe.', details: error instanceof Error ? error.message : String(error) }, { status: 500 });
   }
-}
+});
 
-export async function GET(req: NextRequest) {
+export const GET = withOnboardingGuard(async (req: NextRequest) => {
   try {
     const { userId } = await auth();
     if (!userId) {
@@ -102,9 +103,9 @@ export async function GET(req: NextRequest) {
     console.error('Error fetching recipes:', error instanceof Error ? error.message : String(error));
     return NextResponse.json({ error: 'Failed to fetch recipes.', details: error instanceof Error ? error.message : String(error) }, { status: 500 });
   }
-}
+});
 
-export async function DELETE(req: NextRequest) {
+export const DELETE = withOnboardingGuard(async (req: NextRequest) => {
   try {
     const { userId } = await auth();
     if (!userId) {
@@ -139,9 +140,9 @@ export async function DELETE(req: NextRequest) {
     console.error('Error deleting recipe:', error instanceof Error ? error.message : String(error));
     return NextResponse.json({ error: 'Failed to delete recipe.', details: error instanceof Error ? error.message : String(error) }, { status: 500 });
   }
-}
+});
 
-export async function PUT(req: NextRequest) {
+export const PUT = withOnboardingGuard(async (req: NextRequest) => {
   try {
     const { userId } = await auth();
     if (!userId) {
@@ -198,4 +199,4 @@ export async function PUT(req: NextRequest) {
     console.error('Error updating recipe:', error instanceof Error ? error.message : String(error));
     return NextResponse.json({ error: 'Failed to update recipe.', details: error instanceof Error ? error.message : String(error) }, { status: 500 });
   }
-} 
+}); 

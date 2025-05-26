@@ -124,20 +124,39 @@ export const OnboardingProvider = ({ children }: { children: ReactNode }) => {
     
     setIsLoading(true);
     try {
-      const response = await fetch('/api/user-preferences/onboarding');
+      // Use the new detailed progress API
+      const response = await fetch('/api/onboarding/progress');
       if (response.ok) {
         const data = await response.json();
+        const progress = data.progress;
         
-        setCurrentStep(data.onboarding.currentStep || 0);
-        setIsCompleted(data.onboarding.completed || false);
-        setUserPreferences(data.preferences || getDefaultUserPreferences());
+        setCurrentStep(progress.currentStep || 0);
+        setIsCompleted(progress.isCompleted || false);
+        setCompletedSteps(new Set(progress.completedSteps || []));
         
-        // Mark steps as completed based on current step
-        const completed = new Set<number>();
-        for (let i = 0; i < (data.onboarding.currentStep || 0); i++) {
-          completed.add(i);
+        // Also load user preferences
+        const prefsResponse = await fetch('/api/user-preferences');
+        if (prefsResponse.ok) {
+          const prefsData = await prefsResponse.json();
+          setUserPreferences(prefsData.preferences || getDefaultUserPreferences());
         }
-        setCompletedSteps(completed);
+      } else {
+        // Fallback to old API if new one fails
+        const fallbackResponse = await fetch('/api/user-preferences/onboarding');
+        if (fallbackResponse.ok) {
+          const data = await fallbackResponse.json();
+          
+          setCurrentStep(data.onboarding.currentStep || 0);
+          setIsCompleted(data.onboarding.completed || false);
+          setUserPreferences(data.preferences || getDefaultUserPreferences());
+          
+          // Mark steps as completed based on current step
+          const completed = new Set<number>();
+          for (let i = 0; i < (data.onboarding.currentStep || 0); i++) {
+            completed.add(i);
+          }
+          setCompletedSteps(completed);
+        }
       }
     } catch (error) {
       console.error('Failed to load onboarding progress:', error);
@@ -157,15 +176,29 @@ export const OnboardingProvider = ({ children }: { children: ReactNode }) => {
     if (!user) return;
     
     try {
-      await fetch('/api/user-preferences/onboarding', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          step: currentStep,
-          data: onboardingData[currentStep],
-          markCompleted: isCompleted
-        })
-      });
+      // Use the new detailed step completion API
+      if (currentStep >= 0 && currentStep < ONBOARDING_STEPS.length) {
+        const response = await fetch(`/api/onboarding/steps/${currentStep}/complete`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            data: onboardingData[currentStep] || {}
+          })
+        });
+        
+        if (!response.ok) {
+          // Fallback to old API
+          await fetch('/api/user-preferences/onboarding', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              step: currentStep,
+              data: onboardingData[currentStep],
+              markCompleted: isCompleted
+            })
+          });
+        }
+      }
     } catch (error) {
       console.error('Failed to save onboarding progress:', error);
     }
