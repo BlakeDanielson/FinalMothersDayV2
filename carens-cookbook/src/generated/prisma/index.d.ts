@@ -33,6 +33,11 @@ export type RecipeImage = $Result.DefaultSelection<Prisma.$RecipeImagePayload>
  * 
  */
 export type RecipeFavorite = $Result.DefaultSelection<Prisma.$RecipeFavoritePayload>
+/**
+ * Model UserOnboardingProgress
+ * 
+ */
+export type UserOnboardingProgress = $Result.DefaultSelection<Prisma.$UserOnboardingProgressPayload>
 
 /**
  * Enums
@@ -263,6 +268,16 @@ export class PrismaClient<
     * ```
     */
   get recipeFavorite(): Prisma.RecipeFavoriteDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.userOnboardingProgress`: Exposes CRUD operations for the **UserOnboardingProgress** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more UserOnboardingProgresses
+    * const userOnboardingProgresses = await prisma.userOnboardingProgress.findMany()
+    * ```
+    */
+  get userOnboardingProgress(): Prisma.UserOnboardingProgressDelegate<ExtArgs, ClientOptions>;
 }
 
 export namespace Prisma {
@@ -706,7 +721,8 @@ export namespace Prisma {
     User: 'User',
     Recipe: 'Recipe',
     RecipeImage: 'RecipeImage',
-    RecipeFavorite: 'RecipeFavorite'
+    RecipeFavorite: 'RecipeFavorite',
+    UserOnboardingProgress: 'UserOnboardingProgress'
   };
 
   export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -725,7 +741,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "user" | "recipe" | "recipeImage" | "recipeFavorite"
+      modelProps: "user" | "recipe" | "recipeImage" | "recipeFavorite" | "userOnboardingProgress"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -1025,6 +1041,80 @@ export namespace Prisma {
           }
         }
       }
+      UserOnboardingProgress: {
+        payload: Prisma.$UserOnboardingProgressPayload<ExtArgs>
+        fields: Prisma.UserOnboardingProgressFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.UserOnboardingProgressFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$UserOnboardingProgressPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.UserOnboardingProgressFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$UserOnboardingProgressPayload>
+          }
+          findFirst: {
+            args: Prisma.UserOnboardingProgressFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$UserOnboardingProgressPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.UserOnboardingProgressFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$UserOnboardingProgressPayload>
+          }
+          findMany: {
+            args: Prisma.UserOnboardingProgressFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$UserOnboardingProgressPayload>[]
+          }
+          create: {
+            args: Prisma.UserOnboardingProgressCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$UserOnboardingProgressPayload>
+          }
+          createMany: {
+            args: Prisma.UserOnboardingProgressCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.UserOnboardingProgressCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$UserOnboardingProgressPayload>[]
+          }
+          delete: {
+            args: Prisma.UserOnboardingProgressDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$UserOnboardingProgressPayload>
+          }
+          update: {
+            args: Prisma.UserOnboardingProgressUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$UserOnboardingProgressPayload>
+          }
+          deleteMany: {
+            args: Prisma.UserOnboardingProgressDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.UserOnboardingProgressUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.UserOnboardingProgressUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$UserOnboardingProgressPayload>[]
+          }
+          upsert: {
+            args: Prisma.UserOnboardingProgressUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$UserOnboardingProgressPayload>
+          }
+          aggregate: {
+            args: Prisma.UserOnboardingProgressAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateUserOnboardingProgress>
+          }
+          groupBy: {
+            args: Prisma.UserOnboardingProgressGroupByArgs<ExtArgs>
+            result: $Utils.Optional<UserOnboardingProgressGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.UserOnboardingProgressCountArgs<ExtArgs>
+            result: $Utils.Optional<UserOnboardingProgressCountAggregateOutputType> | number
+          }
+        }
+      }
     }
   } & {
     other: {
@@ -1113,6 +1203,7 @@ export namespace Prisma {
     recipe?: RecipeOmit
     recipeImage?: RecipeImageOmit
     recipeFavorite?: RecipeFavoriteOmit
+    userOnboardingProgress?: UserOnboardingProgressOmit
   }
 
   /* Types for Logging */
@@ -1209,11 +1300,13 @@ export namespace Prisma {
   export type UserCountOutputType = {
     recipes: number
     favorites: number
+    onboardingProgress: number
   }
 
   export type UserCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     recipes?: boolean | UserCountOutputTypeCountRecipesArgs
     favorites?: boolean | UserCountOutputTypeCountFavoritesArgs
+    onboardingProgress?: boolean | UserCountOutputTypeCountOnboardingProgressArgs
   }
 
   // Custom InputTypes
@@ -1239,6 +1332,13 @@ export namespace Prisma {
    */
   export type UserCountOutputTypeCountFavoritesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: RecipeFavoriteWhereInput
+  }
+
+  /**
+   * UserCountOutputType without action
+   */
+  export type UserCountOutputTypeCountOnboardingProgressArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: UserOnboardingProgressWhereInput
   }
 
 
@@ -1574,6 +1674,7 @@ export namespace Prisma {
     measurementSystem?: boolean
     recipes?: boolean | User$recipesArgs<ExtArgs>
     favorites?: boolean | User$favoritesArgs<ExtArgs>
+    onboardingProgress?: boolean | User$onboardingProgressArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["user"]>
 
@@ -1641,6 +1742,7 @@ export namespace Prisma {
   export type UserInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     recipes?: boolean | User$recipesArgs<ExtArgs>
     favorites?: boolean | User$favoritesArgs<ExtArgs>
+    onboardingProgress?: boolean | User$onboardingProgressArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type UserIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
@@ -1651,6 +1753,7 @@ export namespace Prisma {
     objects: {
       recipes: Prisma.$RecipePayload<ExtArgs>[]
       favorites: Prisma.$RecipeFavoritePayload<ExtArgs>[]
+      onboardingProgress: Prisma.$UserOnboardingProgressPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -2066,6 +2169,7 @@ export namespace Prisma {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     recipes<T extends User$recipesArgs<ExtArgs> = {}>(args?: Subset<T, User$recipesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$RecipePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     favorites<T extends User$favoritesArgs<ExtArgs> = {}>(args?: Subset<T, User$favoritesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$RecipeFavoritePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    onboardingProgress<T extends User$onboardingProgressArgs<ExtArgs> = {}>(args?: Subset<T, User$onboardingProgressArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$UserOnboardingProgressPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -2545,6 +2649,30 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: RecipeFavoriteScalarFieldEnum | RecipeFavoriteScalarFieldEnum[]
+  }
+
+  /**
+   * User.onboardingProgress
+   */
+  export type User$onboardingProgressArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UserOnboardingProgress
+     */
+    select?: UserOnboardingProgressSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the UserOnboardingProgress
+     */
+    omit?: UserOnboardingProgressOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserOnboardingProgressInclude<ExtArgs> | null
+    where?: UserOnboardingProgressWhereInput
+    orderBy?: UserOnboardingProgressOrderByWithRelationInput | UserOnboardingProgressOrderByWithRelationInput[]
+    cursor?: UserOnboardingProgressWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: UserOnboardingProgressScalarFieldEnum | UserOnboardingProgressScalarFieldEnum[]
   }
 
   /**
@@ -6036,6 +6164,1159 @@ export namespace Prisma {
 
 
   /**
+   * Model UserOnboardingProgress
+   */
+
+  export type AggregateUserOnboardingProgress = {
+    _count: UserOnboardingProgressCountAggregateOutputType | null
+    _avg: UserOnboardingProgressAvgAggregateOutputType | null
+    _sum: UserOnboardingProgressSumAggregateOutputType | null
+    _min: UserOnboardingProgressMinAggregateOutputType | null
+    _max: UserOnboardingProgressMaxAggregateOutputType | null
+  }
+
+  export type UserOnboardingProgressAvgAggregateOutputType = {
+    stepId: number | null
+  }
+
+  export type UserOnboardingProgressSumAggregateOutputType = {
+    stepId: number | null
+  }
+
+  export type UserOnboardingProgressMinAggregateOutputType = {
+    id: string | null
+    userId: string | null
+    stepId: number | null
+    stepKey: string | null
+    completedAt: Date | null
+    skippedAt: Date | null
+    isRequired: boolean | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type UserOnboardingProgressMaxAggregateOutputType = {
+    id: string | null
+    userId: string | null
+    stepId: number | null
+    stepKey: string | null
+    completedAt: Date | null
+    skippedAt: Date | null
+    isRequired: boolean | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type UserOnboardingProgressCountAggregateOutputType = {
+    id: number
+    userId: number
+    stepId: number
+    stepKey: number
+    completedAt: number
+    skippedAt: number
+    data: number
+    isRequired: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type UserOnboardingProgressAvgAggregateInputType = {
+    stepId?: true
+  }
+
+  export type UserOnboardingProgressSumAggregateInputType = {
+    stepId?: true
+  }
+
+  export type UserOnboardingProgressMinAggregateInputType = {
+    id?: true
+    userId?: true
+    stepId?: true
+    stepKey?: true
+    completedAt?: true
+    skippedAt?: true
+    isRequired?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type UserOnboardingProgressMaxAggregateInputType = {
+    id?: true
+    userId?: true
+    stepId?: true
+    stepKey?: true
+    completedAt?: true
+    skippedAt?: true
+    isRequired?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type UserOnboardingProgressCountAggregateInputType = {
+    id?: true
+    userId?: true
+    stepId?: true
+    stepKey?: true
+    completedAt?: true
+    skippedAt?: true
+    data?: true
+    isRequired?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type UserOnboardingProgressAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which UserOnboardingProgress to aggregate.
+     */
+    where?: UserOnboardingProgressWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of UserOnboardingProgresses to fetch.
+     */
+    orderBy?: UserOnboardingProgressOrderByWithRelationInput | UserOnboardingProgressOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: UserOnboardingProgressWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` UserOnboardingProgresses from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` UserOnboardingProgresses.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned UserOnboardingProgresses
+    **/
+    _count?: true | UserOnboardingProgressCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: UserOnboardingProgressAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: UserOnboardingProgressSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: UserOnboardingProgressMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: UserOnboardingProgressMaxAggregateInputType
+  }
+
+  export type GetUserOnboardingProgressAggregateType<T extends UserOnboardingProgressAggregateArgs> = {
+        [P in keyof T & keyof AggregateUserOnboardingProgress]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateUserOnboardingProgress[P]>
+      : GetScalarType<T[P], AggregateUserOnboardingProgress[P]>
+  }
+
+
+
+
+  export type UserOnboardingProgressGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: UserOnboardingProgressWhereInput
+    orderBy?: UserOnboardingProgressOrderByWithAggregationInput | UserOnboardingProgressOrderByWithAggregationInput[]
+    by: UserOnboardingProgressScalarFieldEnum[] | UserOnboardingProgressScalarFieldEnum
+    having?: UserOnboardingProgressScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: UserOnboardingProgressCountAggregateInputType | true
+    _avg?: UserOnboardingProgressAvgAggregateInputType
+    _sum?: UserOnboardingProgressSumAggregateInputType
+    _min?: UserOnboardingProgressMinAggregateInputType
+    _max?: UserOnboardingProgressMaxAggregateInputType
+  }
+
+  export type UserOnboardingProgressGroupByOutputType = {
+    id: string
+    userId: string
+    stepId: number
+    stepKey: string
+    completedAt: Date | null
+    skippedAt: Date | null
+    data: JsonValue | null
+    isRequired: boolean
+    createdAt: Date
+    updatedAt: Date
+    _count: UserOnboardingProgressCountAggregateOutputType | null
+    _avg: UserOnboardingProgressAvgAggregateOutputType | null
+    _sum: UserOnboardingProgressSumAggregateOutputType | null
+    _min: UserOnboardingProgressMinAggregateOutputType | null
+    _max: UserOnboardingProgressMaxAggregateOutputType | null
+  }
+
+  type GetUserOnboardingProgressGroupByPayload<T extends UserOnboardingProgressGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<UserOnboardingProgressGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof UserOnboardingProgressGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], UserOnboardingProgressGroupByOutputType[P]>
+            : GetScalarType<T[P], UserOnboardingProgressGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type UserOnboardingProgressSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    userId?: boolean
+    stepId?: boolean
+    stepKey?: boolean
+    completedAt?: boolean
+    skippedAt?: boolean
+    data?: boolean
+    isRequired?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["userOnboardingProgress"]>
+
+  export type UserOnboardingProgressSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    userId?: boolean
+    stepId?: boolean
+    stepKey?: boolean
+    completedAt?: boolean
+    skippedAt?: boolean
+    data?: boolean
+    isRequired?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["userOnboardingProgress"]>
+
+  export type UserOnboardingProgressSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    userId?: boolean
+    stepId?: boolean
+    stepKey?: boolean
+    completedAt?: boolean
+    skippedAt?: boolean
+    data?: boolean
+    isRequired?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["userOnboardingProgress"]>
+
+  export type UserOnboardingProgressSelectScalar = {
+    id?: boolean
+    userId?: boolean
+    stepId?: boolean
+    stepKey?: boolean
+    completedAt?: boolean
+    skippedAt?: boolean
+    data?: boolean
+    isRequired?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type UserOnboardingProgressOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "userId" | "stepId" | "stepKey" | "completedAt" | "skippedAt" | "data" | "isRequired" | "createdAt" | "updatedAt", ExtArgs["result"]["userOnboardingProgress"]>
+  export type UserOnboardingProgressInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }
+  export type UserOnboardingProgressIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }
+  export type UserOnboardingProgressIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }
+
+  export type $UserOnboardingProgressPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "UserOnboardingProgress"
+    objects: {
+      user: Prisma.$UserPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      userId: string
+      stepId: number
+      stepKey: string
+      completedAt: Date | null
+      skippedAt: Date | null
+      data: Prisma.JsonValue | null
+      isRequired: boolean
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["userOnboardingProgress"]>
+    composites: {}
+  }
+
+  type UserOnboardingProgressGetPayload<S extends boolean | null | undefined | UserOnboardingProgressDefaultArgs> = $Result.GetResult<Prisma.$UserOnboardingProgressPayload, S>
+
+  type UserOnboardingProgressCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<UserOnboardingProgressFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: UserOnboardingProgressCountAggregateInputType | true
+    }
+
+  export interface UserOnboardingProgressDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['UserOnboardingProgress'], meta: { name: 'UserOnboardingProgress' } }
+    /**
+     * Find zero or one UserOnboardingProgress that matches the filter.
+     * @param {UserOnboardingProgressFindUniqueArgs} args - Arguments to find a UserOnboardingProgress
+     * @example
+     * // Get one UserOnboardingProgress
+     * const userOnboardingProgress = await prisma.userOnboardingProgress.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends UserOnboardingProgressFindUniqueArgs>(args: SelectSubset<T, UserOnboardingProgressFindUniqueArgs<ExtArgs>>): Prisma__UserOnboardingProgressClient<$Result.GetResult<Prisma.$UserOnboardingProgressPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one UserOnboardingProgress that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {UserOnboardingProgressFindUniqueOrThrowArgs} args - Arguments to find a UserOnboardingProgress
+     * @example
+     * // Get one UserOnboardingProgress
+     * const userOnboardingProgress = await prisma.userOnboardingProgress.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends UserOnboardingProgressFindUniqueOrThrowArgs>(args: SelectSubset<T, UserOnboardingProgressFindUniqueOrThrowArgs<ExtArgs>>): Prisma__UserOnboardingProgressClient<$Result.GetResult<Prisma.$UserOnboardingProgressPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first UserOnboardingProgress that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {UserOnboardingProgressFindFirstArgs} args - Arguments to find a UserOnboardingProgress
+     * @example
+     * // Get one UserOnboardingProgress
+     * const userOnboardingProgress = await prisma.userOnboardingProgress.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends UserOnboardingProgressFindFirstArgs>(args?: SelectSubset<T, UserOnboardingProgressFindFirstArgs<ExtArgs>>): Prisma__UserOnboardingProgressClient<$Result.GetResult<Prisma.$UserOnboardingProgressPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first UserOnboardingProgress that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {UserOnboardingProgressFindFirstOrThrowArgs} args - Arguments to find a UserOnboardingProgress
+     * @example
+     * // Get one UserOnboardingProgress
+     * const userOnboardingProgress = await prisma.userOnboardingProgress.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends UserOnboardingProgressFindFirstOrThrowArgs>(args?: SelectSubset<T, UserOnboardingProgressFindFirstOrThrowArgs<ExtArgs>>): Prisma__UserOnboardingProgressClient<$Result.GetResult<Prisma.$UserOnboardingProgressPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more UserOnboardingProgresses that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {UserOnboardingProgressFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all UserOnboardingProgresses
+     * const userOnboardingProgresses = await prisma.userOnboardingProgress.findMany()
+     * 
+     * // Get first 10 UserOnboardingProgresses
+     * const userOnboardingProgresses = await prisma.userOnboardingProgress.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const userOnboardingProgressWithIdOnly = await prisma.userOnboardingProgress.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends UserOnboardingProgressFindManyArgs>(args?: SelectSubset<T, UserOnboardingProgressFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$UserOnboardingProgressPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a UserOnboardingProgress.
+     * @param {UserOnboardingProgressCreateArgs} args - Arguments to create a UserOnboardingProgress.
+     * @example
+     * // Create one UserOnboardingProgress
+     * const UserOnboardingProgress = await prisma.userOnboardingProgress.create({
+     *   data: {
+     *     // ... data to create a UserOnboardingProgress
+     *   }
+     * })
+     * 
+     */
+    create<T extends UserOnboardingProgressCreateArgs>(args: SelectSubset<T, UserOnboardingProgressCreateArgs<ExtArgs>>): Prisma__UserOnboardingProgressClient<$Result.GetResult<Prisma.$UserOnboardingProgressPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many UserOnboardingProgresses.
+     * @param {UserOnboardingProgressCreateManyArgs} args - Arguments to create many UserOnboardingProgresses.
+     * @example
+     * // Create many UserOnboardingProgresses
+     * const userOnboardingProgress = await prisma.userOnboardingProgress.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends UserOnboardingProgressCreateManyArgs>(args?: SelectSubset<T, UserOnboardingProgressCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many UserOnboardingProgresses and returns the data saved in the database.
+     * @param {UserOnboardingProgressCreateManyAndReturnArgs} args - Arguments to create many UserOnboardingProgresses.
+     * @example
+     * // Create many UserOnboardingProgresses
+     * const userOnboardingProgress = await prisma.userOnboardingProgress.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many UserOnboardingProgresses and only return the `id`
+     * const userOnboardingProgressWithIdOnly = await prisma.userOnboardingProgress.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends UserOnboardingProgressCreateManyAndReturnArgs>(args?: SelectSubset<T, UserOnboardingProgressCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$UserOnboardingProgressPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a UserOnboardingProgress.
+     * @param {UserOnboardingProgressDeleteArgs} args - Arguments to delete one UserOnboardingProgress.
+     * @example
+     * // Delete one UserOnboardingProgress
+     * const UserOnboardingProgress = await prisma.userOnboardingProgress.delete({
+     *   where: {
+     *     // ... filter to delete one UserOnboardingProgress
+     *   }
+     * })
+     * 
+     */
+    delete<T extends UserOnboardingProgressDeleteArgs>(args: SelectSubset<T, UserOnboardingProgressDeleteArgs<ExtArgs>>): Prisma__UserOnboardingProgressClient<$Result.GetResult<Prisma.$UserOnboardingProgressPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one UserOnboardingProgress.
+     * @param {UserOnboardingProgressUpdateArgs} args - Arguments to update one UserOnboardingProgress.
+     * @example
+     * // Update one UserOnboardingProgress
+     * const userOnboardingProgress = await prisma.userOnboardingProgress.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends UserOnboardingProgressUpdateArgs>(args: SelectSubset<T, UserOnboardingProgressUpdateArgs<ExtArgs>>): Prisma__UserOnboardingProgressClient<$Result.GetResult<Prisma.$UserOnboardingProgressPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more UserOnboardingProgresses.
+     * @param {UserOnboardingProgressDeleteManyArgs} args - Arguments to filter UserOnboardingProgresses to delete.
+     * @example
+     * // Delete a few UserOnboardingProgresses
+     * const { count } = await prisma.userOnboardingProgress.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends UserOnboardingProgressDeleteManyArgs>(args?: SelectSubset<T, UserOnboardingProgressDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more UserOnboardingProgresses.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {UserOnboardingProgressUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many UserOnboardingProgresses
+     * const userOnboardingProgress = await prisma.userOnboardingProgress.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends UserOnboardingProgressUpdateManyArgs>(args: SelectSubset<T, UserOnboardingProgressUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more UserOnboardingProgresses and returns the data updated in the database.
+     * @param {UserOnboardingProgressUpdateManyAndReturnArgs} args - Arguments to update many UserOnboardingProgresses.
+     * @example
+     * // Update many UserOnboardingProgresses
+     * const userOnboardingProgress = await prisma.userOnboardingProgress.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more UserOnboardingProgresses and only return the `id`
+     * const userOnboardingProgressWithIdOnly = await prisma.userOnboardingProgress.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends UserOnboardingProgressUpdateManyAndReturnArgs>(args: SelectSubset<T, UserOnboardingProgressUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$UserOnboardingProgressPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one UserOnboardingProgress.
+     * @param {UserOnboardingProgressUpsertArgs} args - Arguments to update or create a UserOnboardingProgress.
+     * @example
+     * // Update or create a UserOnboardingProgress
+     * const userOnboardingProgress = await prisma.userOnboardingProgress.upsert({
+     *   create: {
+     *     // ... data to create a UserOnboardingProgress
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the UserOnboardingProgress we want to update
+     *   }
+     * })
+     */
+    upsert<T extends UserOnboardingProgressUpsertArgs>(args: SelectSubset<T, UserOnboardingProgressUpsertArgs<ExtArgs>>): Prisma__UserOnboardingProgressClient<$Result.GetResult<Prisma.$UserOnboardingProgressPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of UserOnboardingProgresses.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {UserOnboardingProgressCountArgs} args - Arguments to filter UserOnboardingProgresses to count.
+     * @example
+     * // Count the number of UserOnboardingProgresses
+     * const count = await prisma.userOnboardingProgress.count({
+     *   where: {
+     *     // ... the filter for the UserOnboardingProgresses we want to count
+     *   }
+     * })
+    **/
+    count<T extends UserOnboardingProgressCountArgs>(
+      args?: Subset<T, UserOnboardingProgressCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], UserOnboardingProgressCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a UserOnboardingProgress.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {UserOnboardingProgressAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends UserOnboardingProgressAggregateArgs>(args: Subset<T, UserOnboardingProgressAggregateArgs>): Prisma.PrismaPromise<GetUserOnboardingProgressAggregateType<T>>
+
+    /**
+     * Group by UserOnboardingProgress.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {UserOnboardingProgressGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends UserOnboardingProgressGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: UserOnboardingProgressGroupByArgs['orderBy'] }
+        : { orderBy?: UserOnboardingProgressGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, UserOnboardingProgressGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetUserOnboardingProgressGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the UserOnboardingProgress model
+   */
+  readonly fields: UserOnboardingProgressFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for UserOnboardingProgress.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__UserOnboardingProgressClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    user<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the UserOnboardingProgress model
+   */
+  interface UserOnboardingProgressFieldRefs {
+    readonly id: FieldRef<"UserOnboardingProgress", 'String'>
+    readonly userId: FieldRef<"UserOnboardingProgress", 'String'>
+    readonly stepId: FieldRef<"UserOnboardingProgress", 'Int'>
+    readonly stepKey: FieldRef<"UserOnboardingProgress", 'String'>
+    readonly completedAt: FieldRef<"UserOnboardingProgress", 'DateTime'>
+    readonly skippedAt: FieldRef<"UserOnboardingProgress", 'DateTime'>
+    readonly data: FieldRef<"UserOnboardingProgress", 'Json'>
+    readonly isRequired: FieldRef<"UserOnboardingProgress", 'Boolean'>
+    readonly createdAt: FieldRef<"UserOnboardingProgress", 'DateTime'>
+    readonly updatedAt: FieldRef<"UserOnboardingProgress", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * UserOnboardingProgress findUnique
+   */
+  export type UserOnboardingProgressFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UserOnboardingProgress
+     */
+    select?: UserOnboardingProgressSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the UserOnboardingProgress
+     */
+    omit?: UserOnboardingProgressOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserOnboardingProgressInclude<ExtArgs> | null
+    /**
+     * Filter, which UserOnboardingProgress to fetch.
+     */
+    where: UserOnboardingProgressWhereUniqueInput
+  }
+
+  /**
+   * UserOnboardingProgress findUniqueOrThrow
+   */
+  export type UserOnboardingProgressFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UserOnboardingProgress
+     */
+    select?: UserOnboardingProgressSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the UserOnboardingProgress
+     */
+    omit?: UserOnboardingProgressOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserOnboardingProgressInclude<ExtArgs> | null
+    /**
+     * Filter, which UserOnboardingProgress to fetch.
+     */
+    where: UserOnboardingProgressWhereUniqueInput
+  }
+
+  /**
+   * UserOnboardingProgress findFirst
+   */
+  export type UserOnboardingProgressFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UserOnboardingProgress
+     */
+    select?: UserOnboardingProgressSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the UserOnboardingProgress
+     */
+    omit?: UserOnboardingProgressOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserOnboardingProgressInclude<ExtArgs> | null
+    /**
+     * Filter, which UserOnboardingProgress to fetch.
+     */
+    where?: UserOnboardingProgressWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of UserOnboardingProgresses to fetch.
+     */
+    orderBy?: UserOnboardingProgressOrderByWithRelationInput | UserOnboardingProgressOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for UserOnboardingProgresses.
+     */
+    cursor?: UserOnboardingProgressWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` UserOnboardingProgresses from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` UserOnboardingProgresses.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of UserOnboardingProgresses.
+     */
+    distinct?: UserOnboardingProgressScalarFieldEnum | UserOnboardingProgressScalarFieldEnum[]
+  }
+
+  /**
+   * UserOnboardingProgress findFirstOrThrow
+   */
+  export type UserOnboardingProgressFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UserOnboardingProgress
+     */
+    select?: UserOnboardingProgressSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the UserOnboardingProgress
+     */
+    omit?: UserOnboardingProgressOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserOnboardingProgressInclude<ExtArgs> | null
+    /**
+     * Filter, which UserOnboardingProgress to fetch.
+     */
+    where?: UserOnboardingProgressWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of UserOnboardingProgresses to fetch.
+     */
+    orderBy?: UserOnboardingProgressOrderByWithRelationInput | UserOnboardingProgressOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for UserOnboardingProgresses.
+     */
+    cursor?: UserOnboardingProgressWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` UserOnboardingProgresses from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` UserOnboardingProgresses.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of UserOnboardingProgresses.
+     */
+    distinct?: UserOnboardingProgressScalarFieldEnum | UserOnboardingProgressScalarFieldEnum[]
+  }
+
+  /**
+   * UserOnboardingProgress findMany
+   */
+  export type UserOnboardingProgressFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UserOnboardingProgress
+     */
+    select?: UserOnboardingProgressSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the UserOnboardingProgress
+     */
+    omit?: UserOnboardingProgressOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserOnboardingProgressInclude<ExtArgs> | null
+    /**
+     * Filter, which UserOnboardingProgresses to fetch.
+     */
+    where?: UserOnboardingProgressWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of UserOnboardingProgresses to fetch.
+     */
+    orderBy?: UserOnboardingProgressOrderByWithRelationInput | UserOnboardingProgressOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing UserOnboardingProgresses.
+     */
+    cursor?: UserOnboardingProgressWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` UserOnboardingProgresses from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` UserOnboardingProgresses.
+     */
+    skip?: number
+    distinct?: UserOnboardingProgressScalarFieldEnum | UserOnboardingProgressScalarFieldEnum[]
+  }
+
+  /**
+   * UserOnboardingProgress create
+   */
+  export type UserOnboardingProgressCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UserOnboardingProgress
+     */
+    select?: UserOnboardingProgressSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the UserOnboardingProgress
+     */
+    omit?: UserOnboardingProgressOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserOnboardingProgressInclude<ExtArgs> | null
+    /**
+     * The data needed to create a UserOnboardingProgress.
+     */
+    data: XOR<UserOnboardingProgressCreateInput, UserOnboardingProgressUncheckedCreateInput>
+  }
+
+  /**
+   * UserOnboardingProgress createMany
+   */
+  export type UserOnboardingProgressCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many UserOnboardingProgresses.
+     */
+    data: UserOnboardingProgressCreateManyInput | UserOnboardingProgressCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * UserOnboardingProgress createManyAndReturn
+   */
+  export type UserOnboardingProgressCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UserOnboardingProgress
+     */
+    select?: UserOnboardingProgressSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the UserOnboardingProgress
+     */
+    omit?: UserOnboardingProgressOmit<ExtArgs> | null
+    /**
+     * The data used to create many UserOnboardingProgresses.
+     */
+    data: UserOnboardingProgressCreateManyInput | UserOnboardingProgressCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserOnboardingProgressIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * UserOnboardingProgress update
+   */
+  export type UserOnboardingProgressUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UserOnboardingProgress
+     */
+    select?: UserOnboardingProgressSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the UserOnboardingProgress
+     */
+    omit?: UserOnboardingProgressOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserOnboardingProgressInclude<ExtArgs> | null
+    /**
+     * The data needed to update a UserOnboardingProgress.
+     */
+    data: XOR<UserOnboardingProgressUpdateInput, UserOnboardingProgressUncheckedUpdateInput>
+    /**
+     * Choose, which UserOnboardingProgress to update.
+     */
+    where: UserOnboardingProgressWhereUniqueInput
+  }
+
+  /**
+   * UserOnboardingProgress updateMany
+   */
+  export type UserOnboardingProgressUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update UserOnboardingProgresses.
+     */
+    data: XOR<UserOnboardingProgressUpdateManyMutationInput, UserOnboardingProgressUncheckedUpdateManyInput>
+    /**
+     * Filter which UserOnboardingProgresses to update
+     */
+    where?: UserOnboardingProgressWhereInput
+    /**
+     * Limit how many UserOnboardingProgresses to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * UserOnboardingProgress updateManyAndReturn
+   */
+  export type UserOnboardingProgressUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UserOnboardingProgress
+     */
+    select?: UserOnboardingProgressSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the UserOnboardingProgress
+     */
+    omit?: UserOnboardingProgressOmit<ExtArgs> | null
+    /**
+     * The data used to update UserOnboardingProgresses.
+     */
+    data: XOR<UserOnboardingProgressUpdateManyMutationInput, UserOnboardingProgressUncheckedUpdateManyInput>
+    /**
+     * Filter which UserOnboardingProgresses to update
+     */
+    where?: UserOnboardingProgressWhereInput
+    /**
+     * Limit how many UserOnboardingProgresses to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserOnboardingProgressIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * UserOnboardingProgress upsert
+   */
+  export type UserOnboardingProgressUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UserOnboardingProgress
+     */
+    select?: UserOnboardingProgressSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the UserOnboardingProgress
+     */
+    omit?: UserOnboardingProgressOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserOnboardingProgressInclude<ExtArgs> | null
+    /**
+     * The filter to search for the UserOnboardingProgress to update in case it exists.
+     */
+    where: UserOnboardingProgressWhereUniqueInput
+    /**
+     * In case the UserOnboardingProgress found by the `where` argument doesn't exist, create a new UserOnboardingProgress with this data.
+     */
+    create: XOR<UserOnboardingProgressCreateInput, UserOnboardingProgressUncheckedCreateInput>
+    /**
+     * In case the UserOnboardingProgress was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<UserOnboardingProgressUpdateInput, UserOnboardingProgressUncheckedUpdateInput>
+  }
+
+  /**
+   * UserOnboardingProgress delete
+   */
+  export type UserOnboardingProgressDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UserOnboardingProgress
+     */
+    select?: UserOnboardingProgressSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the UserOnboardingProgress
+     */
+    omit?: UserOnboardingProgressOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserOnboardingProgressInclude<ExtArgs> | null
+    /**
+     * Filter which UserOnboardingProgress to delete.
+     */
+    where: UserOnboardingProgressWhereUniqueInput
+  }
+
+  /**
+   * UserOnboardingProgress deleteMany
+   */
+  export type UserOnboardingProgressDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which UserOnboardingProgresses to delete
+     */
+    where?: UserOnboardingProgressWhereInput
+    /**
+     * Limit how many UserOnboardingProgresses to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * UserOnboardingProgress without action
+   */
+  export type UserOnboardingProgressDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UserOnboardingProgress
+     */
+    select?: UserOnboardingProgressSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the UserOnboardingProgress
+     */
+    omit?: UserOnboardingProgressOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserOnboardingProgressInclude<ExtArgs> | null
+  }
+
+
+  /**
    * Enums
    */
 
@@ -6118,12 +7399,36 @@ export namespace Prisma {
   export type RecipeFavoriteScalarFieldEnum = (typeof RecipeFavoriteScalarFieldEnum)[keyof typeof RecipeFavoriteScalarFieldEnum]
 
 
+  export const UserOnboardingProgressScalarFieldEnum: {
+    id: 'id',
+    userId: 'userId',
+    stepId: 'stepId',
+    stepKey: 'stepKey',
+    completedAt: 'completedAt',
+    skippedAt: 'skippedAt',
+    data: 'data',
+    isRequired: 'isRequired',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type UserOnboardingProgressScalarFieldEnum = (typeof UserOnboardingProgressScalarFieldEnum)[keyof typeof UserOnboardingProgressScalarFieldEnum]
+
+
   export const SortOrder: {
     asc: 'asc',
     desc: 'desc'
   };
 
   export type SortOrder = (typeof SortOrder)[keyof typeof SortOrder]
+
+
+  export const NullableJsonNullValueInput: {
+    DbNull: typeof DbNull,
+    JsonNull: typeof JsonNull
+  };
+
+  export type NullableJsonNullValueInput = (typeof NullableJsonNullValueInput)[keyof typeof NullableJsonNullValueInput]
 
 
   export const QueryMode: {
@@ -6140,6 +7445,15 @@ export namespace Prisma {
   };
 
   export type NullsOrder = (typeof NullsOrder)[keyof typeof NullsOrder]
+
+
+  export const JsonNullValueFilter: {
+    DbNull: typeof DbNull,
+    JsonNull: typeof JsonNull,
+    AnyNull: typeof AnyNull
+  };
+
+  export type JsonNullValueFilter = (typeof JsonNullValueFilter)[keyof typeof JsonNullValueFilter]
 
 
   /**
@@ -6264,6 +7578,20 @@ export namespace Prisma {
    */
   export type ListFloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Float[]'>
     
+
+
+  /**
+   * Reference to a field of type 'Json'
+   */
+  export type JsonFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Json'>
+    
+
+
+  /**
+   * Reference to a field of type 'QueryMode'
+   */
+  export type EnumQueryModeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'QueryMode'>
+    
   /**
    * Deep Input Types
    */
@@ -6292,6 +7620,7 @@ export namespace Prisma {
     measurementSystem?: StringNullableFilter<"User"> | string | null
     recipes?: RecipeListRelationFilter
     favorites?: RecipeFavoriteListRelationFilter
+    onboardingProgress?: UserOnboardingProgressListRelationFilter
   }
 
   export type UserOrderByWithRelationInput = {
@@ -6314,6 +7643,7 @@ export namespace Prisma {
     measurementSystem?: SortOrderInput | SortOrder
     recipes?: RecipeOrderByRelationAggregateInput
     favorites?: RecipeFavoriteOrderByRelationAggregateInput
+    onboardingProgress?: UserOnboardingProgressOrderByRelationAggregateInput
   }
 
   export type UserWhereUniqueInput = Prisma.AtLeast<{
@@ -6339,6 +7669,7 @@ export namespace Prisma {
     measurementSystem?: StringNullableFilter<"User"> | string | null
     recipes?: RecipeListRelationFilter
     favorites?: RecipeFavoriteListRelationFilter
+    onboardingProgress?: UserOnboardingProgressListRelationFilter
   }, "id" | "email">
 
   export type UserOrderByWithAggregationInput = {
@@ -6633,6 +7964,89 @@ export namespace Prisma {
     createdAt?: DateTimeWithAggregatesFilter<"RecipeFavorite"> | Date | string
   }
 
+  export type UserOnboardingProgressWhereInput = {
+    AND?: UserOnboardingProgressWhereInput | UserOnboardingProgressWhereInput[]
+    OR?: UserOnboardingProgressWhereInput[]
+    NOT?: UserOnboardingProgressWhereInput | UserOnboardingProgressWhereInput[]
+    id?: StringFilter<"UserOnboardingProgress"> | string
+    userId?: StringFilter<"UserOnboardingProgress"> | string
+    stepId?: IntFilter<"UserOnboardingProgress"> | number
+    stepKey?: StringFilter<"UserOnboardingProgress"> | string
+    completedAt?: DateTimeNullableFilter<"UserOnboardingProgress"> | Date | string | null
+    skippedAt?: DateTimeNullableFilter<"UserOnboardingProgress"> | Date | string | null
+    data?: JsonNullableFilter<"UserOnboardingProgress">
+    isRequired?: BoolFilter<"UserOnboardingProgress"> | boolean
+    createdAt?: DateTimeFilter<"UserOnboardingProgress"> | Date | string
+    updatedAt?: DateTimeFilter<"UserOnboardingProgress"> | Date | string
+    user?: XOR<UserScalarRelationFilter, UserWhereInput>
+  }
+
+  export type UserOnboardingProgressOrderByWithRelationInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    stepId?: SortOrder
+    stepKey?: SortOrder
+    completedAt?: SortOrderInput | SortOrder
+    skippedAt?: SortOrderInput | SortOrder
+    data?: SortOrderInput | SortOrder
+    isRequired?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    user?: UserOrderByWithRelationInput
+  }
+
+  export type UserOnboardingProgressWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    userId_stepId?: UserOnboardingProgressUserIdStepIdCompoundUniqueInput
+    AND?: UserOnboardingProgressWhereInput | UserOnboardingProgressWhereInput[]
+    OR?: UserOnboardingProgressWhereInput[]
+    NOT?: UserOnboardingProgressWhereInput | UserOnboardingProgressWhereInput[]
+    userId?: StringFilter<"UserOnboardingProgress"> | string
+    stepId?: IntFilter<"UserOnboardingProgress"> | number
+    stepKey?: StringFilter<"UserOnboardingProgress"> | string
+    completedAt?: DateTimeNullableFilter<"UserOnboardingProgress"> | Date | string | null
+    skippedAt?: DateTimeNullableFilter<"UserOnboardingProgress"> | Date | string | null
+    data?: JsonNullableFilter<"UserOnboardingProgress">
+    isRequired?: BoolFilter<"UserOnboardingProgress"> | boolean
+    createdAt?: DateTimeFilter<"UserOnboardingProgress"> | Date | string
+    updatedAt?: DateTimeFilter<"UserOnboardingProgress"> | Date | string
+    user?: XOR<UserScalarRelationFilter, UserWhereInput>
+  }, "id" | "userId_stepId">
+
+  export type UserOnboardingProgressOrderByWithAggregationInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    stepId?: SortOrder
+    stepKey?: SortOrder
+    completedAt?: SortOrderInput | SortOrder
+    skippedAt?: SortOrderInput | SortOrder
+    data?: SortOrderInput | SortOrder
+    isRequired?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: UserOnboardingProgressCountOrderByAggregateInput
+    _avg?: UserOnboardingProgressAvgOrderByAggregateInput
+    _max?: UserOnboardingProgressMaxOrderByAggregateInput
+    _min?: UserOnboardingProgressMinOrderByAggregateInput
+    _sum?: UserOnboardingProgressSumOrderByAggregateInput
+  }
+
+  export type UserOnboardingProgressScalarWhereWithAggregatesInput = {
+    AND?: UserOnboardingProgressScalarWhereWithAggregatesInput | UserOnboardingProgressScalarWhereWithAggregatesInput[]
+    OR?: UserOnboardingProgressScalarWhereWithAggregatesInput[]
+    NOT?: UserOnboardingProgressScalarWhereWithAggregatesInput | UserOnboardingProgressScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"UserOnboardingProgress"> | string
+    userId?: StringWithAggregatesFilter<"UserOnboardingProgress"> | string
+    stepId?: IntWithAggregatesFilter<"UserOnboardingProgress"> | number
+    stepKey?: StringWithAggregatesFilter<"UserOnboardingProgress"> | string
+    completedAt?: DateTimeNullableWithAggregatesFilter<"UserOnboardingProgress"> | Date | string | null
+    skippedAt?: DateTimeNullableWithAggregatesFilter<"UserOnboardingProgress"> | Date | string | null
+    data?: JsonNullableWithAggregatesFilter<"UserOnboardingProgress">
+    isRequired?: BoolWithAggregatesFilter<"UserOnboardingProgress"> | boolean
+    createdAt?: DateTimeWithAggregatesFilter<"UserOnboardingProgress"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"UserOnboardingProgress"> | Date | string
+  }
+
   export type UserCreateInput = {
     id: string
     email: string
@@ -6653,6 +8067,7 @@ export namespace Prisma {
     measurementSystem?: string | null
     recipes?: RecipeCreateNestedManyWithoutUserInput
     favorites?: RecipeFavoriteCreateNestedManyWithoutUserInput
+    onboardingProgress?: UserOnboardingProgressCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateInput = {
@@ -6675,6 +8090,7 @@ export namespace Prisma {
     measurementSystem?: string | null
     recipes?: RecipeUncheckedCreateNestedManyWithoutUserInput
     favorites?: RecipeFavoriteUncheckedCreateNestedManyWithoutUserInput
+    onboardingProgress?: UserOnboardingProgressUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserUpdateInput = {
@@ -6697,6 +8113,7 @@ export namespace Prisma {
     measurementSystem?: NullableStringFieldUpdateOperationsInput | string | null
     recipes?: RecipeUpdateManyWithoutUserNestedInput
     favorites?: RecipeFavoriteUpdateManyWithoutUserNestedInput
+    onboardingProgress?: UserOnboardingProgressUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateInput = {
@@ -6719,6 +8136,7 @@ export namespace Prisma {
     measurementSystem?: NullableStringFieldUpdateOperationsInput | string | null
     recipes?: RecipeUncheckedUpdateManyWithoutUserNestedInput
     favorites?: RecipeFavoriteUncheckedUpdateManyWithoutUserNestedInput
+    onboardingProgress?: UserOnboardingProgressUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserCreateManyInput = {
@@ -7044,6 +8462,96 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type UserOnboardingProgressCreateInput = {
+    id?: string
+    stepId: number
+    stepKey: string
+    completedAt?: Date | string | null
+    skippedAt?: Date | string | null
+    data?: NullableJsonNullValueInput | InputJsonValue
+    isRequired?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    user: UserCreateNestedOneWithoutOnboardingProgressInput
+  }
+
+  export type UserOnboardingProgressUncheckedCreateInput = {
+    id?: string
+    userId: string
+    stepId: number
+    stepKey: string
+    completedAt?: Date | string | null
+    skippedAt?: Date | string | null
+    data?: NullableJsonNullValueInput | InputJsonValue
+    isRequired?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type UserOnboardingProgressUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    stepId?: IntFieldUpdateOperationsInput | number
+    stepKey?: StringFieldUpdateOperationsInput | string
+    completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    skippedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    data?: NullableJsonNullValueInput | InputJsonValue
+    isRequired?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    user?: UserUpdateOneRequiredWithoutOnboardingProgressNestedInput
+  }
+
+  export type UserOnboardingProgressUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    stepId?: IntFieldUpdateOperationsInput | number
+    stepKey?: StringFieldUpdateOperationsInput | string
+    completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    skippedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    data?: NullableJsonNullValueInput | InputJsonValue
+    isRequired?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type UserOnboardingProgressCreateManyInput = {
+    id?: string
+    userId: string
+    stepId: number
+    stepKey: string
+    completedAt?: Date | string | null
+    skippedAt?: Date | string | null
+    data?: NullableJsonNullValueInput | InputJsonValue
+    isRequired?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type UserOnboardingProgressUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    stepId?: IntFieldUpdateOperationsInput | number
+    stepKey?: StringFieldUpdateOperationsInput | string
+    completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    skippedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    data?: NullableJsonNullValueInput | InputJsonValue
+    isRequired?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type UserOnboardingProgressUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    stepId?: IntFieldUpdateOperationsInput | number
+    stepKey?: StringFieldUpdateOperationsInput | string
+    completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    skippedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    data?: NullableJsonNullValueInput | InputJsonValue
+    isRequired?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type StringFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel>
     in?: string[] | ListStringFieldRefInput<$PrismaModel>
@@ -7143,6 +8651,12 @@ export namespace Prisma {
     none?: RecipeFavoriteWhereInput
   }
 
+  export type UserOnboardingProgressListRelationFilter = {
+    every?: UserOnboardingProgressWhereInput
+    some?: UserOnboardingProgressWhereInput
+    none?: UserOnboardingProgressWhereInput
+  }
+
   export type SortOrderInput = {
     sort: SortOrder
     nulls?: NullsOrder
@@ -7153,6 +8667,10 @@ export namespace Prisma {
   }
 
   export type RecipeFavoriteOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type UserOnboardingProgressOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -7533,6 +9051,130 @@ export namespace Prisma {
     createdAt?: SortOrder
   }
 
+  export type DateTimeNullableFilter<$PrismaModel = never> = {
+    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
+    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    not?: NestedDateTimeNullableFilter<$PrismaModel> | Date | string | null
+  }
+  export type JsonNullableFilter<$PrismaModel = never> =
+    | PatchUndefined<
+        Either<Required<JsonNullableFilterBase<$PrismaModel>>, Exclude<keyof Required<JsonNullableFilterBase<$PrismaModel>>, 'path'>>,
+        Required<JsonNullableFilterBase<$PrismaModel>>
+      >
+    | OptionalFlat<Omit<Required<JsonNullableFilterBase<$PrismaModel>>, 'path'>>
+
+  export type JsonNullableFilterBase<$PrismaModel = never> = {
+    equals?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+    path?: string[]
+    mode?: QueryMode | EnumQueryModeFieldRefInput<$PrismaModel>
+    string_contains?: string | StringFieldRefInput<$PrismaModel>
+    string_starts_with?: string | StringFieldRefInput<$PrismaModel>
+    string_ends_with?: string | StringFieldRefInput<$PrismaModel>
+    array_starts_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_ends_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_contains?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    lt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    lte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+  }
+
+  export type UserOnboardingProgressUserIdStepIdCompoundUniqueInput = {
+    userId: string
+    stepId: number
+  }
+
+  export type UserOnboardingProgressCountOrderByAggregateInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    stepId?: SortOrder
+    stepKey?: SortOrder
+    completedAt?: SortOrder
+    skippedAt?: SortOrder
+    data?: SortOrder
+    isRequired?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type UserOnboardingProgressAvgOrderByAggregateInput = {
+    stepId?: SortOrder
+  }
+
+  export type UserOnboardingProgressMaxOrderByAggregateInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    stepId?: SortOrder
+    stepKey?: SortOrder
+    completedAt?: SortOrder
+    skippedAt?: SortOrder
+    isRequired?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type UserOnboardingProgressMinOrderByAggregateInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    stepId?: SortOrder
+    stepKey?: SortOrder
+    completedAt?: SortOrder
+    skippedAt?: SortOrder
+    isRequired?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type UserOnboardingProgressSumOrderByAggregateInput = {
+    stepId?: SortOrder
+  }
+
+  export type DateTimeNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
+    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    not?: NestedDateTimeNullableWithAggregatesFilter<$PrismaModel> | Date | string | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedDateTimeNullableFilter<$PrismaModel>
+    _max?: NestedDateTimeNullableFilter<$PrismaModel>
+  }
+  export type JsonNullableWithAggregatesFilter<$PrismaModel = never> =
+    | PatchUndefined<
+        Either<Required<JsonNullableWithAggregatesFilterBase<$PrismaModel>>, Exclude<keyof Required<JsonNullableWithAggregatesFilterBase<$PrismaModel>>, 'path'>>,
+        Required<JsonNullableWithAggregatesFilterBase<$PrismaModel>>
+      >
+    | OptionalFlat<Omit<Required<JsonNullableWithAggregatesFilterBase<$PrismaModel>>, 'path'>>
+
+  export type JsonNullableWithAggregatesFilterBase<$PrismaModel = never> = {
+    equals?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+    path?: string[]
+    mode?: QueryMode | EnumQueryModeFieldRefInput<$PrismaModel>
+    string_contains?: string | StringFieldRefInput<$PrismaModel>
+    string_starts_with?: string | StringFieldRefInput<$PrismaModel>
+    string_ends_with?: string | StringFieldRefInput<$PrismaModel>
+    array_starts_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_ends_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_contains?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    lt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    lte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedJsonNullableFilter<$PrismaModel>
+    _max?: NestedJsonNullableFilter<$PrismaModel>
+  }
+
   export type UserCreatedietaryPreferencesInput = {
     set: $Enums.DietaryPreference[]
   }
@@ -7559,6 +9201,13 @@ export namespace Prisma {
     connect?: RecipeFavoriteWhereUniqueInput | RecipeFavoriteWhereUniqueInput[]
   }
 
+  export type UserOnboardingProgressCreateNestedManyWithoutUserInput = {
+    create?: XOR<UserOnboardingProgressCreateWithoutUserInput, UserOnboardingProgressUncheckedCreateWithoutUserInput> | UserOnboardingProgressCreateWithoutUserInput[] | UserOnboardingProgressUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: UserOnboardingProgressCreateOrConnectWithoutUserInput | UserOnboardingProgressCreateOrConnectWithoutUserInput[]
+    createMany?: UserOnboardingProgressCreateManyUserInputEnvelope
+    connect?: UserOnboardingProgressWhereUniqueInput | UserOnboardingProgressWhereUniqueInput[]
+  }
+
   export type RecipeUncheckedCreateNestedManyWithoutUserInput = {
     create?: XOR<RecipeCreateWithoutUserInput, RecipeUncheckedCreateWithoutUserInput> | RecipeCreateWithoutUserInput[] | RecipeUncheckedCreateWithoutUserInput[]
     connectOrCreate?: RecipeCreateOrConnectWithoutUserInput | RecipeCreateOrConnectWithoutUserInput[]
@@ -7571,6 +9220,13 @@ export namespace Prisma {
     connectOrCreate?: RecipeFavoriteCreateOrConnectWithoutUserInput | RecipeFavoriteCreateOrConnectWithoutUserInput[]
     createMany?: RecipeFavoriteCreateManyUserInputEnvelope
     connect?: RecipeFavoriteWhereUniqueInput | RecipeFavoriteWhereUniqueInput[]
+  }
+
+  export type UserOnboardingProgressUncheckedCreateNestedManyWithoutUserInput = {
+    create?: XOR<UserOnboardingProgressCreateWithoutUserInput, UserOnboardingProgressUncheckedCreateWithoutUserInput> | UserOnboardingProgressCreateWithoutUserInput[] | UserOnboardingProgressUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: UserOnboardingProgressCreateOrConnectWithoutUserInput | UserOnboardingProgressCreateOrConnectWithoutUserInput[]
+    createMany?: UserOnboardingProgressCreateManyUserInputEnvelope
+    connect?: UserOnboardingProgressWhereUniqueInput | UserOnboardingProgressWhereUniqueInput[]
   }
 
   export type StringFieldUpdateOperationsInput = {
@@ -7648,6 +9304,20 @@ export namespace Prisma {
     deleteMany?: RecipeFavoriteScalarWhereInput | RecipeFavoriteScalarWhereInput[]
   }
 
+  export type UserOnboardingProgressUpdateManyWithoutUserNestedInput = {
+    create?: XOR<UserOnboardingProgressCreateWithoutUserInput, UserOnboardingProgressUncheckedCreateWithoutUserInput> | UserOnboardingProgressCreateWithoutUserInput[] | UserOnboardingProgressUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: UserOnboardingProgressCreateOrConnectWithoutUserInput | UserOnboardingProgressCreateOrConnectWithoutUserInput[]
+    upsert?: UserOnboardingProgressUpsertWithWhereUniqueWithoutUserInput | UserOnboardingProgressUpsertWithWhereUniqueWithoutUserInput[]
+    createMany?: UserOnboardingProgressCreateManyUserInputEnvelope
+    set?: UserOnboardingProgressWhereUniqueInput | UserOnboardingProgressWhereUniqueInput[]
+    disconnect?: UserOnboardingProgressWhereUniqueInput | UserOnboardingProgressWhereUniqueInput[]
+    delete?: UserOnboardingProgressWhereUniqueInput | UserOnboardingProgressWhereUniqueInput[]
+    connect?: UserOnboardingProgressWhereUniqueInput | UserOnboardingProgressWhereUniqueInput[]
+    update?: UserOnboardingProgressUpdateWithWhereUniqueWithoutUserInput | UserOnboardingProgressUpdateWithWhereUniqueWithoutUserInput[]
+    updateMany?: UserOnboardingProgressUpdateManyWithWhereWithoutUserInput | UserOnboardingProgressUpdateManyWithWhereWithoutUserInput[]
+    deleteMany?: UserOnboardingProgressScalarWhereInput | UserOnboardingProgressScalarWhereInput[]
+  }
+
   export type RecipeUncheckedUpdateManyWithoutUserNestedInput = {
     create?: XOR<RecipeCreateWithoutUserInput, RecipeUncheckedCreateWithoutUserInput> | RecipeCreateWithoutUserInput[] | RecipeUncheckedCreateWithoutUserInput[]
     connectOrCreate?: RecipeCreateOrConnectWithoutUserInput | RecipeCreateOrConnectWithoutUserInput[]
@@ -7674,6 +9344,20 @@ export namespace Prisma {
     update?: RecipeFavoriteUpdateWithWhereUniqueWithoutUserInput | RecipeFavoriteUpdateWithWhereUniqueWithoutUserInput[]
     updateMany?: RecipeFavoriteUpdateManyWithWhereWithoutUserInput | RecipeFavoriteUpdateManyWithWhereWithoutUserInput[]
     deleteMany?: RecipeFavoriteScalarWhereInput | RecipeFavoriteScalarWhereInput[]
+  }
+
+  export type UserOnboardingProgressUncheckedUpdateManyWithoutUserNestedInput = {
+    create?: XOR<UserOnboardingProgressCreateWithoutUserInput, UserOnboardingProgressUncheckedCreateWithoutUserInput> | UserOnboardingProgressCreateWithoutUserInput[] | UserOnboardingProgressUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: UserOnboardingProgressCreateOrConnectWithoutUserInput | UserOnboardingProgressCreateOrConnectWithoutUserInput[]
+    upsert?: UserOnboardingProgressUpsertWithWhereUniqueWithoutUserInput | UserOnboardingProgressUpsertWithWhereUniqueWithoutUserInput[]
+    createMany?: UserOnboardingProgressCreateManyUserInputEnvelope
+    set?: UserOnboardingProgressWhereUniqueInput | UserOnboardingProgressWhereUniqueInput[]
+    disconnect?: UserOnboardingProgressWhereUniqueInput | UserOnboardingProgressWhereUniqueInput[]
+    delete?: UserOnboardingProgressWhereUniqueInput | UserOnboardingProgressWhereUniqueInput[]
+    connect?: UserOnboardingProgressWhereUniqueInput | UserOnboardingProgressWhereUniqueInput[]
+    update?: UserOnboardingProgressUpdateWithWhereUniqueWithoutUserInput | UserOnboardingProgressUpdateWithWhereUniqueWithoutUserInput[]
+    updateMany?: UserOnboardingProgressUpdateManyWithWhereWithoutUserInput | UserOnboardingProgressUpdateManyWithWhereWithoutUserInput[]
+    deleteMany?: UserOnboardingProgressScalarWhereInput | UserOnboardingProgressScalarWhereInput[]
   }
 
   export type RecipeCreateingredientsInput = {
@@ -7852,6 +9536,24 @@ export namespace Prisma {
     upsert?: RecipeUpsertWithoutFavoritesInput
     connect?: RecipeWhereUniqueInput
     update?: XOR<XOR<RecipeUpdateToOneWithWhereWithoutFavoritesInput, RecipeUpdateWithoutFavoritesInput>, RecipeUncheckedUpdateWithoutFavoritesInput>
+  }
+
+  export type UserCreateNestedOneWithoutOnboardingProgressInput = {
+    create?: XOR<UserCreateWithoutOnboardingProgressInput, UserUncheckedCreateWithoutOnboardingProgressInput>
+    connectOrCreate?: UserCreateOrConnectWithoutOnboardingProgressInput
+    connect?: UserWhereUniqueInput
+  }
+
+  export type NullableDateTimeFieldUpdateOperationsInput = {
+    set?: Date | string | null
+  }
+
+  export type UserUpdateOneRequiredWithoutOnboardingProgressNestedInput = {
+    create?: XOR<UserCreateWithoutOnboardingProgressInput, UserUncheckedCreateWithoutOnboardingProgressInput>
+    connectOrCreate?: UserCreateOrConnectWithoutOnboardingProgressInput
+    upsert?: UserUpsertWithoutOnboardingProgressInput
+    connect?: UserWhereUniqueInput
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutOnboardingProgressInput, UserUpdateWithoutOnboardingProgressInput>, UserUncheckedUpdateWithoutOnboardingProgressInput>
   }
 
   export type NestedStringFilter<$PrismaModel = never> = {
@@ -8097,6 +9799,54 @@ export namespace Prisma {
     not?: NestedFloatFilter<$PrismaModel> | number
   }
 
+  export type NestedDateTimeNullableFilter<$PrismaModel = never> = {
+    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
+    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    not?: NestedDateTimeNullableFilter<$PrismaModel> | Date | string | null
+  }
+
+  export type NestedDateTimeNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
+    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    not?: NestedDateTimeNullableWithAggregatesFilter<$PrismaModel> | Date | string | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedDateTimeNullableFilter<$PrismaModel>
+    _max?: NestedDateTimeNullableFilter<$PrismaModel>
+  }
+  export type NestedJsonNullableFilter<$PrismaModel = never> =
+    | PatchUndefined<
+        Either<Required<NestedJsonNullableFilterBase<$PrismaModel>>, Exclude<keyof Required<NestedJsonNullableFilterBase<$PrismaModel>>, 'path'>>,
+        Required<NestedJsonNullableFilterBase<$PrismaModel>>
+      >
+    | OptionalFlat<Omit<Required<NestedJsonNullableFilterBase<$PrismaModel>>, 'path'>>
+
+  export type NestedJsonNullableFilterBase<$PrismaModel = never> = {
+    equals?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+    path?: string[]
+    mode?: QueryMode | EnumQueryModeFieldRefInput<$PrismaModel>
+    string_contains?: string | StringFieldRefInput<$PrismaModel>
+    string_starts_with?: string | StringFieldRefInput<$PrismaModel>
+    string_ends_with?: string | StringFieldRefInput<$PrismaModel>
+    array_starts_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_ends_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_contains?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    lt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    lte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+  }
+
   export type RecipeCreateWithoutUserInput = {
     id?: string
     title: string
@@ -8169,6 +9919,40 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
+  export type UserOnboardingProgressCreateWithoutUserInput = {
+    id?: string
+    stepId: number
+    stepKey: string
+    completedAt?: Date | string | null
+    skippedAt?: Date | string | null
+    data?: NullableJsonNullValueInput | InputJsonValue
+    isRequired?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type UserOnboardingProgressUncheckedCreateWithoutUserInput = {
+    id?: string
+    stepId: number
+    stepKey: string
+    completedAt?: Date | string | null
+    skippedAt?: Date | string | null
+    data?: NullableJsonNullValueInput | InputJsonValue
+    isRequired?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type UserOnboardingProgressCreateOrConnectWithoutUserInput = {
+    where: UserOnboardingProgressWhereUniqueInput
+    create: XOR<UserOnboardingProgressCreateWithoutUserInput, UserOnboardingProgressUncheckedCreateWithoutUserInput>
+  }
+
+  export type UserOnboardingProgressCreateManyUserInputEnvelope = {
+    data: UserOnboardingProgressCreateManyUserInput | UserOnboardingProgressCreateManyUserInput[]
+    skipDuplicates?: boolean
+  }
+
   export type RecipeUpsertWithWhereUniqueWithoutUserInput = {
     where: RecipeWhereUniqueInput
     update: XOR<RecipeUpdateWithoutUserInput, RecipeUncheckedUpdateWithoutUserInput>
@@ -8233,6 +10017,38 @@ export namespace Prisma {
     createdAt?: DateTimeFilter<"RecipeFavorite"> | Date | string
   }
 
+  export type UserOnboardingProgressUpsertWithWhereUniqueWithoutUserInput = {
+    where: UserOnboardingProgressWhereUniqueInput
+    update: XOR<UserOnboardingProgressUpdateWithoutUserInput, UserOnboardingProgressUncheckedUpdateWithoutUserInput>
+    create: XOR<UserOnboardingProgressCreateWithoutUserInput, UserOnboardingProgressUncheckedCreateWithoutUserInput>
+  }
+
+  export type UserOnboardingProgressUpdateWithWhereUniqueWithoutUserInput = {
+    where: UserOnboardingProgressWhereUniqueInput
+    data: XOR<UserOnboardingProgressUpdateWithoutUserInput, UserOnboardingProgressUncheckedUpdateWithoutUserInput>
+  }
+
+  export type UserOnboardingProgressUpdateManyWithWhereWithoutUserInput = {
+    where: UserOnboardingProgressScalarWhereInput
+    data: XOR<UserOnboardingProgressUpdateManyMutationInput, UserOnboardingProgressUncheckedUpdateManyWithoutUserInput>
+  }
+
+  export type UserOnboardingProgressScalarWhereInput = {
+    AND?: UserOnboardingProgressScalarWhereInput | UserOnboardingProgressScalarWhereInput[]
+    OR?: UserOnboardingProgressScalarWhereInput[]
+    NOT?: UserOnboardingProgressScalarWhereInput | UserOnboardingProgressScalarWhereInput[]
+    id?: StringFilter<"UserOnboardingProgress"> | string
+    userId?: StringFilter<"UserOnboardingProgress"> | string
+    stepId?: IntFilter<"UserOnboardingProgress"> | number
+    stepKey?: StringFilter<"UserOnboardingProgress"> | string
+    completedAt?: DateTimeNullableFilter<"UserOnboardingProgress"> | Date | string | null
+    skippedAt?: DateTimeNullableFilter<"UserOnboardingProgress"> | Date | string | null
+    data?: JsonNullableFilter<"UserOnboardingProgress">
+    isRequired?: BoolFilter<"UserOnboardingProgress"> | boolean
+    createdAt?: DateTimeFilter<"UserOnboardingProgress"> | Date | string
+    updatedAt?: DateTimeFilter<"UserOnboardingProgress"> | Date | string
+  }
+
   export type UserCreateWithoutRecipesInput = {
     id: string
     email: string
@@ -8252,6 +10068,7 @@ export namespace Prisma {
     timezone?: string | null
     measurementSystem?: string | null
     favorites?: RecipeFavoriteCreateNestedManyWithoutUserInput
+    onboardingProgress?: UserOnboardingProgressCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutRecipesInput = {
@@ -8273,6 +10090,7 @@ export namespace Prisma {
     timezone?: string | null
     measurementSystem?: string | null
     favorites?: RecipeFavoriteUncheckedCreateNestedManyWithoutUserInput
+    onboardingProgress?: UserOnboardingProgressUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutRecipesInput = {
@@ -8362,6 +10180,7 @@ export namespace Prisma {
     timezone?: NullableStringFieldUpdateOperationsInput | string | null
     measurementSystem?: NullableStringFieldUpdateOperationsInput | string | null
     favorites?: RecipeFavoriteUpdateManyWithoutUserNestedInput
+    onboardingProgress?: UserOnboardingProgressUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutRecipesInput = {
@@ -8383,6 +10202,7 @@ export namespace Prisma {
     timezone?: NullableStringFieldUpdateOperationsInput | string | null
     measurementSystem?: NullableStringFieldUpdateOperationsInput | string | null
     favorites?: RecipeFavoriteUncheckedUpdateManyWithoutUserNestedInput
+    onboardingProgress?: UserOnboardingProgressUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type RecipeFavoriteUpsertWithWhereUniqueWithoutRecipeInput = {
@@ -8546,6 +10366,7 @@ export namespace Prisma {
     timezone?: string | null
     measurementSystem?: string | null
     recipes?: RecipeCreateNestedManyWithoutUserInput
+    onboardingProgress?: UserOnboardingProgressCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutFavoritesInput = {
@@ -8567,6 +10388,7 @@ export namespace Prisma {
     timezone?: string | null
     measurementSystem?: string | null
     recipes?: RecipeUncheckedCreateNestedManyWithoutUserInput
+    onboardingProgress?: UserOnboardingProgressUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutFavoritesInput = {
@@ -8649,6 +10471,7 @@ export namespace Prisma {
     timezone?: NullableStringFieldUpdateOperationsInput | string | null
     measurementSystem?: NullableStringFieldUpdateOperationsInput | string | null
     recipes?: RecipeUpdateManyWithoutUserNestedInput
+    onboardingProgress?: UserOnboardingProgressUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutFavoritesInput = {
@@ -8670,6 +10493,7 @@ export namespace Prisma {
     timezone?: NullableStringFieldUpdateOperationsInput | string | null
     measurementSystem?: NullableStringFieldUpdateOperationsInput | string | null
     recipes?: RecipeUncheckedUpdateManyWithoutUserNestedInput
+    onboardingProgress?: UserOnboardingProgressUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type RecipeUpsertWithoutFavoritesInput = {
@@ -8723,6 +10547,110 @@ export namespace Prisma {
     images?: RecipeImageUncheckedUpdateManyWithoutRecipeNestedInput
   }
 
+  export type UserCreateWithoutOnboardingProgressInput = {
+    id: string
+    email: string
+    firstName?: string | null
+    lastName?: string | null
+    imageUrl?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    onboardingCompleted?: boolean
+    onboardingStep?: number | null
+    cookingSkillLevel?: $Enums.CookingSkillLevel | null
+    dietaryPreferences?: UserCreatedietaryPreferencesInput | $Enums.DietaryPreference[]
+    favoriteCuisines?: UserCreatefavoriteCuisinesInput | string[]
+    householdSize?: number | null
+    defaultProcessingMethod?: $Enums.ProcessingMethod
+    preferredCategories?: UserCreatepreferredCategoriesInput | string[]
+    timezone?: string | null
+    measurementSystem?: string | null
+    recipes?: RecipeCreateNestedManyWithoutUserInput
+    favorites?: RecipeFavoriteCreateNestedManyWithoutUserInput
+  }
+
+  export type UserUncheckedCreateWithoutOnboardingProgressInput = {
+    id: string
+    email: string
+    firstName?: string | null
+    lastName?: string | null
+    imageUrl?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    onboardingCompleted?: boolean
+    onboardingStep?: number | null
+    cookingSkillLevel?: $Enums.CookingSkillLevel | null
+    dietaryPreferences?: UserCreatedietaryPreferencesInput | $Enums.DietaryPreference[]
+    favoriteCuisines?: UserCreatefavoriteCuisinesInput | string[]
+    householdSize?: number | null
+    defaultProcessingMethod?: $Enums.ProcessingMethod
+    preferredCategories?: UserCreatepreferredCategoriesInput | string[]
+    timezone?: string | null
+    measurementSystem?: string | null
+    recipes?: RecipeUncheckedCreateNestedManyWithoutUserInput
+    favorites?: RecipeFavoriteUncheckedCreateNestedManyWithoutUserInput
+  }
+
+  export type UserCreateOrConnectWithoutOnboardingProgressInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutOnboardingProgressInput, UserUncheckedCreateWithoutOnboardingProgressInput>
+  }
+
+  export type UserUpsertWithoutOnboardingProgressInput = {
+    update: XOR<UserUpdateWithoutOnboardingProgressInput, UserUncheckedUpdateWithoutOnboardingProgressInput>
+    create: XOR<UserCreateWithoutOnboardingProgressInput, UserUncheckedCreateWithoutOnboardingProgressInput>
+    where?: UserWhereInput
+  }
+
+  export type UserUpdateToOneWithWhereWithoutOnboardingProgressInput = {
+    where?: UserWhereInput
+    data: XOR<UserUpdateWithoutOnboardingProgressInput, UserUncheckedUpdateWithoutOnboardingProgressInput>
+  }
+
+  export type UserUpdateWithoutOnboardingProgressInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    firstName?: NullableStringFieldUpdateOperationsInput | string | null
+    lastName?: NullableStringFieldUpdateOperationsInput | string | null
+    imageUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    onboardingCompleted?: BoolFieldUpdateOperationsInput | boolean
+    onboardingStep?: NullableIntFieldUpdateOperationsInput | number | null
+    cookingSkillLevel?: NullableEnumCookingSkillLevelFieldUpdateOperationsInput | $Enums.CookingSkillLevel | null
+    dietaryPreferences?: UserUpdatedietaryPreferencesInput | $Enums.DietaryPreference[]
+    favoriteCuisines?: UserUpdatefavoriteCuisinesInput | string[]
+    householdSize?: NullableIntFieldUpdateOperationsInput | number | null
+    defaultProcessingMethod?: EnumProcessingMethodFieldUpdateOperationsInput | $Enums.ProcessingMethod
+    preferredCategories?: UserUpdatepreferredCategoriesInput | string[]
+    timezone?: NullableStringFieldUpdateOperationsInput | string | null
+    measurementSystem?: NullableStringFieldUpdateOperationsInput | string | null
+    recipes?: RecipeUpdateManyWithoutUserNestedInput
+    favorites?: RecipeFavoriteUpdateManyWithoutUserNestedInput
+  }
+
+  export type UserUncheckedUpdateWithoutOnboardingProgressInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    firstName?: NullableStringFieldUpdateOperationsInput | string | null
+    lastName?: NullableStringFieldUpdateOperationsInput | string | null
+    imageUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    onboardingCompleted?: BoolFieldUpdateOperationsInput | boolean
+    onboardingStep?: NullableIntFieldUpdateOperationsInput | number | null
+    cookingSkillLevel?: NullableEnumCookingSkillLevelFieldUpdateOperationsInput | $Enums.CookingSkillLevel | null
+    dietaryPreferences?: UserUpdatedietaryPreferencesInput | $Enums.DietaryPreference[]
+    favoriteCuisines?: UserUpdatefavoriteCuisinesInput | string[]
+    householdSize?: NullableIntFieldUpdateOperationsInput | number | null
+    defaultProcessingMethod?: EnumProcessingMethodFieldUpdateOperationsInput | $Enums.ProcessingMethod
+    preferredCategories?: UserUpdatepreferredCategoriesInput | string[]
+    timezone?: NullableStringFieldUpdateOperationsInput | string | null
+    measurementSystem?: NullableStringFieldUpdateOperationsInput | string | null
+    recipes?: RecipeUncheckedUpdateManyWithoutUserNestedInput
+    favorites?: RecipeFavoriteUncheckedUpdateManyWithoutUserNestedInput
+  }
+
   export type RecipeCreateManyUserInput = {
     id?: string
     title: string
@@ -8745,6 +10673,18 @@ export namespace Prisma {
     id?: string
     recipeId: string
     createdAt?: Date | string
+  }
+
+  export type UserOnboardingProgressCreateManyUserInput = {
+    id?: string
+    stepId: number
+    stepKey: string
+    completedAt?: Date | string | null
+    skippedAt?: Date | string | null
+    data?: NullableJsonNullValueInput | InputJsonValue
+    isRequired?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
   }
 
   export type RecipeUpdateWithoutUserInput = {
@@ -8821,6 +10761,42 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     recipeId?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type UserOnboardingProgressUpdateWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    stepId?: IntFieldUpdateOperationsInput | number
+    stepKey?: StringFieldUpdateOperationsInput | string
+    completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    skippedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    data?: NullableJsonNullValueInput | InputJsonValue
+    isRequired?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type UserOnboardingProgressUncheckedUpdateWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    stepId?: IntFieldUpdateOperationsInput | number
+    stepKey?: StringFieldUpdateOperationsInput | string
+    completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    skippedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    data?: NullableJsonNullValueInput | InputJsonValue
+    isRequired?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type UserOnboardingProgressUncheckedUpdateManyWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    stepId?: IntFieldUpdateOperationsInput | number
+    stepKey?: StringFieldUpdateOperationsInput | string
+    completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    skippedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    data?: NullableJsonNullValueInput | InputJsonValue
+    isRequired?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type RecipeFavoriteCreateManyRecipeInput = {

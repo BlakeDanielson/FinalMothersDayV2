@@ -177,9 +177,27 @@ exports.Prisma.RecipeFavoriteScalarFieldEnum = {
   createdAt: 'createdAt'
 };
 
+exports.Prisma.UserOnboardingProgressScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  stepId: 'stepId',
+  stepKey: 'stepKey',
+  completedAt: 'completedAt',
+  skippedAt: 'skippedAt',
+  data: 'data',
+  isRequired: 'isRequired',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
+};
+
+exports.Prisma.NullableJsonNullValueInput = {
+  DbNull: Prisma.DbNull,
+  JsonNull: Prisma.JsonNull
 };
 
 exports.Prisma.QueryMode = {
@@ -190,6 +208,12 @@ exports.Prisma.QueryMode = {
 exports.Prisma.NullsOrder = {
   first: 'first',
   last: 'last'
+};
+
+exports.Prisma.JsonNullValueFilter = {
+  DbNull: Prisma.DbNull,
+  JsonNull: Prisma.JsonNull,
+  AnyNull: Prisma.AnyNull
 };
 exports.CookingSkillLevel = exports.$Enums.CookingSkillLevel = {
   BEGINNER: 'BEGINNER',
@@ -227,7 +251,8 @@ exports.Prisma.ModelName = {
   User: 'User',
   Recipe: 'Recipe',
   RecipeImage: 'RecipeImage',
-  RecipeFavorite: 'RecipeFavorite'
+  RecipeFavorite: 'RecipeFavorite',
+  UserOnboardingProgress: 'UserOnboardingProgress'
 };
 
 /**

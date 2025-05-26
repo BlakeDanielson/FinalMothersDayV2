@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import OpenAI from 'openai';
 import { z } from "zod";
+import { withOnboardingGuard } from '@/lib/middleware/onboarding-guard';
 
 // Helper function to fix relative URLs
 function fixImageUrl(url: string | null, baseUrl: string): string | null {
@@ -194,7 +195,7 @@ ${recipeContent}`;
   return content;
 }
 
-export async function POST(request: NextRequest) {
+export const POST = withOnboardingGuard(async (request: NextRequest) => {
   try {
     const { url, processing_method = 'openai' } = await request.json();
 
@@ -302,4 +303,4 @@ export async function POST(request: NextRequest) {
       { status: 500 }
     );
   }
-} 
+}); 

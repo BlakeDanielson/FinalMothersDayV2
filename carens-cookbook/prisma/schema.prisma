@@ -70,6 +70,7 @@ model User {
   // Relations
   recipes   Recipe[]
   favorites RecipeFavorite[]
+  onboardingProgress UserOnboardingProgress[] // Detailed step tracking
 }
 
 // Enum for category source tracking
@@ -140,4 +141,26 @@ model RecipeFavorite {
   recipe Recipe @relation(fields: [recipeId], references: [id], onDelete: Cascade)
 
   @@unique([userId, recipeId])
+}
+
+// New model for detailed onboarding step tracking
+model UserOnboardingProgress {
+  id          String   @id @default(cuid())
+  userId      String
+  stepId      Int      // Step index (0-6 based on ONBOARDING_STEPS)
+  stepKey     String   // Step key (e.g., 'WELCOME', 'PROFILE_SETUP')
+  completedAt DateTime?
+  skippedAt   DateTime?
+  data        Json?    // Step-specific data (JSON)
+  isRequired  Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  // User relation
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  // Ensure one record per user per step
+  @@unique([userId, stepId])
+  @@index([userId])
+  @@index([userId, stepId])
 }
