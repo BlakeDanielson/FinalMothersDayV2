@@ -171,6 +171,7 @@ const RecipeDisplay = ({
   const [scaleFactor, setScaleFactor] = useState(1);
   const [showShareOptionsModal, setShowShareOptionsModal] = useState(false);
   const [saveStatus, setSaveStatus] = useState<'idle' | 'saving' | 'saved'>('idle');
+  const saveTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   useEffect(() => {
     setDisplayIngredients(
@@ -191,6 +192,11 @@ const RecipeDisplay = ({
     setIsEditingTitle(false);
     setSaveStatus('idle');
     setImageError(false); // Reset image error when recipe changes
+    // Clear any pending save timeout when recipe changes
+    if (saveTimeoutRef.current) {
+      clearTimeout(saveTimeoutRef.current);
+      saveTimeoutRef.current = null;
+    }
   }, [recipe.title, recipe.image]);
 
   useEffect(() => {
@@ -199,6 +205,15 @@ const RecipeDisplay = ({
       titleInputRef.current.select();
     }
   }, [isEditingTitle]);
+
+  // Cleanup timeout on unmount
+  useEffect(() => {
+    return () => {
+      if (saveTimeoutRef.current) {
+        clearTimeout(saveTimeoutRef.current);
+      }
+    };
+  }, []);
 
   const handleTitleEditToggle = () => {
     if (isEditingTitle) {
@@ -324,10 +339,17 @@ const RecipeDisplay = ({
   const handleSave = async () => {
     if (onSave) {
       setSaveStatus('saving');
+      // Clear any existing timeout
+      if (saveTimeoutRef.current) {
+        clearTimeout(saveTimeoutRef.current);
+      }
       try {
         await onSave(recipe);
         setSaveStatus('saved');
-        // Assuming onSave will show its own toast notifications for success/error
+        // Reset save status back to idle after 2 seconds to allow saving again
+        saveTimeoutRef.current = setTimeout(() => {
+          setSaveStatus('idle');
+        }, 2000);
       } catch (error) {
         console.error("Error saving recipe:", error);
         toast.error("Failed to save recipe."); // Fallback error toast

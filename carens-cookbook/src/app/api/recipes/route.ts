@@ -12,11 +12,11 @@ const createRecipeSchema = z.object({
   ingredients: z.array(z.string()).min(1, "Ingredients are required"),
   steps: z.array(z.string()).min(1, "Steps are required"),
   image: z.string().url("Image must be a valid URL if present.").nullable(),
-  description: z.string().min(1, "Description is required"),
-  cuisine: z.string().min(1, "Cuisine is required"),
-  category: z.string().min(1, "Category is required"),
-  prepTime: z.string().min(1, "Prep time is required"),
-  cleanupTime: z.string().min(1, "Cleanup time is required"),
+  description: z.string().default("").transform(val => val || ""),
+  cuisine: z.string().default("").transform(val => val || ""),
+  category: z.string().default("Uncategorized").transform(val => val || "Uncategorized"),
+  prepTime: z.string().default("").transform(val => val || ""),
+  cleanupTime: z.string().default("").transform(val => val || ""),
   // createdAt and updatedAt will be handled by Prisma
 });
 
