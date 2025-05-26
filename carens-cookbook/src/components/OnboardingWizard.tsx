@@ -1,0 +1,312 @@
+'use client';
+
+import React, { useState } from 'react';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Progress } from '@/components/ui/progress';
+import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
+import { ChevronLeft, ChevronRight, Check, X } from 'lucide-react';
+import { useOnboarding } from '@/contexts/OnboardingContext';
+import { ONBOARDING_STEPS } from '@/lib/constants/user-preferences';
+
+interface OnboardingWizardProps {
+  onComplete?: () => void;
+  onSkip?: () => void;
+  className?: string;
+}
+
+export function OnboardingWizard({ onComplete, onSkip, className }: OnboardingWizardProps) {
+  const {
+    currentStep,
+    isLoading,
+    progress,
+    nextStep,
+    previousStep,
+    updateStepData,
+    completeOnboarding,
+    skipOnboarding
+  } = useOnboarding();
+
+  const [isProcessing, setIsProcessing] = useState(false);
+
+  const currentStepInfo = ONBOARDING_STEPS[currentStep];
+  const isFirstStep = currentStep === 0;
+  const isLastStep = currentStep === ONBOARDING_STEPS.length - 1;
+
+  const handleNext = async (data?: Record<string, unknown>) => {
+    if (isProcessing) return;
+    
+    setIsProcessing(true);
+    try {
+      if (data) {
+        updateStepData(currentStep, data);
+      }
+      
+      if (isLastStep) {
+        await completeOnboarding();
+        onComplete?.();
+      } else {
+        await nextStep();
+      }
+    } catch (error) {
+      console.error('Error proceeding to next step:', error);
+    } finally {
+      setIsProcessing(false);
+    }
+  };
+
+  const handlePrevious = async () => {
+    if (isProcessing || isFirstStep) return;
+    
+    setIsProcessing(true);
+    try {
+      await previousStep();
+    } catch (error) {
+      console.error('Error going to previous step:', error);
+    } finally {
+      setIsProcessing(false);
+    }
+  };
+
+  const handleSkip = async () => {
+    if (isProcessing) return;
+    
+    setIsProcessing(true);
+    try {
+      await skipOnboarding();
+      onSkip?.();
+    } catch (error) {
+      console.error('Error skipping onboarding:', error);
+    } finally {
+      setIsProcessing(false);
+    }
+  };
+
+  if (isLoading) {
+    return (
+      <div className="flex items-center justify-center min-h-[400px]">
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
+      </div>
+    );
+  }
+
+  if (!currentStepInfo) {
+    return (
+      <div className="flex items-center justify-center min-h-[400px]">
+        <div className="text-center">
+          <h3 className="text-lg font-semibold text-gray-900">Setup Complete!</h3>
+          <p className="text-sm text-gray-600 mt-1">Welcome to Caren&apos;s Cookbook</p>
+        </div>
+      </div>
+    );
+  }
+
+  const renderStepContent = () => {
+    
+    switch (currentStepInfo.key) {
+      case 'WELCOME':
+        return (
+          <div className="text-center space-y-4">
+            <h3 className="text-lg font-medium">Welcome to Caren&apos;s Cookbook!</h3>
+            <p className="text-gray-600">
+              Let&apos;s set up your profile and preferences to personalize your cooking experience.
+            </p>
+          </div>
+        );
+      
+      case 'PROFILE_SETUP':
+        return (
+          <div className="space-y-4">
+            <h3 className="text-lg font-medium">Profile Setup</h3>
+            <p className="text-gray-600">Tell us a bit about yourself to personalize your experience.</p>
+            <div className="bg-gray-50 p-4 rounded-lg">
+              <p className="text-sm text-gray-500">Profile setup form will be implemented here.</p>
+            </div>
+          </div>
+        );
+      
+      case 'DIETARY_PREFERENCES':
+        return (
+          <div className="space-y-4">
+            <h3 className="text-lg font-medium">Dietary Preferences</h3>
+            <p className="text-gray-600">Let us know about any dietary restrictions or preferences.</p>
+            <div className="bg-gray-50 p-4 rounded-lg">
+              <p className="text-sm text-gray-500">Dietary preferences form will be implemented here.</p>
+            </div>
+          </div>
+        );
+      
+      case 'COOKING_PREFERENCES':
+        return (
+          <div className="space-y-4">
+            <h3 className="text-lg font-medium">Cooking Preferences</h3>
+            <p className="text-gray-600">Tell us about your cooking style and experience level.</p>
+            <div className="bg-gray-50 p-4 rounded-lg">
+              <p className="text-sm text-gray-500">Cooking preferences form will be implemented here.</p>
+            </div>
+          </div>
+        );
+      
+      case 'CATEGORY_SETUP':
+        return (
+          <div className="space-y-4">
+            <h3 className="text-lg font-medium">Category Setup</h3>
+            <p className="text-gray-600">Choose your favorite recipe categories to get started.</p>
+            <div className="bg-gray-50 p-4 rounded-lg">
+              <p className="text-sm text-gray-500">Category selection will be implemented here.</p>
+            </div>
+          </div>
+        );
+      
+      case 'FIRST_RECIPE':
+        return (
+          <div className="space-y-4">
+            <h3 className="text-lg font-medium">Add Your First Recipe</h3>
+            <p className="text-gray-600">Start your collection by adding your first recipe.</p>
+            <div className="bg-gray-50 p-4 rounded-lg">
+              <p className="text-sm text-gray-500">Recipe creation form will be implemented here.</p>
+            </div>
+          </div>
+        );
+      
+      case 'COMPLETION':
+        return (
+          <div className="text-center space-y-4">
+            <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto">
+              <Check className="w-8 h-8 text-green-600" />
+            </div>
+            <h3 className="text-lg font-medium">Setup Complete!</h3>
+            <p className="text-gray-600">
+              You&apos;re all set! Welcome to Caren&apos;s Cookbook. Let&apos;s start cooking!
+            </p>
+          </div>
+        );
+      
+      default:
+        return (
+          <div className="text-center space-y-4">
+            <h3 className="text-lg font-medium">{currentStepInfo.title}</h3>
+            <p className="text-gray-600">{currentStepInfo.description}</p>
+          </div>
+        );
+    }
+  };
+
+  return (
+    <div className={`max-w-2xl mx-auto space-y-6 ${className}`}>
+      {/* Header with Progress */}
+      <div className="text-center space-y-4">
+        <div className="flex items-center justify-between">
+          <h1 className="text-2xl font-bold text-gray-900">Welcome Setup</h1>
+          <Badge variant="outline" className="text-xs">
+            Step {currentStep + 1} of {ONBOARDING_STEPS.length}
+          </Badge>
+        </div>
+        
+        <div className="space-y-2">
+          <Progress value={progress} className="w-full" />
+          <p className="text-sm text-gray-600">
+            {Math.round(progress)}% complete
+          </p>
+        </div>
+      </div>
+
+      {/* Main Content */}
+      <Card>
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2">
+            {currentStepInfo.title}
+            {currentStepInfo.isOptional && (
+              <Badge variant="secondary" className="text-xs">Optional</Badge>
+            )}
+          </CardTitle>
+          {currentStepInfo.description && (
+            <CardDescription>{currentStepInfo.description}</CardDescription>
+          )}
+        </CardHeader>
+        
+        <CardContent className="space-y-6">
+          {/* Step Content */}
+          <div className="min-h-[200px]">
+            {renderStepContent()}
+          </div>
+
+          {/* Navigation */}
+          <div className="flex items-center justify-between pt-6 border-t">
+            <div className="flex gap-2">
+              {!isFirstStep && (
+                <Button
+                  variant="outline"
+                  onClick={handlePrevious}
+                  disabled={isProcessing}
+                  size="sm"
+                >
+                  <ChevronLeft className="w-4 h-4 mr-1" />
+                  Previous
+                </Button>
+              )}
+            </div>
+
+            <div className="flex gap-2">
+              {currentStepInfo.isOptional && (
+                <Button
+                  variant="ghost"
+                  onClick={() => handleNext()}
+                  disabled={isProcessing}
+                  size="sm"
+                >
+                  Skip
+                </Button>
+              )}
+              
+              <Button
+                variant="ghost"
+                onClick={handleSkip}
+                disabled={isProcessing}
+                size="sm"
+                className="text-gray-500 hover:text-gray-700"
+              >
+                <X className="w-4 h-4 mr-1" />
+                Skip Setup
+              </Button>
+
+              <Button
+                onClick={() => handleNext()}
+                disabled={isProcessing}
+                size="sm"
+              >
+                {isProcessing ? (
+                  <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
+                ) : isLastStep ? (
+                  <Check className="w-4 h-4 mr-1" />
+                ) : (
+                  <ChevronRight className="w-4 h-4 mr-1" />
+                )}
+                {isLastStep ? 'Complete Setup' : 'Continue'}
+              </Button>
+            </div>
+          </div>
+        </CardContent>
+      </Card>
+
+      {/* Step Indicators */}
+      <div className="flex justify-center">
+        <div className="flex gap-2">
+          {ONBOARDING_STEPS.map((step, index) => (
+            <div
+              key={step.key}
+              className={`w-2 h-2 rounded-full transition-colors ${
+                index < currentStep
+                  ? 'bg-green-500'
+                  : index === currentStep
+                  ? 'bg-primary'
+                  : 'bg-gray-200'
+              }`}
+              title={step.title}
+            />
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+} 

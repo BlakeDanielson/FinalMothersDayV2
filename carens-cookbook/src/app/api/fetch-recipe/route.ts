@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
 import OpenAI from 'openai';
-import { GoogleGenerativeAI } from '@google/generative-ai';
 import { z } from "zod";
 
 // Helper function to fix relative URLs
@@ -128,7 +127,7 @@ ${cleanedHtml}`;
   console.log(`Sending to OpenAI, prompt length: ${prompt.length}`);
 
   const completion = await openai.chat.completions.create({
-    model: "gpt-4o-mini",
+    model: "gpt-4.1-mini-2025-04-14",
     messages: [
       {
         role: "user",
@@ -148,14 +147,9 @@ ${cleanedHtml}`;
   return content;
 }
 
-async function extractWithGemini(url: string, rawHtml: string): Promise<unknown> {
-  const genAI = new GoogleGenerativeAI(process.env.GOOGLE_API_KEY!);
-  const model = genAI.getGenerativeModel({ 
-    model: "gemini-2.5-flash-preview-05-20",
-    generationConfig: {
-      maxOutputTokens: 1000,
-      temperature: 0.1,
-    }
+async function extractWithGPTMini(url: string, rawHtml: string): Promise<unknown> {
+  const openai = new OpenAI({
+    apiKey: process.env.OPENAI_API_KEY,
   });
 
   // Extract recipe-specific content to reduce payload size
@@ -177,23 +171,26 @@ async function extractWithGemini(url: string, rawHtml: string): Promise<unknown>
 Recipe content from ${url}:
 ${recipeContent}`;
 
-  console.log(`Sending optimized content to Gemini, length: ${recipeContent.length}`);
+  console.log(`Sending optimized content to GPT-4o-mini, length: ${recipeContent.length}`);
 
-  // Add timeout to prevent hanging
-  const timeoutPromise = new Promise<never>((_, reject) => {
-    setTimeout(() => reject(new Error('Gemini request timed out after 60 seconds')), 60000);
+  const completion = await openai.chat.completions.create({
+    model: "gpt-4o-mini-2024-07-18",
+    messages: [
+      {
+        role: "user",
+        content: prompt
+      }
+    ],
+    max_tokens: 1000,
+    temperature: 0.1,
   });
 
-  const geminiPromise = model.generateContent(prompt);
-  const result = await Promise.race([geminiPromise, timeoutPromise]);
-  const response = await result.response;
-  const content = response.text();
-
+  const content = completion.choices[0]?.message?.content;
   if (!content) {
-    throw new Error('No response from Gemini');
+    throw new Error('No response from GPT-4o-mini');
   }
 
-  console.log('Gemini response received');
+  console.log('GPT-4o-mini response received');
   return content;
 }
 
@@ -247,7 +244,7 @@ export async function POST(request: NextRequest) {
     let content;
     try {
       if (processing_method === 'gemini') {
-        content = await extractWithGemini(url, htmlContent);
+        content = await extractWithGPTMini(url, htmlContent);
       } else {
         content = await extractWithOpenAI(cleanedHtml);
       }
@@ -290,7 +287,7 @@ export async function POST(request: NextRequest) {
       success: true,
       recipe: validatedRecipe,
       processing_method: processing_method,
-      message: `Recipe extracted successfully using ${processing_method === 'gemini' ? 'Gemini 2.5 Flash' : 'OpenAI GPT-4o'}`
+      message: `Recipe extracted successfully using ${processing_method === 'gemini' ? 'GPT-4o-mini' : 'GPT-4.1-mini'}`
     });
 
   } catch (error) {
