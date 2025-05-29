@@ -1,5 +1,6 @@
 import { CacheServiceFactory, categoryCache } from './services/cache-service';
 import { getCacheConfig } from './cache-config';
+import type { SuggestionResult } from './services/CategorySuggestionEngine';
 
 /**
  * Test script to validate cache service functionality
@@ -53,9 +54,9 @@ async function testCacheService() {
     console.log('💡 Testing category suggestions cache...');
     
     const testQuery = 'pasta with tomatoes';
-    const testSuggestions = [
-      { category: 'Italian', confidence: 0.9, reasoning: 'Contains pasta', source: 'ingredient' },
-      { category: 'Dinner', confidence: 0.7, reasoning: 'Main course', source: 'mealtime' }
+    const testSuggestions: SuggestionResult[] = [
+      { category: 'Italian', confidence: 0.9, reasoning: 'Contains pasta', source: 'ingredient' as const },
+      { category: 'Dinner', confidence: 0.7, reasoning: 'Main course', source: 'mealtime' as const }
     ];
     
     const setSuggestionsResult = await categoryCache.setCategorySuggestions(testQuery, testSuggestions);

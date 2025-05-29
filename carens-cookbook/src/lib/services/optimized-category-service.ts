@@ -185,7 +185,7 @@ export class OptimizedCategoryService {
       category: item.name,
       confidence: 1.0,
       reasoning: `Popular category with ${item.count} recipes`,
-      source: 'popularity_analysis'
+      source: 'keyword' as const
     }));
     await categoryCache.setCategorySuggestions(cacheKey, cacheData);
     return result;
