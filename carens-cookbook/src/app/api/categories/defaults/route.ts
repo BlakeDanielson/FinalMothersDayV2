@@ -1,6 +1,17 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { PREDEFINED_CATEGORIES, CATEGORY_METADATA } from '@/lib/constants/categories';
 
+interface CategoryInfo {
+  name: string;
+  isPredefined: boolean;
+  isDefault: boolean;
+  description?: string;
+  aliases?: string[];
+  icon?: string;
+  color?: string;
+  isCore?: boolean;
+}
+
 export async function GET(request: NextRequest) {
   try {
     // Get query parameters for filtering
@@ -21,7 +32,7 @@ export async function GET(request: NextRequest) {
     const categoriesWithMetadata = PREDEFINED_CATEGORIES.map(categoryName => {
       const metadata = CATEGORY_METADATA[categoryName];
       
-      const categoryInfo: any = {
+      const categoryInfo: CategoryInfo = {
         name: categoryName,
         isPredefined: true,
         isDefault: true
@@ -73,7 +84,7 @@ export async function GET(request: NextRequest) {
   }
 }
 
-export async function POST(request: NextRequest) {
+export async function POST() {
   try {
     // This endpoint could be used to update default categories (admin only)
     // For now, return method not allowed

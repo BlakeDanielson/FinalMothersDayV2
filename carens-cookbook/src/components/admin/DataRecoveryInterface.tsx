@@ -11,16 +11,13 @@ import { Alert, AlertDescription } from '@/components/ui/alert';
 import { 
   Search, 
   RefreshCw, 
-  Download, 
   Upload, 
   AlertTriangle,
   CheckCircle,
   Clock,
   User,
   ChefHat,
-  FolderOpen,
-  Trash2,
-  RotateCcw
+  FolderOpen
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 

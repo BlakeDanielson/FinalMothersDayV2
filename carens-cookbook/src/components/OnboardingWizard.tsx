@@ -9,7 +9,6 @@ import { ChevronLeft, ChevronRight, Check, X } from 'lucide-react';
 import { useOnboarding } from '@/contexts/OnboardingContext';
 import { ONBOARDING_STEPS } from '@/lib/constants/user-preferences';
 import { FirstRecipeFlow, RecipeData } from '@/components/onboarding/FirstRecipeFlow';
-import { useFeatureTour } from '@/contexts/FeatureTourContext';
 import { RecipeBasicsTourTrigger } from '@/components/tour/TourTrigger';
 
 interface OnboardingWizardProps {
@@ -29,8 +28,6 @@ export function OnboardingWizard({ onComplete, onSkip, className }: OnboardingWi
     completeOnboarding,
     skipOnboarding
   } = useOnboarding();
-
-  const { startTour } = useFeatureTour();
 
   const [isProcessing, setIsProcessing] = useState(false);
 
