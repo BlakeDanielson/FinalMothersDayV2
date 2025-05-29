@@ -95,15 +95,19 @@ export async function PUT(req: NextRequest) {
     const validatedData = partialPreferencesSchema.parse(body);
 
     // Ensure user exists in database
-    await prisma.user.upsert({
-      where: { id: userId },
-      update: {},
-      create: { 
-        id: userId, 
-        email: '', // Email will be updated by webhook
-        ...getDefaultUserPreferences()
-      }
+    const existingUser = await prisma.user.findUnique({
+      where: { id: userId }
     });
+    
+    if (!existingUser) {
+      await prisma.user.create({
+        data: { 
+          id: userId, 
+          email: `temp-${userId}@placeholder.local`, // Temporary unique email
+          ...getDefaultUserPreferences()
+        }
+      });
+    }
 
     // Update user preferences
     const updatedUser = await prisma.user.update({
@@ -174,15 +178,19 @@ export async function POST(req: NextRequest) {
       const validatedData = updateOnboardingSchema.parse(body);
       
       // Ensure user exists
-      await prisma.user.upsert({
-        where: { id: userId },
-        update: {},
-        create: { 
-          id: userId, 
-          email: '',
-          ...getDefaultUserPreferences()
-        }
+      const existingUser = await prisma.user.findUnique({
+        where: { id: userId }
       });
+      
+      if (!existingUser) {
+        await prisma.user.create({
+          data: { 
+            id: userId, 
+            email: `temp-${userId}@placeholder.local`, // Temporary unique email
+            ...getDefaultUserPreferences()
+          }
+        });
+      }
 
       // Update onboarding progress
       const updateData: Record<string, unknown> = {};
@@ -216,31 +224,57 @@ export async function POST(req: NextRequest) {
       const validatedData = userPreferencesSchema.parse(body);
 
       // Initialize user with full preferences
-      const user = await prisma.user.upsert({
-        where: { id: userId },
-        update: validatedData,
-        create: { 
-          id: userId, 
-          email: '',
-          ...validatedData
-        },
-        select: {
-          id: true,
-          email: true,
-          onboardingCompleted: true,
-          onboardingStep: true,
-          cookingSkillLevel: true,
-          dietaryPreferences: true,
-          favoriteCuisines: true,
-          householdSize: true,
-          defaultProcessingMethod: true,
-          preferredCategories: true,
-          timezone: true,
-          measurementSystem: true,
-          createdAt: true,
-          updatedAt: true
-        }
+      const existingUser = await prisma.user.findUnique({
+        where: { id: userId }
       });
+      
+      let user;
+      if (existingUser) {
+        user = await prisma.user.update({
+          where: { id: userId },
+          data: validatedData,
+          select: {
+            id: true,
+            email: true,
+            onboardingCompleted: true,
+            onboardingStep: true,
+            cookingSkillLevel: true,
+            dietaryPreferences: true,
+            favoriteCuisines: true,
+            householdSize: true,
+            defaultProcessingMethod: true,
+            preferredCategories: true,
+            timezone: true,
+            measurementSystem: true,
+            createdAt: true,
+            updatedAt: true
+          }
+        });
+      } else {
+        user = await prisma.user.create({
+          data: { 
+            id: userId, 
+            email: `temp-${userId}@placeholder.local`, // Temporary unique email
+            ...validatedData
+          },
+          select: {
+            id: true,
+            email: true,
+            onboardingCompleted: true,
+            onboardingStep: true,
+            cookingSkillLevel: true,
+            dietaryPreferences: true,
+            favoriteCuisines: true,
+            householdSize: true,
+            defaultProcessingMethod: true,
+            preferredCategories: true,
+            timezone: true,
+            measurementSystem: true,
+            createdAt: true,
+            updatedAt: true
+          }
+        });
+      }
 
       return NextResponse.json({
         message: 'User preferences initialized successfully',

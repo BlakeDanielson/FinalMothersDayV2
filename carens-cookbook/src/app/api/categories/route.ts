@@ -3,6 +3,7 @@ import { auth } from '@clerk/nextjs/server';
 import { PrismaClient } from '../../../generated/prisma';
 // import { categoryResolver } from '../../../lib/categories'; // Currently unused
 import { PREDEFINED_CATEGORIES } from '../../../lib/constants/categories';
+import { categoryCache } from '../../../lib/services/cache-service';
 
 const prisma = new PrismaClient();
 
@@ -12,14 +13,29 @@ export async function GET() {
     
     // If user is not logged in, return predefined categories with zero counts
     if (!userId) {
+      // Check cache for default categories
+      const cachedDefaultCategories = await categoryCache.getCategories();
+      if (cachedDefaultCategories) {
+        return NextResponse.json(cachedDefaultCategories);
+      }
+
       const defaultCategories = PREDEFINED_CATEGORIES.map(category => ({
         name: category,
         count: 0
       }));
+
+      // Cache default categories for 5 minutes
+      await categoryCache.setCategories(defaultCategories);
       return NextResponse.json(defaultCategories);
     }
 
-    // Get user's categories with recipe counts
+    // Check cache for user-specific categories
+    const cachedUserCategories = await categoryCache.getCategories(userId);
+    if (cachedUserCategories) {
+      return NextResponse.json(cachedUserCategories);
+    }
+
+    // Get user's categories with recipe counts from database
     const userCategoriesWithCounts = await prisma.recipe.groupBy({
       by: ['category'],
       where: { userId },
@@ -39,6 +55,9 @@ export async function GET() {
         name: category,
         count: 0
       }));
+
+      // Cache user's default categories for 1 hour
+      await categoryCache.setCategories(defaultCategories, userId);
       return NextResponse.json(defaultCategories);
     }
 
@@ -64,6 +83,9 @@ export async function GET() {
       }
       return a.name.localeCompare(b.name); // Alphabetical for same count
     });
+
+    // Cache user's categories for 1 hour
+    await categoryCache.setCategories(finalCategories, userId);
 
     return NextResponse.json(finalCategories);
 

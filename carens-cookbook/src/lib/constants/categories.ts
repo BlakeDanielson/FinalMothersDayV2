@@ -202,6 +202,41 @@ export const CATEGORY_METADATA: Record<string, CategoryMetadata> = {
 };
 
 /**
+ * Mapping of dietary preferences to relevant categories
+ */
+export const DIETARY_CATEGORY_MAPPING: Record<string, string[]> = {
+  VEGETARIAN: ['Vegetable', 'Pasta', 'Salad', 'Soup'],
+  VEGAN: ['Vegetable', 'Salad', 'Soup'],
+  GLUTEN_FREE: ['Salad', 'Seafood', 'Chicken', 'Beef'],
+  DAIRY_FREE: ['Seafood', 'Chicken', 'Beef', 'Vegetable'],
+  KETO: ['Seafood', 'Chicken', 'Beef', 'Sauce'],
+  PALEO: ['Seafood', 'Chicken', 'Beef', 'Vegetable'],
+  LOW_CARB: ['Seafood', 'Chicken', 'Beef', 'Salad'],
+  LOW_SODIUM: ['Vegetable', 'Salad', 'Seafood'],
+  NUT_FREE: ['Chicken', 'Beef', 'Seafood', 'Vegetable'],
+  KOSHER: ['Chicken', 'Beef', 'Seafood', 'Vegetable'],
+  HALAL: ['Chicken', 'Beef', 'Seafood', 'Vegetable']
+};
+
+/**
+ * Mapping of cuisines to relevant categories
+ */
+export const CUISINE_CATEGORY_MAPPING: Record<string, string[]> = {
+  Italian: ['Pasta', 'Sauce', 'Appetizer'],
+  Mexican: ['Chicken', 'Beef', 'Sauce'],
+  Asian: ['Seafood', 'Chicken', 'Vegetable'],
+  American: ['Beef', 'Chicken', 'Side Dish'],
+  Mediterranean: ['Seafood', 'Vegetable', 'Salad'],
+  Indian: ['Chicken', 'Vegetable', 'Sauce'],
+  French: ['Sauce', 'Seafood', 'Dessert'],
+  Chinese: ['Chicken', 'Seafood', 'Vegetable'],
+  Japanese: ['Seafood', 'Soup', 'Vegetable'],
+  Thai: ['Chicken', 'Seafood', 'Soup'],
+  Greek: ['Seafood', 'Salad', 'Vegetable'],
+  Spanish: ['Seafood', 'Chicken', 'Appetizer']
+};
+
+/**
  * Utility functions for category management
  */
 export const CategoryUtils = {

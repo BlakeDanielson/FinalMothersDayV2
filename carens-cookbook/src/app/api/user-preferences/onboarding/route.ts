@@ -109,31 +109,46 @@ export async function POST(req: NextRequest) {
       // Handle onboarding completion
       completeOnboardingSchema.parse(body);
       
-      const updatedUser = await prisma.user.upsert({
-        where: { id: userId },
-        update: {
-          onboardingCompleted: true,
-          onboardingStep: ONBOARDING_STEPS.length - 1
-        },
-        create: {
-          id: userId,
-          email: '',
-          onboardingCompleted: true,
-          onboardingStep: ONBOARDING_STEPS.length - 1,
-          ...getDefaultUserPreferences()
-        },
-        select: {
-          onboardingCompleted: true,
-          onboardingStep: true,
-          updatedAt: true
-        }
+      const existingUser = await prisma.user.findUnique({
+        where: { id: userId }
       });
+      
+      let completedUser;
+      if (existingUser) {
+        completedUser = await prisma.user.update({
+          where: { id: userId },
+          data: {
+            onboardingCompleted: true,
+            onboardingStep: ONBOARDING_STEPS.length - 1
+          },
+          select: {
+            onboardingCompleted: true,
+            onboardingStep: true,
+            updatedAt: true
+          }
+        });
+      } else {
+        completedUser = await prisma.user.create({
+          data: {
+            id: userId,
+            email: `temp-${userId}@placeholder.local`, // Temporary unique email
+            onboardingCompleted: true,
+            onboardingStep: ONBOARDING_STEPS.length - 1,
+            ...getDefaultUserPreferences()
+          },
+          select: {
+            onboardingCompleted: true,
+            onboardingStep: true,
+            updatedAt: true
+          }
+        });
+      }
 
       return NextResponse.json({
         message: 'Onboarding completed successfully',
         onboarding: {
-          completed: updatedUser.onboardingCompleted ?? false,
-          currentStep: updatedUser.onboardingStep ?? ONBOARDING_STEPS.length - 1,
+          completed: completedUser.onboardingCompleted ?? false,
+          currentStep: completedUser.onboardingStep ?? ONBOARDING_STEPS.length - 1,
           nextStep: null
         }
       }, { status: 200 });
@@ -190,28 +205,43 @@ export async function POST(req: NextRequest) {
       ...stepData
     };
 
-    const updatedUser = await prisma.user.upsert({
-      where: { id: userId },
-      update: updateData,
-      create: {
-        id: userId,
-        email: '',
-        ...getDefaultUserPreferences(),
-        ...updateData
-      },
-      select: {
-        onboardingCompleted: true,
-        onboardingStep: true,
-        updatedAt: true
-      }
+    const existingUserForStep = await prisma.user.findUnique({
+      where: { id: userId }
     });
+    
+    let stepUpdatedUser;
+    if (existingUserForStep) {
+      stepUpdatedUser = await prisma.user.update({
+        where: { id: userId },
+        data: updateData,
+        select: {
+          onboardingCompleted: true,
+          onboardingStep: true,
+          updatedAt: true
+        }
+      });
+    } else {
+      stepUpdatedUser = await prisma.user.create({
+        data: {
+          id: userId,
+          email: `temp-${userId}@placeholder.local`, // Temporary unique email
+          ...getDefaultUserPreferences(),
+          ...updateData
+        },
+        select: {
+          onboardingCompleted: true,
+          onboardingStep: true,
+          updatedAt: true
+        }
+      });
+    }
 
     const stepInfo = getOnboardingStepByIndex(validatedData.step);
     return NextResponse.json({
       message: `Onboarding step '${stepInfo?.key || validatedData.step}' updated successfully`,
       onboarding: {
-        completed: updatedUser.onboardingCompleted ?? false,
-        currentStep: updatedUser.onboardingStep ?? validatedData.step,
+        completed: stepUpdatedUser.onboardingCompleted ?? false,
+        currentStep: stepUpdatedUser.onboardingStep ?? validatedData.step,
         nextStep
       }
     }, { status: 200 });
