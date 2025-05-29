@@ -6,6 +6,9 @@ import Navbar from "@/components/Navbar";
 import { SettingsProvider } from "@/contexts/SettingsContext";
 import FloatingSettingsButton from "@/components/FloatingSettingsButton";
 import { ClerkProvider } from '@clerk/nextjs';
+import { FeatureTourProvider } from "@/contexts/FeatureTourContext";
+import { TourOverlay } from "@/components/tour/TourOverlay";
+import { QueryProvider } from "@/components/providers/QueryProvider";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -39,14 +42,19 @@ export default function RootLayout({
           <meta name="theme-color" content="#007bff" />
         </head>
         <body className={inter.className}>
-          <SettingsProvider>
-            <Navbar />
-            <main className="pt-0">
-              {children}
-            </main>
-            <FloatingSettingsButton />
-            {/* You can add a Footer component here if you have one */}
-          </SettingsProvider>
+          <QueryProvider>
+            <SettingsProvider>
+              <FeatureTourProvider>
+                <Navbar />
+                <main className="pt-0">
+                  {children}
+                </main>
+                <FloatingSettingsButton />
+                <TourOverlay />
+                {/* You can add a Footer component here if you have one */}
+              </FeatureTourProvider>
+            </SettingsProvider>
+          </QueryProvider>
           <Script
             src="/registerServiceWorker.js"
             strategy="lazyOnload"

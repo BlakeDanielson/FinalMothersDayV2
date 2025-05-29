@@ -349,12 +349,18 @@ export class OnboardingService {
   // Private helper methods
 
   private static async ensureUserExists(userId: string): Promise<User> {
-    return await prisma.user.upsert({
-      where: { id: userId },
-      update: {},
-      create: {
+    const existingUser = await prisma.user.findUnique({
+      where: { id: userId }
+    });
+    
+    if (existingUser) {
+      return existingUser;
+    }
+    
+    return await prisma.user.create({
+      data: {
         id: userId,
-        email: '',
+        email: `temp-${userId}@placeholder.local`, // Temporary unique email
         ...getDefaultUserPreferences()
       }
     });

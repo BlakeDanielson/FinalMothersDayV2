@@ -8,6 +8,9 @@ import { Badge } from '@/components/ui/badge';
 import { ChevronLeft, ChevronRight, Check, X } from 'lucide-react';
 import { useOnboarding } from '@/contexts/OnboardingContext';
 import { ONBOARDING_STEPS } from '@/lib/constants/user-preferences';
+import { FirstRecipeFlow, RecipeData } from '@/components/onboarding/FirstRecipeFlow';
+import { useFeatureTour } from '@/contexts/FeatureTourContext';
+import { RecipeBasicsTourTrigger } from '@/components/tour/TourTrigger';
 
 interface OnboardingWizardProps {
   onComplete?: () => void;
@@ -26,6 +29,8 @@ export function OnboardingWizard({ onComplete, onSkip, className }: OnboardingWi
     completeOnboarding,
     skipOnboarding
   } = useOnboarding();
+
+  const { startTour } = useFeatureTour();
 
   const [isProcessing, setIsProcessing] = useState(false);
 
@@ -160,13 +165,19 @@ export function OnboardingWizard({ onComplete, onSkip, className }: OnboardingWi
       
       case 'FIRST_RECIPE':
         return (
-          <div className="space-y-4">
-            <h3 className="text-lg font-medium">Add Your First Recipe</h3>
-            <p className="text-gray-600">Start your collection by adding your first recipe.</p>
-            <div className="bg-gray-50 p-4 rounded-lg">
-              <p className="text-sm text-gray-500">Recipe creation form will be implemented here.</p>
-            </div>
-          </div>
+          <FirstRecipeFlow
+            onComplete={(recipe: RecipeData) => {
+              console.log('Recipe added:', recipe);
+              // Automatically proceed to next step when recipe is added
+              handleNext({ recipeAdded: true, recipe });
+            }}
+            onSkip={() => {
+              // Allow users to skip adding their first recipe
+              handleNext({ recipeAdded: false, skipped: true });
+            }}
+            userSkillLevel="BEGINNER"
+            className="min-h-[600px]"
+          />
         );
       
       case 'COMPLETION':
@@ -179,6 +190,17 @@ export function OnboardingWizard({ onComplete, onSkip, className }: OnboardingWi
             <p className="text-gray-600">
               You&apos;re all set! Welcome to Caren&apos;s Cookbook. Let&apos;s start cooking!
             </p>
+            <div className="mt-6 p-4 bg-blue-50 border border-blue-200 rounded-lg">
+              <p className="text-sm text-blue-800 mb-3">
+                Want to learn how to make the most of your new cookbook?
+              </p>
+              <RecipeBasicsTourTrigger 
+                size="sm"
+                className="w-full"
+              >
+                Take the Recipe Basics Tour
+              </RecipeBasicsTourTrigger>
+            </div>
           </div>
         );
       
@@ -227,7 +249,7 @@ export function OnboardingWizard({ onComplete, onSkip, className }: OnboardingWi
         
         <CardContent className="space-y-6">
           {/* Step Content */}
-          <div className="min-h-[200px]">
+          <div className={currentStepInfo.key === 'FIRST_RECIPE' ? '' : 'min-h-[200px]'}>
             {renderStepContent()}
           </div>
 

@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { Webhook } from 'svix';
 import { headers } from 'next/headers';
 import { prisma } from '@/lib/db';
+import { UserCategoryManager } from '@/lib/services/user-category-manager';
 
 const webhookSecret = process.env.CLERK_WEBHOOK_SECRET;
 
@@ -53,18 +54,32 @@ export async function POST(req: NextRequest) {
   try {
     switch (eventType) {
       case 'user.created':
-      case 'user.updated':
-        await prisma.user.upsert({
-          where: { id },
-          update: {
-            email: email_addresses?.[0]?.email_address || '',
+        const userEmail = email_addresses?.[0]?.email_address;
+        
+        // Create user with default categories
+        await prisma.user.create({
+          data: {
+            id,
+            email: userEmail || `temp-${id}@placeholder.local`, // Use temp email if no real email
             firstName: first_name,
             lastName: last_name,
             imageUrl: image_url,
+            // Initialize with default categories
+            preferredCategories: ['Breakfast', 'Lunch', 'Dinner', 'Snacks', 'Desserts']
           },
-          create: {
-            id,
-            email: email_addresses?.[0]?.email_address || '',
+        });
+
+        // Log category initialization
+        console.log(`Initialized default categories for new user: ${id}`);
+        break;
+
+      case 'user.updated':
+        const updateUserEmail = email_addresses?.[0]?.email_address;
+        await prisma.user.update({
+          where: { id },
+          data: {
+            // Only update email if we have a real email address
+            ...(updateUserEmail && { email: updateUserEmail }),
             firstName: first_name,
             lastName: last_name,
             imageUrl: image_url,

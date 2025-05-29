@@ -42,11 +42,20 @@ export const POST = withOnboardingGuard(async (req: NextRequest) => {
     const recipeData = createRecipeSchema.parse(body);
 
     // Ensure user exists in database
-    await prisma.user.upsert({
-      where: { id: userId },
-      update: {},
-      create: { id: userId, email: '' } // Email will be updated by webhook
+    // Check if user exists first to avoid unique constraint issues
+    const existingUser = await prisma.user.findUnique({
+      where: { id: userId }
     });
+    
+    if (!existingUser) {
+      // Create user with a unique temporary email to avoid constraint violations
+      await prisma.user.create({
+        data: { 
+          id: userId, 
+          email: `temp-${userId}@placeholder.local` // Temporary unique email
+        }
+      });
+    }
 
     // Check if a recipe with the same title already exists for this user
     const existingRecipe = await prisma.recipe.findFirst({

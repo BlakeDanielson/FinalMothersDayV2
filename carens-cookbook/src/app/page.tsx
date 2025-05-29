@@ -30,6 +30,10 @@ import { useImageProcessing } from "@/hooks/useRetryableRequest";
 import { useMultipleImageProcessing } from "@/hooks/useMultipleImageProcessing";
 import { logError, RecipeProcessingError } from "@/lib/errors";
 
+// Import React Query hooks
+import { useCategories, usePrefetchCategories } from "@/hooks/useCategories";
+import { useUserRecipes, usePrefetchRecipes } from "@/hooks/useRecipes";
+
 // Define a local type for placeholder recipes that includes tags, extending the imported RecipeData
 interface PlaceholderRecipe extends RecipeData {
   tags?: string[];
@@ -860,7 +864,6 @@ function MainPage() {
   const [loadingStepMessage, setLoadingStepMessage] = useState("");
   const [loadingProgress, setLoadingProgress] = useState(0);
   const [error, setError] = useState<string | null>(null);
-  const [savedRecipes, setSavedRecipes] = useState<RecipeData[]>([]);
   const [currentView, setCurrentView] = useState<'list' | 'recipe' | 'save' | 'stats'>('list');
   const [selectedRecipe, setSelectedRecipe] = useState<RecipeData | null>(null);
   const [showAddRecipeModal, setShowAddRecipeModal] = useState(false);
@@ -868,8 +871,25 @@ function MainPage() {
 
   const [gridTitle] = useState("Recipe Categories");
   const [processedCategories, setProcessedCategories] = useState<{ name: string; count: number; imageUrl?: string | null }[]>([]);
-  const [categoriesLoading, setCategoriesLoading] = useState(true);
-  const [categoriesError, setCategoriesError] = useState<string | null>(null);
+
+  // React Query hooks for data fetching
+  const { 
+    data: categories = [], 
+    isLoading: categoriesLoading, 
+    error: categoriesError,
+    refetch: refetchCategories 
+  } = useCategories();
+  
+  const { 
+    data: savedRecipes = [], 
+    isLoading: recipesLoading,
+    error: recipesError,
+    refetch: refetchRecipes 
+  } = useUserRecipes();
+
+  // Prefetch hooks for performance
+  const { prefetchUserCategories, prefetchPopularCategories } = usePrefetchCategories();
+  const { prefetchUserRecipes } = usePrefetchRecipes();
 
   // Enhanced image processing with retry capability
   const imageProcessing = useImageProcessing(
@@ -891,6 +911,9 @@ function MainPage() {
       onSuccess: () => {
         toast.success('Recipe scanned successfully!');
         setShowAddRecipeModal(false);
+        // Refetch data after successful recipe creation
+        refetchRecipes();
+        refetchCategories();
       }
     }
   );
@@ -915,24 +938,12 @@ function MainPage() {
       onSuccess: () => {
         toast.success('Multiple recipe photos processed successfully!');
         setShowAddRecipeModal(false);
+        // Refetch data after successful recipe creation
+        refetchRecipes();
+        refetchCategories();
       }
     }
   );
-
-  const fetchSavedRecipes = useCallback(async () => {
-    try {
-      const response = await fetch('/api/recipes');
-      if (!response.ok) {
-        const errorData = await response.json().catch(() => ({}));
-        throw new Error(errorData.error || 'Failed to fetch saved recipes');
-      }
-      const data: RecipeData[] = await response.json();
-      setSavedRecipes(data);
-    } catch (err: unknown) {
-      console.error("Error fetching saved recipes:", err);
-      toast.error(`Could not load your saved recipes: ${err instanceof Error ? err.message : String(err)}`);
-    }
-  }, []);
 
   const fetchCategoriesWithCounts = useCallback(async () => {
     setCategoriesLoading(true);
@@ -1019,9 +1030,50 @@ function MainPage() {
     );
   }, [savedRecipes]);
 
+  // Update processed categories when categories data changes
+  useEffect(() => {
+    if (categories.length > 0) {
+      const processedCategoriesData = categories.map(categoryData => {
+        let imageUrl = null;
+        
+        // If category has recipes, try to find an image from saved recipes
+        if (categoryData.count > 0 && savedRecipes.length > 0) {
+          const recipesInThisCategory = savedRecipes.filter(r => r.category === categoryData.name);
+          const recipeWithImage = recipesInThisCategory.find(r => r.image);
+          if (recipeWithImage) {
+            imageUrl = recipeWithImage.image;
+          }
+        }
+        
+        // Fallback to placeholder recipe image
+        if (!imageUrl) {
+          const placeholder = placeholderRecipes.find(p => p.category === categoryData.name);
+          if (placeholder && placeholder.image) {
+            imageUrl = placeholder.image;
+          }
+        }
+
+        // Fallback to predefined default image
+        if (!imageUrl) {
+          const predefinedCategory = ALL_POSSIBLE_CATEGORIES.find(c => c.name === categoryData.name);
+          if (predefinedCategory) {
+            imageUrl = predefinedCategory.defaultImageUrl;
+          }
+        }
+
+        return {
+          name: categoryData.name,
+          count: categoryData.count,
+          imageUrl: imageUrl,
+        };
+      });
+      
+      setProcessedCategories(processedCategoriesData);
+    }
+  }, [categories, savedRecipes]);
+
   // Initial load - fetch both recipes and categories
   useEffect(() => {
-    fetchSavedRecipes();
     fetchCategoriesWithCounts();
 
     const params = new URLSearchParams(window.location.search);
@@ -1030,7 +1082,7 @@ function MainPage() {
     if (recipeIdFromUrl) {
       // URL recipe loading logic would go here if needed
     }
-  }, [fetchSavedRecipes, fetchCategoriesWithCounts]);
+  }, [fetchCategoriesWithCounts]);
 
   // Update category images when saved recipes change (without refetching categories API)
   useEffect(() => {
@@ -1071,7 +1123,7 @@ function MainPage() {
         toast.success(responseData.message || 'Recipe deleted successfully!');
         setSelectedRecipe(null);
         setCurrentView('list');
-        fetchSavedRecipes();
+        // Note: fetchSavedRecipes removed - now using React Query hooks (useUserRecipes)
       } else {
         toast.error(responseData.error || 'Failed to delete recipe.');
         console.error("Error deleting recipe - API response not OK:", responseData);
@@ -1164,7 +1216,7 @@ function MainPage() {
       const responseData = await response.json();
       if (response.ok) {
         toast.success(`Recipe '${recipeToSave.title}' saved successfully!`);
-        fetchSavedRecipes();
+        // Note: fetchSavedRecipes removed - now using React Query hooks (useUserRecipes)
       } else {
         const errorMessage = responseData.error || 'Failed to save recipe. Please try again.';
         toast.error(`Error saving recipe: ${errorMessage}`);
@@ -1366,10 +1418,11 @@ function MainPage() {
             <h2 className="text-2xl font-medium text-foreground mb-2">Quick Actions</h2>
             <p className="text-muted-foreground font-light">Start your cooking journey</p>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-5xl mx-auto">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-5xl mx-auto" data-tour="recipe-pathways">
             <Card 
               className="p-8 cursor-pointer hover:shadow-xl transition-all duration-300 group border-2 hover:border-primary hover:bg-primary/5"
               onClick={handleQuickImportURL}
+              data-tour="add-recipe-button"
             >
               <div className="text-center">
                 <div className="mx-auto w-20 h-20 bg-primary rounded-full flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
@@ -1383,6 +1436,7 @@ function MainPage() {
             <Card 
               className="p-8 cursor-pointer hover:shadow-xl transition-all duration-300 group border-2 hover:border-emerald-500 hover:bg-emerald-50/50"
               onClick={handleQuickScanPhoto}
+              data-tour="scan-recipe-button"
             >
               <div className="text-center">
                 <div className="mx-auto w-20 h-20 bg-emerald-500 rounded-full flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
@@ -1473,7 +1527,7 @@ function MainPage() {
 
             {/* Categories Grid */}
             {!categoriesLoading && !categoriesError && (
-              <BentoGrid className="gap-8">
+              <BentoGrid className="gap-8" data-tour="recipe-categories">
                 {processedCategories.map((category, index) => (
                   <motion.div
                     key={category.name + index}
