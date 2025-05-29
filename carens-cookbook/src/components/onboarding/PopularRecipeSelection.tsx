@@ -771,6 +771,10 @@ export function PopularRecipeSelection({
           Select a recipe to continue
         </div>
       </div>
+
+      <p className="text-gray-600">
+        Don&apos;t worry, you can always add more recipes later!
+      </p>
     </div>
   );
 } 

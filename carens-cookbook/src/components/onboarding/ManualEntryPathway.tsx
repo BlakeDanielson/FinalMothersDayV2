@@ -1,12 +1,13 @@
 'use client';
 
 import React, { useState, useCallback, useEffect, useRef } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Badge } from '@/components/ui/badge';
 import { Progress } from '@/components/ui/progress';
+import { Alert, AlertDescription } from '@/components/ui/alert';
 import { 
   ArrowLeft, 
   ArrowRight,
@@ -25,7 +26,9 @@ import {
   PenTool,
   BookOpen,
   Target,
-  Zap
+  Zap,
+  AlertTriangle,
+  Timer
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { RecipeData } from './FirstRecipeFlow';
@@ -343,7 +346,7 @@ export function ManualEntryPathway({
           <div className="space-y-6">
             <div className="text-center space-y-2">
               <ChefHat className="h-8 w-8 text-blue-600 mx-auto" />
-              <h3 className="text-lg font-semibold text-gray-900">Let's start with the basics</h3>
+              <h3 className="text-lg font-semibold text-gray-900">Let&apos;s start with the basics</h3>
               <p className="text-gray-600">Give your recipe a name and description</p>
             </div>
 
@@ -609,7 +612,7 @@ export function ManualEntryPathway({
                 {DIFFICULTY_OPTIONS.map((option) => (
                   <button
                     key={option.value}
-                    onClick={() => setFormData(prev => ({ ...prev, difficulty: option.value as any }))}
+                    onClick={() => setFormData(prev => ({ ...prev, difficulty: option.value as 'Easy' | 'Medium' | 'Hard' }))}
                     className={cn(
                       "p-3 border rounded-lg text-center transition-colors",
                       formData.difficulty === option.value

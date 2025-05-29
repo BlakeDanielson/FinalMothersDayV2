@@ -7,16 +7,13 @@ import { Badge } from '@/components/ui/badge';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { 
   Camera, 
-  Upload,
+  Upload, 
   Loader2, 
   CheckCircle, 
-  AlertCircle, 
+  AlertCircle,
   X,
   Clock,
-  ChefHat,
-  Edit3,
-  Save,
-  Image as ImageIcon
+  ChefHat
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import type { RecipeData } from './FirstRecipeFlow';
@@ -24,7 +21,6 @@ import type { RecipeData } from './FirstRecipeFlow';
 export interface ImageScanningPathwayProps {
   onComplete: (recipe: RecipeData) => void;
   onBack: () => void;
-  userCategories?: string[];
   className?: string;
   onProgressUpdate?: (progress: number) => void;
 }
@@ -56,7 +52,6 @@ const MAX_FILE_SIZE = 10 * 1024 * 1024; // 10MB
 export function ImageScanningPathway({ 
   onComplete, 
   onBack, 
-  userCategories = [],
   className,
   onProgressUpdate
 }: ImageScanningPathwayProps) {
@@ -198,20 +193,6 @@ export function ImageScanningPathway({
       }));
     }
   }, [scanState.selectedFile]);
-
-  const handleEdit = useCallback(() => {
-    setScanState(prev => ({ ...prev, isEditing: true }));
-  }, []);
-
-  const handleSaveEdit = useCallback(() => {
-    if (editedRecipe) {
-      setScanState(prev => ({
-        ...prev,
-        extractedRecipe: editedRecipe,
-        isEditing: false
-      }));
-    }
-  }, [editedRecipe]);
 
   const handleComplete = useCallback(() => {
     if (scanState.extractedRecipe) {
@@ -455,7 +436,7 @@ export function ImageScanningPathway({
           <h2 className="text-xl font-semibold text-gray-900">Scanning Failed</h2>
         </div>
         <p className="text-gray-600">
-          We couldn't extract the recipe from this image
+          We couldn&apos;t extract the recipe from this image
         </p>
       </div>
 

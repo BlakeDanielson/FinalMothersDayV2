@@ -2,7 +2,6 @@ import { NextRequest, NextResponse } from 'next/server';
 import { Webhook } from 'svix';
 import { headers } from 'next/headers';
 import { prisma } from '@/lib/db';
-import { UserCategoryManager } from '@/lib/services/user-category-manager';
 
 const webhookSecret = process.env.CLERK_WEBHOOK_SECRET;
 

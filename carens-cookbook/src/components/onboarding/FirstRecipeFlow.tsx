@@ -269,22 +269,17 @@ export function FirstRecipeFlow({
     }
   ];
 
-  // Enhanced progress calculation with more granular tracking
-  const calculateProgress = useCallback((step: string, pathway: RecipePathway | null, detailedProgress: any) => {
-    switch (step) {
-      case 'welcome':
-        return Math.min(detailedProgress.welcome, 15); // Max 15% for welcome
-      case 'pathway':
-        return 15 + Math.min(detailedProgress.pathwaySelection, 25); // 15-40%
-      case 'processing':
-        return 40 + Math.min(detailedProgress.processing, 60); // 40-100%
-      default:
-        return 0;
-    }
+  // Unlock achievements with celebration
+  const unlockAchievement = useCallback((achievementId: string) => {
+    setAchievements(prev => prev.map(achievement => 
+      achievement.id === achievementId 
+        ? { ...achievement, unlocked: true, timestamp: new Date() }
+        : achievement
+    ));
   }, []);
 
   // Track user interactions for analytics and achievements
-  const trackInteraction = useCallback((action: string) => {
+  const trackInteraction = useCallback(() => {
     interactionCountRef.current += 1;
     setProgressState(prev => ({
       ...prev,
@@ -299,15 +294,20 @@ export function FirstRecipeFlow({
     if (interactionCountRef.current >= 3) {
       unlockAchievement('pathway_explorer');
     }
-  }, []);
+  }, [unlockAchievement]);
 
-  // Unlock achievements with celebration
-  const unlockAchievement = useCallback((achievementId: string) => {
-    setAchievements(prev => prev.map(achievement => 
-      achievement.id === achievementId 
-        ? { ...achievement, unlocked: true, timestamp: new Date() }
-        : achievement
-    ));
+  // Enhanced progress calculation with more granular tracking
+  const calculateProgress = useCallback((step: string, pathway: RecipePathway | null, detailedProgress: Record<string, number>) => {
+    switch (step) {
+      case 'welcome':
+        return Math.min(detailedProgress.welcome, 15); // Max 15% for welcome
+      case 'pathway':
+        return 15 + Math.min(detailedProgress.pathwaySelection, 25); // 15-40%
+      case 'processing':
+        return 40 + Math.min(detailedProgress.processing, 60); // 40-100%
+      default:
+        return 0;
+    }
   }, []);
 
   // Update progress with smooth transitions and interaction tracking
@@ -324,7 +324,7 @@ export function FirstRecipeFlow({
     });
     
     setTimeout(() => setIsAnimating(false), 300);
-    trackInteraction('progress_update');
+    trackInteraction();
   }, [calculateProgress, trackInteraction]);
 
   // Add milestone tracking with enhanced feedback
@@ -358,7 +358,7 @@ export function FirstRecipeFlow({
   }, [updateProgress]);
 
   const handlePathwaySelect = useCallback((pathway: RecipePathway) => {
-    trackInteraction('pathway_selected');
+    trackInteraction();
     updateProgress({
       selectedPathway: pathway,
       currentStep: 'processing',
@@ -375,7 +375,7 @@ export function FirstRecipeFlow({
   }, [updateProgress, addMilestone, showCelebration, trackInteraction]);
 
   const handleBack = useCallback(() => {
-    trackInteraction('navigation_back');
+    trackInteraction();
     if (progressState.currentStep === 'processing') {
       updateProgress({
         currentStep: 'pathway',
@@ -451,7 +451,7 @@ export function FirstRecipeFlow({
         clearTimeout(timer2);
       };
     }
-  }, [progressState.currentStep, updateProgress]);
+  }, [progressState.currentStep, progressState.detailedProgress, updateProgress]);
 
   // Enhanced keyboard navigation
   useEffect(() => {
@@ -577,7 +577,7 @@ export function FirstRecipeFlow({
           <Sparkles className="h-6 w-6 text-yellow-500 animate-pulse" />
         </div>
         <p className="text-gray-600 max-w-md mx-auto">
-          Let's get you started by adding your first recipe. Choose the method that works best for you.
+          Let&apos;s get you started by adding your first recipe. Choose the method that works best for you.
         </p>
       </div>
 
@@ -601,7 +601,7 @@ export function FirstRecipeFlow({
       {/* Enhanced Get Started Button */}
       <Button 
         onClick={() => {
-          trackInteraction('get_started');
+          trackInteraction();
           updateProgress({
             currentStep: 'pathway',
             detailedProgress: {
@@ -629,7 +629,7 @@ export function FirstRecipeFlow({
           <Button 
             variant="ghost" 
             onClick={() => {
-              trackInteraction('skip_flow');
+              trackInteraction();
               onSkip();
             }}
             className="text-gray-500 hover:text-gray-700 transition-colors"
@@ -713,7 +713,7 @@ export function FirstRecipeFlow({
                     size="sm"
                     onClick={() => {
                       setShowAllPathways(!showAllPathways);
-                      trackInteraction('toggle_all_pathways');
+                      trackInteraction();
                     }}
                     className="text-green-600 hover:text-green-800 p-0 h-auto transition-colors"
                     aria-label={showAllPathways ? 'Show recommended options only' : 'Show all pathway options'}
@@ -727,7 +727,7 @@ export function FirstRecipeFlow({
                     size="sm"
                     onClick={() => {
                       setShowTips(!showTips);
-                      trackInteraction('toggle_tips');
+                      trackInteraction();
                     }}
                     className="text-green-600 hover:text-green-800 p-0 h-auto transition-colors"
                     aria-label={showTips ? 'Hide detailed tips' : 'Show detailed tips'}
@@ -777,7 +777,6 @@ export function FirstRecipeFlow({
           const isPrimary = getPathwayRecommendation.primary === pathway.id;
           const isSecondary = getPathwayRecommendation.secondary === pathway.id;
           const isRecommended = isPrimary || isSecondary;
-          const recommendationLevel = isPrimary ? 'primary' : isSecondary ? 'secondary' : null;
           
           return (
             <div key={pathway.id} className="relative">
@@ -869,7 +868,7 @@ export function FirstRecipeFlow({
                         onClick={(e) => {
                           e.stopPropagation();
                           setShowHelp(showHelp === pathway.id ? null : pathway.id);
-                          trackInteraction('help_requested');
+                          trackInteraction();
                         }}
                         aria-label={`Get help for ${pathway.title}`}
                       >
