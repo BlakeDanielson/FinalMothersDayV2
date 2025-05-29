@@ -148,7 +148,7 @@ class OrphanedRecipeMigrator {
       where: {
         ...whereClause,
         OR: [
-          { category: null },
+          { category: { isSet: false } },
           { category: '' },
           { category: 'undefined' },
           { category: 'null' }

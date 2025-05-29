@@ -10,6 +10,7 @@ import {
   type CacheMetrics,
   createCacheMetrics
 } from '../cache-config';
+import { SuggestionResult } from './CategorySuggestionEngine';
 
 // Cache service interface
 export interface ICacheService {
@@ -351,13 +352,13 @@ export const categoryCache = {
     return cache.delete(key);
   },
 
-  async getCategorySuggestions(query: string): Promise<Array<{ category: string; confidence: number; reasoning: string; source: string }> | null> {
+  async getCategorySuggestions(query: string): Promise<SuggestionResult[] | null> {
     const cache = CacheServiceFactory.getInstance();
     const key = generateCacheKey(CACHE_KEYS.CATEGORY_SUGGESTIONS, query);
     return cache.get(key);
   },
 
-  async setCategorySuggestions(query: string, suggestions: Array<{ category: string; confidence: number; reasoning: string; source: string }>): Promise<boolean> {
+  async setCategorySuggestions(query: string, suggestions: SuggestionResult[]): Promise<boolean> {
     const cache = CacheServiceFactory.getInstance();
     const key = generateCacheKey(CACHE_KEYS.CATEGORY_SUGGESTIONS, query);
     return cache.set(key, suggestions, CACHE_TTL.CATEGORY_SUGGESTIONS);

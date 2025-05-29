@@ -9,19 +9,13 @@ const ManualInitializationSchema = z.object({
   forceReset: z.boolean().optional().default(false)
 });
 
-interface RouteParams {
-  params: {
-    userId: string;
-  };
-}
-
 export async function POST(
   request: NextRequest,
-  { params }: RouteParams
+  { params }: { params: Promise<{ userId: string }> }
 ) {
   try {
     const { userId: authUserId } = await auth();
-    const { userId } = params;
+    const { userId } = await params;
     
     if (!authUserId) {
       return NextResponse.json(
@@ -123,11 +117,11 @@ export async function POST(
 
 export async function GET(
   request: NextRequest,
-  { params }: RouteParams
+  { params }: { params: Promise<{ userId: string }> }
 ) {
   try {
     const { userId: authUserId } = await auth();
-    const { userId } = params;
+    const { userId } = await params;
     
     if (!authUserId) {
       return NextResponse.json(
