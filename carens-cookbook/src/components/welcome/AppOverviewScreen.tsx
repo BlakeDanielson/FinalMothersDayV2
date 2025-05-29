@@ -7,7 +7,6 @@ import { Badge } from '@/components/ui/badge';
 import { 
   BookOpen, 
   Search, 
-  Tags, 
   Share2, 
   Camera, 
   Globe,
@@ -56,7 +55,7 @@ const FEATURE_HIGHLIGHTS: FeatureHighlight[] = [
   {
     id: 'search',
     title: 'Powerful Search',
-    description: 'Find exactly what you\'re looking for with advanced search and filtering',
+    description: 'Find exactly what you&apos;re looking for with advanced search and filtering',
     icon: Search,
     benefits: [
       'Search by ingredients, cuisine, or prep time',
@@ -293,7 +292,7 @@ export function AppOverviewScreen() {
             Ready to transform your recipe collection?
           </p>
           <Badge variant="secondary" className="text-xs">
-            Let's get you set up in just a few minutes!
+            Let&apos;s get you set up in just a few minutes!
           </Badge>
         </div>
       </div>

@@ -49,12 +49,11 @@ export function TourOverlay() {
   const overlayRef = useRef<HTMLDivElement>(null);
   const tooltipRef = useRef<HTMLDivElement>(null);
 
-  // Find and track the target element
+  // Find and track target element
   useEffect(() => {
     if (!currentStep || !tourState.isActive) {
       setTargetElement(null);
       setElementPosition(null);
-      setTooltipPosition(null);
       return;
     }
 
@@ -62,7 +61,7 @@ export function TourOverlay() {
       const element = document.querySelector(currentStep.target) as HTMLElement;
       if (element) {
         setTargetElement(element);
-        updateElementPosition(element);
+        // updateElementPosition will be called in a separate effect
       } else {
         console.warn(`Tour target element not found: ${currentStep.target}`);
         setTargetElement(null);
@@ -82,36 +81,10 @@ export function TourOverlay() {
       attributeFilter: ['class', 'style']
     });
 
-    // Handle window resize
-    const handleResize = () => {
-      if (targetElement) {
-        updateElementPosition(targetElement);
-      }
-    };
-
-    window.addEventListener('resize', handleResize);
-    window.addEventListener('scroll', handleResize, true);
-
     return () => {
       observer.disconnect();
-      window.removeEventListener('resize', handleResize);
-      window.removeEventListener('scroll', handleResize, true);
     };
-  }, [currentStep, tourState.isActive, targetElement]);
-
-  const updateElementPosition = useCallback((element: HTMLElement) => {
-    const rect = element.getBoundingClientRect();
-    const position: ElementPosition = {
-      top: rect.top,
-      left: rect.left,
-      width: rect.width,
-      height: rect.height,
-      centerX: rect.left + rect.width / 2,
-      centerY: rect.top + rect.height / 2
-    };
-    setElementPosition(position);
-    calculateTooltipPosition(position);
-  }, []);
+  }, [currentStep, tourState.isActive]);
 
   const calculateTooltipPosition = useCallback((elementPos: ElementPosition) => {
     if (!currentStep || !tooltipRef.current) return;
@@ -186,6 +159,43 @@ export function TourOverlay() {
 
     setTooltipPosition(position);
   }, [currentStep]);
+
+  const updateElementPosition = useCallback((element: HTMLElement) => {
+    const rect = element.getBoundingClientRect();
+    const position: ElementPosition = {
+      top: rect.top,
+      left: rect.left,
+      width: rect.width,
+      height: rect.height,
+      centerX: rect.left + rect.width / 2,
+      centerY: rect.top + rect.height / 2
+    };
+    setElementPosition(position);
+    calculateTooltipPosition(position);
+  }, [calculateTooltipPosition]);
+
+  // Handle element positioning and window events
+  useEffect(() => {
+    if (!targetElement) return;
+
+    // Initial position update
+    updateElementPosition(targetElement);
+
+    // Handle window resize and scroll
+    const handleResize = () => {
+      if (targetElement) {
+        updateElementPosition(targetElement);
+      }
+    };
+
+    window.addEventListener('resize', handleResize);
+    window.addEventListener('scroll', handleResize, true);
+
+    return () => {
+      window.removeEventListener('resize', handleResize);
+      window.removeEventListener('scroll', handleResize, true);
+    };
+  }, [targetElement, updateElementPosition]);
 
   // Scroll target element into view
   useEffect(() => {

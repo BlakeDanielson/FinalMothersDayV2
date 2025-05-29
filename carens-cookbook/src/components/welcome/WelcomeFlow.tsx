@@ -26,13 +26,11 @@ function WelcomeFlowContent() {
 
 export interface WelcomeFlowProps {
   autoStart?: boolean;
-  onComplete?: () => void;
   className?: string;
 }
 
 export function WelcomeFlow({ 
   autoStart = false, 
-  onComplete,
   className 
 }: WelcomeFlowProps) {
   return (

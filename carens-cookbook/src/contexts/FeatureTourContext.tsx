@@ -1,7 +1,7 @@
 'use client';
 
 import React, { createContext, useContext, useState, useCallback, useEffect, ReactNode } from 'react';
-import { getTourConfig, getAllTourConfigs } from '@/lib/tour-configs';
+import { getAllTourConfigs } from '@/lib/tour-configs';
 
 export interface TourStep {
   id: string;
@@ -128,7 +128,14 @@ export function FeatureTourProvider({ children }: FeatureTourProviderProps) {
 
     const nextIndex = tourState.currentStepIndex + 1;
     if (nextIndex >= currentTour.steps.length) {
-      completeTour();
+      // Complete tour inline to avoid dependency issues
+      setTourState(prev => ({
+        ...prev,
+        activeTour: null,
+        currentStepIndex: 0,
+        isActive: false,
+        completedTours: [...prev.completedTours, prev.activeTour!]
+      }));
     } else {
       setTourState(prev => ({
         ...prev,

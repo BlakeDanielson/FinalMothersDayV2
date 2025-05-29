@@ -1,13 +1,11 @@
 'use client';
 
 import React, { useState, useCallback, useEffect, useRef } from 'react';
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
+import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Badge } from '@/components/ui/badge';
-import { Progress } from '@/components/ui/progress';
-import { Alert, AlertDescription } from '@/components/ui/alert';
 import { 
   ArrowLeft, 
   ArrowRight,
@@ -17,18 +15,12 @@ import {
   Upload,
   Camera,
   ChefHat,
-  Clock,
-  Users,
   Lightbulb,
   CheckCircle,
   AlertCircle,
   Sparkles,
-  PenTool,
   BookOpen,
-  Target,
-  Zap,
-  AlertTriangle,
-  Timer
+  Target
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { RecipeData } from './FirstRecipeFlow';
@@ -109,10 +101,6 @@ const COMMON_INGREDIENTS = [
   'eggs', 'milk', 'cheese', 'chicken', 'beef', 'tomatoes', 'lemon', 'herbs'
 ];
 
-const MEASUREMENT_UNITS = [
-  'cup', 'cups', 'tbsp', 'tsp', 'oz', 'lb', 'g', 'kg', 'ml', 'l', 'piece', 'pieces'
-];
-
 export function ManualEntryPathway({ 
   onComplete, 
   onBack, 
@@ -137,8 +125,6 @@ export function ManualEntryPathway({
   const [formSteps, setFormSteps] = useState(FORM_STEPS);
   const [showIngredientSuggestions, setShowIngredientSuggestions] = useState(false);
   const [activeIngredientIndex, setActiveIngredientIndex] = useState(-1);
-  const [draggedStepIndex, setDraggedStepIndex] = useState<number | null>(null);
-  const [showTips, setShowTips] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   // Calculate progress based on completed steps and form completion
@@ -174,28 +160,6 @@ export function ManualEntryPathway({
       )
     })));
   }, [currentStep, formData]);
-
-  // Smart ingredient parsing
-  const parseIngredient = useCallback((input: string) => {
-    const trimmed = input.trim();
-    if (!trimmed) return input;
-
-    // Simple parsing for common patterns
-    const patterns = [
-      /^(\d+(?:\/\d+)?)\s*(cups?|tbsp|tsp|oz|lbs?|g|kg|ml|l)\s+(.+)$/i,
-      /^(\d+(?:\/\d+)?)\s+(.+)$/,
-      /^(.+)$/
-    ];
-
-    for (const pattern of patterns) {
-      const match = trimmed.match(pattern);
-      if (match) {
-        return trimmed; // Return as-is for now, but could enhance with suggestions
-      }
-    }
-
-    return input;
-  }, []);
 
   // Handle ingredient changes with smart suggestions
   const handleIngredientChange = useCallback((index: number, value: string) => {
@@ -243,14 +207,6 @@ export function ManualEntryPathway({
       const newSteps = formData.steps.filter((_, i) => i !== index);
       setFormData(prev => ({ ...prev, steps: newSteps }));
     }
-  }, [formData.steps]);
-
-  // Handle step reordering
-  const moveStep = useCallback((fromIndex: number, toIndex: number) => {
-    const newSteps = [...formData.steps];
-    const [movedStep] = newSteps.splice(fromIndex, 1);
-    newSteps.splice(toIndex, 0, movedStep);
-    setFormData(prev => ({ ...prev, steps: newSteps }));
   }, [formData.steps]);
 
   // Handle image upload

@@ -249,11 +249,10 @@ export class CategoryErrorHandler {
   /**
    * Handle concurrent initialization attempts
    */
-  static async handleConcurrentInitialization(
+  static async handleConcurrentInitialization<T>(
     userId: string,
-    operation: () => Promise<any>
-  ): Promise<any> {
-    const lockKey = `category_init_${userId}`;
+    operation: () => Promise<T>
+  ): Promise<T> {
     const existingOperation = Array.from(this.operations.values())
       .find(op => op.userId === userId && op.status === 'pending');
 

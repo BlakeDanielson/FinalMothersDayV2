@@ -54,7 +54,6 @@ export function WelcomeScreen({
     skipWelcomeFlow,
     markScreenCompleted,
     completeWelcomeFlow,
-    canGoNext,
     canGoPrevious,
     currentScreenIndex,
     totalScreens,
