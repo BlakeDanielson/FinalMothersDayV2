@@ -3,7 +3,6 @@
 
 import { prisma } from '@/lib/db';
 import { PREDEFINED_CATEGORIES, CATEGORY_METADATA } from '@/lib/constants/categories';
-import type { User } from '@/generated/prisma';
 
 export interface CategoryOperationResult {
   success: boolean;
@@ -367,7 +366,7 @@ export class UserCategoryManager {
       metadata: {
         totalCategories: categories.length,
         predefinedCount: categories.filter(cat => 
-          PREDEFINED_CATEGORIES.includes(cat as any)
+          (PREDEFINED_CATEGORIES as readonly string[]).includes(cat)
         ).length
       }
     };
@@ -511,7 +510,7 @@ export class UserCategoryManager {
 
     const stats = categories.map(category => {
       const recipeCount = recipeCounts.find(rc => rc.category === category)?._count.id || 0;
-      const isPredefined = PREDEFINED_CATEGORIES.includes(category as any);
+      const isPredefined = (PREDEFINED_CATEGORIES as readonly string[]).includes(category);
       const metadata = CATEGORY_METADATA[category];
 
       return {

@@ -130,11 +130,11 @@ export class OptimizedCategoryService {
     ]);
 
     const predefinedCount = categoriesWithCounts.filter(c => 
-      PREDEFINED_CATEGORIES.includes(c.name as any)
+      (PREDEFINED_CATEGORIES as readonly string[]).includes(c.name)
     ).length;
 
     const customCount = categoriesWithCounts.filter(c => 
-      !PREDEFINED_CATEGORIES.includes(c.name as any) && c.count > 0
+      !(PREDEFINED_CATEGORIES as readonly string[]).includes(c.name) && c.count > 0
     ).length;
 
     return {
@@ -180,8 +180,14 @@ export class OptimizedCategoryService {
       count: item._count.id
     }));
 
-    // Cache for 30 minutes - cast to expected cache type
-    await categoryCache.setCategorySuggestions(cacheKey, result as any);
+    // Cache for 30 minutes - convert to expected cache type
+    const cacheData = result.map(item => ({
+      category: item.name,
+      confidence: 1.0,
+      reasoning: `Popular category with ${item.count} recipes`,
+      source: 'popularity_analysis'
+    }));
+    await categoryCache.setCategorySuggestions(cacheKey, cacheData);
     return result;
   }
 
@@ -401,7 +407,7 @@ export class OptimizedCategoryService {
         category: item.category,
         recipeCount: Number(item.recipe_count),
         userCount: Number(item.user_count),
-        isPredefined: PREDEFINED_CATEGORIES.includes(item.category as any)
+        isPredefined: (PREDEFINED_CATEGORIES as readonly string[]).includes(item.category)
       }))
     };
   }

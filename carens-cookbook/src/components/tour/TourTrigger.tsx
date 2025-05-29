@@ -29,12 +29,6 @@ const TOUR_ICONS = {
   'profile-settings': User
 };
 
-const TOUR_COLORS = {
-  'recipe-basics': 'blue',
-  'search-features': 'green',
-  'profile-settings': 'purple'
-};
-
 export function TourTrigger({ 
   tourId, 
   variant = 'button', 
@@ -71,7 +65,6 @@ export function TourTrigger({
   };
 
   const Icon = TOUR_ICONS[tourId as keyof typeof TOUR_ICONS] || HelpCircle;
-  const color = TOUR_COLORS[tourId as keyof typeof TOUR_COLORS] || 'blue';
 
   if (variant === 'badge') {
     return (

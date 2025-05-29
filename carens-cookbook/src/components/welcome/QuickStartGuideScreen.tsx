@@ -51,7 +51,7 @@ const QUICK_START_TASKS: QuickStartTask[] = [
     tips: [
       'Try scanning a recipe from a website URL first',
       'Use the image scanner for cookbook recipes',
-      'Don\'t worry about perfection - you can edit later'
+      'Don&apos;t worry about perfection - you can edit later'
     ],
     completed: false
   },
@@ -207,7 +207,7 @@ export function QuickStartGuideScreen() {
     <WelcomeScreen
       screenId="quickstart"
       title="Quick Start Guide"
-      subtitle="Complete these essential tasks to get the most out of Caren's Cookbook."
+      subtitle="Complete these essential tasks to get the most out of Caren&apos;s Cookbook."
     >
       <div className="space-y-6">
         {/* Progress Overview */}
@@ -234,7 +234,7 @@ export function QuickStartGuideScreen() {
               {progressPercentage === 100 && (
                 <div className="flex items-center space-x-2 text-sm text-green-700 bg-green-100 rounded-lg p-3 mt-4">
                   <Trophy className="h-4 w-4" />
-                  <span className="font-medium">Congratulations! You've completed the quick start guide!</span>
+                  <span className="font-medium">Congratulations! You&apos;ve completed the quick start guide!</span>
                 </div>
               )}
             </div>
@@ -385,16 +385,16 @@ export function QuickStartGuideScreen() {
                 
                 <div>
                   <h3 className="text-xl font-semibold text-gray-900 mb-2">
-                    🎉 You're All Set!
+                    🎉 You&apos;re All Set!
                   </h3>
                   <p className="text-gray-600 mb-4">
-                    You've completed the quick start guide and you're ready to make the most of Caren's Cookbook!
+                    You&apos;ve completed the quick start guide and you&apos;re ready to make the most of Caren&apos;s Cookbook!
                   </p>
                 </div>
 
                 <div className="grid md:grid-cols-3 gap-4 text-sm">
                   <div className="bg-white rounded-lg p-3 border">
-                    <div className="font-medium text-gray-900">What's Next?</div>
+                    <div className="font-medium text-gray-900">What&apos;s Next?</div>
                     <div className="text-gray-600">Keep adding recipes and exploring features</div>
                   </div>
                   <div className="bg-white rounded-lg p-3 border">
@@ -417,7 +417,7 @@ export function QuickStartGuideScreen() {
             Ready to start cooking with confidence?
           </p>
           <div className="flex items-center justify-center space-x-2 text-sm text-blue-600">
-            <span>Let's get started!</span>
+            <span>Let&apos;s get started!</span>
             <ArrowRight className="h-4 w-4" />
           </div>
         </div>

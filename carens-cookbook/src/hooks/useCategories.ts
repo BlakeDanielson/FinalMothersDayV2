@@ -131,15 +131,22 @@ export function usePopularCategories(limit = 10) {
   });
 }
 
+interface CategoryMutationData {
+  categoryName?: string;
+  newCategoryName?: string;
+  targetCategory?: string;
+  userId?: string;
+  [key: string]: unknown;
+}
+
 /**
  * Mutation hook for category operations (rename, merge, delete)
  */
 export function useCategoryMutation() {
-  const queryClient = useQueryClient();
   const { user } = useUser();
   
   return useMutation({
-    mutationFn: async ({ action, data }: { action: string; data: any }) => {
+    mutationFn: async ({ action, data }: { action: string; data: CategoryMutationData }) => {
       const response = await fetch(`/api/categories/${action}`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },

@@ -8,18 +8,14 @@ import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { 
   ArrowLeft, 
-  ArrowRight,
   Clock,
   Users,
   ChefHat,
   Star,
-  Heart,
-  Bookmark,
   Search,
   Filter,
   CheckCircle,
   Edit3,
-  Eye,
   Sparkles,
   TrendingUp,
   Award,
@@ -459,7 +455,7 @@ export function PopularRecipeSelection({
       <div className="text-center space-y-2">
         <Edit3 className="h-8 w-8 text-blue-600 mx-auto" />
         <h3 className="text-lg font-semibold text-gray-900">Customize Your Recipe</h3>
-        <p className="text-gray-600">Make any changes you'd like before adding to your collection</p>
+        <p className="text-gray-600">Make any changes you&apos;d like before adding to your collection</p>
       </div>
 
       <div className="space-y-4">

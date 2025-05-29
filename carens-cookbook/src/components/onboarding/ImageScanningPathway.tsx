@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState, useCallback, useRef, useEffect } from 'react';
+import Image from 'next/image';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -267,9 +268,11 @@ export function ImageScanningPathway({
       ) : (
         <div className="space-y-4">
           <div className="relative">
-            <img
+            <Image
               src={scanState.previewUrl!}
               alt="Recipe preview"
+              width={256}
+              height={256}
               className="w-full max-h-64 object-contain rounded-lg border"
             />
             <Button
@@ -359,9 +362,11 @@ export function ImageScanningPathway({
                 )}
               </div>
               {scanState.previewUrl && (
-                <img
+                <Image
                   src={scanState.previewUrl}
                   alt="Original recipe"
+                  width={80}
+                  height={80}
                   className="w-20 h-20 object-cover rounded-lg ml-4"
                 />
               )}

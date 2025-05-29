@@ -6,16 +6,9 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { 
-  FolderOpen, 
-  Tag, 
   ArrowRight,
-  ArrowDown,
   CheckCircle,
   Lightbulb,
-  Users,
-  Clock,
-  ChefHat,
-  Heart,
   Utensils,
   Coffee,
   Cake,
@@ -135,7 +128,7 @@ const DECISION_TREE: Record<string, DecisionNode> = {
   anytime: {
     id: 'anytime',
     type: 'question',
-    question: 'What\'s the primary purpose?',
+    question: 'What&apos;s the primary purpose?',
     options: [
       { label: 'Quick energy/snack', nextId: 'snacks' },
       { label: 'Sweet treat', nextId: 'desserts' }
@@ -196,16 +189,13 @@ const DECISION_TREE: Record<string, DecisionNode> = {
 export function CategorizationGuideScreen() {
   const [selectedExample, setSelectedExample] = useState<string>('breakfast');
   const [currentDecisionNode, setCurrentDecisionNode] = useState<string>('start');
-  const [decisionPath, setDecisionPath] = useState<string[]>(['start']);
 
   const handleDecisionChoice = (nextId: string) => {
     setCurrentDecisionNode(nextId);
-    setDecisionPath(prev => [...prev, nextId]);
   };
 
   const resetDecisionTree = () => {
     setCurrentDecisionNode('start');
-    setDecisionPath(['start']);
   };
 
   const currentNode = DECISION_TREE[currentDecisionNode];
@@ -432,7 +422,7 @@ export function CategorizationGuideScreen() {
                   </li>
                   <li className="flex items-center space-x-2">
                     <div className="w-3 h-3 bg-red-500 rounded-full"></div>
-                    <span>Categories you'll rarely use</span>
+                    <span>Categories you&apos;ll rarely use</span>
                   </li>
                   <li className="flex items-center space-x-2">
                     <div className="w-3 h-3 bg-red-500 rounded-full"></div>

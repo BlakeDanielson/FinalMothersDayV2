@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState, useCallback, useEffect } from 'react';
+import Image from 'next/image';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -24,7 +25,6 @@ import type { RecipeData } from './FirstRecipeFlow';
 export interface URLScanningPathwayProps {
   onComplete: (recipe: RecipeData) => void;
   onBack: () => void;
-  userCategories?: string[];
   className?: string;
   onProgressUpdate?: (progress: number) => void;
 }
@@ -63,7 +63,6 @@ const POPULAR_RECIPE_SITES = [
 export function URLScanningPathway({ 
   onComplete, 
   onBack, 
-  userCategories = [],
   className,
   onProgressUpdate 
 }: URLScanningPathwayProps) {
@@ -209,7 +208,7 @@ export function URLScanningPathway({
           <h2 className="text-xl font-semibold text-gray-900">Scan from URL</h2>
         </div>
         <p className="text-gray-600">
-          Enter a recipe URL and we'll extract all the details automatically
+          Enter a recipe URL and we&apos;ll extract all the details automatically
         </p>
       </div>
 
@@ -315,9 +314,11 @@ export function URLScanningPathway({
                 )}
               </div>
               {recipe.image && (
-                <img
+                <Image
                   src={recipe.image}
                   alt={recipe.title}
+                  width={80}
+                  height={80}
                   className="w-20 h-20 object-cover rounded-lg ml-4"
                 />
               )}
@@ -425,7 +426,7 @@ export function URLScanningPathway({
           <h2 className="text-xl font-semibold text-gray-900">Extraction Failed</h2>
         </div>
         <p className="text-gray-600">
-          We couldn't extract the recipe from this URL
+          We couldn&apos;t extract the recipe from this URL
         </p>
       </div>
 

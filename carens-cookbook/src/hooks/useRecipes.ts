@@ -140,7 +140,7 @@ export function useRecipeMutation() {
   return useMutation({
     mutationFn: async ({ action, data, recipeId }: { 
       action: 'create' | 'update' | 'delete'; 
-      data?: any; 
+      data?: Partial<Recipe>; 
       recipeId?: string;
     }) => {
       let url = '/api/recipes';
