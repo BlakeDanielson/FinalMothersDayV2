@@ -1,0 +1,222 @@
+<testsuites id="" name="" tests="20" failures="1" skipped="0" errors="0" time="165.12026699999998">
+<testsuite name="e2e/smoke.test.ts" timestamp="2025-05-30T05:55:14.371Z" hostname="chromium" tests="4" failures="0" skipped="0" time="25.155" errors="0">
+<testcase name="Smoke Tests › homepage loads successfully" classname="e2e/smoke.test.ts" time="6.743">
+<system-out>
+<![CDATA[✅ Homepage smoke test passed
+]]>
+</system-out>
+</testcase>
+<testcase name="Smoke Tests › navigation works correctly" classname="e2e/smoke.test.ts" time="6.606">
+<system-out>
+<![CDATA[Sign-in link not found, skipping navigation test
+✅ Navigation smoke test passed
+]]>
+</system-out>
+</testcase>
+<testcase name="Smoke Tests › API endpoints are accessible" classname="e2e/smoke.test.ts" time="2.291">
+<system-out>
+<![CDATA[✅ API accessibility smoke test passed
+]]>
+</system-out>
+</testcase>
+<testcase name="Smoke Tests › responsive design works" classname="e2e/smoke.test.ts" time="9.515">
+<system-out>
+<![CDATA[✅ Responsive design smoke test passed
+]]>
+</system-out>
+</testcase>
+</testsuite>
+<testsuite name="e2e/smoke.test.ts" timestamp="2025-05-30T05:55:14.371Z" hostname="firefox" tests="4" failures="0" skipped="0" time="44.845" errors="0">
+<testcase name="Smoke Tests › homepage loads successfully" classname="e2e/smoke.test.ts" time="13.507">
+<system-out>
+<![CDATA[✅ Homepage smoke test passed
+]]>
+</system-out>
+</testcase>
+<testcase name="Smoke Tests › navigation works correctly" classname="e2e/smoke.test.ts" time="8.639">
+<system-out>
+<![CDATA[Sign-in link not found, skipping navigation test
+✅ Navigation smoke test passed
+]]>
+</system-out>
+</testcase>
+<testcase name="Smoke Tests › API endpoints are accessible" classname="e2e/smoke.test.ts" time="4.755">
+<system-out>
+<![CDATA[✅ API accessibility smoke test passed
+]]>
+</system-out>
+</testcase>
+<testcase name="Smoke Tests › responsive design works" classname="e2e/smoke.test.ts" time="17.944">
+<system-out>
+<![CDATA[✅ Responsive design smoke test passed
+]]>
+</system-out>
+</testcase>
+</testsuite>
+<testsuite name="e2e/smoke.test.ts" timestamp="2025-05-30T05:55:14.371Z" hostname="webkit" tests="4" failures="0" skipped="0" time="89.748" errors="0">
+<testcase name="Smoke Tests › homepage loads successfully" classname="e2e/smoke.test.ts" time="13.238">
+<system-out>
+<![CDATA[✅ Homepage smoke test passed
+]]>
+</system-out>
+</testcase>
+<testcase name="Smoke Tests › navigation works correctly" classname="e2e/smoke.test.ts" time="25.564">
+<system-out>
+<![CDATA[Sign-in link not found, skipping navigation test
+✅ Navigation smoke test passed
+]]>
+</system-out>
+</testcase>
+<testcase name="Smoke Tests › API endpoints are accessible" classname="e2e/smoke.test.ts" time="13.654">
+<system-out>
+<![CDATA[✅ API accessibility smoke test passed
+]]>
+</system-out>
+</testcase>
+<testcase name="Smoke Tests › responsive design works" classname="e2e/smoke.test.ts" time="37.292">
+<system-out>
+<![CDATA[✅ Responsive design smoke test passed
+]]>
+</system-out>
+</testcase>
+</testsuite>
+<testsuite name="e2e/smoke.test.ts" timestamp="2025-05-30T05:55:14.371Z" hostname="Mobile Chrome" tests="4" failures="1" skipped="0" time="131.369" errors="0">
+<testcase name="Smoke Tests › homepage loads successfully" classname="e2e/smoke.test.ts" time="22.977">
+<system-out>
+<![CDATA[✅ Homepage smoke test passed
+]]>
+</system-out>
+<system-err>
+<![CDATA[Failed to take screenshot homepage-loaded: page.screenshot: Timeout 10000ms exceeded.
+Call log:
+[2m  - taking page screenshot[22m
+[2m  - waiting for fonts to load...[22m
+[2m  - fonts loaded[22m
+
+    at TestHelpers.takeScreenshot [90m(/Users/carendanielson/BlakeProjects/FinalMothersDayV2/carens-cookbook/[39mtests/utils/test-helpers.ts:35:23[90m)[39m
+    at [90m/Users/carendanielson/BlakeProjects/FinalMothersDayV2/carens-cookbook/[39mtests/e2e/smoke.test.ts:23:5 {
+  name: [32m'TimeoutError'[39m,
+  [[32mSymbol(step)[39m]: {
+    stepId: [32m'pw:api@12'[39m,
+    location: {
+      file: [32m'/Users/carendanielson/BlakeProjects/FinalMothersDayV2/carens-cookbook/tests/utils/test-helpers.ts'[39m,
+      line: [33m35[39m,
+      column: [33m23[39m,
+      function: [32m'TestHelpers.takeScreenshot'[39m
+    },
+    category: [32m'pw:api'[39m,
+    title: [32m'page.screenshot'[39m,
+    apiName: [32m'page.screenshot'[39m,
+    params: {
+      path: [32m'test-results/screenshots/homepage-loaded-1748584574559.png'[39m,
+      fullPage: [33mtrue[39m,
+      timeout: [33m10000[39m,
+      mask: [90mundefined[39m,
+      type: [32m'png'[39m
+    },
+    boxedStack: [90mundefined[39m,
+    steps: [],
+    attachmentIndices: [],
+    info: TestStepInfoImpl {
+      annotations: [],
+      _testInfo: [36m[TestInfoImpl][39m,
+      _stepId: [32m'pw:api@12'[39m
+    },
+    complete: [36m[Function: complete][39m,
+    endWallTime: [33m1748584584978[39m,
+    error: {
+      message: [32m'TimeoutError: page.screenshot: Timeout 10000ms exceeded.\n'[39m +
+        [32m'Call log:\n'[39m +
+        [32m'\x1B[2m  - taking page screenshot\x1B[22m\n'[39m +
+        [32m'\x1B[2m  - waiting for fonts to load...\x1B[22m\n'[39m +
+        [32m'\x1B[2m  - fonts loaded\x1B[22m\n'[39m,
+      stack: [32m'TimeoutError: page.screenshot: Timeout 10000ms exceeded.\n'[39m +
+        [32m'Call log:\n'[39m +
+        [32m'\x1B[2m  - taking page screenshot\x1B[22m\n'[39m +
+        [32m'\x1B[2m  - waiting for fonts to load...\x1B[22m\n'[39m +
+        [32m'\x1B[2m  - fonts loaded\x1B[22m\n'[39m +
+        [32m'\n'[39m +
+        [32m'    at TestHelpers.takeScreenshot (/Users/carendanielson/BlakeProjects/FinalMothersDayV2/carens-cookbook/tests/utils/test-helpers.ts:35:23)\n'[39m +
+        [32m'    at /Users/carendanielson/BlakeProjects/FinalMothersDayV2/carens-cookbook/tests/e2e/smoke.test.ts:23:5'[39m,
+      cause: [90mundefined[39m
+    }
+  }
+}
+]]>
+</system-err>
+</testcase>
+<testcase name="Smoke Tests › navigation works correctly" classname="e2e/smoke.test.ts" time="15.824">
+<system-out>
+<![CDATA[Sign-in link not found, skipping navigation test
+✅ Navigation smoke test passed
+]]>
+</system-out>
+</testcase>
+<testcase name="Smoke Tests › API endpoints are accessible" classname="e2e/smoke.test.ts" time="40.366">
+<system-out>
+<![CDATA[✅ API accessibility smoke test passed
+]]>
+</system-out>
+</testcase>
+<testcase name="Smoke Tests › responsive design works" classname="e2e/smoke.test.ts" time="52.202">
+<failure message="smoke.test.ts:63:7 responsive design works" type="FAILURE">
+<![CDATA[  [Mobile Chrome] › e2e/smoke.test.ts:63:7 › Smoke Tests › responsive design works ─────────────────
+
+    TimeoutError: page.goto: Timeout 30000ms exceeded.
+    Call log:
+      - navigating to "http://localhost:3000/", waiting until "load"
+
+
+      64 |     const helpers = new TestHelpers(page);
+      65 |
+    > 66 |     await page.goto('/', { timeout: 30000 });
+         |                ^
+      67 |     await helpers.waitForPageLoad();
+      68 |
+      69 |     // Test mobile viewport
+        at /Users/carendanielson/BlakeProjects/FinalMothersDayV2/carens-cookbook/tests/e2e/smoke.test.ts:66:16
+
+    attachment #1: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results/e2e-smoke-Smoke-Tests-responsive-design-works-Mobile-Chrome/video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ../test-results/e2e-smoke-Smoke-Tests-responsive-design-works-Mobile-Chrome/error-context.md
+]]>
+</failure>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|e2e-smoke-Smoke-Tests-responsive-design-works-Mobile-Chrome/video.webm]]
+
+[[ATTACHMENT|e2e-smoke-Smoke-Tests-responsive-design-works-Mobile-Chrome/error-context.md]]
+]]>
+</system-out>
+</testcase>
+</testsuite>
+<testsuite name="e2e/smoke.test.ts" timestamp="2025-05-30T05:55:14.371Z" hostname="Mobile Safari" tests="4" failures="0" skipped="0" time="105.405" errors="0">
+<testcase name="Smoke Tests › homepage loads successfully" classname="e2e/smoke.test.ts" time="44.691">
+<system-out>
+<![CDATA[✅ Homepage smoke test passed
+]]>
+</system-out>
+</testcase>
+<testcase name="Smoke Tests › navigation works correctly" classname="e2e/smoke.test.ts" time="40.814">
+<system-out>
+<![CDATA[Sign-in link not found, skipping navigation test
+✅ Navigation smoke test passed
+]]>
+</system-out>
+</testcase>
+<testcase name="Smoke Tests › API endpoints are accessible" classname="e2e/smoke.test.ts" time="5.146">
+<system-out>
+<![CDATA[✅ API accessibility smoke test passed
+]]>
+</system-out>
+</testcase>
+<testcase name="Smoke Tests › responsive design works" classname="e2e/smoke.test.ts" time="14.754">
+<system-out>
+<![CDATA[✅ Responsive design smoke test passed
+]]>
+</system-out>
+</testcase>
+</testsuite>
+</testsuites>
