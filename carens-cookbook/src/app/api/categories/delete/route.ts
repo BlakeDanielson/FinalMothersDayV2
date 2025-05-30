@@ -8,6 +8,7 @@ import {
   CategoryOperationError
 } from '@/lib/middleware/errorHandler';
 import { categoryLogger, withPerformanceLogging } from '@/lib/utils/logger';
+import { withOnboardingGuard } from '@/lib/middleware/onboarding-guard';
 
 const prisma = new PrismaClient();
 const categoryValidator = new CategoryValidator(prisma);
@@ -142,7 +143,9 @@ async function handleDeleteCategory(req: NextRequest) {
   return result;
 }
 
-export const DELETE = withCategoryErrorHandling(
-  handleDeleteCategory,
-  { operation: 'delete', userId: '' }
+export const DELETE = withOnboardingGuard(
+  withCategoryErrorHandling(
+    handleDeleteCategory,
+    { operation: 'delete', userId: '' }
+  )
 ); 

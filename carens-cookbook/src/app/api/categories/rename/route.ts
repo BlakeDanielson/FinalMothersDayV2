@@ -8,6 +8,7 @@ import {
   CategoryNotFoundError 
 } from '@/lib/middleware/errorHandler';
 import { categoryLogger, withPerformanceLogging } from '@/lib/utils/logger';
+import { withOnboardingGuard } from '@/lib/middleware/onboarding-guard';
 
 const prisma = new PrismaClient();
 const categoryValidator = new CategoryValidator(prisma);
@@ -99,7 +100,9 @@ async function handleRenameCategory(req: NextRequest) {
   return result;
 }
 
-export const PUT = withCategoryErrorHandling(
-  handleRenameCategory,
-  { operation: 'rename', userId: '' }
+export const PUT = withOnboardingGuard(
+  withCategoryErrorHandling(
+    handleRenameCategory,
+    { operation: 'rename', userId: '' }
+  )
 ); 

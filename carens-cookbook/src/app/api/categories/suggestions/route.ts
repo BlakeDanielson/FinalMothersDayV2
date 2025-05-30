@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { auth } from '@clerk/nextjs/server';
 import { PrismaClient } from '@/generated/prisma';
 import { CategorySuggestionEngine } from '@/lib/services/CategorySuggestionEngine';
+import { withOnboardingGuard } from '@/lib/middleware/onboarding-guard';
 import { z } from 'zod';
 
 const prisma = new PrismaClient();
@@ -16,7 +17,7 @@ const SuggestionRequestSchema = z.object({
   includeUserCategories: z.boolean().optional()
 });
 
-export async function POST(request: NextRequest) {
+export const POST = withOnboardingGuard(async (request: NextRequest) => {
   try {
     const { userId } = await auth();
     
@@ -72,10 +73,10 @@ export async function POST(request: NextRequest) {
       { status: 500 }
     );
   }
-}
+});
 
 // GET endpoint for testing with query parameters
-export async function GET(request: NextRequest) {
+export const GET = withOnboardingGuard(async (request: NextRequest) => {
   try {
     const { userId } = await auth();
     
@@ -113,4 +114,4 @@ export async function GET(request: NextRequest) {
       { status: 500 }
     );
   }
-} 
+}); 

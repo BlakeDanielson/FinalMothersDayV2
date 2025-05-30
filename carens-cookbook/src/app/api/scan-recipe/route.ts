@@ -6,6 +6,7 @@ import { AIProvider, getProviderConfig } from '@/lib/ai-providers';
 import { categoryService, categoryResolver } from '@/lib/categories';
 import { auth } from '@clerk/nextjs/server';
 import { CategorySource } from '@/generated/prisma';
+import { withOnboardingGuard } from '@/lib/middleware/onboarding-guard';
 
 // Zod schema for recipe data parsed from an image
 const scanRecipeZodSchema = z.object({
@@ -249,7 +250,7 @@ async function processImageWithGPTMini(imageBase64: string, imageMimeType: strin
   return chatCompletion.choices[0]?.message?.content;
 }
 
-export async function POST(req: NextRequest) {
+export const POST = withOnboardingGuard(async (req: NextRequest) => {
   const requestId = Math.random().toString(36).substr(2, 9);
   const startTime = Date.now();
   
@@ -590,4 +591,4 @@ export async function POST(req: NextRequest) {
       { status: recipeError.statusCode || 500 }
     );
   }
-} 
+}); 

@@ -8,8 +8,8 @@ import type { CategoryWithCount, CategoryStats } from '@/lib/services/optimized-
 /**
  * Fetch user categories with counts
  */
-async function fetchUserCategories(userId: string): Promise<CategoryWithCount[]> {
-  const response = await fetch(`/api/categories?userId=${userId}`);
+async function fetchUserCategories(): Promise<CategoryWithCount[]> {
+  const response = await fetch(`/api/categories`);
   if (!response.ok) {
     throw new Error(`Failed to fetch categories: ${response.statusText}`);
   }
@@ -57,7 +57,7 @@ export function useUserCategories() {
   
   return useQuery({
     queryKey: queryKeys.categories.userWithCounts(user?.id || ''),
-    queryFn: () => fetchUserCategories(user!.id),
+    queryFn: () => fetchUserCategories(),
     enabled: isLoaded && !!user?.id,
     staleTime: 5 * 60 * 1000, // 5 minutes
     gcTime: 10 * 60 * 1000, // 10 minutes
@@ -183,7 +183,7 @@ export function usePrefetchCategories() {
     if (user?.id) {
       queryClient.prefetchQuery({
         queryKey: queryKeys.categories.userWithCounts(user.id),
-        queryFn: () => fetchUserCategories(user.id),
+        queryFn: () => fetchUserCategories(),
         staleTime: 5 * 60 * 1000,
       });
     }
