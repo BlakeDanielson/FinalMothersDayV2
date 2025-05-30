@@ -92,10 +92,14 @@ export const GET = withOnboardingGuard(async () => {
 
   } catch (error: unknown) {
     console.error('Error fetching categories:', error instanceof Error ? error.message : String(error));
-    return NextResponse.json(
-      { error: 'Failed to fetch categories.', details: error instanceof Error ? error.message : String(error) }, 
-      { status: 500 }
-    );
+    
+    // Return fallback categories instead of error to prevent frontend issues
+    const fallbackCategories = PREDEFINED_CATEGORIES.map(category => ({
+      name: category,
+      count: 0
+    }));
+    
+    return NextResponse.json(fallbackCategories);
   } finally {
     await prisma.$disconnect();
   }
