@@ -1,5 +1,4 @@
 import NodeCache from 'node-cache';
-import Redis from 'ioredis';
 
 // Cache TTL configurations (in seconds)
 export const CACHE_TTL = {
@@ -30,41 +29,15 @@ export const createInMemoryCache = () => {
   });
 };
 
-// Redis configuration
-export const createRedisClient = () => {
-  const redisUrl = process.env.REDIS_URL || 'redis://localhost:6379';
-  
-  const redis = new Redis(redisUrl);
-
-  // Error handling
-  redis.on('error', (error) => {
-    console.error('Redis connection error:', error);
-  });
-
-  redis.on('connect', () => {
-    console.log('Redis connected successfully');
-  });
-
-  redis.on('ready', () => {
-    console.log('Redis ready for operations');
-  });
-
-  return redis;
-};
-
 // Cache key generators
 export const generateCacheKey = (prefix: string, ...parts: (string | number)[]): string => {
   return `${prefix}:${parts.join(':')}`;
 };
 
-// Environment-based cache configuration
+// Simple cache configuration - always use in-memory
 export const getCacheConfig = () => {
-  const isProduction = process.env.NODE_ENV === 'production';
-  const isDevelopment = process.env.NODE_ENV === 'development';
-  
   return {
-    useRedis: isProduction || process.env.USE_REDIS === 'true',
-    useInMemory: isDevelopment || process.env.USE_IN_MEMORY_CACHE === 'true',
+    useInMemory: true,
     enableCaching: process.env.DISABLE_CACHING !== 'true',
   };
 };
