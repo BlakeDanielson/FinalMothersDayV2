@@ -4,10 +4,11 @@ import { PrismaClient } from '../../../generated/prisma';
 // import { categoryResolver } from '../../../lib/categories'; // Currently unused
 import { PREDEFINED_CATEGORIES } from '../../../lib/constants/categories';
 import { categoryCache } from '../../../lib/services/cache-service';
+import { withOnboardingGuard } from '@/lib/middleware/onboarding-guard';
 
 const prisma = new PrismaClient();
 
-export async function GET() {
+export const GET = withOnboardingGuard(async () => {
   try {
     const { userId } = await auth();
     
@@ -98,4 +99,4 @@ export async function GET() {
   } finally {
     await prisma.$disconnect();
   }
-} 
+}); 
