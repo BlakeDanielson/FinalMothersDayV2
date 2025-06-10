@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 
 interface ConversionMetrics {
@@ -21,7 +21,7 @@ export default function AnalyticsPage() {
   const [error, setError] = useState<string | null>(null);
   const [days, setDays] = useState(30);
 
-  const fetchMetrics = async () => {
+  const fetchMetrics = useCallback(async () => {
     try {
       setLoading(true);
       const response = await fetch(`/api/analytics/conversion-metrics?days=${days}`);
@@ -38,11 +38,11 @@ export default function AnalyticsPage() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [days]);
 
   useEffect(() => {
     fetchMetrics();
-  }, [days]);
+  }, [fetchMetrics]);
 
   if (loading) {
     return (
