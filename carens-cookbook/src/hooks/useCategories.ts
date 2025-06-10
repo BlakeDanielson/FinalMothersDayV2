@@ -20,7 +20,8 @@ async function fetchUserCategories(): Promise<CategoryWithCount[]> {
  * Fetch default categories for non-authenticated users
  */
 async function fetchDefaultCategories(): Promise<CategoryWithCount[]> {
-  const response = await fetch('/api/categories/defaults');
+  // Use the main categories endpoint since it already handles non-authenticated users
+  const response = await fetch('/api/categories');
   if (!response.ok) {
     throw new Error(`Failed to fetch default categories: ${response.statusText}`);
   }
