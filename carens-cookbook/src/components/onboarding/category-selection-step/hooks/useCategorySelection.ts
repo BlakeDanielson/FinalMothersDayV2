@@ -12,8 +12,8 @@ import {
   validationSchema,
   MAX_HISTORY_SIZE,
   MIN_CATEGORIES_REQUIRED,
-  useDebounce,
-  DEBOUNCE_DELAY
+  // useDebounce,
+  // DEBOUNCE_DELAY
 } from '../utils';
 
 interface UseCategorySelectionProps {
@@ -41,7 +41,7 @@ export function useCategorySelection({
   const isUndoRedoOperation = useRef(false);
 
   // Debounced category name for validation
-  const debouncedCategoryName = useDebounce(newCategoryName, DEBOUNCE_DELAY);
+  // const debouncedCategoryName = useDebounce(newCategoryName, DEBOUNCE_DELAY);
 
   // Initialize categories from metadata
   useEffect(() => {
@@ -319,7 +319,7 @@ export function useCategorySelection({
     },
     validationSchema,
     enableReinitialize: true,
-    onSubmit: (values) => {
+    onSubmit: () => {
       const selectedCategories = categories.filter(cat => cat.isSelected).map(cat => cat.name);
       const customCategories = categories.filter(cat => cat.isCustom && cat.isSelected).map(cat => ({
         name: cat.name,

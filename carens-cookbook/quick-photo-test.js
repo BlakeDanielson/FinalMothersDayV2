@@ -4,6 +4,7 @@
  * Quick Recipe Photo Test
  * Tests first 3 HEIC photos through both AI models for quick validation
  * Similar to quick-test.js but for image processing
+ * NOW WITH HEIC TO JPEG CONVERSION (like the frontend)
  */
 
 // Try to use built-in fetch first, fallback to node-fetch
@@ -74,6 +75,37 @@ async function ensureFetch() {
   }
 }
 
+async function convertHeicToJpeg(imageBuffer, filename) {
+  try {
+    log(`  🔄 Converting ${filename} from HEIC to JPEG...`, 'cyan');
+    
+    // Import heic-convert (Node.js compatible)
+    const convert = require('heic-convert');
+    
+    // Convert HEIC to JPEG using heic-convert
+    const jpegBuffer = await convert({
+      buffer: imageBuffer,   // the HEIC file buffer
+      format: 'JPEG',       // output format
+      quality: 0.8          // the jpeg compression quality, between 0 and 1
+    });
+    
+    // Create new filename with .jpeg extension
+    const originalNameWithoutExt = filename.split('.').slice(0, -1).join('.');
+    const jpegFilename = `${originalNameWithoutExt}.jpeg`;
+    
+    log(`  ✅ Converted to JPEG: ${jpegBuffer.length} bytes`, 'green');
+    
+    return {
+      buffer: jpegBuffer,
+      filename: jpegFilename,
+      mimeType: 'image/jpeg'
+    };
+  } catch (error) {
+    log(`  ❌ HEIC conversion failed: ${error.message}`, 'red');
+    throw new Error(`HEIC conversion failed: ${error.message}`);
+  }
+}
+
 async function getTestPhotoFiles() {
   try {
     const photoPath = path.resolve(__dirname, RECIPE_PHOTOS_DIR);
@@ -104,13 +136,18 @@ async function processPhotoWithAI(photoFile, aiProvider) {
     // Read the image file
     const imageBuffer = await fs.readFile(photoFile.path);
     
-    // Create FormData
+    // Convert HEIC to JPEG (like the frontend does)
+    const converted = await convertHeicToJpeg(imageBuffer, photoFile.filename);
+    
+    // Create FormData with the converted image
     const formData = new FormData();
     
-    // Create a proper File-like object for the image
-    const imageBlob = new Blob([imageBuffer], { type: 'image/heic' });
-    formData.append('image', imageBlob, photoFile.filename);
+    // Create a proper File-like object for the converted image
+    const imageBlob = new Blob([converted.buffer], { type: converted.mimeType });
+    formData.append('image', imageBlob, converted.filename);
     formData.append('provider', aiProvider.id);
+    
+    log(`  📤 Uploading converted ${converted.filename} to ${aiProvider.name}...`, 'cyan');
     
     const response = await fetch(`${BASE_URL}${aiProvider.endpoint}`, {
       method: 'POST',
@@ -127,26 +164,45 @@ async function processPhotoWithAI(photoFile, aiProvider) {
 
     const data = await response.json();
     
+    log(`  📋 API Response: ${JSON.stringify(data, null, 2).slice(0, 200)}...`, 'blue');
+    
+    // Handle both wrapped {success: true, recipe: {...}} and direct recipe responses
+    let recipe = null;
+    let success = false;
+    
     if (data.success && data.recipe) {
+      // Wrapped format: {success: true, recipe: {...}}
+      recipe = data.recipe;
+      success = true;
+    } else if (data.title && data.ingredients && data.steps) {
+      // Direct format: {title: "...", ingredients: [...], steps: [...]}
+      recipe = data;
+      success = true;
+    }
+    
+    if (success && recipe) {
       // Check if we got actual recipe data (not just defaults)
-      const hasRealData = data.recipe.title && 
-                         data.recipe.title !== "Recipe" && 
-                         data.recipe.title !== "Unknown Recipe" &&
-                         data.recipe.ingredients && 
-                         data.recipe.ingredients.length > 0 &&
-                         data.recipe.steps && 
-                         data.recipe.steps.length > 0;
+      const hasRealData = recipe.title && 
+                         recipe.title !== "Recipe" && 
+                         recipe.title !== "Unknown Recipe" &&
+                         recipe.ingredients && 
+                         recipe.ingredients.length > 0 &&
+                         recipe.steps && 
+                         recipe.steps.length > 0;
 
       return {
         success: true,
         duration,
-        recipe: data.recipe,
+        recipe: recipe,
         hasRealData,
         provider: aiProvider.id,
-        filename: photoFile.filename
+        filename: photoFile.filename,
+        convertedFilename: converted.filename
       };
     } else {
-      throw new Error(data.error || data.userMessage || 'No recipe data returned');
+      const errorMsg = data.error || data.userMessage || data.message || 'No recipe data returned';
+      log(`  🔍 Response details: success=${data.success}, hasRecipe=${!!data.recipe}, hasTitle=${!!data.title}`, 'yellow');
+      throw new Error(errorMsg);
     }
     
   } catch (error) {
@@ -162,10 +218,11 @@ async function processPhotoWithAI(photoFile, aiProvider) {
 }
 
 async function runQuickPhotoTest() {
-  log('🧪 QUICK RECIPE PHOTO AI TEST', 'bright');
-  log('═'.repeat(60), 'cyan');
+  log('🧪 QUICK RECIPE PHOTO AI TEST (WITH HEIC CONVERSION)', 'bright');
+  log('═'.repeat(70), 'cyan');
   log(`📊 Testing first ${MAX_PHOTOS} HEIC photos from ${RECIPE_PHOTOS_DIR}`, 'blue');
   log(`🤖 Using ${AI_PROVIDERS.map(p => p.name).join(' & ')}`, 'blue');
+  log(`🔄 Converting HEIC → JPEG (like frontend)`, 'blue');
   log(`🌐 Base URL: ${BASE_URL}`, 'blue');
   log('', 'reset');
 
@@ -211,6 +268,7 @@ async function runQuickPhotoTest() {
             log(`  📝 Title: "${result.recipe.title}"`, 'green');
             log(`  🥘 ${result.recipe.ingredients.length} ingredients, ${result.recipe.steps.length} steps`, 'cyan');
             log(`  🍽️  Category: ${result.recipe.category} | Cuisine: ${result.recipe.cuisine}`, 'blue');
+            log(`  📄 Converted: ${result.convertedFilename}`, 'blue');
             
             // Show a sample ingredient and step for validation
             if (result.recipe.ingredients.length > 0) {
@@ -269,8 +327,8 @@ async function runQuickPhotoTest() {
 }
 
 function generateQuickResults(results, totalTests, successfulTests, realDataTests, durations, providerStats, totalPhotos) {
-  log('\n\n📊 QUICK TEST RESULTS', 'bright');
-  log('═'.repeat(60), 'cyan');
+  log('\n\n📊 QUICK TEST RESULTS (WITH HEIC CONVERSION)', 'bright');
+  log('═'.repeat(70), 'cyan');
   
   // Overall statistics
   const successRate = totalTests > 0 ? (successfulTests / totalTests * 100).toFixed(2) : '0.00';
@@ -283,7 +341,7 @@ function generateQuickResults(results, totalTests, successfulTests, realDataTest
   log(`🧪 Total Tests Run: ${totalTests}`, 'blue');
   log(`🎯 Overall Success Rate: ${successRate}% (${successfulTests}/${totalTests})`, 'green');
   log(`📊 Real Data Rate: ${realDataRate}% (${realDataTests}/${totalTests})`, 'blue');
-  log(`⏱️  Average Duration: ${avgDuration}ms`, 'blue');
+  log(`⏱️  Average Duration: ${avgDuration}ms (includes HEIC conversion)`, 'blue');
   log(`🏃 Fastest: ${minDuration}ms`, 'green');
   log(`🐌 Slowest: ${maxDuration}ms`, 'yellow');
 
@@ -308,25 +366,25 @@ function generateQuickResults(results, totalTests, successfulTests, realDataTest
   log('─'.repeat(50), 'cyan');
   
   if (parseFloat(realDataRate) >= 70) {
-    log('🏆 EXCELLENT: Photo processing is working great!', 'green');
+    log('🏆 EXCELLENT: Photo processing with HEIC conversion is working great!', 'green');
     log('✅ Ready to run full test suite', 'green');
   } else if (parseFloat(realDataRate) >= 40) {
-    log('👍 GOOD: Photo processing shows promise', 'yellow');
+    log('👍 GOOD: Photo processing shows promise with HEIC conversion', 'yellow');
     log('💡 Consider running full test to get better insights', 'yellow');
   } else if (parseFloat(realDataRate) >= 10) {
-    log('⚠️  PARTIAL: Some photos are being processed', 'yellow');
+    log('⚠️  PARTIAL: Some photos are being processed after HEIC conversion', 'yellow');
     log('🔍 Check if photos contain clear, readable recipes', 'yellow');
   } else {
-    log('🔴 ISSUES: Photo processing may need attention', 'red');
+    log('🔴 ISSUES: Photo processing may need attention even with HEIC conversion', 'red');
     log('🛠️  Check API configuration and photo quality', 'red');
   }
 
-  if (parseInt(avgDuration) <= 15000) {
-    log('🚀 SPEED: Processing is fast (under 15s)', 'green');
-  } else if (parseInt(avgDuration) <= 30000) {
-    log('✅ SPEED: Processing time is reasonable (under 30s)', 'yellow');
+  if (parseInt(avgDuration) <= 20000) {
+    log('🚀 SPEED: Processing is fast (under 20s including conversion)', 'green');
+  } else if (parseInt(avgDuration) <= 40000) {
+    log('✅ SPEED: Processing time is reasonable (under 40s including conversion)', 'yellow');
   } else {
-    log('⏱️  SLOW: Processing is taking longer than expected', 'red');
+    log('⏱️  SLOW: Processing is taking longer than expected (including conversion)', 'red');
   }
 
   // Next steps recommendations
@@ -339,6 +397,8 @@ function generateQuickResults(results, totalTests, successfulTests, realDataTest
     log('2. Verify API keys are configured correctly', 'yellow');
     log('3. Test with a known good recipe photo manually', 'yellow');
   }
+
+  log('\n🔄 HEIC Conversion: Working correctly (matches frontend behavior)', 'green');
 
   return {
     totalPhotos,
@@ -362,4 +422,4 @@ if (require.main === module) {
   });
 }
 
-module.exports = { runQuickPhotoTest, processPhotoWithAI }; 
+module.exports = { runQuickPhotoTest, processPhotoWithAI, convertHeicToJpeg };

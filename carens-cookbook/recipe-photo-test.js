@@ -4,6 +4,7 @@
  * Recipe Photo AI Processing Test
  * Tests all HEIC photos in /recipe_photos through both AI models (OpenAI & Gemini)
  * Similar to existing URL tests but for image processing
+ * NOW WITH HEIC TO JPEG CONVERSION (like the frontend)
  */
 
 // Try to use built-in fetch first, fallback to node-fetch
@@ -16,6 +17,7 @@ try {
 
 const fs = require('fs').promises;
 const path = require('path');
+const FormData = require('form-data');
 
 // Colors for console output
 const colors = {
@@ -73,6 +75,37 @@ async function ensureFetch() {
   }
 }
 
+async function convertHeicToJpeg(imageBuffer, filename) {
+  try {
+    log(`  🔄 Converting ${filename} from HEIC to JPEG...`, 'cyan');
+    
+    // Import heic-convert (Node.js compatible)
+    const convert = require('heic-convert');
+    
+    // Convert HEIC to JPEG using heic-convert
+    const jpegBuffer = await convert({
+      buffer: imageBuffer,   // the HEIC file buffer
+      format: 'JPEG',       // output format
+      quality: 0.8          // the jpeg compression quality, between 0 and 1
+    });
+    
+    // Create new filename with .jpeg extension
+    const originalNameWithoutExt = filename.split('.').slice(0, -1).join('.');
+    const jpegFilename = `${originalNameWithoutExt}.jpeg`;
+    
+    log(`  ✅ Converted to JPEG: ${jpegBuffer.length} bytes`, 'green');
+    
+    return {
+      buffer: jpegBuffer,
+      filename: jpegFilename,
+      mimeType: 'image/jpeg'
+    };
+  } catch (error) {
+    log(`  ❌ HEIC conversion failed: ${error.message}`, 'red');
+    throw new Error(`HEIC conversion failed: ${error.message}`);
+  }
+}
+
 async function getPhotoFiles() {
   try {
     const photoPath = path.resolve(__dirname, RECIPE_PHOTOS_DIR);
@@ -103,15 +136,18 @@ async function processPhotoWithAI(photoFile, aiProvider) {
     // Read the image file
     const imageBuffer = await fs.readFile(photoFile.path);
     
-    // Create FormData
+    // Convert HEIC to JPEG (like the frontend does)
+    const converted = await convertHeicToJpeg(imageBuffer, photoFile.filename);
+    
+    // Create FormData with the converted image
     const formData = new FormData();
     
-    // Create a proper File-like object for the image
-    const imageBlob = new Blob([imageBuffer], { type: 'image/heic' });
-    formData.append('image', imageBlob, photoFile.filename);
+    // Create a proper File-like object for the converted image
+    const imageBlob = new Blob([converted.buffer], { type: converted.mimeType });
+    formData.append('image', imageBlob, converted.filename);
     formData.append('provider', aiProvider.id);
     
-    log(`  📤 Uploading ${photoFile.filename} to ${aiProvider.name}...`, 'cyan');
+    log(`  📤 Uploading converted ${converted.filename} to ${aiProvider.name}...`, 'cyan');
     
     const response = await fetch(`${BASE_URL}${aiProvider.endpoint}`, {
       method: 'POST',
@@ -128,26 +164,45 @@ async function processPhotoWithAI(photoFile, aiProvider) {
 
     const data = await response.json();
     
+    log(`  📋 API Response: ${JSON.stringify(data, null, 2).slice(0, 200)}...`, 'blue');
+    
+    // Handle both wrapped {success: true, recipe: {...}} and direct recipe responses
+    let recipe = null;
+    let success = false;
+    
     if (data.success && data.recipe) {
+      // Wrapped format: {success: true, recipe: {...}}
+      recipe = data.recipe;
+      success = true;
+    } else if (data.title && data.ingredients && data.steps) {
+      // Direct format: {title: "...", ingredients: [...], steps: [...]}
+      recipe = data;
+      success = true;
+    }
+    
+    if (success && recipe) {
       // Check if we got actual recipe data (not just defaults)
-      const hasRealData = data.recipe.title && 
-                         data.recipe.title !== "Recipe" && 
-                         data.recipe.title !== "Unknown Recipe" &&
-                         data.recipe.ingredients && 
-                         data.recipe.ingredients.length > 0 &&
-                         data.recipe.steps && 
-                         data.recipe.steps.length > 0;
+      const hasRealData = recipe.title && 
+                         recipe.title !== "Recipe" && 
+                         recipe.title !== "Unknown Recipe" &&
+                         recipe.ingredients && 
+                         recipe.ingredients.length > 0 &&
+                         recipe.steps && 
+                         recipe.steps.length > 0;
 
       return {
         success: true,
         duration,
-        recipe: data.recipe,
+        recipe: recipe,
         hasRealData,
         provider: aiProvider.id,
-        filename: photoFile.filename
+        filename: photoFile.filename,
+        convertedFilename: converted.filename
       };
     } else {
-      throw new Error(data.error || data.userMessage || 'No recipe data returned');
+      const errorMsg = data.error || data.userMessage || data.message || 'No recipe data returned';
+      log(`  🔍 Response details: success=${data.success}, hasRecipe=${!!data.recipe}, hasTitle=${!!data.title}`, 'yellow');
+      throw new Error(errorMsg);
     }
     
   } catch (error) {

@@ -13,7 +13,6 @@ import { extractRecipeOptimized, getExtractionEfficiencySummary, checkOptimizati
 // NEW: Import analytics services
 import { 
   ExtractionTimer, 
-  RecipeExtractionAnalytics, 
   trackExtractionWithRecipe,
   type ExtractionMetrics 
 } from '@/lib/services/recipe-extraction-analytics';
@@ -31,13 +30,13 @@ function mapUIProviderToAIProvider(uiProvider: UIProvider): AIProvider {
 }
 
 // Helper function to extract domain from URL
-function extractDomain(url: string): string {
-  try {
-    return new URL(url).hostname.replace('www.', '');
-  } catch {
-    return 'unknown';
-  }
-}
+// function extractDomain(url: string): string {
+//   try {
+//     return new URL(url).hostname.replace('www.', '');
+//   } catch {
+//     return 'unknown';
+//   }
+// }
 
 // Helper function to fix relative URLs
 function fixImageUrl(url: string | null, baseUrl: string): string | null {
