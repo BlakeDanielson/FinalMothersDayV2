@@ -2,7 +2,6 @@ import { extractRecipeViaUrlDirect, shouldUseUrlDirect, getUrlDirectUsageMetrics
 import { AI_SETTINGS, type UIProvider } from '@/lib/config/ai-models';
 import OpenAI from 'openai';
 import { getModelFromUIProvider } from '@/lib/config/ai-models';
-import { RecipeExtractionAnalytics } from './recipe-extraction-analytics';
 import { ExtractionStrategy, AIProvider } from '@/generated/prisma';
 
 // Helper functions (extracted from existing route for consistency)

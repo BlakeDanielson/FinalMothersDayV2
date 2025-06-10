@@ -13,7 +13,6 @@ import { extractRecipeOptimized, getExtractionEfficiencySummary, checkOptimizati
 // NEW: Import analytics services
 import { 
   ExtractionTimer, 
-  RecipeExtractionAnalytics, 
   trackExtractionWithRecipe,
   type ExtractionMetrics 
 } from '@/lib/services/recipe-extraction-analytics';
@@ -28,15 +27,6 @@ function mapUIProviderToAIProvider(uiProvider: UIProvider): AIProvider {
     'gemini-pro': AIProvider.GEMINI_MAIN // Map gemini-pro to GEMINI_MAIN
   };
   return mapping[uiProvider] || AIProvider.OPENAI_MAIN;
-}
-
-// Helper function to extract domain from URL
-function extractDomain(url: string): string {
-  try {
-    return new URL(url).hostname.replace('www.', '');
-  } catch {
-    return 'unknown';
-  }
 }
 
 // Helper function to fix relative URLs
