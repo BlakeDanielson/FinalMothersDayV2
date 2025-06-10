@@ -99,9 +99,9 @@ test.describe('Real Analytics Generation', () => {
         if (line.startsWith('data: ')) {
           try {
             const data = JSON.parse(line.slice(6));
-            if (data.type === 'complete') {
+            if (data.type === 'success') {
               finalResult = data;
-              strategy = data.strategy || 'unknown';
+              strategy = data.optimization?.strategy || 'unknown';
               break;
             }
           } catch (e) {
