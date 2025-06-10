@@ -23,6 +23,8 @@ interface UrlDirectOptions {
  * Extract recipe information directly from a URL using Gemini's built-in web access capability.
  * This is the most efficient strategy, using only ~143 tokens vs ~175K tokens for HTML processing.
  * 
+ * Optimized for fast failover: 15s timeout, single attempt before falling back to OpenAI.
+ * 
  * @param url - The recipe URL to process
  * @param options - Configuration options
  * @returns Extracted recipe data
@@ -33,8 +35,8 @@ export async function extractRecipeViaUrlDirect(
 ): Promise<UrlDirectResult> {
   const { 
     uiProvider = 'gemini-pro',
-    maxRetries = 3,
-    timeout = 45000 
+    maxRetries = 1,
+    timeout = 15000 
   } = options;
 
   if (!process.env.GOOGLE_API_KEY) {
