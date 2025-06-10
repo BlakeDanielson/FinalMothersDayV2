@@ -1,0 +1,447 @@
+{
+  "config": {
+    "configFile": "C:\\Users\\blake\\OneDrive\\Desktop\\NewProjects\\FinalMothersDayV2\\carens-cookbook\\playwright.config.ts",
+    "rootDir": "C:/Users/blake/OneDrive/Desktop/NewProjects/FinalMothersDayV2/carens-cookbook/tests",
+    "forbidOnly": false,
+    "fullyParallel": true,
+    "globalSetup": "C:\\Users\\blake\\OneDrive\\Desktop\\NewProjects\\FinalMothersDayV2\\carens-cookbook\\tests\\global-setup.ts",
+    "globalTeardown": "C:\\Users\\blake\\OneDrive\\Desktop\\NewProjects\\FinalMothersDayV2\\carens-cookbook\\tests\\global-teardown.ts",
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "reporter": [
+      [
+        "html",
+        null
+      ],
+      [
+        "json",
+        {
+          "outputFile": "test-results/results.json"
+        }
+      ],
+      [
+        "junit",
+        {
+          "outputFile": "test-results/results.xml"
+        }
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "quiet": false,
+    "projects": [
+      {
+        "outputDir": "C:/Users/blake/OneDrive/Desktop/NewProjects/FinalMothersDayV2/carens-cookbook/test-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "chromium",
+        "name": "chromium",
+        "testDir": "C:/Users/blake/OneDrive/Desktop/NewProjects/FinalMothersDayV2/carens-cookbook/tests",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 60000
+      },
+      {
+        "outputDir": "C:/Users/blake/OneDrive/Desktop/NewProjects/FinalMothersDayV2/carens-cookbook/test-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "firefox",
+        "name": "firefox",
+        "testDir": "C:/Users/blake/OneDrive/Desktop/NewProjects/FinalMothersDayV2/carens-cookbook/tests",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 60000
+      },
+      {
+        "outputDir": "C:/Users/blake/OneDrive/Desktop/NewProjects/FinalMothersDayV2/carens-cookbook/test-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "webkit",
+        "name": "webkit",
+        "testDir": "C:/Users/blake/OneDrive/Desktop/NewProjects/FinalMothersDayV2/carens-cookbook/tests",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 60000
+      },
+      {
+        "outputDir": "C:/Users/blake/OneDrive/Desktop/NewProjects/FinalMothersDayV2/carens-cookbook/test-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "Mobile Chrome",
+        "name": "Mobile Chrome",
+        "testDir": "C:/Users/blake/OneDrive/Desktop/NewProjects/FinalMothersDayV2/carens-cookbook/tests",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 60000
+      },
+      {
+        "outputDir": "C:/Users/blake/OneDrive/Desktop/NewProjects/FinalMothersDayV2/carens-cookbook/test-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "Mobile Safari",
+        "name": "Mobile Safari",
+        "testDir": "C:/Users/blake/OneDrive/Desktop/NewProjects/FinalMothersDayV2/carens-cookbook/tests",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 60000
+      }
+    ],
+    "shard": null,
+    "updateSnapshots": "missing",
+    "updateSourceMethod": "patch",
+    "version": "1.52.0",
+    "workers": 1,
+    "webServer": {
+      "command": "npm run dev",
+      "url": "http://localhost:3000",
+      "reuseExistingServer": true,
+      "timeout": 180000,
+      "stdout": "pipe",
+      "stderr": "pipe"
+    }
+  },
+  "suites": [
+    {
+      "title": "e2e\\real-analytics-generation.test.ts",
+      "file": "e2e/real-analytics-generation.test.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [],
+      "suites": [
+        {
+          "title": "Real Analytics Generation",
+          "file": "e2e/real-analytics-generation.test.ts",
+          "line": 30,
+          "column": 6,
+          "specs": [
+            {
+              "title": "Extract real analytics data from allrecipes.com",
+              "ok": false,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "failed",
+                      "duration": 49515,
+                      "error": {
+                        "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeTruthy\u001b[2m()\u001b[22m\n\nReceived: \u001b[31mnull\u001b[39m",
+                        "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeTruthy\u001b[2m()\u001b[22m\n\nReceived: \u001b[31mnull\u001b[39m\n    at C:\\Users\\blake\\OneDrive\\Desktop\\NewProjects\\FinalMothersDayV2\\carens-cookbook\\tests\\e2e\\real-analytics-generation.test.ts:116:27",
+                        "location": {
+                          "file": "C:\\Users\\blake\\OneDrive\\Desktop\\NewProjects\\FinalMothersDayV2\\carens-cookbook\\tests\\e2e\\real-analytics-generation.test.ts",
+                          "column": 27,
+                          "line": 116
+                        },
+                        "snippet": "\u001b[0m \u001b[90m 114 |\u001b[39m       \n \u001b[90m 115 |\u001b[39m       \u001b[90m// Verify extraction was successful\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 116 |\u001b[39m       expect(finalResult)\u001b[33m.\u001b[39mtoBeTruthy()\u001b[33m;\u001b[39m\n \u001b[90m     |\u001b[39m                           \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 117 |\u001b[39m       expect(finalResult\u001b[33m.\u001b[39mrecipe)\u001b[33m.\u001b[39mtoBeTruthy()\u001b[33m;\u001b[39m\n \u001b[90m 118 |\u001b[39m       expect(finalResult\u001b[33m.\u001b[39mrecipe\u001b[33m.\u001b[39mtitle)\u001b[33m.\u001b[39mtoBeTruthy()\u001b[33m;\u001b[39m\n \u001b[90m 119 |\u001b[39m       expect(finalResult\u001b[33m.\u001b[39mrecipe\u001b[33m.\u001b[39mingredients)\u001b[33m.\u001b[39mtoBeTruthy()\u001b[33m;\u001b[39m\u001b[0m"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "C:\\Users\\blake\\OneDrive\\Desktop\\NewProjects\\FinalMothersDayV2\\carens-cookbook\\tests\\e2e\\real-analytics-generation.test.ts",
+                            "column": 27,
+                            "line": 116
+                          },
+                          "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeTruthy\u001b[2m()\u001b[22m\n\nReceived: \u001b[31mnull\u001b[39m\n\n\u001b[0m \u001b[90m 114 |\u001b[39m       \n \u001b[90m 115 |\u001b[39m       \u001b[90m// Verify extraction was successful\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 116 |\u001b[39m       expect(finalResult)\u001b[33m.\u001b[39mtoBeTruthy()\u001b[33m;\u001b[39m\n \u001b[90m     |\u001b[39m                           \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 117 |\u001b[39m       expect(finalResult\u001b[33m.\u001b[39mrecipe)\u001b[33m.\u001b[39mtoBeTruthy()\u001b[33m;\u001b[39m\n \u001b[90m 118 |\u001b[39m       expect(finalResult\u001b[33m.\u001b[39mrecipe\u001b[33m.\u001b[39mtitle)\u001b[33m.\u001b[39mtoBeTruthy()\u001b[33m;\u001b[39m\n \u001b[90m 119 |\u001b[39m       expect(finalResult\u001b[33m.\u001b[39mrecipe\u001b[33m.\u001b[39mingredients)\u001b[33m.\u001b[39mtoBeTruthy()\u001b[33m;\u001b[39m\u001b[0m\n\u001b[2m    at C:\\Users\\blake\\OneDrive\\Desktop\\NewProjects\\FinalMothersDayV2\\carens-cookbook\\tests\\e2e\\real-analytics-generation.test.ts:116:27\u001b[22m"
+                        }
+                      ],
+                      "stdout": [
+                        {
+                          "text": "🔍 Testing extraction from: https://www.allrecipes.com/recipe/213742/cheesy-chicken-broccoli-casserole/\n"
+                        },
+                        {
+                          "text": "⏱️  Request completed in 49061ms\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-06-10T08:14:40.902Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "_error-context-0",
+                          "contentType": "text/markdown",
+                          "path": "C:\\Users\\blake\\OneDrive\\Desktop\\NewProjects\\FinalMothersDayV2\\carens-cookbook\\test-results\\e2e-real-analytics-generat-600a9-cs-data-from-allrecipes-com-chromium\\error-context.md"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "C:\\Users\\blake\\OneDrive\\Desktop\\NewProjects\\FinalMothersDayV2\\carens-cookbook\\tests\\e2e\\real-analytics-generation.test.ts",
+                        "column": 27,
+                        "line": 116
+                      }
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "c9669f548a4885756099-df1ec7bda0767a013ada",
+              "file": "e2e/real-analytics-generation.test.ts",
+              "line": 74,
+              "column": 9
+            },
+            {
+              "title": "Extract real analytics data from kingarthurbaking.com",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 1,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 29984,
+                      "errors": [],
+                      "stdout": [
+                        {
+                          "text": "🔍 Testing extraction from: https://www.kingarthurbaking.com/recipes/chocolate-chip-cookies-recipe\n"
+                        },
+                        {
+                          "text": "⏱️  Request completed in 28339ms\n"
+                        },
+                        {
+                          "text": "✅ Successfully extracted: \"Chocolate Chip Cookies\"\n"
+                        },
+                        {
+                          "text": "🔧 Strategy used: gemini-url-direct\n"
+                        },
+                        {
+                          "text": "📊 9 ingredients, 11 steps\n"
+                        },
+                        {
+                          "text": "📈 Analytics recorded - Strategy: URL_DIRECT, Duration: 27067ms\n"
+                        },
+                        {
+                          "text": "🍳 Recipe saved to database with ID: cmbq8y0860008pru8itlv7mg1\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-06-10T08:15:31.534Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "c9669f548a4885756099-8dbe5c2340a47165ea2c",
+              "file": "e2e/real-analytics-generation.test.ts",
+              "line": 74,
+              "column": 9
+            },
+            {
+              "title": "Extract real analytics data from tasteofhome.com",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 1,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 26622,
+                      "errors": [],
+                      "stdout": [
+                        {
+                          "text": "🔍 Testing extraction from: https://www.tasteofhome.com/recipes/makeover-creamy-macaroni-and-cheese/\n"
+                        },
+                        {
+                          "text": "⏱️  Request completed in 25431ms\n"
+                        },
+                        {
+                          "text": "✅ Successfully extracted: \"Makeover Creamy Macaroni and Cheese\"\n"
+                        },
+                        {
+                          "text": "🔧 Strategy used: gemini-url-direct\n"
+                        },
+                        {
+                          "text": "📊 11 ingredients, 3 steps\n"
+                        },
+                        {
+                          "text": "📈 Analytics recorded - Strategy: URL_DIRECT, Duration: 24216ms\n"
+                        },
+                        {
+                          "text": "🍳 Recipe saved to database with ID: cmbq8ykvg000hpru8z0l8j5ry\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-06-10T08:16:01.539Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "c9669f548a4885756099-8232d43f2dbf79fbc576",
+              "file": "e2e/real-analytics-generation.test.ts",
+              "line": 74,
+              "column": 9
+            },
+            {
+              "title": "Verify analytics dashboard can display real data",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 1,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 3617,
+                      "errors": [],
+                      "stdout": [
+                        {
+                          "text": "✅ Analytics dashboard loaded successfully with real data\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-06-10T08:16:28.163Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "c9669f548a4885756099-91a34da0f83a36eb5123",
+              "file": "e2e/real-analytics-generation.test.ts",
+              "line": 167,
+              "column": 7
+            },
+            {
+              "title": "Verify analytics aggregation functions work with real data",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 1,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 401,
+                      "errors": [],
+                      "stdout": [
+                        {
+                          "text": "📊 Success rate: 100.0% (2/2)\n"
+                        },
+                        {
+                          "text": "🔧 Strategy Performance:\n"
+                        },
+                        {
+                          "text": "   URL_DIRECT: 2 extractions\n"
+                        },
+                        {
+                          "text": "      Avg Duration: 25642ms\n"
+                        },
+                        {
+                          "text": "      Avg Tokens: 118\n"
+                        },
+                        {
+                          "text": "      Avg Cost: $0.0001\n"
+                        },
+                        {
+                          "text": "🌐 Domain Performance:\n"
+                        },
+                        {
+                          "text": "   kingarthurbaking.com: 1 extractions, 27067ms avg\n"
+                        },
+                        {
+                          "text": "   tasteofhome.com: 1 extractions, 24216ms avg\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-06-10T08:16:31.834Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "c9669f548a4885756099-28452090d66b113db962",
+              "file": "e2e/real-analytics-generation.test.ts",
+              "line": 193,
+              "column": 7
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2025-06-10T08:14:31.191Z",
+    "duration": 121442.885,
+    "expected": 4,
+    "skipped": 0,
+    "unexpected": 1,
+    "flaky": 0
+  }
+}

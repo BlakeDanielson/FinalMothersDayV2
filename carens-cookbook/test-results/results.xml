@@ -1,0 +1,76 @@
+<testsuites id="" name="" tests="5" failures="1" skipped="0" errors="0" time="121.44288499999999">
+<testsuite name="e2e\real-analytics-generation.test.ts" timestamp="2025-06-10T08:14:40.178Z" hostname="chromium" tests="5" failures="1" skipped="0" time="110.139" errors="0">
+<testcase name="Real Analytics Generation › Extract real analytics data from allrecipes.com" classname="e2e\real-analytics-generation.test.ts" time="49.515">
+<failure message="real-analytics-generation.test.ts:74:9 Extract real analytics data from allrecipes.com" type="FAILURE">
+<![CDATA[  [chromium] › e2e\real-analytics-generation.test.ts:74:9 › Real Analytics Generation › Extract real analytics data from allrecipes.com 
+
+    Error: expect(received).toBeTruthy()
+
+    Received: null
+
+      114 |       
+      115 |       // Verify extraction was successful
+    > 116 |       expect(finalResult).toBeTruthy();
+          |                           ^
+      117 |       expect(finalResult.recipe).toBeTruthy();
+      118 |       expect(finalResult.recipe.title).toBeTruthy();
+      119 |       expect(finalResult.recipe.ingredients).toBeTruthy();
+        at C:\Users\blake\OneDrive\Desktop\NewProjects\FinalMothersDayV2\carens-cookbook\tests\e2e\real-analytics-generation.test.ts:116:27
+
+    Error Context: ..\test-results\e2e-real-analytics-generat-600a9-cs-data-from-allrecipes-com-chromium\error-context.md
+]]>
+</failure>
+<system-out>
+<![CDATA[🔍 Testing extraction from: https://www.allrecipes.com/recipe/213742/cheesy-chicken-broccoli-casserole/
+⏱️  Request completed in 49061ms
+
+[[ATTACHMENT|e2e-real-analytics-generat-600a9-cs-data-from-allrecipes-com-chromium\error-context.md]]
+]]>
+</system-out>
+</testcase>
+<testcase name="Real Analytics Generation › Extract real analytics data from kingarthurbaking.com" classname="e2e\real-analytics-generation.test.ts" time="29.984">
+<system-out>
+<![CDATA[🔍 Testing extraction from: https://www.kingarthurbaking.com/recipes/chocolate-chip-cookies-recipe
+⏱️  Request completed in 28339ms
+✅ Successfully extracted: "Chocolate Chip Cookies"
+🔧 Strategy used: gemini-url-direct
+📊 9 ingredients, 11 steps
+📈 Analytics recorded - Strategy: URL_DIRECT, Duration: 27067ms
+🍳 Recipe saved to database with ID: cmbq8y0860008pru8itlv7mg1
+]]>
+</system-out>
+</testcase>
+<testcase name="Real Analytics Generation › Extract real analytics data from tasteofhome.com" classname="e2e\real-analytics-generation.test.ts" time="26.622">
+<system-out>
+<![CDATA[🔍 Testing extraction from: https://www.tasteofhome.com/recipes/makeover-creamy-macaroni-and-cheese/
+⏱️  Request completed in 25431ms
+✅ Successfully extracted: "Makeover Creamy Macaroni and Cheese"
+🔧 Strategy used: gemini-url-direct
+📊 11 ingredients, 3 steps
+📈 Analytics recorded - Strategy: URL_DIRECT, Duration: 24216ms
+🍳 Recipe saved to database with ID: cmbq8ykvg000hpru8z0l8j5ry
+]]>
+</system-out>
+</testcase>
+<testcase name="Real Analytics Generation › Verify analytics dashboard can display real data" classname="e2e\real-analytics-generation.test.ts" time="3.617">
+<system-out>
+<![CDATA[✅ Analytics dashboard loaded successfully with real data
+]]>
+</system-out>
+</testcase>
+<testcase name="Real Analytics Generation › Verify analytics aggregation functions work with real data" classname="e2e\real-analytics-generation.test.ts" time="0.401">
+<system-out>
+<![CDATA[📊 Success rate: 100.0% (2/2)
+🔧 Strategy Performance:
+   URL_DIRECT: 2 extractions
+      Avg Duration: 25642ms
+      Avg Tokens: 118
+      Avg Cost: $0.0001
+🌐 Domain Performance:
+   kingarthurbaking.com: 1 extractions, 27067ms avg
+   tasteofhome.com: 1 extractions, 24216ms avg
+]]>
+</system-out>
+</testcase>
+</testsuite>
+</testsuites>
