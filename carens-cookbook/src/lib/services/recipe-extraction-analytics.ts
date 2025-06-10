@@ -29,6 +29,7 @@ export interface ExtractionMetrics {
   
   // Success & Quality Metrics
   extractionSuccess: boolean;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   validationErrors?: any[];
   missingFields?: string[];
   completenessScore?: number;
@@ -106,12 +107,12 @@ function calculateEstimatedCost(
 }
 
 // Recipe completeness scoring
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 function calculateCompletenessScore(recipe: any, missingFields: string[]): number {
   const criticalFields = ['title', 'ingredients', 'steps'];
   const importantFields = ['description', 'cuisine', 'category', 'prepTime'];
   const optionalFields = ['cleanupTime', 'image'];
   
-  const totalFields = criticalFields.length + importantFields.length + optionalFields.length;
   let score = 0;
 
   // Critical fields are worth 40% (0.4 / 3 = 0.133 each)
@@ -148,6 +149,7 @@ function extractDomain(url: string): string {
 }
 
 // Identify missing fields in extracted recipe
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 function identifyMissingFields(recipe: any): string[] {
   const fields = ['title', 'ingredients', 'steps', 'description', 'cuisine', 'category', 'prepTime', 'cleanupTime', 'image'];
   return fields.filter(field => !recipe[field] || 
@@ -156,17 +158,6 @@ function identifyMissingFields(recipe: any): string[] {
     recipe[field] === undefined ||
     recipe[field] === ''
   );
-}
-
-// Map UI provider strings to enum values
-function mapUIProviderToEnum(uiProvider: string): AIProvider {
-  const mapping: Record<string, AIProvider> = {
-    'openai-mini': AIProvider.OPENAI_MINI,
-    'openai-main': AIProvider.OPENAI_MAIN,
-    'gemini-main': AIProvider.GEMINI_MAIN,
-    'gemini-flash': AIProvider.GEMINI_FLASH
-  };
-  return mapping[uiProvider] || AIProvider.OPENAI_MINI;
 }
 
 // Main analytics service class
@@ -380,9 +371,11 @@ export class RecipeExtractionAnalytics {
   }
 }
 
-// Helper function to create analytics tracking with recipe data
+// Export the trackExtraction with recipe utility
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export async function trackExtractionWithRecipe(
   metrics: Omit<ExtractionMetrics, 'missingFields' | 'completenessScore'>,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   recipe?: any
 ): Promise<void> {
   let missingFields: string[] = [];
