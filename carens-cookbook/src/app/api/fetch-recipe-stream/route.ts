@@ -88,7 +88,7 @@ function createErrorEvent(error: string) {
 }
 
 export const POST = withOnboardingGuard(async (request: NextRequest) => {
-  const { url, forceStrategy, geminiProvider = 'gemini-pro', openaiProvider = 'openai-main', sessionId } = await request.json();
+  const { url, forceStrategy, geminiProvider = 'gemini-pro', openaiProvider = 'openai-main', sessionId, userId: requestUserId } = await request.json();
 
   if (!url) {
     return NextResponse.json(
@@ -98,7 +98,9 @@ export const POST = withOnboardingGuard(async (request: NextRequest) => {
   }
 
   // Get user info and session context
-  const { userId } = await auth();
+  const { userId: authUserId } = await auth();
+  // Use userId from request if provided (for testing), otherwise use authenticated user
+  const userId = requestUserId || authUserId;
   let sessionContext;
   
   try {
@@ -217,6 +219,7 @@ export const POST = withOnboardingGuard(async (request: NextRequest) => {
         // Track detailed extraction analytics
         if (userId) {
           try {
+            console.log(`🔍 Starting analytics tracking for user: ${userId}`);
             const extractionMetrics = {
               userId,
               recipeUrl: url,
@@ -239,12 +242,16 @@ export const POST = withOnboardingGuard(async (request: NextRequest) => {
               completenessScore: 0.9
             };
 
+            console.log(`📊 Analytics metrics prepared:`, JSON.stringify(extractionMetrics, null, 2));
             await trackExtractionWithRecipe(extractionMetrics, recipe);
-            console.log(`📊 Analytics tracked for ${extractionMetrics.primaryStrategy} strategy`);
+            console.log(`✅ Analytics tracked successfully for ${extractionMetrics.primaryStrategy} strategy`);
           } catch (analyticsError) {
-            console.error('Failed to track detailed analytics:', analyticsError);
+            console.error('❌ Failed to track detailed analytics:', analyticsError);
+            console.error('Analytics error stack:', analyticsError instanceof Error ? analyticsError.stack : 'No stack available');
             // Don't fail the request for analytics errors
           }
+        } else {
+          console.log(`⚠️ No userId provided, skipping analytics tracking`);
         }
 
         // Track successful extraction
@@ -308,6 +315,7 @@ export const POST = withOnboardingGuard(async (request: NextRequest) => {
         // Track failed extraction analytics
         if (userId) {
           try {
+            console.log(`🔍 Tracking failed extraction analytics for user: ${userId}`);
             const extractionMetrics = {
               userId,
               recipeUrl: url,
@@ -323,10 +331,13 @@ export const POST = withOnboardingGuard(async (request: NextRequest) => {
             };
 
             await trackExtractionWithRecipe(extractionMetrics);
-            console.log(`📊 Failed extraction analytics tracked`);
+            console.log(`✅ Failed extraction analytics tracked successfully`);
           } catch (analyticsError) {
-            console.error('Failed to track failed extraction analytics:', analyticsError);
+            console.error('❌ Failed to track failed extraction analytics:', analyticsError);
+            console.error('Failed analytics error stack:', analyticsError instanceof Error ? analyticsError.stack : 'No stack available');
           }
+        } else {
+          console.log(`⚠️ No userId for failed extraction, skipping analytics tracking`);
         }
         
         controller.enqueue(encoder.encode(createErrorEvent(
