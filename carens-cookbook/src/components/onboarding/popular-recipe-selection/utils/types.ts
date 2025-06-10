@@ -37,7 +37,6 @@ export interface RecipeCardProps {
 }
 
 export interface CustomizationFormProps {
-  selectedRecipe: PopularRecipe;
   customizedRecipe: Partial<RecipeData>;
   setCustomizedRecipe: (recipe: Partial<RecipeData>) => void;
   userCategories: string[];

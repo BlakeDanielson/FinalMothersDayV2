@@ -4,10 +4,8 @@ import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Edit3, ArrowLeft, CheckCircle } from 'lucide-react';
 import { CustomizationFormProps } from '../utils/types';
-import { RecipeData } from '../../first-recipe-flow/utils/types';
 
 export function CustomizationForm({ 
-  selectedRecipe,
   customizedRecipe, 
   setCustomizedRecipe, 
   userCategories, 
