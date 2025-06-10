@@ -149,7 +149,7 @@ export async function extractRecipeOptimized(
     forceStrategy,
     geminiProvider = 'gemini-pro',
     openaiProvider = 'openai-main',
-    timeoutMs = 45000
+    timeoutMs = 15000
   } = options;
 
   console.log(`\n🎯 Recipe Extraction Orchestrator: Starting optimization for ${url}`);

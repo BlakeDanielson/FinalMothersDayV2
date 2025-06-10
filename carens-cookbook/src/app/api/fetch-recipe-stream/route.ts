@@ -231,7 +231,7 @@ async function extractRecipeOptimizedWithProgress(
     progressCallback: (progress: number, message: string, data?: Record<string, unknown>) => void;
   }
 ) {
-  const { forceStrategy, geminiProvider = 'gemini-pro', openaiProvider = 'openai-main', timeoutMs = 45000, progressCallback } = options;
+  const { forceStrategy, geminiProvider = 'gemini-pro', openaiProvider = 'openai-main', timeoutMs = 15000, progressCallback } = options;
 
   const metrics = {
     primaryStrategy: 'gemini-url-direct' as const,
