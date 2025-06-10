@@ -20,6 +20,11 @@ NEXT_PUBLIC_CLERK_AFTER_SIGN_UP_URL=/onboarding
 OPENAI_API_KEY=sk-your_openai_api_key_here
 GOOGLE_API_KEY=your_google_gemini_api_key_here
 
+# ===== OPTIMIZATION SETTINGS =====
+
+# Gemini URL-Direct Processing (Recommended for 99% efficiency gains)
+GEMINI_ENABLE_URL_DIRECT=true
+
 # ===== OPTIONAL VARIABLES =====
 
 # Caching Configuration

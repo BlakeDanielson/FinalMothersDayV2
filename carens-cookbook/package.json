@@ -19,7 +19,9 @@
     "test-enhanced-api": "npx tsx scripts/test-enhanced-scan-api.ts",
     "migrate-category-metadata": "npx tsx scripts/migrate-category-metadata.ts",
     "test-enhanced-schema": "npx tsx scripts/test-enhanced-schema.ts",
-    "test-suggestion-engine": "npx tsx scripts/test-suggestion-engine.ts"
+    "test-suggestion-engine": "npx tsx scripts/test-suggestion-engine.ts",
+    "seed-analytics": "npx tsx scripts/seed-analytics-data.ts",
+    "test-real-analytics": "npx tsx scripts/real-extraction-analytics.ts"
   },
   "dependencies": {
     "@clerk/clerk-react": "^5.31.5",
