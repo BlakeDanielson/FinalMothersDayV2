@@ -1,0 +1,968 @@
+{
+  "timestamp": "2025-06-10T04:17:04.021Z",
+  "summary": {
+    "openai-main": {
+      "totalTests": 6,
+      "successes": 6,
+      "failures": 0,
+      "totalDuration": 101106,
+      "avgDuration": 16851,
+      "successRate": 100,
+      "minDuration": 12548,
+      "maxDuration": 23195,
+      "medianDuration": 15541
+    },
+    "openai-mini": {
+      "totalTests": 6,
+      "successes": 5,
+      "failures": 1,
+      "totalDuration": 93687,
+      "avgDuration": 15615,
+      "successRate": 83,
+      "minDuration": 7583,
+      "maxDuration": 21121,
+      "medianDuration": 11753
+    },
+    "gemini-main": {
+      "totalTests": 6,
+      "successes": 6,
+      "failures": 0,
+      "totalDuration": 59220,
+      "avgDuration": 9870,
+      "successRate": 100,
+      "minDuration": 8567,
+      "maxDuration": 12100,
+      "medianDuration": 9722
+    },
+    "gemini-pro": {
+      "totalTests": 6,
+      "successes": 6,
+      "failures": 0,
+      "totalDuration": 56516,
+      "avgDuration": 9419,
+      "successRate": 100,
+      "minDuration": 5983,
+      "maxDuration": 14212,
+      "medianDuration": 8315
+    }
+  },
+  "detailedResults": [
+    [
+      {
+        "model": "openai-main",
+        "success": true,
+        "duration": 12548,
+        "url": "https://www.allrecipes.com/recipe/16354/easy-meatloaf/",
+        "data": {
+          "success": true,
+          "recipe": {
+            "title": "Easy Meatloaf",
+            "ingredients": [
+              "1 1/2 pounds lean ground beef",
+              "1 egg",
+              "1 onion, chopped",
+              "1 cup milk",
+              "1 cup dried bread crumbs",
+              "salt and pepper to taste",
+              "2 tablespoons brown sugar",
+              "2 tablespoons prepared mustard",
+              "1/3 cup ketchup"
+            ],
+            "steps": [
+              "Preheat oven to 350 degrees F (175 degrees C).",
+              "In a large bowl, combine the beef, egg, onion, milk and bread crumbs. Season with salt and pepper to taste and place in a lightly greased 5x9 inch loaf pan, or form into a loaf and place in a lightly greased 9x13 inch baking dish.",
+              "In a separate small bowl, combine the brown sugar, mustard and ketchup. Mix well and pour over the meatloaf.",
+              "Bake at 350 degrees F (175 degrees C) for 1 hour."
+            ],
+            "image": "https://www.allrecipes.com/thmb/iLAfLvIq4cqfEB3pA8AoNCGxrwE=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/16354-easy-meatloaf-DDMFS-0036-5186-hero-2x1-36abc71abb0b436b9ce8eebef460f3f8.jpg",
+            "description": "This meatloaf recipe is easy to make and doesn't take long to prep. It's one of our best recipes that's been made over 8,000 times and never disappoints!",
+            "cuisine": "American",
+            "category": "Main Dishes",
+            "prepTime": "15 mins",
+            "cleanupTime": "10 mins"
+          },
+          "processing_method": "openai",
+          "message": "Recipe extracted successfully using OpenAI"
+        },
+        "statusCode": 200
+      },
+      {
+        "model": "openai-mini",
+        "success": true,
+        "duration": 12203,
+        "url": "https://www.allrecipes.com/recipe/16354/easy-meatloaf/",
+        "data": {
+          "success": true,
+          "recipe": {
+            "title": "Easy Meatloaf",
+            "ingredients": [
+              "1 1/2 pounds lean ground beef",
+              "1 egg",
+              "1 onion, chopped",
+              "1 cup milk",
+              "1 cup dried bread crumbs",
+              "salt and pepper to taste",
+              "2 tablespoons brown sugar",
+              "2 tablespoons prepared mustard",
+              "1/3 cup ketchup"
+            ],
+            "steps": [
+              "Preheat oven to 350 degrees F (175 degrees C).",
+              "In a large bowl, combine the beef, egg, onion, milk and bread crumbs. Season with salt and pepper to taste and place in a lightly greased 5x9 inch loaf pan, or form into a loaf and place in a lightly greased 9x13 inch baking dish.",
+              "In a separate small bowl, combine the brown sugar, mustard and ketchup. Mix well and pour over the meatloaf.",
+              "Bake at 350 degrees F (175 degrees C) for 1 hour."
+            ],
+            "image": "https://www.allrecipes.com/thmb/iLAfLvIq4cqfEB3pA8AoNCGxrwE=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/16354-easy-meatloaf-DDMFS-0036-5186-hero-2x1-36abc71abb0b436b9ce8eebef460f3f8.jpg",
+            "description": "This meatloaf recipe is easy to make and doesn't take long to prep. It's one of our best recipes that's been made over 8,000 times and never disappoints!",
+            "cuisine": "American",
+            "category": "Main Dish",
+            "prepTime": "15 mins",
+            "cleanupTime": "10 mins"
+          },
+          "processing_method": "openai",
+          "message": "Recipe extracted successfully using OpenAI"
+        },
+        "statusCode": 200
+      },
+      {
+        "model": "gemini-main",
+        "success": true,
+        "duration": 8567,
+        "url": "https://www.allrecipes.com/recipe/16354/easy-meatloaf/",
+        "data": {
+          "success": true,
+          "recipe": {
+            "title": "Easy Meatloaf",
+            "ingredients": [
+              "1 1/2 pounds lean ground beef",
+              "1 egg",
+              "1 onion, chopped",
+              "1 cup milk",
+              "1 cup dried bread crumbs",
+              "salt and pepper to taste",
+              "2 tablespoons brown sugar",
+              "2 tablespoons prepared mustard",
+              "1/3 cup ketchup"
+            ],
+            "steps": [
+              "Preheat oven to 350 degrees F (175 degrees C).",
+              "In a large bowl, combine the beef, egg, onion, milk and bread crumbs. Season with salt and pepper to taste and place in a lightly greased 5x9 inch loaf pan, or form into a loaf and place in a lightly greased 9x13 inch baking dish.",
+              "In a separate small bowl, combine the brown sugar, mustard and ketchup. Mix well and pour over the meatloaf.",
+              "Bake at 350 degrees F (175 degrees C) for 1 hour."
+            ],
+            "image": "https://www.allrecipes.com/thmb/iLAfLvIq4cqfEB3pA8AoNCGxrwE=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/16354-easy-meatloaf-DDMFS-0036-5186-hero-2x1-36abc71abb0b436b9ce8eebef460f3f8.jpg",
+            "description": "This meatloaf recipe is easy to make and doesn't take long to prep. It's one of our best recipes that's been made over 8,000 times and never disappoints!",
+            "cuisine": "American",
+            "category": "Main Dishes",
+            "prepTime": "15 mins",
+            "cleanupTime": "10 mins"
+          },
+          "processing_method": "openai",
+          "message": "Recipe extracted successfully using OpenAI"
+        },
+        "statusCode": 200
+      },
+      {
+        "model": "gemini-pro",
+        "success": true,
+        "duration": 5983,
+        "url": "https://www.allrecipes.com/recipe/16354/easy-meatloaf/",
+        "data": {
+          "success": true,
+          "recipe": {
+            "title": "Easy Meatloaf",
+            "ingredients": [
+              "1 pound lean ground beef",
+              "1 egg",
+              "1 onion, chopped",
+              "1 cup milk",
+              "1 cup dried bread crumbs",
+              "salt and pepper to taste",
+              "2 tablespoons brown sugar",
+              "2 tablespoons prepared mustard",
+              "1/3 cup ketchup"
+            ],
+            "steps": [
+              "Preheat oven to 350 degrees F (175 degrees C).",
+              "In a large bowl, combine the beef, egg, onion, milk and bread crumbs. Season with salt and pepper to taste and place in a lightly greased 5x9 inch loaf pan, or form into a loaf and place in a lightly greased 9x13 inch baking dish.",
+              "In a separate small bowl, combine the brown sugar, mustard and ketchup. Mix well and pour over the meatloaf.",
+              "Bake at 350 degrees F (175 degrees C) for 1 hour."
+            ],
+            "image": "https://www.allrecipes.com/thmb/iLAfLvIq4cqfEB3pA8AoNCGxrwE=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/16354-easy-meatloaf-DDMFS-0036-5186-hero-2x1-36abc71abb0b436b9ce8eebef460f3f8.jpg",
+            "description": "This meatloaf recipe is easy to make and doesn't take long to prep. It's one of our best recipes that's been made over 8,000 times and never disappoints!",
+            "cuisine": "American",
+            "category": "Main Dish",
+            "prepTime": "15 mins",
+            "cleanupTime": "10 mins"
+          },
+          "processing_method": "openai",
+          "message": "Recipe extracted successfully using OpenAI"
+        },
+        "statusCode": 200
+      }
+    ],
+    [
+      {
+        "model": "openai-main",
+        "success": true,
+        "duration": 13402,
+        "url": "https://www.tasteofhome.com/recipes/slow-cooker-chicken-and-dumplings/",
+        "data": {
+          "success": true,
+          "recipe": {
+            "title": "Slow-Cooker Chicken and Dumplings",
+            "ingredients": [
+              "1 small onion, chopped",
+              "1 cup chopped carrot",
+              "1 cup chopped celery",
+              "1 garlic clove, minced",
+              "2 pounds boneless skinless chicken thighs or boneless skinless chicken breasts",
+              "1 teaspoon dried oregano",
+              "1/2 teaspoon salt",
+              "1/2 teaspoon pepper",
+              "1/2 teaspoon dried marjoram",
+              "2 cans (10 ounces each) condensed cream of chicken soup, undiluted",
+              "1 cup reduced-sodium chicken broth",
+              "1 cup frozen or canned peas, drained",
+              "1 can (6 ounces) large refrigerated buttermilk biscuits",
+              "Chopped fresh parsley, optional"
+            ],
+            "steps": [
+              "Place onion, carrot, celery and garlic in a greased 6- or 8-qt. slow cooker; stir. Place chicken thighs or breasts on top. Sprinkle with oregano, salt, pepper and marjoram.",
+              "In a small bowl, stir together cream of chicken soup and broth; pour over chicken. Cover; cook on low 4-5 hours or high 2-3 hours or until chicken is cooked through.",
+              "Shred chicken with two forks. Stir in peas. Cut biscuits into 4 pieces each; arrange on top of chicken. Cook on high 1 to 1-1/4 hours or until biscuits are cooked through. If desired, top with chopped parsley and additional pepper."
+            ],
+            "image": "https://www.tasteofhome.com/wp-content/uploads/2024/12/Slow-Cooker-Chicken-and-Dumplings_EXPS_FT24_191085_JR_1203_6.jpg",
+            "description": "Slow-cooker chicken and dumplings is a classic comfort food made easy with shortcut ingredients. This recipe requires minimal effort, so you can enjoy a filling, home-cooked meal anytime!",
+            "cuisine": "American",
+            "category": "Main Dish",
+            "prepTime": "20 min",
+            "cleanupTime": "5 hours"
+          },
+          "processing_method": "openai",
+          "message": "Recipe extracted successfully using OpenAI"
+        },
+        "statusCode": 200
+      },
+      {
+        "model": "openai-mini",
+        "success": true,
+        "duration": 11753,
+        "url": "https://www.tasteofhome.com/recipes/slow-cooker-chicken-and-dumplings/",
+        "data": {
+          "success": true,
+          "recipe": {
+            "title": "Slow-Cooker Chicken and Dumplings",
+            "ingredients": [
+              "1 small onion, chopped",
+              "1 cup chopped carrot",
+              "1 cup chopped celery",
+              "1 garlic clove, minced",
+              "2 pounds boneless skinless chicken thighs or boneless skinless chicken breasts",
+              "1 teaspoon dried oregano",
+              "1/2 teaspoon salt",
+              "1/2 teaspoon pepper",
+              "1/2 teaspoon dried marjoram",
+              "2 cans (10 ounces each) condensed cream of chicken soup, undiluted",
+              "1 cup reduced-sodium chicken broth",
+              "1 cup frozen or canned peas, drained",
+              "1 can (6 ounces) large refrigerated buttermilk biscuits",
+              "Chopped fresh parsley, optional"
+            ],
+            "steps": [
+              "Place onion, carrot, celery and garlic in a greased 6- or 8-qt. slow cooker; stir. Place chicken thighs or breasts on top. Sprinkle with oregano, salt, pepper and marjoram.",
+              "In a small bowl, stir together cream of chicken soup and broth; pour over chicken. Cover; cook on low 4-5 hours or high 2-3 hours or until chicken is cooked through.",
+              "Shred chicken with two forks. Stir in peas. Cut biscuits into 4 pieces each; arrange on top of chicken. Cook on high 1 to 1-1/4 hours or until biscuits are cooked through. If desired, top with chopped parsley and additional pepper."
+            ],
+            "image": "https://www.tasteofhome.com/wp-content/uploads/2024/12/Slow-Cooker-Chicken-and-Dumplings_EXPS_FT24_191085_JR_1203_6.jpg",
+            "description": "Slow-cooker chicken and dumplings is a classic comfort food made easy with shortcut ingredients. This recipe requires minimal effort, so you can enjoy a filling, home-cooked meal anytime!",
+            "cuisine": "American",
+            "category": "Main Dish",
+            "prepTime": "20 min",
+            "cleanupTime": "5 hours"
+          },
+          "processing_method": "openai",
+          "message": "Recipe extracted successfully using OpenAI"
+        },
+        "statusCode": 200
+      },
+      {
+        "model": "gemini-main",
+        "success": true,
+        "duration": 9722,
+        "url": "https://www.tasteofhome.com/recipes/slow-cooker-chicken-and-dumplings/",
+        "data": {
+          "success": true,
+          "recipe": {
+            "title": "Slow-Cooker Chicken and Dumplings",
+            "ingredients": [
+              "1 small onion, chopped",
+              "1 cup chopped carrot",
+              "1 cup chopped celery",
+              "1 garlic clove, minced",
+              "2 pounds boneless skinless chicken thighs or boneless skinless chicken breasts",
+              "1 teaspoon dried oregano",
+              "1/2 teaspoon salt",
+              "1/2 teaspoon pepper",
+              "1/2 teaspoon dried marjoram",
+              "2 cans (10 ounces each) condensed cream of chicken soup, undiluted",
+              "1 cup reduced-sodium chicken broth",
+              "1 cup frozen or canned peas, drained",
+              "1 can (6 ounces) large refrigerated buttermilk biscuits",
+              "Chopped fresh parsley, optional"
+            ],
+            "steps": [
+              "Place onion, carrot, celery and garlic in a greased 6- or 8-qt. slow cooker; stir. Place chicken thighs or breasts on top. Sprinkle with oregano, salt, pepper and marjoram.",
+              "In a small bowl, stir together cream of chicken soup and broth; pour over chicken. Cover; cook on low 4-5 hours or high 2-3 hours or until chicken is cooked through.",
+              "Shred chicken with two forks. Stir in peas. Cut biscuits into 4 pieces each; arrange on top of chicken. Cook on high 1 to 1-1/4 hours or until biscuits are cooked through. If desired, top with chopped parsley and additional pepper."
+            ],
+            "image": "https://www.tasteofhome.com/wp-content/uploads/2024/12/Slow-Cooker-Chicken-and-Dumplings_EXPS_FT24_191085_JR_1203_6.jpg",
+            "description": "Slow-cooker chicken and dumplings is a classic comfort food made easy with shortcut ingredients. This recipe requires minimal effort, so you can enjoy a filling, home-cooked meal anytime!",
+            "cuisine": "American",
+            "category": "Main Dish",
+            "prepTime": "20 min",
+            "cleanupTime": "5 hours"
+          },
+          "processing_method": "openai",
+          "message": "Recipe extracted successfully using OpenAI"
+        },
+        "statusCode": 200
+      },
+      {
+        "model": "gemini-pro",
+        "success": true,
+        "duration": 14212,
+        "url": "https://www.tasteofhome.com/recipes/slow-cooker-chicken-and-dumplings/",
+        "data": {
+          "success": true,
+          "recipe": {
+            "title": "Slow-Cooker Chicken and Dumplings",
+            "ingredients": [
+              "1 small onion, chopped",
+              "1 cup chopped carrot",
+              "1 cup chopped celery",
+              "1 garlic clove, minced",
+              "2 pounds boneless skinless chicken thighs or boneless skinless chicken breasts",
+              "1 teaspoon dried oregano",
+              "1/2 teaspoon salt",
+              "1/2 teaspoon pepper",
+              "1/2 teaspoon dried marjoram",
+              "2 cans (10 ounces each) condensed cream of chicken soup, undiluted",
+              "1 cup reduced-sodium chicken broth",
+              "1 cup frozen or canned peas, drained",
+              "1 can (6 ounces) large refrigerated buttermilk biscuits",
+              "Chopped fresh parsley, optional"
+            ],
+            "steps": [
+              "Place onion, carrot, celery and garlic in a greased 6- or 8-qt. slow cooker; stir. Place chicken thighs or breasts on top. Sprinkle with oregano, salt, pepper and marjoram.",
+              "In a small bowl, stir together cream of chicken soup and broth; pour over chicken. Cover; cook on low 4-5 hours or high 2-3 hours or until chicken is cooked through.",
+              "Shred chicken with two forks. Stir in peas. Cut biscuits into 4 pieces each; arrange on top of chicken. Cook on high 1 to 1-1/4 hours or until biscuits are cooked through. If desired, top with chopped parsley and additional pepper."
+            ],
+            "image": "https://www.tasteofhome.com/wp-content/uploads/2024/12/Slow-Cooker-Chicken-and-Dumplings_EXPS_FT24_191085_JR_1203_6.jpg",
+            "description": "Slow-cooker chicken and dumplings is a classic comfort food made easy with shortcut ingredients. This recipe requires minimal effort, so you can enjoy a filling, home-cooked meal anytime!",
+            "cuisine": "American",
+            "category": "Main Dish",
+            "prepTime": "20 min",
+            "cleanupTime": "5 hours"
+          },
+          "processing_method": "openai",
+          "message": "Recipe extracted successfully using OpenAI"
+        },
+        "statusCode": 200
+      }
+    ],
+    [
+      {
+        "model": "openai-main",
+        "success": true,
+        "duration": 23195,
+        "url": "https://www.delish.com/cooking/recipe-ideas/a19636089/best-beef-stew-recipe/",
+        "data": {
+          "success": true,
+          "recipe": {
+            "title": "Creamy Tuscan Chicken",
+            "ingredients": [
+              "1 Tbsp. extra-virgin olive oil",
+              "4 boneless skinless chicken breasts",
+              "Kosher salt",
+              "Freshly ground black pepper",
+              "1 tsp. dried oregano",
+              "3 Tbsp. butter",
+              "3 cloves garlic, minced",
+              "1 1/2 cups cherry tomatoes, halved",
+              "3 cups baby spinach",
+              "1/2 cup heavy cream",
+              "1/4 cup freshly grated Parmesan",
+              "Lemon wedges, for serving"
+            ],
+            "steps": [
+              "In a skillet over medium heat, heat oil. Add chicken and season with salt, pepper, and oregano. Cook until golden and no longer pink, 8 minutes per side. Remove from skillet and set aside.",
+              "In the same skillet over medium heat, melt butter. Stir in garlic and cook until fragrant, about 1 minute. Add cherry tomatoes and season with salt and pepper. Cook until tomatoes are beginning to burst then add spinach and cook until spinach is beginning to wilt.",
+              "Stir in heavy cream and parmesan and bring mixture to a simmer. Reduce heat to low and simmer until sauce is slightly reduced, about 3 minutes. Return chicken to skillet and cook until heated through, 5 to 7 minutes.",
+              "Serve with lemon wedges."
+            ],
+            "image": "https://hips.hearstapps.com/hmg-prod/images/20191011-creamy-tuscan-chicken-delish-ehg-2518-1662055541.jpg?crop=1.00xw:0.670xh;0,0.104xh&resize=640:*",
+            "description": "This skillet chicken dinner pairs chicken breasts with a bright and creamy sauce, spinach, and baby tomatoes for a quick and easy dinner dream.",
+            "cuisine": "Italian",
+            "category": "Dinner",
+            "prepTime": "5 mins",
+            "cleanupTime": ""
+          },
+          "processing_method": "openai",
+          "message": "Recipe extracted successfully using OpenAI"
+        },
+        "statusCode": 200
+      },
+      {
+        "model": "openai-mini",
+        "success": true,
+        "duration": 21121,
+        "url": "https://www.delish.com/cooking/recipe-ideas/a19636089/best-beef-stew-recipe/",
+        "data": {
+          "success": true,
+          "recipe": {
+            "title": "Creamy Tuscan Chicken",
+            "ingredients": [
+              "1 Tbsp. extra-virgin olive oil",
+              "4 boneless skinless chicken breasts",
+              "Kosher salt",
+              "Freshly ground black pepper",
+              "1 tsp. dried oregano",
+              "3 Tbsp. butter",
+              "3 cloves garlic, minced",
+              "1 1/2 cups cherry tomatoes, halved",
+              "3 cups baby spinach",
+              "1/2 cup heavy cream",
+              "1/4 cup freshly grated Parmesan",
+              "Lemon wedges, for serving"
+            ],
+            "steps": [
+              "In a skillet over medium heat, heat oil. Add chicken and season with salt, pepper, and oregano. Cook until golden and no longer pink, 8 minutes per side. Remove from skillet and set aside.",
+              "In the same skillet over medium heat, melt butter. Stir in garlic and cook until fragrant, about 1 minute. Add cherry tomatoes and season with salt and pepper. Cook until tomatoes are beginning to burst then add spinach and cook until spinach is beginning to wilt.",
+              "Stir in heavy cream and parmesan and bring mixture to a simmer. Reduce heat to low and simmer until sauce is slightly reduced, about 3 minutes. Return chicken to skillet and cook until heated through, 5 to 7 minutes.",
+              "Serve with lemon wedges."
+            ],
+            "image": "https://hips.hearstapps.com/hmg-prod/images/20191011-creamy-tuscan-chicken-delish-ehg-2518-1662055541.jpg?crop=1.00xw:0.670xh;0,0.104xh&resize=640:*",
+            "description": "This skillet chicken dinner pairs chicken breasts with a bright and creamy sauce, spinach, and baby tomatoes for a quick and easy dinner dream.",
+            "cuisine": "Italian",
+            "category": "Dinner",
+            "prepTime": "5 mins",
+            "cleanupTime": "35 mins"
+          },
+          "processing_method": "openai",
+          "message": "Recipe extracted successfully using OpenAI"
+        },
+        "statusCode": 200
+      },
+      {
+        "model": "gemini-main",
+        "success": true,
+        "duration": 12100,
+        "url": "https://www.delish.com/cooking/recipe-ideas/a19636089/best-beef-stew-recipe/",
+        "data": {
+          "success": true,
+          "recipe": {
+            "title": "Creamy Tuscan Chicken",
+            "ingredients": [
+              "1 Tbsp. extra-virgin olive oil",
+              "4 boneless skinless chicken breasts",
+              "Kosher salt",
+              "Freshly ground black pepper",
+              "1 tsp. dried oregano",
+              "3 Tbsp. butter",
+              "3 cloves garlic, minced",
+              "1 1/2 cups cherry tomatoes, halved",
+              "3 cups baby spinach",
+              "1/2 cup heavy cream",
+              "1/4 cup freshly grated Parmesan",
+              "Lemon wedges, for serving"
+            ],
+            "steps": [
+              "In a skillet over medium heat, heat oil. Add chicken and season with salt, pepper, and oregano. Cook until golden and no longer pink, 8 minutes per side. Remove from skillet and set aside.",
+              "In the same skillet over medium heat, melt butter. Stir in garlic and cook until fragrant, about 1 minute. Add cherry tomatoes and season with salt and pepper. Cook until tomatoes are beginning to burst then add spinach and cook until spinach is beginning to wilt.",
+              "Stir in heavy cream and parmesan and bring mixture to a simmer. Reduce heat to low and simmer until sauce is slightly reduced, about 3 minutes. Return chicken to skillet and cook until heated through, 5 to 7 minutes.",
+              "Serve with lemon wedges."
+            ],
+            "image": "https://hips.hearstapps.com/hmg-prod/images/20191011-creamy-tuscan-chicken-delish-ehg-2518-1662055541.jpg?crop=1.00xw:0.670xh;0,0.104xh&resize=640:*",
+            "description": "This skillet chicken dinner pairs chicken breasts with a bright and creamy sauce, spinach, and baby tomatoes for a quick and easy dinner dream.",
+            "cuisine": "Italian",
+            "category": "Dinner",
+            "prepTime": "5 mins",
+            "cleanupTime": ""
+          },
+          "processing_method": "openai",
+          "message": "Recipe extracted successfully using OpenAI"
+        },
+        "statusCode": 200
+      },
+      {
+        "model": "gemini-pro",
+        "success": true,
+        "duration": 8315,
+        "url": "https://www.delish.com/cooking/recipe-ideas/a19636089/best-beef-stew-recipe/",
+        "data": {
+          "success": true,
+          "recipe": {
+            "title": "Creamy Tuscan Chicken",
+            "ingredients": [
+              "1 Tbsp. extra-virgin olive oil",
+              "4 boneless skinless chicken breasts",
+              "Kosher salt",
+              "Freshly ground black pepper",
+              "1 tsp. dried oregano",
+              "3 Tbsp. butter",
+              "3 cloves garlic, minced",
+              "1 1/2 cups cherry tomatoes, halved",
+              "3 cups baby spinach",
+              "1/2 cup heavy cream",
+              "1/4 cup freshly grated Parmesan",
+              "Lemon wedges, for serving"
+            ],
+            "steps": [
+              "In a skillet over medium heat, heat oil. Add chicken and season with salt, pepper, and oregano. Cook until golden and no longer pink, 8 minutes per side. Remove from skillet and set aside.",
+              "In the same skillet over medium heat, melt butter. Stir in garlic and cook until fragrant, about 1 minute. Add cherry tomatoes and season with salt and pepper. Cook until tomatoes are beginning to burst then add spinach and cook until spinach is beginning to wilt.",
+              "Stir in heavy cream and parmesan and bring mixture to a simmer. Reduce heat to low and simmer until sauce is slightly reduced, about 3 minutes. Return chicken to skillet and cook until heated through, 5 to 7 minutes.",
+              "Serve with lemon wedges."
+            ],
+            "image": "https://hips.hearstapps.com/hmg-prod/images/20191011-creamy-tuscan-chicken-delish-ehg-2518-1662055541.jpg?crop=1.00xw:0.670xh;0,0.104xh&resize=640:*",
+            "description": "This skillet chicken dinner pairs chicken breasts with a bright and creamy sauce, spinach, and baby tomatoes for a quick and easy dinner dream.",
+            "cuisine": "Italian",
+            "category": "Dinner",
+            "prepTime": "5 mins",
+            "cleanupTime": ""
+          },
+          "processing_method": "openai",
+          "message": "Recipe extracted successfully using OpenAI"
+        },
+        "statusCode": 200
+      }
+    ],
+    [
+      {
+        "model": "openai-main",
+        "success": true,
+        "duration": 14475,
+        "url": "https://www.simplyrecipes.com/recipes/chocolate_chip_cookies/",
+        "data": {
+          "success": true,
+          "recipe": {
+            "title": "Chewy Chocolate Chip Cookies",
+            "ingredients": [
+              "2 1/4 cups all-purpose flour",
+              "1/2 teaspoon baking soda",
+              "1/2 teaspoon salt",
+              "3/4 cup unsalted butter, melted and cooled",
+              "1 cup packed brown sugar",
+              "1/2 cup granulated sugar",
+              "1 tablespoon vanilla extract",
+              "1 large egg plus 1 egg yolk, at room temperature",
+              "2 tablespoons milk powder (powdered milk)",
+              "1 1/4 cups semisweet chocolate chips"
+            ],
+            "steps": [
+              "Preheat oven to 325°F (163°C).",
+              "In a medium bowl, whisk together flour, baking soda, salt, and milk powder.",
+              "In a large bowl, mix melted butter, brown sugar, and granulated sugar until combined.",
+              "Add vanilla, egg, and egg yolk to the butter mixture and mix until light and creamy.",
+              "Gradually add the dry ingredients to the wet ingredients and mix until just combined.",
+              "Fold in the chocolate chips.",
+              "Drop cookie dough by rounded tablespoons onto baking sheets lined with parchment paper.",
+              "Bake for 12 to 15 minutes or until edges are lightly golden but centers are still soft.",
+              "Allow cookies to cool on baking sheet for a few minutes before transferring to a wire rack to cool completely."
+            ],
+            "image": "https://www.simplyrecipes.com/thmb/ew6Aq_nxR1iOazMJlG-mnFNtRb4=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/__opt__aboutcom__coeus__resources__content_migration__simply_recipes__uploads__2018__04__2017-06-13-ChocolateChipCookies-16b-794dd62f975047fb873d547b17ac2dcd.jpg",
+            "description": "These homemade chocolate chip cookies are the BEST! One special ingredient helps deepens the flavor and gives the chocolate chip cookies a chewier texture. Save this chocolate chip cookie recipe. It's that good.",
+            "cuisine": "American",
+            "category": "Dessert",
+            "prepTime": "15 minutes",
+            "cleanupTime": "15 minutes"
+          },
+          "processing_method": "openai",
+          "message": "Recipe extracted successfully using OpenAI"
+        },
+        "statusCode": 200
+      },
+      {
+        "model": "openai-mini",
+        "success": true,
+        "duration": 11026,
+        "url": "https://www.simplyrecipes.com/recipes/chocolate_chip_cookies/",
+        "data": {
+          "success": true,
+          "recipe": {
+            "title": "Chewy Chocolate Chip Cookies",
+            "ingredients": [],
+            "steps": [],
+            "image": "https://www.simplyrecipes.com/thmb/ew6Aq_nxR1iOazMJlG-mnFNtRb4=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/__opt__aboutcom__coeus__resources__content_migration__simply_recipes__uploads__2018__04__2017-06-13-ChocolateChipCookies-16b-794dd62f975047fb873d547b17ac2dcd.jpg",
+            "description": "These homemade chocolate chip cookies are the BEST! One special ingredient helps deepens the flavor and gives the chocolate chip cookies a chewier texture. Save this chocolate chip cookie recipe. It's that good.",
+            "cuisine": "",
+            "category": "Chocolate Chip Cookies",
+            "prepTime": "",
+            "cleanupTime": ""
+          },
+          "processing_method": "openai",
+          "message": "Recipe extracted successfully using OpenAI"
+        },
+        "statusCode": 200
+      },
+      {
+        "model": "gemini-main",
+        "success": true,
+        "duration": 9330,
+        "url": "https://www.simplyrecipes.com/recipes/chocolate_chip_cookies/",
+        "data": {
+          "success": true,
+          "recipe": {
+            "title": "Chewy Chocolate Chip Cookies",
+            "ingredients": [
+              "2 1/4 cups all-purpose flour",
+              "1/2 teaspoon baking soda",
+              "1/2 teaspoon salt",
+              "3/4 cup unsalted butter, melted and cooled",
+              "1 cup packed brown sugar",
+              "1/2 cup granulated sugar",
+              "1 tablespoon milk powder",
+              "1 large egg plus 1 egg yolk, at room temperature",
+              "2 teaspoons vanilla extract",
+              "1 1/4 cups semisweet chocolate chips"
+            ],
+            "steps": [
+              "Preheat oven to 325°F (163°C).",
+              "Whisk together flour, baking soda, salt, and milk powder in a bowl.",
+              "In a separate bowl, mix melted butter, brown sugar, and granulated sugar until combined.",
+              "Add egg and egg yolk to the butter mixture and mix well.",
+              "Add vanilla extract and mix.",
+              "Gradually add the dry ingredients to the wet ingredients and mix until just combined.",
+              "Fold in the chocolate chips.",
+              "Scoop dough onto baking sheets lined with parchment paper.",
+              "Bake for 12-15 minutes or until edges are lightly golden.",
+              "Cool on baking sheets for a few minutes before transferring to wire racks to cool completely."
+            ],
+            "image": "https://www.simplyrecipes.com/thmb/ew6Aq_nxR1iOazMJlG-mnFNtRb4=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/__opt__aboutcom__coeus__resources__content_migration__simply_recipes__uploads__2018__04__2017-06-13-ChocolateChipCookies-16b-794dd62f975047fb873d547b17ac2dcd.jpg",
+            "description": "These homemade chocolate chip cookies are the BEST! One special ingredient helps deepens the flavor and gives the chocolate chip cookies a chewier texture. Save this chocolate chip cookie recipe. It's that good.",
+            "cuisine": "American",
+            "category": "Dessert",
+            "prepTime": "15 minutes",
+            "cleanupTime": "15 minutes"
+          },
+          "processing_method": "openai",
+          "message": "Recipe extracted successfully using OpenAI"
+        },
+        "statusCode": 200
+      },
+      {
+        "model": "gemini-pro",
+        "success": true,
+        "duration": 8051,
+        "url": "https://www.simplyrecipes.com/recipes/chocolate_chip_cookies/",
+        "data": {
+          "success": true,
+          "recipe": {
+            "title": "Chewy Chocolate Chip Cookies",
+            "ingredients": [
+              "2 tablespoons milk powder"
+            ],
+            "steps": [
+              "If you are a fan of chocolate chip cookies, you generally fall into one of two camps: thin and crispy, or thick and chewy. This particular recipe is for the latter—thick and chewy chocolate chip cookies is what I grew up with and it remains my favorite cookie to this day.",
+              "There were two major influences on this chewy chocolate chip cookie recipe: the Nestle Toll House back-of-the-package recipe and a recipe from Christina Tosi's cookbook Milk Bar Life.",
+              "It's thanks to Christina's chocolate chip cookie recipe that I discovered the wonders of this one special ingredient that makes all the difference.",
+              "Add milk powder! Milk powder gives cookies a distinct chewiness as well as a subtle caramel flavor that takes a cookie from good to amazing.",
+              "You don't need much. Just two tablespoons will improve the texture, though I admit that I've gone as high as four tablespoons on occasion and been pleased with the results.",
+              "Milk powder, also called powdered milk, keeps forever in the pantry. Even once the package is opened, milk powder will keep for several months if kept in an airtight container."
+            ],
+            "image": "https://www.simplyrecipes.com/thmb/ew6Aq_nxR1iOazMJlG-mnFNtRb4=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/__opt__aboutcom__coeus__resources__content_migration__simply_recipes__uploads__2018__04__2017-06-13-ChocolateChipCookies-16b-794dd62f975047fb873d547b17ac2dcd.jpg",
+            "description": "These homemade chocolate chip cookies are the BEST! One special ingredient helps deepens the flavor and gives the chocolate chip cookies a chewier texture. Save this chocolate chip cookie recipe. It's that good.",
+            "cuisine": "American",
+            "category": "Desserts",
+            "prepTime": "",
+            "cleanupTime": ""
+          },
+          "processing_method": "openai",
+          "message": "Recipe extracted successfully using OpenAI"
+        },
+        "statusCode": 200
+      }
+    ],
+    [
+      {
+        "model": "openai-main",
+        "success": true,
+        "duration": 21945,
+        "url": "https://www.kingarthurbaking.com/recipes/classic-chocolate-chip-cookies-recipe",
+        "data": {
+          "success": true,
+          "recipe": {
+            "title": "Classic Chocolate Chip Cookies",
+            "ingredients": [
+              "2/3 cup (142g) light brown sugar, packed",
+              "2/3 cup (131g) granulated sugar",
+              "8 tablespoons (113g) unsalted butter",
+              "1/2 cup (92g) vegetable shortening",
+              "3/4 teaspoon table salt, (use 1/2 teaspoon salt if you use salted butter)",
+              "2 teaspoons King Arthur Pure Vanilla Extract",
+              "1/4 teaspoon almond extract, optional",
+              "1 teaspoon cider vinegar or white vinegar",
+              "1 teaspoon baking soda",
+              "1 large egg",
+              "2 cups (240g) King Arthur Unbleached All-Purpose Flour",
+              "2 cups (340g) semisweet chocolate chips*"
+            ],
+            "steps": [
+              "Preheat the oven to 375°F. Lightly grease (or line with parchment) two baking sheets.",
+              "In a large bowl, combine the sugars, butter, shortening, salt, vanilla and almond extracts, vinegar, and baking soda, beating until smooth and creamy.",
+              "Beat in the egg, again beating until smooth. Scrape the bottom and sides of the bowl with a spatula to make sure everything is thoroughly combined.",
+              "Mix in the flour, then the chips.",
+              "Use a spoon (or a tablespoon cookie scoop) to scoop 1 1/4\" balls of dough onto the prepared baking sheets, leaving 2\" between them on all sides; they'll spread.",
+              "For enticing salty-sweet flavor, sprinkle a touch of sea salt atop the cookies before putting them in the oven, if desired.",
+              "Bake the cookies for 11 to 12 minutes, until their edges are chestnut brown and their tops are light golden brown, almost blonde.",
+              "Remove the cookies from the oven, and cool on the pan until they've set enough to move without breaking. Repeat with the remaining dough.",
+              "Store cookies, well wrapped, at room temperature for up to 5 days; freeze for longer storage."
+            ],
+            "image": "https://www.kingarthurbaking.com/sites/default/files/recipe_legacy/6-3-large.jpg",
+            "description": "These homemade chocolate chip cookies are packed with chips and loaded with buttery flavor. They walk the line nicely between crunchy and chewy: the edges are crisp, while the center is \"bendy.\" Give them a try: They might just be the best chocolate chip cookies you've ever had.",
+            "cuisine": "",
+            "category": "",
+            "prepTime": "12 mins",
+            "cleanupTime": ""
+          },
+          "processing_method": "openai",
+          "message": "Recipe extracted successfully using OpenAI"
+        },
+        "statusCode": 200
+      },
+      {
+        "model": "openai-mini",
+        "success": false,
+        "duration": 30001,
+        "url": "https://www.kingarthurbaking.com/recipes/classic-chocolate-chip-cookies-recipe",
+        "error": "Request timeout"
+      },
+      {
+        "model": "gemini-main",
+        "success": true,
+        "duration": 10695,
+        "url": "https://www.kingarthurbaking.com/recipes/classic-chocolate-chip-cookies-recipe",
+        "data": {
+          "success": true,
+          "recipe": {
+            "title": "Classic Chocolate Chip Cookies",
+            "ingredients": [
+              "2/3 cup (142g) light brown sugar, packed",
+              "2/3 cup (131g) granulated sugar",
+              "8 tablespoons (113g) unsalted butter",
+              "1/2 cup (92g) vegetable shortening",
+              "3/4 teaspoon table salt, (use 1/2 teaspoon salt if you use salted butter)",
+              "2 teaspoons King Arthur Pure Vanilla Extract",
+              "1/4 teaspoon almond extract, optional",
+              "1 teaspoon cider vinegar or white vinegar",
+              "1 teaspoon baking soda",
+              "1 large egg",
+              "2 cups (240g) King Arthur Unbleached All-Purpose Flour",
+              "2 cups (340g) semisweet chocolate chips*"
+            ],
+            "steps": [
+              "Preheat the oven to 375°F. Lightly grease (or line with parchment) two baking sheets.",
+              "In a large bowl, combine the sugars, butter, shortening, salt, vanilla and almond extracts, vinegar, and baking soda, beating until smooth and creamy.",
+              "Beat in the egg, again beating until smooth. Scrape the bottom and sides of the bowl with a spatula to make sure everything is thoroughly combined.",
+              "Mix in the flour, then the chips.",
+              "Use a spoon (or a tablespoon cookie scoop) to scoop 1 1/4\" balls of dough onto the prepared baking sheets, leaving 2\" between them on all sides; they'll spread.",
+              "For enticing salty-sweet flavor, sprinkle a touch of sea salt atop the cookies before putting them in the oven, if desired.",
+              "Bake the cookies for 11 to 12 minutes, until their edges are chestnut brown and their tops are light golden brown, almost blonde.",
+              "Remove the cookies from the oven, and cool on the pan until they've set enough to move without breaking. Repeat with the remaining dough.",
+              "Store cookies, well wrapped, at room temperature for up to 5 days; freeze for longer storage."
+            ],
+            "image": "https://www.kingarthurbaking.com/sites/default/files/recipe_legacy/6-3-large.jpg",
+            "description": "These homemade chocolate chip cookies are packed with chips and loaded with buttery flavor. They walk the line nicely between crunchy and chewy: the edges are crisp, while the center is \"bendy.\" Give them a try: They might just be the best chocolate chip cookies you've ever had.",
+            "cuisine": "",
+            "category": "",
+            "prepTime": "12 mins",
+            "cleanupTime": "12 mins"
+          },
+          "processing_method": "openai",
+          "message": "Recipe extracted successfully using OpenAI"
+        },
+        "statusCode": 200
+      },
+      {
+        "model": "gemini-pro",
+        "success": true,
+        "duration": 12445,
+        "url": "https://www.kingarthurbaking.com/recipes/classic-chocolate-chip-cookies-recipe",
+        "data": {
+          "success": true,
+          "recipe": {
+            "title": "Classic Chocolate Chip Cookies",
+            "ingredients": [
+              "2/3 cup (142g) light brown sugar, packed",
+              "2/3 cup (131g) granulated sugar",
+              "8 tablespoons (113g) unsalted butter",
+              "1/2 cup (92g) vegetable shortening",
+              "3/4 teaspoon table salt, (use 1/2 teaspoon salt if you use salted butter)",
+              "2 teaspoons King Arthur Pure Vanilla Extract",
+              "1/4 teaspoon almond extract, optional",
+              "1 teaspoon cider vinegar or white vinegar",
+              "1 teaspoon baking soda",
+              "1 large egg",
+              "2 cups (240g) King Arthur Unbleached All-Purpose Flour",
+              "2 cups (340g) semisweet chocolate chips*"
+            ],
+            "steps": [
+              "Preheat the oven to 375°F. Lightly grease (or line with parchment) two baking sheets.",
+              "In a large bowl, combine the sugars, butter, shortening, salt, vanilla and almond extracts, vinegar, and baking soda, beating until smooth and creamy.",
+              "Beat in the egg, again beating until smooth. Scrape the bottom and sides of the bowl with a spatula to make sure everything is thoroughly combined.",
+              "Mix in the flour, then the chips.",
+              "Use a spoon (or a tablespoon cookie scoop) to scoop 1 1/4\" balls of dough onto the prepared baking sheets, leaving 2\" between them on all sides; they'll spread.",
+              "For enticing salty-sweet flavor, sprinkle a touch of sea salt atop the cookies before putting them in the oven, if desired.",
+              "Bake the cookies for 11 to 12 minutes, until their edges are chestnut brown and their tops are light golden brown, almost blonde.",
+              "Remove the cookies from the oven, and cool on the pan until they've set enough to move without breaking. Repeat with the remaining dough.",
+              "Store cookies, well wrapped, at room temperature for up to 5 days; freeze for longer storage."
+            ],
+            "image": "https://www.kingarthurbaking.com/sites/default/files/recipe_legacy/6-3-large.jpg",
+            "description": "These homemade chocolate chip cookies are packed with chips and loaded with buttery flavor. They walk the line nicely between crunchy and chewy: the edges are crisp, while the center is \"bendy.\" Give them a try: They might just be the best chocolate chip cookies you've ever had.",
+            "cuisine": "American",
+            "category": "Chocolate chip cookies",
+            "prepTime": "12 mins",
+            "cleanupTime": "12 mins"
+          },
+          "processing_method": "openai",
+          "message": "Recipe extracted successfully using OpenAI"
+        },
+        "statusCode": 200
+      }
+    ],
+    [
+      {
+        "model": "openai-main",
+        "success": true,
+        "duration": 15541,
+        "url": "https://www.bbcgoodfood.com/recipes/classic-pancakes",
+        "data": {
+          "success": true,
+          "recipe": {
+            "title": "Classic pancakes",
+            "ingredients": [
+              "100g plain flour",
+              "1 large egg",
+              "300ml milk",
+              "oil or melted butter, for frying"
+            ],
+            "steps": [
+              "Sift the flour and a pinch of salt into a bowl. Make a well in the centre with the back of a spoon then break in the egg and pour in half the milk. Whisk together, gradually incorporating the flour to make a smooth thick batter. Beat thoroughly to remove any lumps, then stir in the rest of the milk.",
+              "Heat a little oil or butter in a medium frying pan, then tip off the excess into a bowl. Pour about 2 tablespoons of batter into the pan, tilting the pan as you pour, until the batter thinly coats the base. Cook over a moderate heat for 30 seconds to one minute until golden brown on the underside.",
+              "Flip over the pancake with a palette knife, and cook the other side until it is golden brown. Slide the pancake out of the pan on to a plate, heat a little more oil or butter and cook the remaining pancakes one at a time in the same way.",
+              "If preparing in advance, cook and stack the pancakes. Reheat in the microwave on Medium (750W) for about 2 minutes. Alternatively, heat the oven to 180C/gas 4/fan 160C. Wrap the pancakes in foil and warm them through in the oven for 10 minutes."
+            ],
+            "image": "https://images.immediate.co.uk/production/volatile/sites/30/2020/08/recipe-image-legacy-id-881465_10-7cc4719.jpg?quality=90&resize=440,400",
+            "description": "You can use this foolproof classic batter recipe to create a base for sweet or savoury pancakes",
+            "cuisine": "",
+            "category": "",
+            "prepTime": "30 mins",
+            "cleanupTime": ""
+          },
+          "processing_method": "openai",
+          "message": "Recipe extracted successfully using OpenAI"
+        },
+        "statusCode": 200
+      },
+      {
+        "model": "openai-mini",
+        "success": true,
+        "duration": 7583,
+        "url": "https://www.bbcgoodfood.com/recipes/classic-pancakes",
+        "data": {
+          "success": true,
+          "recipe": {
+            "title": "Classic pancakes",
+            "ingredients": [
+              "100g plain flour",
+              "1 large egg",
+              "300ml milk",
+              "oil or melted butter, for frying"
+            ],
+            "steps": [
+              "Sift the flour and a pinch of salt into a bowl. Make a well in the centre with the back of a spoon then break in the egg and pour in half the milk. Whisk together, gradually incorporating the flour to make a smooth thick batter. Beat thoroughly to remove any lumps, then stir in the rest of the milk.",
+              "Heat a little oil or butter in a medium frying pan, then tip off the excess into a bowl. Pour about 2 tablespoons of batter into the pan, tilting the pan as you pour, until the batter thinly coats the base. Cook over a moderate heat for 30 seconds to one minute until golden brown on the underside.",
+              "Flip over the pancake with a palette knife, and cook the other side until it is golden brown. Slide the pancake out of the pan on to a plate, heat a little more oil or butter and cook the remaining pancakes one at a time in the same way.",
+              "If preparing in advance, cook and stack the pancakes. Reheat in the microwave on Medium (750W) for about 2 minutes. Alternatively, heat the oven to 180C/gas 4/fan 160C. Wrap the pancakes in foil and warm them through in the oven for 10 minutes."
+            ],
+            "image": "https://images.immediate.co.uk/production/volatile/sites/30/2020/08/recipe-image-legacy-id-881465_10-7cc4719.jpg?quality=90&resize=440,400",
+            "description": "You can use this foolproof classic batter recipe to create a base for sweet or savoury pancakes",
+            "cuisine": "",
+            "category": "",
+            "prepTime": "30 mins",
+            "cleanupTime": ""
+          },
+          "processing_method": "openai",
+          "message": "Recipe extracted successfully using OpenAI"
+        },
+        "statusCode": 200
+      },
+      {
+        "model": "gemini-main",
+        "success": true,
+        "duration": 8806,
+        "url": "https://www.bbcgoodfood.com/recipes/classic-pancakes",
+        "data": {
+          "success": true,
+          "recipe": {
+            "title": "Classic pancakes",
+            "ingredients": [
+              "100g plain flour",
+              "1 large egg",
+              "300ml milk",
+              "oil or melted butter, for frying"
+            ],
+            "steps": [
+              "Sift the flour and a pinch of salt into a bowl. Make a well in the centre with the back of a spoon then break in the egg and pour in half the milk. Whisk together, gradually incorporating the flour to make a smooth thick batter. Beat thoroughly to remove any lumps, then stir in the rest of the milk.",
+              "Heat a little oil or butter in a medium frying pan, then tip off the excess into a bowl. Pour about 2 tablespoons of batter into the pan, tilting the pan as you pour, until the batter thinly coats the base. Cook over a moderate heat for 30 seconds to one minute until golden brown on the underside.",
+              "Flip over the pancake with a palette knife, and cook the other side until it is golden brown. Slide the pancake out of the pan on to a plate, heat a little more oil or butter and cook the remaining pancakes one at a time in the same way.",
+              "If preparing in advance, cook and stack the pancakes. Reheat in the microwave on Medium (750W) for about 2 minutes. Alternatively, heat the oven to 180C/gas 4/fan 160C. Wrap the pancakes in foil and warm them through in the oven for 10 minutes."
+            ],
+            "image": "https://images.immediate.co.uk/production/volatile/sites/30/2020/08/recipe-image-legacy-id-881465_10-7cc4719.jpg?quality=90&resize=440,400",
+            "description": "You can use this foolproof classic batter recipe to create a base for sweet or savoury pancakes",
+            "cuisine": "",
+            "category": "",
+            "prepTime": "30 mins",
+            "cleanupTime": ""
+          },
+          "processing_method": "openai",
+          "message": "Recipe extracted successfully using OpenAI"
+        },
+        "statusCode": 200
+      },
+      {
+        "model": "gemini-pro",
+        "success": true,
+        "duration": 7510,
+        "url": "https://www.bbcgoodfood.com/recipes/classic-pancakes",
+        "data": {
+          "success": true,
+          "recipe": {
+            "title": "Classic pancakes",
+            "ingredients": [
+              "100g plain flour",
+              "1 large egg",
+              "300ml milk",
+              "oil or melted butter, for frying"
+            ],
+            "steps": [
+              "Sift the flour and a pinch of salt into a bowl. Make a well in the centre with the back of a spoon then break in the egg and pour in half the milk. Whisk together, gradually incorporating the flour to make a smooth thick batter. Beat thoroughly to remove any lumps, then stir in the rest of the milk.",
+              "Heat a little oil or butter in a medium frying pan, then tip off the excess into a bowl. Pour about 2 tablespoons of batter into the pan, tilting the pan as you pour, until the batter thinly coats the base. Cook over a moderate heat for 30 seconds to one minute until golden brown on the underside.",
+              "Flip over the pancake with a palette knife, and cook the other side until it is golden brown. Slide the pancake out of the pan on to a plate, heat a little more oil or butter and cook the remaining pancakes one at a time in the same way.",
+              "If preparing in advance, cook and stack the pancakes. Reheat in the microwave on Medium (750W) for about 2 minutes. Alternatively, heat the oven to 180C/gas 4/fan 160C. Wrap the pancakes in foil and warm them through in the oven for 10 minutes."
+            ],
+            "image": "https://images.immediate.co.uk/production/volatile/sites/30/2020/08/recipe-image-legacy-id-881465_10-7cc4719.jpg?quality=90&resize=440,400",
+            "description": "You can use this foolproof classic batter recipe to create a base for sweet or savoury pancakes",
+            "cuisine": "",
+            "category": "",
+            "prepTime": "30 mins",
+            "cleanupTime": ""
+          },
+          "processing_method": "openai",
+          "message": "Recipe extracted successfully using OpenAI"
+        },
+        "statusCode": 200
+      }
+    ]
+  ]
+}

@@ -1,0 +1,47 @@
+# Environment Variables Required for Caren's Cookbook
+
+# ===== REQUIRED VARIABLES =====
+
+# Database
+DATABASE_URL=postgresql://username:password@localhost:5432/database_name
+
+# Clerk Authentication (Required)
+NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=pk_test_your_clerk_publishable_key_here
+CLERK_SECRET_KEY=sk_test_your_clerk_secret_key_here
+CLERK_WEBHOOK_SECRET=whsec_your_clerk_webhook_secret_here
+
+# Clerk URLs (Required for proper authentication flow)
+NEXT_PUBLIC_CLERK_SIGN_IN_URL=/sign-in
+NEXT_PUBLIC_CLERK_SIGN_UP_URL=/sign-up
+NEXT_PUBLIC_CLERK_AFTER_SIGN_IN_URL=/
+NEXT_PUBLIC_CLERK_AFTER_SIGN_UP_URL=/onboarding
+
+# AI API Keys (At least one required for recipe processing)
+OPENAI_API_KEY=sk-your_openai_api_key_here
+GOOGLE_API_KEY=your_google_gemini_api_key_here
+
+# ===== OPTIONAL VARIABLES =====
+
+# Caching Configuration
+DISABLE_CACHING=false
+
+# Logging Level
+LOG_LEVEL=info
+
+# Node Environment (auto-set by hosting platforms)
+NODE_ENV=development
+
+# Testing (for Playwright tests)
+PLAYWRIGHT_TEST_BASE_URL=http://localhost:3000
+
+# Debug flags
+DEBUG=
+PRISMA_DISABLE_WARNINGS=false
+
+# ===== NOTES =====
+# 1. DATABASE_URL: Use PostgreSQL connection string format
+# 2. OPENAI_API_KEY OR GOOGLE_API_KEY: At least one is required for recipe scanning functionality
+# 3. All CLERK_ variables are required for authentication to work
+# 4. NEXT_PUBLIC_ variables are exposed to the browser
+# 5. Optional variables have default values and can be omitted
+# 6. For production, ensure NODE_ENV=production is set by your hosting platform 

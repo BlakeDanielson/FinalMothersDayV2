@@ -1,9 +1,9 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useMemo } from "react";
 import { useRouter } from 'next/navigation';
 import { toast } from 'sonner';
-import { AIProvider } from '@/lib/ai-providers';
+import { type AIProvider } from '@/lib/config/ui-models';
 import { processSingleImage, processMultipleImages } from '@/lib/api-client';
 import { logError } from "@/lib/errors";
 import { RecipeData } from "@/components/RecipeDisplay";
@@ -26,7 +26,7 @@ export function useHomePage() {
   
   // Basic state
   const [url, setUrl] = useState("");
-  const [urlProcessingMethod, setUrlProcessingMethod] = useState<'openai' | 'gemini'>('openai');
+  const [urlProcessingMethod, setUrlProcessingMethod] = useState<AIProvider>('openai-main');
   const [isLoading, setIsLoading] = useState(false);
   const [loadingStepMessage, setLoadingStepMessage] = useState("");
   const [loadingProgress, setLoadingProgress] = useState(0);
@@ -53,7 +53,7 @@ export function useHomePage() {
   // Enhanced image processing with retry capability
   const imageProcessing = useImageProcessing(
     async (file: File, provider?: string) => {
-      return processSingleImage(file, (provider as AIProvider) || 'openai');
+      return processSingleImage(file, (provider as AIProvider) || 'openai-main');
     },
     {
       onProgress: (progress, message) => {
@@ -79,7 +79,7 @@ export function useHomePage() {
   // Multiple image processing
   const multipleImageProcessing = useMultipleImageProcessing(
     async (files: File[], provider?: string) => {
-      return processMultipleImages(files, (provider as AIProvider) || 'openai');
+      return processMultipleImages(files, (provider as AIProvider) || 'openai-main');
     },
     {
       onProgress: (progress, message) => {
@@ -102,47 +102,68 @@ export function useHomePage() {
     }
   );
 
+  // Memoize processed categories to prevent unnecessary recalculations
+  const processedCategoriesData = useMemo(() => {
+    if (categories.length === 0) return [];
+    
+    return categories.map(categoryData => {
+      let imageUrl = null;
+      
+      // If category has recipes, try to find an image from saved recipes
+      if (categoryData.count > 0 && savedRecipes.length > 0) {
+        const recipesInThisCategory = savedRecipes.filter(r => r.category === categoryData.name);
+        const recipeWithImage = recipesInThisCategory.find(r => r.image);
+        if (recipeWithImage) {
+          imageUrl = recipeWithImage.image;
+        }
+      }
+      
+      // Fallback to placeholder recipe image
+      if (!imageUrl) {
+        const placeholder = placeholderRecipes.find(p => p.category === categoryData.name);
+        if (placeholder && placeholder.image) {
+          imageUrl = placeholder.image;
+        }
+      }
+
+      // Fallback to predefined default image
+      if (!imageUrl) {
+        const predefinedCategory = ALL_POSSIBLE_CATEGORIES.find(c => c.name === categoryData.name);
+        if (predefinedCategory) {
+          imageUrl = predefinedCategory.defaultImageUrl;
+        }
+      }
+
+      return {
+        name: categoryData.name,
+        count: categoryData.count,
+        imageUrl: imageUrl,
+      };
+    });
+  }, [categories, savedRecipes]);
+
   // Update processed categories when categories data changes
   useEffect(() => {
-    if (categories.length > 0) {
-      const processedCategoriesData = categories.map(categoryData => {
-        let imageUrl = null;
-        
-        // If category has recipes, try to find an image from saved recipes
-        if (categoryData.count > 0 && savedRecipes.length > 0) {
-          const recipesInThisCategory = savedRecipes.filter(r => r.category === categoryData.name);
-          const recipeWithImage = recipesInThisCategory.find(r => r.image);
-          if (recipeWithImage) {
-            imageUrl = recipeWithImage.image;
-          }
+    if (processedCategoriesData.length > 0) {
+      // Only update if the processed categories actually changed
+      setProcessedCategories(prev => {
+        if (prev.length !== processedCategoriesData.length) {
+          return processedCategoriesData;
         }
         
-        // Fallback to placeholder recipe image
-        if (!imageUrl) {
-          const placeholder = placeholderRecipes.find(p => p.category === categoryData.name);
-          if (placeholder && placeholder.image) {
-            imageUrl = placeholder.image;
-          }
-        }
-
-        // Fallback to predefined default image
-        if (!imageUrl) {
-          const predefinedCategory = ALL_POSSIBLE_CATEGORIES.find(c => c.name === categoryData.name);
-          if (predefinedCategory) {
-            imageUrl = predefinedCategory.defaultImageUrl;
-          }
-        }
-
-        return {
-          name: categoryData.name,
-          count: categoryData.count,
-          imageUrl: imageUrl,
-        };
+        // Check if any category data has changed
+        const hasChanged = processedCategoriesData.some((newCategory, index) => {
+          const oldCategory = prev[index];
+          return !oldCategory || 
+                 oldCategory.name !== newCategory.name ||
+                 oldCategory.count !== newCategory.count ||
+                 oldCategory.imageUrl !== newCategory.imageUrl;
+        });
+        
+        return hasChanged ? processedCategoriesData : prev;
       });
-      
-      setProcessedCategories(processedCategoriesData);
     }
-  }, [categories, savedRecipes]);
+  }, [processedCategoriesData]);
 
   const handleViewRecipe = useCallback((recipe: RecipeData) => {
     setSelectedRecipe(recipe);
@@ -261,6 +282,75 @@ export function useHomePage() {
       setLoadingProgress(0);
     }
   }, [url, urlProcessingMethod, handleViewRecipe]);
+
+  const handleUrlSubmit = useCallback(async (
+    urlToProcess: string, 
+    geminiProvider: AIProvider, 
+    openaiProvider: AIProvider, 
+    forceStrategy?: 'url-direct' | 'html-fallback'
+  ) => {
+    if (!urlToProcess) return;
+    setIsLoading(true); 
+    setError(null); 
+    setLoadingProgress(10);
+    setLoadingStepMessage("🚀 Preparing ultra-efficient recipe extraction...");
+    
+    try {
+      setLoadingProgress(25); 
+      setLoadingStepMessage("🔍 Analyzing URL and selecting optimal strategy...");
+      
+      // Use the new optimized PUT endpoint
+      const response = await fetch(`/api/fetch-recipe`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ 
+          url: urlToProcess, 
+          forceStrategy,
+          geminiProvider,
+          openaiProvider
+        }),
+      });
+      
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({}));
+        console.error("Error fetching from optimized API:", errorData);
+        throw new Error(errorData.error || 'Failed to fetch recipe from optimized API');
+      }
+      
+      setLoadingProgress(75); 
+      setLoadingStepMessage("⚡ Processing with ultra-efficient AI strategy...");
+      const responseData = await response.json();
+      const recipeData: RecipeData = responseData.recipe;
+      
+      // Show optimization results
+      if (responseData.optimization) {
+        const { strategy, efficiency, tokensUsed, efficiencyGain } = responseData.optimization;
+        setLoadingStepMessage(`✨ Success! Used ${strategy} (${efficiency}) • ${tokensUsed} tokens`);
+        console.log("🎯 Optimization results:", responseData.optimization);
+        
+        // Show a toast with efficiency info
+        if (strategy === 'gemini-url-direct') {
+          toast.success(`Ultra-efficient extraction! ${efficiencyGain}`, { duration: 4000 });
+        } else {
+          toast.info(`Extracted via fallback: ${strategy}`, { duration: 3000 });
+        }
+      }
+      
+      setLoadingProgress(90); 
+      setLoadingStepMessage("Getting it all plated up for you... ✨");
+      handleViewRecipe(recipeData); 
+      setLoadingProgress(100);
+      setShowAddRecipeModal(false);
+    } catch (err: unknown) {
+      console.error("Error in optimized handleUrlSubmit:", err);
+      setError(err instanceof Error ? err.message : "An unexpected error occurred.");
+      setLoadingProgress(0);
+    } finally { 
+      setIsLoading(false);
+      setLoadingStepMessage("");
+      setLoadingProgress(0);
+    }
+  }, [handleViewRecipe]);
   
   const handleSaveRecipe = useCallback(async (recipeToSave: RecipeData) => {
     console.log("Attempting to save recipe:", recipeToSave.title);
@@ -366,7 +456,7 @@ export function useHomePage() {
     }
   }, [imageProcessing]);
 
-  const handleMultipleImageFileSelect = useCallback(async (files: File[], provider: AIProvider = 'openai') => {
+  const handleMultipleImageFileSelect = useCallback(async (files: File[], provider: AIProvider = 'openai-main') => {
     console.log("Multiple images selected:", files.map(f => ({ name: f.name, type: f.type, size: f.size })));
     
     setIsLoading(true);
@@ -454,6 +544,7 @@ export function useHomePage() {
     handleDeleteRecipeFromDisplay,
     handleUpdateRecipeTitle,
     handleSubmit,
+    handleUrlSubmit,
     handleSaveRecipe,
     handleImageFileSelect,
     handleRetryImageProcessing,

@@ -7,6 +7,7 @@ import { categoryService, categoryResolver } from '@/lib/categories';
 import { auth } from '@clerk/nextjs/server';
 import { CategorySource } from '@/generated/prisma';
 import { withOnboardingGuard } from '@/lib/middleware/onboarding-guard';
+import { AI_MODELS, AI_SETTINGS, getBackendProviderFromUI, getModelFromUIProvider, type UIProvider } from '@/lib/config/ai-models';
 
 // Zod schema for recipe data parsed from an image
 const scanRecipeZodSchema = z.object({
@@ -200,9 +201,9 @@ function handleOpenAIError(error: unknown): never {
 
 
 
-async function processImageWithOpenAI(imageBase64: string, imageMimeType: string, systemPrompt: string) {
+async function processImageWithOpenAI(imageBase64: string, imageMimeType: string, systemPrompt: string, model: string = AI_MODELS.OPENAI_MAIN) {
   const chatCompletion = await openaiClient.chat.completions.create({
-    model: "gpt-4.1-mini-2025-04-14",
+    model: model,
     messages: [
       {
         role: "user",
@@ -219,7 +220,7 @@ async function processImageWithOpenAI(imageBase64: string, imageMimeType: string
       },
     ],
     response_format: { type: "json_object" },
-    max_tokens: 2000,
+    max_tokens: AI_SETTINGS.OPENAI.MAX_TOKENS * 2, // Double for image processing
   });
 
   return chatCompletion.choices[0]?.message?.content;
@@ -227,7 +228,7 @@ async function processImageWithOpenAI(imageBase64: string, imageMimeType: string
 
 async function processImageWithGPTMini(imageBase64: string, imageMimeType: string, systemPrompt: string) {
   const chatCompletion = await openaiClient.chat.completions.create({
-    model: "gpt-4o-mini-2024-07-18",
+    model: AI_MODELS.OPENAI_MINI,
     messages: [
       {
         role: "user",
@@ -244,7 +245,7 @@ async function processImageWithGPTMini(imageBase64: string, imageMimeType: strin
       },
     ],
     response_format: { type: "json_object" },
-    max_tokens: 2000,
+    max_tokens: AI_SETTINGS.OPENAI.MAX_TOKENS * 2, // Double for image processing
   });
 
   return chatCompletion.choices[0]?.message?.content;
@@ -302,7 +303,22 @@ export const POST = withOnboardingGuard(async (req: NextRequest) => {
 
     const imageFile = formData.get('image') as File | null;
     const providerParam = formData.get('provider') as string | null;
-    const provider: AIProvider = (providerParam === 'gemini') ? 'gemini' : 'openai';
+    
+    // Handle new UI provider system - fallback to old system for backward compatibility
+    let provider: AIProvider;
+    let selectedModel: string;
+    
+    if (providerParam && ['openai-main', 'openai-mini', 'gemini-main', 'gemini-pro'].includes(providerParam)) {
+      // New UI provider system
+      const uiProvider = providerParam as UIProvider;
+      const backendProvider = getBackendProviderFromUI(uiProvider);
+      provider = backendProvider as AIProvider; // Cast since we know it's either 'openai' or 'gemini'
+      selectedModel = getModelFromUIProvider(uiProvider);
+    } else {
+      // Fallback to old system
+      provider = (providerParam === 'gemini') ? 'gemini' : 'openai';
+      selectedModel = provider === 'gemini' ? AI_MODELS.GEMINI_MAIN : AI_MODELS.OPENAI_MAIN;
+    }
     
     // Enhanced file debugging
     if (imageFile) {
@@ -394,8 +410,9 @@ export const POST = withOnboardingGuard(async (req: NextRequest) => {
       const aiStart = Date.now();
       
       if (provider === 'openai') {
-        responseContent = await processImageWithOpenAI(imageBase64, imageMimeType, systemPrompt);
+        responseContent = await processImageWithOpenAI(imageBase64, imageMimeType, systemPrompt, selectedModel);
       } else {
+        // For Gemini, we'll need to implement the Gemini processing with the specific model
         responseContent = await processImageWithGPTMini(imageBase64, imageMimeType, systemPrompt);
       }
       

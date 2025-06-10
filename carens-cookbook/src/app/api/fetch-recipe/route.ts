@@ -1,7 +1,12 @@
 import { NextRequest, NextResponse } from 'next/server';
 import OpenAI from 'openai';
+import { GoogleGenAI } from '@google/genai';
 import { z } from "zod";
 import { withOnboardingGuard } from '@/lib/middleware/onboarding-guard';
+import { AI_SETTINGS, getBackendProviderFromUI, getModelFromUIProvider, type UIProvider } from '@/lib/config/ai-models';
+
+// NEW: Import the optimized orchestrator
+import { extractRecipeOptimized, getExtractionEfficiencySummary, checkOptimizationReadiness } from '@/lib/services/recipe-extraction-orchestrator';
 
 // Helper function to fix relative URLs
 function fixImageUrl(url: string | null, baseUrl: string): string | null {
@@ -104,7 +109,7 @@ function cleanHtml(html: string, forGemini: boolean = false): string {
   return cleaned.substring(0, maxLength);
 }
 
-async function extractWithOpenAI(cleanedHtml: string): Promise<unknown> {
+async function extractWithOpenAI(cleanedHtml: string, uiProvider: UIProvider): Promise<unknown> {
   const openai = new OpenAI({
     apiKey: process.env.OPENAI_API_KEY,
   });
@@ -125,18 +130,21 @@ async function extractWithOpenAI(cleanedHtml: string): Promise<unknown> {
 HTML content:
 ${cleanedHtml}`;
 
-  console.log(`Sending to OpenAI, prompt length: ${prompt.length}`);
+  console.log(`Sending to OpenAI (${uiProvider}), prompt length: ${prompt.length}`);
+
+  // Get the specific model for this UI provider
+  const modelToUse = getModelFromUIProvider(uiProvider);
 
   const completion = await openai.chat.completions.create({
-    model: "gpt-4.1-mini-2025-04-14",
+    model: modelToUse,
     messages: [
       {
         role: "user",
         content: prompt
       }
     ],
-    max_tokens: 1000,
-    temperature: 0.1,
+    max_tokens: Math.min(AI_SETTINGS.OPENAI.MAX_TOKENS, 32768), // Ensure we don't exceed model limits
+    temperature: AI_SETTINGS.OPENAI.TEMPERATURE,
   });
 
   const content = completion.choices[0]?.message?.content;
@@ -144,15 +152,17 @@ ${cleanedHtml}`;
     throw new Error('No response from OpenAI');
   }
 
-  console.log('OpenAI response received');
+  console.log(`OpenAI (${uiProvider}) response received`);
   return content;
 }
 
-async function extractWithGPTMini(url: string, rawHtml: string): Promise<unknown> {
-  const openai = new OpenAI({
-    apiKey: process.env.OPENAI_API_KEY,
-  });
+async function extractWithGemini(url: string, rawHtml: string, uiProvider: UIProvider): Promise<unknown> {
+  if (!process.env.GOOGLE_API_KEY) {
+    throw new Error('Google API key not configured');
+  }
 
+  const genAI = new GoogleGenAI({ apiKey: process.env.GOOGLE_API_KEY });
+  
   // Extract recipe-specific content to reduce payload size
   const recipeContent = extractRecipeContent(rawHtml);
   
@@ -172,32 +182,33 @@ async function extractWithGPTMini(url: string, rawHtml: string): Promise<unknown
 Recipe content from ${url}:
 ${recipeContent}`;
 
-  console.log(`Sending optimized content to GPT-4o-mini, length: ${recipeContent.length}`);
+  // Get the specific model for this UI provider
+  const modelToUse = getModelFromUIProvider(uiProvider);
 
-  const completion = await openai.chat.completions.create({
-    model: "gpt-4o-mini-2024-07-18",
-    messages: [
-      {
-        role: "user",
-        content: prompt
-      }
-    ],
-    max_tokens: 1000,
-    temperature: 0.1,
+  console.log(`Sending optimized content to Gemini (${uiProvider}), length: ${recipeContent.length}`);
+
+  const response = await genAI.models.generateContent({
+    model: modelToUse,
+    contents: prompt,
+    config: {
+      maxOutputTokens: AI_SETTINGS.GEMINI.MAX_TOKENS,
+      temperature: AI_SETTINGS.GEMINI.TEMPERATURE,
+    }
   });
 
-  const content = completion.choices[0]?.message?.content;
+  const content = response.text;
   if (!content) {
-    throw new Error('No response from GPT-4o-mini');
+    throw new Error('No response from Gemini');
   }
 
-  console.log('GPT-4o-mini response received');
+  console.log(`Gemini (${uiProvider}) response received`);
   return content;
 }
 
-export const POST = withOnboardingGuard(async (request: NextRequest) => {
+// NEW: Optimized POST handler using the orchestrator (Gemini URL-direct primary, OpenAI fallback)
+export const PUT = withOnboardingGuard(async (request: NextRequest) => {
   try {
-    const { url, processing_method = 'openai' } = await request.json();
+    const { url, forceStrategy, geminiProvider = 'gemini-pro', openaiProvider = 'openai-main' } = await request.json();
 
     if (!url) {
       return NextResponse.json(
@@ -206,15 +217,95 @@ export const POST = withOnboardingGuard(async (request: NextRequest) => {
       );
     }
 
+    console.log(`🎯 OPTIMIZED EXTRACTION: Processing ${url}`);
+    console.log(`📊 System readiness:`, checkOptimizationReadiness());
+
+    // Use the new optimized orchestrator
+    const { recipe, metrics } = await extractRecipeOptimized(url, {
+      forceStrategy, // 'url-direct', 'html-fallback', or undefined for auto-detect
+      geminiProvider,
+      openaiProvider,
+      timeoutMs: 45000
+    });
+
+    // Fix image URL if present
+    if (recipe.image) {
+      recipe.image = fixImageUrl(recipe.image, url);
+    }
+
+    const efficiencySummary = getExtractionEfficiencySummary(metrics);
+
+    console.log(`✅ OPTIMIZED SUCCESS: Strategy=${metrics.primarySuccess ? 'Gemini URL-Direct' : 'OpenAI HTML Fallback'}`);
+    console.log(`📊 Efficiency: ${efficiencySummary.efficiency}, Tokens: ${efficiencySummary.tokensUsed}, Time: ${efficiencySummary.processingTime}ms`);
+
+    return NextResponse.json({
+      success: true,
+      recipe,
+      optimization: {
+        strategy: metrics.primarySuccess ? 'gemini-url-direct' : 'openai-html-fallback',
+        efficiency: efficiencySummary.efficiency,
+        tokensUsed: metrics.totalTokensEstimated,
+        processingTime: metrics.processingTime,
+        fallbackUsed: metrics.fallbackUsed,
+        efficiencyGain: metrics.efficiencyGain,
+        recommendation: efficiencySummary.recommendation
+      },
+      message: `Recipe extracted using ${metrics.primarySuccess ? 'ultra-efficient Gemini URL-direct' : 'OpenAI HTML fallback'} strategy`
+    });
+
+  } catch (error) {
+    console.error('🚨 OPTIMIZED EXTRACTION ERROR:', error);
+    
+    return NextResponse.json(
+      { 
+        success: false, 
+        error: error instanceof Error ? error.message : 'Unknown error occurred',
+        optimization: {
+          strategy: 'failed',
+          recommendation: 'Check API keys and network connectivity'
+        }
+      },
+      { status: 500 }
+    );
+  }
+});
+
+// EXISTING: Legacy POST handler (maintained for compatibility)
+export const POST = withOnboardingGuard(async (request: NextRequest) => {
+  try {
+    const { url, processing_method = 'openai-main' } = await request.json();
+
+    if (!url) {
+      return NextResponse.json(
+        { success: false, error: 'URL is required' },
+        { status: 400 }
+      );
+    }
+
+    // Convert UI provider to backend processing method
+    let backendProcessingMethod: string;
+    let uiProvider: UIProvider;
+    
+    // Support both old format (openai/gemini) and new format (openai-main/gemini-main/etc)
+    if (processing_method === 'openai' || processing_method === 'gemini') {
+      // Legacy format - convert to new format
+      backendProcessingMethod = processing_method;
+      uiProvider = processing_method === 'openai' ? 'openai-main' : 'gemini-main';
+    } else {
+      // New format - convert UI provider to backend
+      uiProvider = processing_method as UIProvider;
+      backendProcessingMethod = getBackendProviderFromUI(uiProvider);
+    }
+
     // Validate processing method
-    if (!['openai', 'gemini'].includes(processing_method)) {
+    if (!['openai', 'gemini'].includes(backendProcessingMethod)) {
       return NextResponse.json(
         { success: false, error: 'Invalid processing method. Must be "openai" or "gemini"' },
         { status: 400 }
       );
     }
 
-    console.log(`Processing URL: ${url} with ${processing_method}`);
+    console.log(`Processing URL: ${url} with ${uiProvider} (backend: ${backendProcessingMethod})`);
 
     // Fetch the webpage
     const response = await fetch(url, {
@@ -231,7 +322,7 @@ export const POST = withOnboardingGuard(async (request: NextRequest) => {
     console.log(`Raw HTML length: ${htmlContent.length}`);
 
     // Simple HTML cleaning (more aggressive for Gemini)
-    const isGemini = processing_method === 'gemini';
+    const isGemini = backendProcessingMethod === 'gemini';
     const cleanedHtml = cleanHtml(htmlContent, isGemini);
     console.log(`Cleaned HTML length: ${cleanedHtml.length}`);
 
@@ -244,14 +335,14 @@ export const POST = withOnboardingGuard(async (request: NextRequest) => {
     // Extract with chosen method
     let content;
     try {
-      if (processing_method === 'gemini') {
-        content = await extractWithGPTMini(url, htmlContent);
+      if (backendProcessingMethod === 'gemini') {
+        content = await extractWithGemini(url, htmlContent, uiProvider);
       } else {
-        content = await extractWithOpenAI(cleanedHtml);
+        content = await extractWithOpenAI(cleanedHtml, uiProvider);
       }
     } catch (apiError) {
-      console.error(`${processing_method} extraction failed:`, apiError);
-      throw new Error(`${processing_method} extraction failed: ${apiError instanceof Error ? apiError.message : 'Unknown error'}`);
+      console.error(`${uiProvider} (${backendProcessingMethod}) extraction failed:`, apiError);
+      throw new Error(`${uiProvider} extraction failed: ${apiError instanceof Error ? apiError.message : 'Unknown error'}`);
     }
 
     // Parse JSON response
@@ -269,9 +360,9 @@ export const POST = withOnboardingGuard(async (request: NextRequest) => {
       
       parsedRecipe = JSON.parse(jsonString);
     } catch (parseError) {
-      console.error(`Failed to parse ${processing_method} response as JSON:`, parseError);
+      console.error(`Failed to parse ${uiProvider} (${backendProcessingMethod}) response as JSON:`, parseError);
       console.log('Raw response:', content);
-      throw new Error(`Invalid JSON response from ${processing_method}`);
+      throw new Error(`Invalid JSON response from ${uiProvider}`);
     }
 
     // Validate and fix the recipe
@@ -282,13 +373,13 @@ export const POST = withOnboardingGuard(async (request: NextRequest) => {
       validatedRecipe.image = fixImageUrl(validatedRecipe.image, url);
     }
 
-    console.log(`Recipe extraction successful using ${processing_method}`);
+    console.log(`Recipe extraction successful using ${uiProvider} (${backendProcessingMethod})`);
 
     return NextResponse.json({
       success: true,
       recipe: validatedRecipe,
-      processing_method: processing_method,
-      message: `Recipe extracted successfully using ${processing_method === 'gemini' ? 'GPT-4o-mini' : 'GPT-4.1-mini'}`
+      processing_method: uiProvider,
+      message: `Recipe extracted successfully using ${uiProvider}`
     });
 
   } catch (error) {
