@@ -1,6 +1,6 @@
 # Test info
 
-- Name: Real Analytics Generation >> Extract real analytics data from kingarthur
+- Name: Real Analytics Generation >> Extract real analytics data from tasteofhome
 - Location: C:\Users\blake\OneDrive\Desktop\NewProjects\FinalMothersDayV2\carens-cookbook\tests\e2e\real-analytics-generation.test.ts:72:9
 
 # Error details

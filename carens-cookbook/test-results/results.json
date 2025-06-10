@@ -1,0 +1,1739 @@
+{
+  "config": {
+    "configFile": "C:\\Users\\blake\\OneDrive\\Desktop\\NewProjects\\FinalMothersDayV2\\carens-cookbook\\playwright.config.ts",
+    "rootDir": "C:/Users/blake/OneDrive/Desktop/NewProjects/FinalMothersDayV2/carens-cookbook/tests",
+    "forbidOnly": false,
+    "fullyParallel": true,
+    "globalSetup": "C:\\Users\\blake\\OneDrive\\Desktop\\NewProjects\\FinalMothersDayV2\\carens-cookbook\\tests\\global-setup.ts",
+    "globalTeardown": "C:\\Users\\blake\\OneDrive\\Desktop\\NewProjects\\FinalMothersDayV2\\carens-cookbook\\tests\\global-teardown.ts",
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 10
+    },
+    "preserveOutput": "always",
+    "reporter": [
+      [
+        "html",
+        null
+      ],
+      [
+        "json",
+        {
+          "outputFile": "test-results/results.json"
+        }
+      ],
+      [
+        "junit",
+        {
+          "outputFile": "test-results/results.xml"
+        }
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "quiet": false,
+    "projects": [
+      {
+        "outputDir": "C:/Users/blake/OneDrive/Desktop/NewProjects/FinalMothersDayV2/carens-cookbook/test-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 10
+        },
+        "id": "chromium",
+        "name": "chromium",
+        "testDir": "C:/Users/blake/OneDrive/Desktop/NewProjects/FinalMothersDayV2/carens-cookbook/tests",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 60000
+      },
+      {
+        "outputDir": "C:/Users/blake/OneDrive/Desktop/NewProjects/FinalMothersDayV2/carens-cookbook/test-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 10
+        },
+        "id": "firefox",
+        "name": "firefox",
+        "testDir": "C:/Users/blake/OneDrive/Desktop/NewProjects/FinalMothersDayV2/carens-cookbook/tests",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 60000
+      },
+      {
+        "outputDir": "C:/Users/blake/OneDrive/Desktop/NewProjects/FinalMothersDayV2/carens-cookbook/test-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 10
+        },
+        "id": "webkit",
+        "name": "webkit",
+        "testDir": "C:/Users/blake/OneDrive/Desktop/NewProjects/FinalMothersDayV2/carens-cookbook/tests",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 60000
+      },
+      {
+        "outputDir": "C:/Users/blake/OneDrive/Desktop/NewProjects/FinalMothersDayV2/carens-cookbook/test-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 10
+        },
+        "id": "Mobile Chrome",
+        "name": "Mobile Chrome",
+        "testDir": "C:/Users/blake/OneDrive/Desktop/NewProjects/FinalMothersDayV2/carens-cookbook/tests",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 60000
+      },
+      {
+        "outputDir": "C:/Users/blake/OneDrive/Desktop/NewProjects/FinalMothersDayV2/carens-cookbook/test-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 10
+        },
+        "id": "Mobile Safari",
+        "name": "Mobile Safari",
+        "testDir": "C:/Users/blake/OneDrive/Desktop/NewProjects/FinalMothersDayV2/carens-cookbook/tests",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 60000
+      }
+    ],
+    "shard": null,
+    "updateSnapshots": "missing",
+    "updateSourceMethod": "patch",
+    "version": "1.52.0",
+    "workers": 10,
+    "webServer": {
+      "command": "npm run dev",
+      "url": "http://localhost:3000",
+      "reuseExistingServer": true,
+      "timeout": 180000,
+      "stdout": "pipe",
+      "stderr": "pipe"
+    }
+  },
+  "suites": [
+    {
+      "title": "e2e\\real-analytics-generation.test.ts",
+      "file": "e2e/real-analytics-generation.test.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [],
+      "suites": [
+        {
+          "title": "Real Analytics Generation",
+          "file": "e2e/real-analytics-generation.test.ts",
+          "line": 30,
+          "column": 6,
+          "specs": [
+            {
+              "title": "Extract real analytics data from allrecipes",
+              "ok": false,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "failed",
+                      "duration": 33137,
+                      "error": {
+                        "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeTruthy\u001b[2m()\u001b[22m\n\nReceived: \u001b[31mnull\u001b[39m",
+                        "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeTruthy\u001b[2m()\u001b[22m\n\nReceived: \u001b[31mnull\u001b[39m\n    at C:\\Users\\blake\\OneDrive\\Desktop\\NewProjects\\FinalMothersDayV2\\carens-cookbook\\tests\\e2e\\real-analytics-generation.test.ts:114:27",
+                        "location": {
+                          "file": "C:\\Users\\blake\\OneDrive\\Desktop\\NewProjects\\FinalMothersDayV2\\carens-cookbook\\tests\\e2e\\real-analytics-generation.test.ts",
+                          "column": 27,
+                          "line": 114
+                        },
+                        "snippet": "\u001b[0m \u001b[90m 112 |\u001b[39m       \n \u001b[90m 113 |\u001b[39m       \u001b[90m// Verify extraction was successful\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 114 |\u001b[39m       expect(finalResult)\u001b[33m.\u001b[39mtoBeTruthy()\u001b[33m;\u001b[39m\n \u001b[90m     |\u001b[39m                           \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 115 |\u001b[39m       expect(finalResult\u001b[33m.\u001b[39mrecipe)\u001b[33m.\u001b[39mtoBeTruthy()\u001b[33m;\u001b[39m\n \u001b[90m 116 |\u001b[39m       expect(finalResult\u001b[33m.\u001b[39mrecipe\u001b[33m.\u001b[39mtitle)\u001b[33m.\u001b[39mtoBeTruthy()\u001b[33m;\u001b[39m\n \u001b[90m 117 |\u001b[39m       expect(finalResult\u001b[33m.\u001b[39mrecipe\u001b[33m.\u001b[39mingredients)\u001b[33m.\u001b[39mtoBeTruthy()\u001b[33m;\u001b[39m\u001b[0m"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "C:\\Users\\blake\\OneDrive\\Desktop\\NewProjects\\FinalMothersDayV2\\carens-cookbook\\tests\\e2e\\real-analytics-generation.test.ts",
+                            "column": 27,
+                            "line": 114
+                          },
+                          "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeTruthy\u001b[2m()\u001b[22m\n\nReceived: \u001b[31mnull\u001b[39m\n\n\u001b[0m \u001b[90m 112 |\u001b[39m       \n \u001b[90m 113 |\u001b[39m       \u001b[90m// Verify extraction was successful\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 114 |\u001b[39m       expect(finalResult)\u001b[33m.\u001b[39mtoBeTruthy()\u001b[33m;\u001b[39m\n \u001b[90m     |\u001b[39m                           \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 115 |\u001b[39m       expect(finalResult\u001b[33m.\u001b[39mrecipe)\u001b[33m.\u001b[39mtoBeTruthy()\u001b[33m;\u001b[39m\n \u001b[90m 116 |\u001b[39m       expect(finalResult\u001b[33m.\u001b[39mrecipe\u001b[33m.\u001b[39mtitle)\u001b[33m.\u001b[39mtoBeTruthy()\u001b[33m;\u001b[39m\n \u001b[90m 117 |\u001b[39m       expect(finalResult\u001b[33m.\u001b[39mrecipe\u001b[33m.\u001b[39mingredients)\u001b[33m.\u001b[39mtoBeTruthy()\u001b[33m;\u001b[39m\u001b[0m\n\u001b[2m    at C:\\Users\\blake\\OneDrive\\Desktop\\NewProjects\\FinalMothersDayV2\\carens-cookbook\\tests\\e2e\\real-analytics-generation.test.ts:114:27\u001b[22m"
+                        }
+                      ],
+                      "stdout": [
+                        {
+                          "text": "🔍 Testing extraction from: https://www.allrecipes.com/recipe/213742/cheesy-chicken-broccoli-casserole/\n"
+                        },
+                        {
+                          "text": "⏱️  Request completed in 33125ms\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-06-10T08:03:12.262Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "_error-context-0",
+                          "contentType": "text/markdown",
+                          "path": "C:\\Users\\blake\\OneDrive\\Desktop\\NewProjects\\FinalMothersDayV2\\carens-cookbook\\test-results\\e2e-real-analytics-generat-0c068-lytics-data-from-allrecipes-chromium\\error-context.md"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "C:\\Users\\blake\\OneDrive\\Desktop\\NewProjects\\FinalMothersDayV2\\carens-cookbook\\tests\\e2e\\real-analytics-generation.test.ts",
+                        "column": 27,
+                        "line": 114
+                      }
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "c9669f548a4885756099-8b2f4471dbd1dd12599b",
+              "file": "e2e/real-analytics-generation.test.ts",
+              "line": 72,
+              "column": 9
+            },
+            {
+              "title": "Extract real analytics data from kingarthur",
+              "ok": false,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 1,
+                      "parallelIndex": 1,
+                      "status": "failed",
+                      "duration": 32066,
+                      "error": {
+                        "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeTruthy\u001b[2m()\u001b[22m\n\nReceived: \u001b[31mnull\u001b[39m",
+                        "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeTruthy\u001b[2m()\u001b[22m\n\nReceived: \u001b[31mnull\u001b[39m\n    at C:\\Users\\blake\\OneDrive\\Desktop\\NewProjects\\FinalMothersDayV2\\carens-cookbook\\tests\\e2e\\real-analytics-generation.test.ts:114:27",
+                        "location": {
+                          "file": "C:\\Users\\blake\\OneDrive\\Desktop\\NewProjects\\FinalMothersDayV2\\carens-cookbook\\tests\\e2e\\real-analytics-generation.test.ts",
+                          "column": 27,
+                          "line": 114
+                        },
+                        "snippet": "\u001b[0m \u001b[90m 112 |\u001b[39m       \n \u001b[90m 113 |\u001b[39m       \u001b[90m// Verify extraction was successful\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 114 |\u001b[39m       expect(finalResult)\u001b[33m.\u001b[39mtoBeTruthy()\u001b[33m;\u001b[39m\n \u001b[90m     |\u001b[39m                           \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 115 |\u001b[39m       expect(finalResult\u001b[33m.\u001b[39mrecipe)\u001b[33m.\u001b[39mtoBeTruthy()\u001b[33m;\u001b[39m\n \u001b[90m 116 |\u001b[39m       expect(finalResult\u001b[33m.\u001b[39mrecipe\u001b[33m.\u001b[39mtitle)\u001b[33m.\u001b[39mtoBeTruthy()\u001b[33m;\u001b[39m\n \u001b[90m 117 |\u001b[39m       expect(finalResult\u001b[33m.\u001b[39mrecipe\u001b[33m.\u001b[39mingredients)\u001b[33m.\u001b[39mtoBeTruthy()\u001b[33m;\u001b[39m\u001b[0m"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "C:\\Users\\blake\\OneDrive\\Desktop\\NewProjects\\FinalMothersDayV2\\carens-cookbook\\tests\\e2e\\real-analytics-generation.test.ts",
+                            "column": 27,
+                            "line": 114
+                          },
+                          "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeTruthy\u001b[2m()\u001b[22m\n\nReceived: \u001b[31mnull\u001b[39m\n\n\u001b[0m \u001b[90m 112 |\u001b[39m       \n \u001b[90m 113 |\u001b[39m       \u001b[90m// Verify extraction was successful\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 114 |\u001b[39m       expect(finalResult)\u001b[33m.\u001b[39mtoBeTruthy()\u001b[33m;\u001b[39m\n \u001b[90m     |\u001b[39m                           \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 115 |\u001b[39m       expect(finalResult\u001b[33m.\u001b[39mrecipe)\u001b[33m.\u001b[39mtoBeTruthy()\u001b[33m;\u001b[39m\n \u001b[90m 116 |\u001b[39m       expect(finalResult\u001b[33m.\u001b[39mrecipe\u001b[33m.\u001b[39mtitle)\u001b[33m.\u001b[39mtoBeTruthy()\u001b[33m;\u001b[39m\n \u001b[90m 117 |\u001b[39m       expect(finalResult\u001b[33m.\u001b[39mrecipe\u001b[33m.\u001b[39mingredients)\u001b[33m.\u001b[39mtoBeTruthy()\u001b[33m;\u001b[39m\u001b[0m\n\u001b[2m    at C:\\Users\\blake\\OneDrive\\Desktop\\NewProjects\\FinalMothersDayV2\\carens-cookbook\\tests\\e2e\\real-analytics-generation.test.ts:114:27\u001b[22m"
+                        }
+                      ],
+                      "stdout": [
+                        {
+                          "text": "🔍 Testing extraction from: https://www.kingarthurbaking.com/recipes/chocolate-chip-cookies-recipe\n"
+                        },
+                        {
+                          "text": "⏱️  Request completed in 32054ms\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-06-10T08:03:12.267Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "_error-context-0",
+                          "contentType": "text/markdown",
+                          "path": "C:\\Users\\blake\\OneDrive\\Desktop\\NewProjects\\FinalMothersDayV2\\carens-cookbook\\test-results\\e2e-real-analytics-generat-bb223-lytics-data-from-kingarthur-chromium\\error-context.md"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "C:\\Users\\blake\\OneDrive\\Desktop\\NewProjects\\FinalMothersDayV2\\carens-cookbook\\tests\\e2e\\real-analytics-generation.test.ts",
+                        "column": 27,
+                        "line": 114
+                      }
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "c9669f548a4885756099-1da3f1ca40766381db0f",
+              "file": "e2e/real-analytics-generation.test.ts",
+              "line": 72,
+              "column": 9
+            },
+            {
+              "title": "Extract real analytics data from tasteofhome",
+              "ok": false,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 2,
+                      "parallelIndex": 2,
+                      "status": "failed",
+                      "duration": 45062,
+                      "error": {
+                        "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeTruthy\u001b[2m()\u001b[22m\n\nReceived: \u001b[31mnull\u001b[39m",
+                        "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeTruthy\u001b[2m()\u001b[22m\n\nReceived: \u001b[31mnull\u001b[39m\n    at C:\\Users\\blake\\OneDrive\\Desktop\\NewProjects\\FinalMothersDayV2\\carens-cookbook\\tests\\e2e\\real-analytics-generation.test.ts:114:27",
+                        "location": {
+                          "file": "C:\\Users\\blake\\OneDrive\\Desktop\\NewProjects\\FinalMothersDayV2\\carens-cookbook\\tests\\e2e\\real-analytics-generation.test.ts",
+                          "column": 27,
+                          "line": 114
+                        },
+                        "snippet": "\u001b[0m \u001b[90m 112 |\u001b[39m       \n \u001b[90m 113 |\u001b[39m       \u001b[90m// Verify extraction was successful\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 114 |\u001b[39m       expect(finalResult)\u001b[33m.\u001b[39mtoBeTruthy()\u001b[33m;\u001b[39m\n \u001b[90m     |\u001b[39m                           \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 115 |\u001b[39m       expect(finalResult\u001b[33m.\u001b[39mrecipe)\u001b[33m.\u001b[39mtoBeTruthy()\u001b[33m;\u001b[39m\n \u001b[90m 116 |\u001b[39m       expect(finalResult\u001b[33m.\u001b[39mrecipe\u001b[33m.\u001b[39mtitle)\u001b[33m.\u001b[39mtoBeTruthy()\u001b[33m;\u001b[39m\n \u001b[90m 117 |\u001b[39m       expect(finalResult\u001b[33m.\u001b[39mrecipe\u001b[33m.\u001b[39mingredients)\u001b[33m.\u001b[39mtoBeTruthy()\u001b[33m;\u001b[39m\u001b[0m"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "C:\\Users\\blake\\OneDrive\\Desktop\\NewProjects\\FinalMothersDayV2\\carens-cookbook\\tests\\e2e\\real-analytics-generation.test.ts",
+                            "column": 27,
+                            "line": 114
+                          },
+                          "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeTruthy\u001b[2m()\u001b[22m\n\nReceived: \u001b[31mnull\u001b[39m\n\n\u001b[0m \u001b[90m 112 |\u001b[39m       \n \u001b[90m 113 |\u001b[39m       \u001b[90m// Verify extraction was successful\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 114 |\u001b[39m       expect(finalResult)\u001b[33m.\u001b[39mtoBeTruthy()\u001b[33m;\u001b[39m\n \u001b[90m     |\u001b[39m                           \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 115 |\u001b[39m       expect(finalResult\u001b[33m.\u001b[39mrecipe)\u001b[33m.\u001b[39mtoBeTruthy()\u001b[33m;\u001b[39m\n \u001b[90m 116 |\u001b[39m       expect(finalResult\u001b[33m.\u001b[39mrecipe\u001b[33m.\u001b[39mtitle)\u001b[33m.\u001b[39mtoBeTruthy()\u001b[33m;\u001b[39m\n \u001b[90m 117 |\u001b[39m       expect(finalResult\u001b[33m.\u001b[39mrecipe\u001b[33m.\u001b[39mingredients)\u001b[33m.\u001b[39mtoBeTruthy()\u001b[33m;\u001b[39m\u001b[0m\n\u001b[2m    at C:\\Users\\blake\\OneDrive\\Desktop\\NewProjects\\FinalMothersDayV2\\carens-cookbook\\tests\\e2e\\real-analytics-generation.test.ts:114:27\u001b[22m"
+                        }
+                      ],
+                      "stdout": [
+                        {
+                          "text": "🔍 Testing extraction from: https://www.tasteofhome.com/recipes/makeover-creamy-macaroni-and-cheese/\n"
+                        },
+                        {
+                          "text": "⏱️  Request completed in 45046ms\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-06-10T08:03:12.273Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "_error-context-0",
+                          "contentType": "text/markdown",
+                          "path": "C:\\Users\\blake\\OneDrive\\Desktop\\NewProjects\\FinalMothersDayV2\\carens-cookbook\\test-results\\e2e-real-analytics-generat-1fef4-ytics-data-from-tasteofhome-chromium\\error-context.md"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "C:\\Users\\blake\\OneDrive\\Desktop\\NewProjects\\FinalMothersDayV2\\carens-cookbook\\tests\\e2e\\real-analytics-generation.test.ts",
+                        "column": 27,
+                        "line": 114
+                      }
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "c9669f548a4885756099-7f20df115e016392d675",
+              "file": "e2e/real-analytics-generation.test.ts",
+              "line": 72,
+              "column": 9
+            },
+            {
+              "title": "Verify analytics dashboard can display real data",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 3,
+                      "parallelIndex": 3,
+                      "status": "passed",
+                      "duration": 5025,
+                      "errors": [],
+                      "stdout": [
+                        {
+                          "text": "✅ Analytics dashboard loaded successfully with real data\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-06-10T08:03:12.262Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "c9669f548a4885756099-91a34da0f83a36eb5123",
+              "file": "e2e/real-analytics-generation.test.ts",
+              "line": 165,
+              "column": 7
+            },
+            {
+              "title": "Verify analytics aggregation functions work with real data",
+              "ok": false,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 4,
+                      "parallelIndex": 4,
+                      "status": "failed",
+                      "duration": 104,
+                      "error": {
+                        "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeGreaterThan\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nExpected: > \u001b[32m0\u001b[39m\nReceived:   \u001b[31m0\u001b[39m",
+                        "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeGreaterThan\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nExpected: > \u001b[32m0\u001b[39m\nReceived:   \u001b[31m0\u001b[39m\n    at C:\\Users\\blake\\OneDrive\\Desktop\\NewProjects\\FinalMothersDayV2\\carens-cookbook\\tests\\e2e\\real-analytics-generation.test.ts:197:30",
+                        "location": {
+                          "file": "C:\\Users\\blake\\OneDrive\\Desktop\\NewProjects\\FinalMothersDayV2\\carens-cookbook\\tests\\e2e\\real-analytics-generation.test.ts",
+                          "column": 30,
+                          "line": 197
+                        },
+                        "snippet": "\u001b[0m \u001b[90m 195 |\u001b[39m     })\u001b[33m;\u001b[39m\n \u001b[90m 196 |\u001b[39m     \n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 197 |\u001b[39m     expect(totalExtractions)\u001b[33m.\u001b[39mtoBeGreaterThan(\u001b[35m0\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m     |\u001b[39m                              \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 198 |\u001b[39m     \n \u001b[90m 199 |\u001b[39m     \u001b[36mconst\u001b[39m successfulExtractions \u001b[33m=\u001b[39m \u001b[36mawait\u001b[39m prisma\u001b[33m.\u001b[39mrecipeExtractionMetrics\u001b[33m.\u001b[39mcount({\n \u001b[90m 200 |\u001b[39m       where\u001b[33m:\u001b[39m {\u001b[0m"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "C:\\Users\\blake\\OneDrive\\Desktop\\NewProjects\\FinalMothersDayV2\\carens-cookbook\\tests\\e2e\\real-analytics-generation.test.ts",
+                            "column": 30,
+                            "line": 197
+                          },
+                          "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeGreaterThan\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nExpected: > \u001b[32m0\u001b[39m\nReceived:   \u001b[31m0\u001b[39m\n\n\u001b[0m \u001b[90m 195 |\u001b[39m     })\u001b[33m;\u001b[39m\n \u001b[90m 196 |\u001b[39m     \n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 197 |\u001b[39m     expect(totalExtractions)\u001b[33m.\u001b[39mtoBeGreaterThan(\u001b[35m0\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m     |\u001b[39m                              \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 198 |\u001b[39m     \n \u001b[90m 199 |\u001b[39m     \u001b[36mconst\u001b[39m successfulExtractions \u001b[33m=\u001b[39m \u001b[36mawait\u001b[39m prisma\u001b[33m.\u001b[39mrecipeExtractionMetrics\u001b[33m.\u001b[39mcount({\n \u001b[90m 200 |\u001b[39m       where\u001b[33m:\u001b[39m {\u001b[0m\n\u001b[2m    at C:\\Users\\blake\\OneDrive\\Desktop\\NewProjects\\FinalMothersDayV2\\carens-cookbook\\tests\\e2e\\real-analytics-generation.test.ts:197:30\u001b[22m"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-06-10T08:03:12.294Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "_error-context-0",
+                          "contentType": "text/markdown",
+                          "path": "C:\\Users\\blake\\OneDrive\\Desktop\\NewProjects\\FinalMothersDayV2\\carens-cookbook\\test-results\\e2e-real-analytics-generat-38db6-nctions-work-with-real-data-chromium\\error-context.md"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "C:\\Users\\blake\\OneDrive\\Desktop\\NewProjects\\FinalMothersDayV2\\carens-cookbook\\tests\\e2e\\real-analytics-generation.test.ts",
+                        "column": 30,
+                        "line": 197
+                      }
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "c9669f548a4885756099-28452090d66b113db962",
+              "file": "e2e/real-analytics-generation.test.ts",
+              "line": 191,
+              "column": 7
+            },
+            {
+              "title": "Extract real analytics data from allrecipes",
+              "ok": false,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "firefox",
+                  "projectName": "firefox",
+                  "results": [
+                    {
+                      "workerIndex": 5,
+                      "parallelIndex": 5,
+                      "status": "failed",
+                      "duration": 33815,
+                      "error": {
+                        "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeTruthy\u001b[2m()\u001b[22m\n\nReceived: \u001b[31mnull\u001b[39m",
+                        "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeTruthy\u001b[2m()\u001b[22m\n\nReceived: \u001b[31mnull\u001b[39m\n    at C:\\Users\\blake\\OneDrive\\Desktop\\NewProjects\\FinalMothersDayV2\\carens-cookbook\\tests\\e2e\\real-analytics-generation.test.ts:114:27",
+                        "location": {
+                          "file": "C:\\Users\\blake\\OneDrive\\Desktop\\NewProjects\\FinalMothersDayV2\\carens-cookbook\\tests\\e2e\\real-analytics-generation.test.ts",
+                          "column": 27,
+                          "line": 114
+                        },
+                        "snippet": "\u001b[0m \u001b[90m 112 |\u001b[39m       \n \u001b[90m 113 |\u001b[39m       \u001b[90m// Verify extraction was successful\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 114 |\u001b[39m       expect(finalResult)\u001b[33m.\u001b[39mtoBeTruthy()\u001b[33m;\u001b[39m\n \u001b[90m     |\u001b[39m                           \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 115 |\u001b[39m       expect(finalResult\u001b[33m.\u001b[39mrecipe)\u001b[33m.\u001b[39mtoBeTruthy()\u001b[33m;\u001b[39m\n \u001b[90m 116 |\u001b[39m       expect(finalResult\u001b[33m.\u001b[39mrecipe\u001b[33m.\u001b[39mtitle)\u001b[33m.\u001b[39mtoBeTruthy()\u001b[33m;\u001b[39m\n \u001b[90m 117 |\u001b[39m       expect(finalResult\u001b[33m.\u001b[39mrecipe\u001b[33m.\u001b[39mingredients)\u001b[33m.\u001b[39mtoBeTruthy()\u001b[33m;\u001b[39m\u001b[0m"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "C:\\Users\\blake\\OneDrive\\Desktop\\NewProjects\\FinalMothersDayV2\\carens-cookbook\\tests\\e2e\\real-analytics-generation.test.ts",
+                            "column": 27,
+                            "line": 114
+                          },
+                          "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeTruthy\u001b[2m()\u001b[22m\n\nReceived: \u001b[31mnull\u001b[39m\n\n\u001b[0m \u001b[90m 112 |\u001b[39m       \n \u001b[90m 113 |\u001b[39m       \u001b[90m// Verify extraction was successful\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 114 |\u001b[39m       expect(finalResult)\u001b[33m.\u001b[39mtoBeTruthy()\u001b[33m;\u001b[39m\n \u001b[90m     |\u001b[39m                           \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 115 |\u001b[39m       expect(finalResult\u001b[33m.\u001b[39mrecipe)\u001b[33m.\u001b[39mtoBeTruthy()\u001b[33m;\u001b[39m\n \u001b[90m 116 |\u001b[39m       expect(finalResult\u001b[33m.\u001b[39mrecipe\u001b[33m.\u001b[39mtitle)\u001b[33m.\u001b[39mtoBeTruthy()\u001b[33m;\u001b[39m\n \u001b[90m 117 |\u001b[39m       expect(finalResult\u001b[33m.\u001b[39mrecipe\u001b[33m.\u001b[39mingredients)\u001b[33m.\u001b[39mtoBeTruthy()\u001b[33m;\u001b[39m\u001b[0m\n\u001b[2m    at C:\\Users\\blake\\OneDrive\\Desktop\\NewProjects\\FinalMothersDayV2\\carens-cookbook\\tests\\e2e\\real-analytics-generation.test.ts:114:27\u001b[22m"
+                        }
+                      ],
+                      "stdout": [
+                        {
+                          "text": "🔍 Testing extraction from: https://www.allrecipes.com/recipe/213742/cheesy-chicken-broccoli-casserole/\n"
+                        },
+                        {
+                          "text": "⏱️  Request completed in 33801ms\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-06-10T08:03:12.262Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "_error-context-0",
+                          "contentType": "text/markdown",
+                          "path": "C:\\Users\\blake\\OneDrive\\Desktop\\NewProjects\\FinalMothersDayV2\\carens-cookbook\\test-results\\e2e-real-analytics-generat-0c068-lytics-data-from-allrecipes-firefox\\error-context.md"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "C:\\Users\\blake\\OneDrive\\Desktop\\NewProjects\\FinalMothersDayV2\\carens-cookbook\\tests\\e2e\\real-analytics-generation.test.ts",
+                        "column": 27,
+                        "line": 114
+                      }
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "c9669f548a4885756099-7dc64fc871acf8eb0390",
+              "file": "e2e/real-analytics-generation.test.ts",
+              "line": 72,
+              "column": 9
+            },
+            {
+              "title": "Extract real analytics data from kingarthur",
+              "ok": false,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "firefox",
+                  "projectName": "firefox",
+                  "results": [
+                    {
+                      "workerIndex": 6,
+                      "parallelIndex": 6,
+                      "status": "failed",
+                      "duration": 33652,
+                      "error": {
+                        "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeTruthy\u001b[2m()\u001b[22m\n\nReceived: \u001b[31mnull\u001b[39m",
+                        "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeTruthy\u001b[2m()\u001b[22m\n\nReceived: \u001b[31mnull\u001b[39m\n    at C:\\Users\\blake\\OneDrive\\Desktop\\NewProjects\\FinalMothersDayV2\\carens-cookbook\\tests\\e2e\\real-analytics-generation.test.ts:114:27",
+                        "location": {
+                          "file": "C:\\Users\\blake\\OneDrive\\Desktop\\NewProjects\\FinalMothersDayV2\\carens-cookbook\\tests\\e2e\\real-analytics-generation.test.ts",
+                          "column": 27,
+                          "line": 114
+                        },
+                        "snippet": "\u001b[0m \u001b[90m 112 |\u001b[39m       \n \u001b[90m 113 |\u001b[39m       \u001b[90m// Verify extraction was successful\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 114 |\u001b[39m       expect(finalResult)\u001b[33m.\u001b[39mtoBeTruthy()\u001b[33m;\u001b[39m\n \u001b[90m     |\u001b[39m                           \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 115 |\u001b[39m       expect(finalResult\u001b[33m.\u001b[39mrecipe)\u001b[33m.\u001b[39mtoBeTruthy()\u001b[33m;\u001b[39m\n \u001b[90m 116 |\u001b[39m       expect(finalResult\u001b[33m.\u001b[39mrecipe\u001b[33m.\u001b[39mtitle)\u001b[33m.\u001b[39mtoBeTruthy()\u001b[33m;\u001b[39m\n \u001b[90m 117 |\u001b[39m       expect(finalResult\u001b[33m.\u001b[39mrecipe\u001b[33m.\u001b[39mingredients)\u001b[33m.\u001b[39mtoBeTruthy()\u001b[33m;\u001b[39m\u001b[0m"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "C:\\Users\\blake\\OneDrive\\Desktop\\NewProjects\\FinalMothersDayV2\\carens-cookbook\\tests\\e2e\\real-analytics-generation.test.ts",
+                            "column": 27,
+                            "line": 114
+                          },
+                          "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeTruthy\u001b[2m()\u001b[22m\n\nReceived: \u001b[31mnull\u001b[39m\n\n\u001b[0m \u001b[90m 112 |\u001b[39m       \n \u001b[90m 113 |\u001b[39m       \u001b[90m// Verify extraction was successful\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 114 |\u001b[39m       expect(finalResult)\u001b[33m.\u001b[39mtoBeTruthy()\u001b[33m;\u001b[39m\n \u001b[90m     |\u001b[39m                           \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 115 |\u001b[39m       expect(finalResult\u001b[33m.\u001b[39mrecipe)\u001b[33m.\u001b[39mtoBeTruthy()\u001b[33m;\u001b[39m\n \u001b[90m 116 |\u001b[39m       expect(finalResult\u001b[33m.\u001b[39mrecipe\u001b[33m.\u001b[39mtitle)\u001b[33m.\u001b[39mtoBeTruthy()\u001b[33m;\u001b[39m\n \u001b[90m 117 |\u001b[39m       expect(finalResult\u001b[33m.\u001b[39mrecipe\u001b[33m.\u001b[39mingredients)\u001b[33m.\u001b[39mtoBeTruthy()\u001b[33m;\u001b[39m\u001b[0m\n\u001b[2m    at C:\\Users\\blake\\OneDrive\\Desktop\\NewProjects\\FinalMothersDayV2\\carens-cookbook\\tests\\e2e\\real-analytics-generation.test.ts:114:27\u001b[22m"
+                        }
+                      ],
+                      "stdout": [
+                        {
+                          "text": "🔍 Testing extraction from: https://www.kingarthurbaking.com/recipes/chocolate-chip-cookies-recipe\n"
+                        },
+                        {
+                          "text": "⏱️  Request completed in 33633ms\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-06-10T08:03:12.324Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "_error-context-0",
+                          "contentType": "text/markdown",
+                          "path": "C:\\Users\\blake\\OneDrive\\Desktop\\NewProjects\\FinalMothersDayV2\\carens-cookbook\\test-results\\e2e-real-analytics-generat-bb223-lytics-data-from-kingarthur-firefox\\error-context.md"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "C:\\Users\\blake\\OneDrive\\Desktop\\NewProjects\\FinalMothersDayV2\\carens-cookbook\\tests\\e2e\\real-analytics-generation.test.ts",
+                        "column": 27,
+                        "line": 114
+                      }
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "c9669f548a4885756099-bdbdf70a1dda67c96284",
+              "file": "e2e/real-analytics-generation.test.ts",
+              "line": 72,
+              "column": 9
+            },
+            {
+              "title": "Extract real analytics data from tasteofhome",
+              "ok": false,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "firefox",
+                  "projectName": "firefox",
+                  "results": [
+                    {
+                      "workerIndex": 7,
+                      "parallelIndex": 7,
+                      "status": "failed",
+                      "duration": 27532,
+                      "error": {
+                        "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeTruthy\u001b[2m()\u001b[22m\n\nReceived: \u001b[31mnull\u001b[39m",
+                        "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeTruthy\u001b[2m()\u001b[22m\n\nReceived: \u001b[31mnull\u001b[39m\n    at C:\\Users\\blake\\OneDrive\\Desktop\\NewProjects\\FinalMothersDayV2\\carens-cookbook\\tests\\e2e\\real-analytics-generation.test.ts:114:27",
+                        "location": {
+                          "file": "C:\\Users\\blake\\OneDrive\\Desktop\\NewProjects\\FinalMothersDayV2\\carens-cookbook\\tests\\e2e\\real-analytics-generation.test.ts",
+                          "column": 27,
+                          "line": 114
+                        },
+                        "snippet": "\u001b[0m \u001b[90m 112 |\u001b[39m       \n \u001b[90m 113 |\u001b[39m       \u001b[90m// Verify extraction was successful\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 114 |\u001b[39m       expect(finalResult)\u001b[33m.\u001b[39mtoBeTruthy()\u001b[33m;\u001b[39m\n \u001b[90m     |\u001b[39m                           \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 115 |\u001b[39m       expect(finalResult\u001b[33m.\u001b[39mrecipe)\u001b[33m.\u001b[39mtoBeTruthy()\u001b[33m;\u001b[39m\n \u001b[90m 116 |\u001b[39m       expect(finalResult\u001b[33m.\u001b[39mrecipe\u001b[33m.\u001b[39mtitle)\u001b[33m.\u001b[39mtoBeTruthy()\u001b[33m;\u001b[39m\n \u001b[90m 117 |\u001b[39m       expect(finalResult\u001b[33m.\u001b[39mrecipe\u001b[33m.\u001b[39mingredients)\u001b[33m.\u001b[39mtoBeTruthy()\u001b[33m;\u001b[39m\u001b[0m"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "C:\\Users\\blake\\OneDrive\\Desktop\\NewProjects\\FinalMothersDayV2\\carens-cookbook\\tests\\e2e\\real-analytics-generation.test.ts",
+                            "column": 27,
+                            "line": 114
+                          },
+                          "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeTruthy\u001b[2m()\u001b[22m\n\nReceived: \u001b[31mnull\u001b[39m\n\n\u001b[0m \u001b[90m 112 |\u001b[39m       \n \u001b[90m 113 |\u001b[39m       \u001b[90m// Verify extraction was successful\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 114 |\u001b[39m       expect(finalResult)\u001b[33m.\u001b[39mtoBeTruthy()\u001b[33m;\u001b[39m\n \u001b[90m     |\u001b[39m                           \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 115 |\u001b[39m       expect(finalResult\u001b[33m.\u001b[39mrecipe)\u001b[33m.\u001b[39mtoBeTruthy()\u001b[33m;\u001b[39m\n \u001b[90m 116 |\u001b[39m       expect(finalResult\u001b[33m.\u001b[39mrecipe\u001b[33m.\u001b[39mtitle)\u001b[33m.\u001b[39mtoBeTruthy()\u001b[33m;\u001b[39m\n \u001b[90m 117 |\u001b[39m       expect(finalResult\u001b[33m.\u001b[39mrecipe\u001b[33m.\u001b[39mingredients)\u001b[33m.\u001b[39mtoBeTruthy()\u001b[33m;\u001b[39m\u001b[0m\n\u001b[2m    at C:\\Users\\blake\\OneDrive\\Desktop\\NewProjects\\FinalMothersDayV2\\carens-cookbook\\tests\\e2e\\real-analytics-generation.test.ts:114:27\u001b[22m"
+                        }
+                      ],
+                      "stdout": [
+                        {
+                          "text": "🔍 Testing extraction from: https://www.tasteofhome.com/recipes/makeover-creamy-macaroni-and-cheese/\n"
+                        },
+                        {
+                          "text": "⏱️  Request completed in 27519ms\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-06-10T08:03:12.292Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "_error-context-0",
+                          "contentType": "text/markdown",
+                          "path": "C:\\Users\\blake\\OneDrive\\Desktop\\NewProjects\\FinalMothersDayV2\\carens-cookbook\\test-results\\e2e-real-analytics-generat-1fef4-ytics-data-from-tasteofhome-firefox\\error-context.md"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "C:\\Users\\blake\\OneDrive\\Desktop\\NewProjects\\FinalMothersDayV2\\carens-cookbook\\tests\\e2e\\real-analytics-generation.test.ts",
+                        "column": 27,
+                        "line": 114
+                      }
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "c9669f548a4885756099-241f4f656c8ded3d5ddd",
+              "file": "e2e/real-analytics-generation.test.ts",
+              "line": 72,
+              "column": 9
+            },
+            {
+              "title": "Verify analytics dashboard can display real data",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "firefox",
+                  "projectName": "firefox",
+                  "results": [
+                    {
+                      "workerIndex": 8,
+                      "parallelIndex": 8,
+                      "status": "passed",
+                      "duration": 4807,
+                      "errors": [],
+                      "stdout": [
+                        {
+                          "text": "✅ Analytics dashboard loaded successfully with real data\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-06-10T08:03:12.310Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "c9669f548a4885756099-93beb61bca777ae7a516",
+              "file": "e2e/real-analytics-generation.test.ts",
+              "line": 165,
+              "column": 7
+            },
+            {
+              "title": "Verify analytics aggregation functions work with real data",
+              "ok": false,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "firefox",
+                  "projectName": "firefox",
+                  "results": [
+                    {
+                      "workerIndex": 9,
+                      "parallelIndex": 9,
+                      "status": "failed",
+                      "duration": 97,
+                      "error": {
+                        "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeGreaterThan\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nExpected: > \u001b[32m0\u001b[39m\nReceived:   \u001b[31m0\u001b[39m",
+                        "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeGreaterThan\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nExpected: > \u001b[32m0\u001b[39m\nReceived:   \u001b[31m0\u001b[39m\n    at C:\\Users\\blake\\OneDrive\\Desktop\\NewProjects\\FinalMothersDayV2\\carens-cookbook\\tests\\e2e\\real-analytics-generation.test.ts:197:30",
+                        "location": {
+                          "file": "C:\\Users\\blake\\OneDrive\\Desktop\\NewProjects\\FinalMothersDayV2\\carens-cookbook\\tests\\e2e\\real-analytics-generation.test.ts",
+                          "column": 30,
+                          "line": 197
+                        },
+                        "snippet": "\u001b[0m \u001b[90m 195 |\u001b[39m     })\u001b[33m;\u001b[39m\n \u001b[90m 196 |\u001b[39m     \n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 197 |\u001b[39m     expect(totalExtractions)\u001b[33m.\u001b[39mtoBeGreaterThan(\u001b[35m0\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m     |\u001b[39m                              \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 198 |\u001b[39m     \n \u001b[90m 199 |\u001b[39m     \u001b[36mconst\u001b[39m successfulExtractions \u001b[33m=\u001b[39m \u001b[36mawait\u001b[39m prisma\u001b[33m.\u001b[39mrecipeExtractionMetrics\u001b[33m.\u001b[39mcount({\n \u001b[90m 200 |\u001b[39m       where\u001b[33m:\u001b[39m {\u001b[0m"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "C:\\Users\\blake\\OneDrive\\Desktop\\NewProjects\\FinalMothersDayV2\\carens-cookbook\\tests\\e2e\\real-analytics-generation.test.ts",
+                            "column": 30,
+                            "line": 197
+                          },
+                          "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeGreaterThan\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nExpected: > \u001b[32m0\u001b[39m\nReceived:   \u001b[31m0\u001b[39m\n\n\u001b[0m \u001b[90m 195 |\u001b[39m     })\u001b[33m;\u001b[39m\n \u001b[90m 196 |\u001b[39m     \n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 197 |\u001b[39m     expect(totalExtractions)\u001b[33m.\u001b[39mtoBeGreaterThan(\u001b[35m0\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m     |\u001b[39m                              \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 198 |\u001b[39m     \n \u001b[90m 199 |\u001b[39m     \u001b[36mconst\u001b[39m successfulExtractions \u001b[33m=\u001b[39m \u001b[36mawait\u001b[39m prisma\u001b[33m.\u001b[39mrecipeExtractionMetrics\u001b[33m.\u001b[39mcount({\n \u001b[90m 200 |\u001b[39m       where\u001b[33m:\u001b[39m {\u001b[0m\n\u001b[2m    at C:\\Users\\blake\\OneDrive\\Desktop\\NewProjects\\FinalMothersDayV2\\carens-cookbook\\tests\\e2e\\real-analytics-generation.test.ts:197:30\u001b[22m"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-06-10T08:03:12.310Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "_error-context-0",
+                          "contentType": "text/markdown",
+                          "path": "C:\\Users\\blake\\OneDrive\\Desktop\\NewProjects\\FinalMothersDayV2\\carens-cookbook\\test-results\\e2e-real-analytics-generat-38db6-nctions-work-with-real-data-firefox\\error-context.md"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "C:\\Users\\blake\\OneDrive\\Desktop\\NewProjects\\FinalMothersDayV2\\carens-cookbook\\tests\\e2e\\real-analytics-generation.test.ts",
+                        "column": 30,
+                        "line": 197
+                      }
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "c9669f548a4885756099-fa227b3e2009198b91af",
+              "file": "e2e/real-analytics-generation.test.ts",
+              "line": 191,
+              "column": 7
+            },
+            {
+              "title": "Extract real analytics data from allrecipes",
+              "ok": false,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "webkit",
+                  "projectName": "webkit",
+                  "results": [
+                    {
+                      "workerIndex": 10,
+                      "parallelIndex": 9,
+                      "status": "failed",
+                      "duration": 26318,
+                      "error": {
+                        "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeTruthy\u001b[2m()\u001b[22m\n\nReceived: \u001b[31mnull\u001b[39m",
+                        "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeTruthy\u001b[2m()\u001b[22m\n\nReceived: \u001b[31mnull\u001b[39m\n    at C:\\Users\\blake\\OneDrive\\Desktop\\NewProjects\\FinalMothersDayV2\\carens-cookbook\\tests\\e2e\\real-analytics-generation.test.ts:114:27",
+                        "location": {
+                          "file": "C:\\Users\\blake\\OneDrive\\Desktop\\NewProjects\\FinalMothersDayV2\\carens-cookbook\\tests\\e2e\\real-analytics-generation.test.ts",
+                          "column": 27,
+                          "line": 114
+                        },
+                        "snippet": "\u001b[0m \u001b[90m 112 |\u001b[39m       \n \u001b[90m 113 |\u001b[39m       \u001b[90m// Verify extraction was successful\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 114 |\u001b[39m       expect(finalResult)\u001b[33m.\u001b[39mtoBeTruthy()\u001b[33m;\u001b[39m\n \u001b[90m     |\u001b[39m                           \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 115 |\u001b[39m       expect(finalResult\u001b[33m.\u001b[39mrecipe)\u001b[33m.\u001b[39mtoBeTruthy()\u001b[33m;\u001b[39m\n \u001b[90m 116 |\u001b[39m       expect(finalResult\u001b[33m.\u001b[39mrecipe\u001b[33m.\u001b[39mtitle)\u001b[33m.\u001b[39mtoBeTruthy()\u001b[33m;\u001b[39m\n \u001b[90m 117 |\u001b[39m       expect(finalResult\u001b[33m.\u001b[39mrecipe\u001b[33m.\u001b[39mingredients)\u001b[33m.\u001b[39mtoBeTruthy()\u001b[33m;\u001b[39m\u001b[0m"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "C:\\Users\\blake\\OneDrive\\Desktop\\NewProjects\\FinalMothersDayV2\\carens-cookbook\\tests\\e2e\\real-analytics-generation.test.ts",
+                            "column": 27,
+                            "line": 114
+                          },
+                          "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeTruthy\u001b[2m()\u001b[22m\n\nReceived: \u001b[31mnull\u001b[39m\n\n\u001b[0m \u001b[90m 112 |\u001b[39m       \n \u001b[90m 113 |\u001b[39m       \u001b[90m// Verify extraction was successful\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 114 |\u001b[39m       expect(finalResult)\u001b[33m.\u001b[39mtoBeTruthy()\u001b[33m;\u001b[39m\n \u001b[90m     |\u001b[39m                           \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 115 |\u001b[39m       expect(finalResult\u001b[33m.\u001b[39mrecipe)\u001b[33m.\u001b[39mtoBeTruthy()\u001b[33m;\u001b[39m\n \u001b[90m 116 |\u001b[39m       expect(finalResult\u001b[33m.\u001b[39mrecipe\u001b[33m.\u001b[39mtitle)\u001b[33m.\u001b[39mtoBeTruthy()\u001b[33m;\u001b[39m\n \u001b[90m 117 |\u001b[39m       expect(finalResult\u001b[33m.\u001b[39mrecipe\u001b[33m.\u001b[39mingredients)\u001b[33m.\u001b[39mtoBeTruthy()\u001b[33m;\u001b[39m\u001b[0m\n\u001b[2m    at C:\\Users\\blake\\OneDrive\\Desktop\\NewProjects\\FinalMothersDayV2\\carens-cookbook\\tests\\e2e\\real-analytics-generation.test.ts:114:27\u001b[22m"
+                        }
+                      ],
+                      "stdout": [
+                        {
+                          "text": "🔍 Testing extraction from: https://www.allrecipes.com/recipe/213742/cheesy-chicken-broccoli-casserole/\n"
+                        },
+                        {
+                          "text": "⏱️  Request completed in 26303ms\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-06-10T08:03:14.141Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "_error-context-0",
+                          "contentType": "text/markdown",
+                          "path": "C:\\Users\\blake\\OneDrive\\Desktop\\NewProjects\\FinalMothersDayV2\\carens-cookbook\\test-results\\e2e-real-analytics-generat-0c068-lytics-data-from-allrecipes-webkit\\error-context.md"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "C:\\Users\\blake\\OneDrive\\Desktop\\NewProjects\\FinalMothersDayV2\\carens-cookbook\\tests\\e2e\\real-analytics-generation.test.ts",
+                        "column": 27,
+                        "line": 114
+                      }
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "c9669f548a4885756099-b790a2d5281b3a838e92",
+              "file": "e2e/real-analytics-generation.test.ts",
+              "line": 72,
+              "column": 9
+            },
+            {
+              "title": "Extract real analytics data from kingarthur",
+              "ok": false,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "webkit",
+                  "projectName": "webkit",
+                  "results": [
+                    {
+                      "workerIndex": 11,
+                      "parallelIndex": 4,
+                      "status": "failed",
+                      "duration": 36652,
+                      "error": {
+                        "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeTruthy\u001b[2m()\u001b[22m\n\nReceived: \u001b[31mnull\u001b[39m",
+                        "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeTruthy\u001b[2m()\u001b[22m\n\nReceived: \u001b[31mnull\u001b[39m\n    at C:\\Users\\blake\\OneDrive\\Desktop\\NewProjects\\FinalMothersDayV2\\carens-cookbook\\tests\\e2e\\real-analytics-generation.test.ts:114:27",
+                        "location": {
+                          "file": "C:\\Users\\blake\\OneDrive\\Desktop\\NewProjects\\FinalMothersDayV2\\carens-cookbook\\tests\\e2e\\real-analytics-generation.test.ts",
+                          "column": 27,
+                          "line": 114
+                        },
+                        "snippet": "\u001b[0m \u001b[90m 112 |\u001b[39m       \n \u001b[90m 113 |\u001b[39m       \u001b[90m// Verify extraction was successful\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 114 |\u001b[39m       expect(finalResult)\u001b[33m.\u001b[39mtoBeTruthy()\u001b[33m;\u001b[39m\n \u001b[90m     |\u001b[39m                           \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 115 |\u001b[39m       expect(finalResult\u001b[33m.\u001b[39mrecipe)\u001b[33m.\u001b[39mtoBeTruthy()\u001b[33m;\u001b[39m\n \u001b[90m 116 |\u001b[39m       expect(finalResult\u001b[33m.\u001b[39mrecipe\u001b[33m.\u001b[39mtitle)\u001b[33m.\u001b[39mtoBeTruthy()\u001b[33m;\u001b[39m\n \u001b[90m 117 |\u001b[39m       expect(finalResult\u001b[33m.\u001b[39mrecipe\u001b[33m.\u001b[39mingredients)\u001b[33m.\u001b[39mtoBeTruthy()\u001b[33m;\u001b[39m\u001b[0m"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "C:\\Users\\blake\\OneDrive\\Desktop\\NewProjects\\FinalMothersDayV2\\carens-cookbook\\tests\\e2e\\real-analytics-generation.test.ts",
+                            "column": 27,
+                            "line": 114
+                          },
+                          "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeTruthy\u001b[2m()\u001b[22m\n\nReceived: \u001b[31mnull\u001b[39m\n\n\u001b[0m \u001b[90m 112 |\u001b[39m       \n \u001b[90m 113 |\u001b[39m       \u001b[90m// Verify extraction was successful\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 114 |\u001b[39m       expect(finalResult)\u001b[33m.\u001b[39mtoBeTruthy()\u001b[33m;\u001b[39m\n \u001b[90m     |\u001b[39m                           \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 115 |\u001b[39m       expect(finalResult\u001b[33m.\u001b[39mrecipe)\u001b[33m.\u001b[39mtoBeTruthy()\u001b[33m;\u001b[39m\n \u001b[90m 116 |\u001b[39m       expect(finalResult\u001b[33m.\u001b[39mrecipe\u001b[33m.\u001b[39mtitle)\u001b[33m.\u001b[39mtoBeTruthy()\u001b[33m;\u001b[39m\n \u001b[90m 117 |\u001b[39m       expect(finalResult\u001b[33m.\u001b[39mrecipe\u001b[33m.\u001b[39mingredients)\u001b[33m.\u001b[39mtoBeTruthy()\u001b[33m;\u001b[39m\u001b[0m\n\u001b[2m    at C:\\Users\\blake\\OneDrive\\Desktop\\NewProjects\\FinalMothersDayV2\\carens-cookbook\\tests\\e2e\\real-analytics-generation.test.ts:114:27\u001b[22m"
+                        }
+                      ],
+                      "stdout": [
+                        {
+                          "text": "🔍 Testing extraction from: https://www.kingarthurbaking.com/recipes/chocolate-chip-cookies-recipe\n"
+                        },
+                        {
+                          "text": "⏱️  Request completed in 36638ms\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-06-10T08:03:14.274Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "_error-context-0",
+                          "contentType": "text/markdown",
+                          "path": "C:\\Users\\blake\\OneDrive\\Desktop\\NewProjects\\FinalMothersDayV2\\carens-cookbook\\test-results\\e2e-real-analytics-generat-bb223-lytics-data-from-kingarthur-webkit\\error-context.md"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "C:\\Users\\blake\\OneDrive\\Desktop\\NewProjects\\FinalMothersDayV2\\carens-cookbook\\tests\\e2e\\real-analytics-generation.test.ts",
+                        "column": 27,
+                        "line": 114
+                      }
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "c9669f548a4885756099-20656496e795ceeccd40",
+              "file": "e2e/real-analytics-generation.test.ts",
+              "line": 72,
+              "column": 9
+            },
+            {
+              "title": "Extract real analytics data from tasteofhome",
+              "ok": false,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "webkit",
+                  "projectName": "webkit",
+                  "results": [
+                    {
+                      "workerIndex": 12,
+                      "parallelIndex": 3,
+                      "status": "failed",
+                      "duration": 42565,
+                      "error": {
+                        "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeTruthy\u001b[2m()\u001b[22m\n\nReceived: \u001b[31mnull\u001b[39m",
+                        "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeTruthy\u001b[2m()\u001b[22m\n\nReceived: \u001b[31mnull\u001b[39m\n    at C:\\Users\\blake\\OneDrive\\Desktop\\NewProjects\\FinalMothersDayV2\\carens-cookbook\\tests\\e2e\\real-analytics-generation.test.ts:114:27",
+                        "location": {
+                          "file": "C:\\Users\\blake\\OneDrive\\Desktop\\NewProjects\\FinalMothersDayV2\\carens-cookbook\\tests\\e2e\\real-analytics-generation.test.ts",
+                          "column": 27,
+                          "line": 114
+                        },
+                        "snippet": "\u001b[0m \u001b[90m 112 |\u001b[39m       \n \u001b[90m 113 |\u001b[39m       \u001b[90m// Verify extraction was successful\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 114 |\u001b[39m       expect(finalResult)\u001b[33m.\u001b[39mtoBeTruthy()\u001b[33m;\u001b[39m\n \u001b[90m     |\u001b[39m                           \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 115 |\u001b[39m       expect(finalResult\u001b[33m.\u001b[39mrecipe)\u001b[33m.\u001b[39mtoBeTruthy()\u001b[33m;\u001b[39m\n \u001b[90m 116 |\u001b[39m       expect(finalResult\u001b[33m.\u001b[39mrecipe\u001b[33m.\u001b[39mtitle)\u001b[33m.\u001b[39mtoBeTruthy()\u001b[33m;\u001b[39m\n \u001b[90m 117 |\u001b[39m       expect(finalResult\u001b[33m.\u001b[39mrecipe\u001b[33m.\u001b[39mingredients)\u001b[33m.\u001b[39mtoBeTruthy()\u001b[33m;\u001b[39m\u001b[0m"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "C:\\Users\\blake\\OneDrive\\Desktop\\NewProjects\\FinalMothersDayV2\\carens-cookbook\\tests\\e2e\\real-analytics-generation.test.ts",
+                            "column": 27,
+                            "line": 114
+                          },
+                          "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeTruthy\u001b[2m()\u001b[22m\n\nReceived: \u001b[31mnull\u001b[39m\n\n\u001b[0m \u001b[90m 112 |\u001b[39m       \n \u001b[90m 113 |\u001b[39m       \u001b[90m// Verify extraction was successful\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 114 |\u001b[39m       expect(finalResult)\u001b[33m.\u001b[39mtoBeTruthy()\u001b[33m;\u001b[39m\n \u001b[90m     |\u001b[39m                           \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 115 |\u001b[39m       expect(finalResult\u001b[33m.\u001b[39mrecipe)\u001b[33m.\u001b[39mtoBeTruthy()\u001b[33m;\u001b[39m\n \u001b[90m 116 |\u001b[39m       expect(finalResult\u001b[33m.\u001b[39mrecipe\u001b[33m.\u001b[39mtitle)\u001b[33m.\u001b[39mtoBeTruthy()\u001b[33m;\u001b[39m\n \u001b[90m 117 |\u001b[39m       expect(finalResult\u001b[33m.\u001b[39mrecipe\u001b[33m.\u001b[39mingredients)\u001b[33m.\u001b[39mtoBeTruthy()\u001b[33m;\u001b[39m\u001b[0m\n\u001b[2m    at C:\\Users\\blake\\OneDrive\\Desktop\\NewProjects\\FinalMothersDayV2\\carens-cookbook\\tests\\e2e\\real-analytics-generation.test.ts:114:27\u001b[22m"
+                        }
+                      ],
+                      "stdout": [
+                        {
+                          "text": "🔍 Testing extraction from: https://www.tasteofhome.com/recipes/makeover-creamy-macaroni-and-cheese/\n"
+                        },
+                        {
+                          "text": "⏱️  Request completed in 42551ms\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-06-10T08:03:19.063Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "_error-context-0",
+                          "contentType": "text/markdown",
+                          "path": "C:\\Users\\blake\\OneDrive\\Desktop\\NewProjects\\FinalMothersDayV2\\carens-cookbook\\test-results\\e2e-real-analytics-generat-1fef4-ytics-data-from-tasteofhome-webkit\\error-context.md"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "C:\\Users\\blake\\OneDrive\\Desktop\\NewProjects\\FinalMothersDayV2\\carens-cookbook\\tests\\e2e\\real-analytics-generation.test.ts",
+                        "column": 27,
+                        "line": 114
+                      }
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "c9669f548a4885756099-4288b97170b243c354a2",
+              "file": "e2e/real-analytics-generation.test.ts",
+              "line": 72,
+              "column": 9
+            },
+            {
+              "title": "Verify analytics dashboard can display real data",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "webkit",
+                  "projectName": "webkit",
+                  "results": [
+                    {
+                      "workerIndex": 13,
+                      "parallelIndex": 8,
+                      "status": "passed",
+                      "duration": 3496,
+                      "errors": [],
+                      "stdout": [
+                        {
+                          "text": "✅ Analytics dashboard loaded successfully with real data\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-06-10T08:03:19.608Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "c9669f548a4885756099-aeb3375e60b0b6024190",
+              "file": "e2e/real-analytics-generation.test.ts",
+              "line": 165,
+              "column": 7
+            },
+            {
+              "title": "Verify analytics aggregation functions work with real data",
+              "ok": false,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "webkit",
+                  "projectName": "webkit",
+                  "results": [
+                    {
+                      "workerIndex": 13,
+                      "parallelIndex": 8,
+                      "status": "failed",
+                      "duration": 98,
+                      "error": {
+                        "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeGreaterThan\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nExpected: > \u001b[32m0\u001b[39m\nReceived:   \u001b[31m0\u001b[39m",
+                        "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeGreaterThan\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nExpected: > \u001b[32m0\u001b[39m\nReceived:   \u001b[31m0\u001b[39m\n    at C:\\Users\\blake\\OneDrive\\Desktop\\NewProjects\\FinalMothersDayV2\\carens-cookbook\\tests\\e2e\\real-analytics-generation.test.ts:197:30",
+                        "location": {
+                          "file": "C:\\Users\\blake\\OneDrive\\Desktop\\NewProjects\\FinalMothersDayV2\\carens-cookbook\\tests\\e2e\\real-analytics-generation.test.ts",
+                          "column": 30,
+                          "line": 197
+                        },
+                        "snippet": "\u001b[0m \u001b[90m 195 |\u001b[39m     })\u001b[33m;\u001b[39m\n \u001b[90m 196 |\u001b[39m     \n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 197 |\u001b[39m     expect(totalExtractions)\u001b[33m.\u001b[39mtoBeGreaterThan(\u001b[35m0\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m     |\u001b[39m                              \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 198 |\u001b[39m     \n \u001b[90m 199 |\u001b[39m     \u001b[36mconst\u001b[39m successfulExtractions \u001b[33m=\u001b[39m \u001b[36mawait\u001b[39m prisma\u001b[33m.\u001b[39mrecipeExtractionMetrics\u001b[33m.\u001b[39mcount({\n \u001b[90m 200 |\u001b[39m       where\u001b[33m:\u001b[39m {\u001b[0m"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "C:\\Users\\blake\\OneDrive\\Desktop\\NewProjects\\FinalMothersDayV2\\carens-cookbook\\tests\\e2e\\real-analytics-generation.test.ts",
+                            "column": 30,
+                            "line": 197
+                          },
+                          "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeGreaterThan\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nExpected: > \u001b[32m0\u001b[39m\nReceived:   \u001b[31m0\u001b[39m\n\n\u001b[0m \u001b[90m 195 |\u001b[39m     })\u001b[33m;\u001b[39m\n \u001b[90m 196 |\u001b[39m     \n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 197 |\u001b[39m     expect(totalExtractions)\u001b[33m.\u001b[39mtoBeGreaterThan(\u001b[35m0\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m     |\u001b[39m                              \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 198 |\u001b[39m     \n \u001b[90m 199 |\u001b[39m     \u001b[36mconst\u001b[39m successfulExtractions \u001b[33m=\u001b[39m \u001b[36mawait\u001b[39m prisma\u001b[33m.\u001b[39mrecipeExtractionMetrics\u001b[33m.\u001b[39mcount({\n \u001b[90m 200 |\u001b[39m       where\u001b[33m:\u001b[39m {\u001b[0m\n\u001b[2m    at C:\\Users\\blake\\OneDrive\\Desktop\\NewProjects\\FinalMothersDayV2\\carens-cookbook\\tests\\e2e\\real-analytics-generation.test.ts:197:30\u001b[22m"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-06-10T08:03:23.936Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "_error-context-0",
+                          "contentType": "text/markdown",
+                          "path": "C:\\Users\\blake\\OneDrive\\Desktop\\NewProjects\\FinalMothersDayV2\\carens-cookbook\\test-results\\e2e-real-analytics-generat-38db6-nctions-work-with-real-data-webkit\\error-context.md"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "C:\\Users\\blake\\OneDrive\\Desktop\\NewProjects\\FinalMothersDayV2\\carens-cookbook\\tests\\e2e\\real-analytics-generation.test.ts",
+                        "column": 30,
+                        "line": 197
+                      }
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "c9669f548a4885756099-7142c63077a776834109",
+              "file": "e2e/real-analytics-generation.test.ts",
+              "line": 191,
+              "column": 7
+            },
+            {
+              "title": "Extract real analytics data from allrecipes",
+              "ok": false,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "Mobile Chrome",
+                  "projectName": "Mobile Chrome",
+                  "results": [
+                    {
+                      "workerIndex": 14,
+                      "parallelIndex": 8,
+                      "status": "failed",
+                      "duration": 31600,
+                      "error": {
+                        "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeTruthy\u001b[2m()\u001b[22m\n\nReceived: \u001b[31mnull\u001b[39m",
+                        "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeTruthy\u001b[2m()\u001b[22m\n\nReceived: \u001b[31mnull\u001b[39m\n    at C:\\Users\\blake\\OneDrive\\Desktop\\NewProjects\\FinalMothersDayV2\\carens-cookbook\\tests\\e2e\\real-analytics-generation.test.ts:114:27",
+                        "location": {
+                          "file": "C:\\Users\\blake\\OneDrive\\Desktop\\NewProjects\\FinalMothersDayV2\\carens-cookbook\\tests\\e2e\\real-analytics-generation.test.ts",
+                          "column": 27,
+                          "line": 114
+                        },
+                        "snippet": "\u001b[0m \u001b[90m 112 |\u001b[39m       \n \u001b[90m 113 |\u001b[39m       \u001b[90m// Verify extraction was successful\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 114 |\u001b[39m       expect(finalResult)\u001b[33m.\u001b[39mtoBeTruthy()\u001b[33m;\u001b[39m\n \u001b[90m     |\u001b[39m                           \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 115 |\u001b[39m       expect(finalResult\u001b[33m.\u001b[39mrecipe)\u001b[33m.\u001b[39mtoBeTruthy()\u001b[33m;\u001b[39m\n \u001b[90m 116 |\u001b[39m       expect(finalResult\u001b[33m.\u001b[39mrecipe\u001b[33m.\u001b[39mtitle)\u001b[33m.\u001b[39mtoBeTruthy()\u001b[33m;\u001b[39m\n \u001b[90m 117 |\u001b[39m       expect(finalResult\u001b[33m.\u001b[39mrecipe\u001b[33m.\u001b[39mingredients)\u001b[33m.\u001b[39mtoBeTruthy()\u001b[33m;\u001b[39m\u001b[0m"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "C:\\Users\\blake\\OneDrive\\Desktop\\NewProjects\\FinalMothersDayV2\\carens-cookbook\\tests\\e2e\\real-analytics-generation.test.ts",
+                            "column": 27,
+                            "line": 114
+                          },
+                          "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeTruthy\u001b[2m()\u001b[22m\n\nReceived: \u001b[31mnull\u001b[39m\n\n\u001b[0m \u001b[90m 112 |\u001b[39m       \n \u001b[90m 113 |\u001b[39m       \u001b[90m// Verify extraction was successful\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 114 |\u001b[39m       expect(finalResult)\u001b[33m.\u001b[39mtoBeTruthy()\u001b[33m;\u001b[39m\n \u001b[90m     |\u001b[39m                           \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 115 |\u001b[39m       expect(finalResult\u001b[33m.\u001b[39mrecipe)\u001b[33m.\u001b[39mtoBeTruthy()\u001b[33m;\u001b[39m\n \u001b[90m 116 |\u001b[39m       expect(finalResult\u001b[33m.\u001b[39mrecipe\u001b[33m.\u001b[39mtitle)\u001b[33m.\u001b[39mtoBeTruthy()\u001b[33m;\u001b[39m\n \u001b[90m 117 |\u001b[39m       expect(finalResult\u001b[33m.\u001b[39mrecipe\u001b[33m.\u001b[39mingredients)\u001b[33m.\u001b[39mtoBeTruthy()\u001b[33m;\u001b[39m\u001b[0m\n\u001b[2m    at C:\\Users\\blake\\OneDrive\\Desktop\\NewProjects\\FinalMothersDayV2\\carens-cookbook\\tests\\e2e\\real-analytics-generation.test.ts:114:27\u001b[22m"
+                        }
+                      ],
+                      "stdout": [
+                        {
+                          "text": "🔍 Testing extraction from: https://www.allrecipes.com/recipe/213742/cheesy-chicken-broccoli-casserole/\n"
+                        },
+                        {
+                          "text": "⏱️  Request completed in 31588ms\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-06-10T08:03:25.482Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "_error-context-0",
+                          "contentType": "text/markdown",
+                          "path": "C:\\Users\\blake\\OneDrive\\Desktop\\NewProjects\\FinalMothersDayV2\\carens-cookbook\\test-results\\e2e-real-analytics-generat-0c068-lytics-data-from-allrecipes-Mobile-Chrome\\error-context.md"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "C:\\Users\\blake\\OneDrive\\Desktop\\NewProjects\\FinalMothersDayV2\\carens-cookbook\\tests\\e2e\\real-analytics-generation.test.ts",
+                        "column": 27,
+                        "line": 114
+                      }
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "c9669f548a4885756099-92510ed64dd76b95fe11",
+              "file": "e2e/real-analytics-generation.test.ts",
+              "line": 72,
+              "column": 9
+            },
+            {
+              "title": "Extract real analytics data from kingarthur",
+              "ok": false,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "Mobile Chrome",
+                  "projectName": "Mobile Chrome",
+                  "results": [
+                    {
+                      "workerIndex": 15,
+                      "parallelIndex": 7,
+                      "status": "failed",
+                      "duration": 25055,
+                      "error": {
+                        "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeTruthy\u001b[2m()\u001b[22m\n\nReceived: \u001b[31mnull\u001b[39m",
+                        "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeTruthy\u001b[2m()\u001b[22m\n\nReceived: \u001b[31mnull\u001b[39m\n    at C:\\Users\\blake\\OneDrive\\Desktop\\NewProjects\\FinalMothersDayV2\\carens-cookbook\\tests\\e2e\\real-analytics-generation.test.ts:114:27",
+                        "location": {
+                          "file": "C:\\Users\\blake\\OneDrive\\Desktop\\NewProjects\\FinalMothersDayV2\\carens-cookbook\\tests\\e2e\\real-analytics-generation.test.ts",
+                          "column": 27,
+                          "line": 114
+                        },
+                        "snippet": "\u001b[0m \u001b[90m 112 |\u001b[39m       \n \u001b[90m 113 |\u001b[39m       \u001b[90m// Verify extraction was successful\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 114 |\u001b[39m       expect(finalResult)\u001b[33m.\u001b[39mtoBeTruthy()\u001b[33m;\u001b[39m\n \u001b[90m     |\u001b[39m                           \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 115 |\u001b[39m       expect(finalResult\u001b[33m.\u001b[39mrecipe)\u001b[33m.\u001b[39mtoBeTruthy()\u001b[33m;\u001b[39m\n \u001b[90m 116 |\u001b[39m       expect(finalResult\u001b[33m.\u001b[39mrecipe\u001b[33m.\u001b[39mtitle)\u001b[33m.\u001b[39mtoBeTruthy()\u001b[33m;\u001b[39m\n \u001b[90m 117 |\u001b[39m       expect(finalResult\u001b[33m.\u001b[39mrecipe\u001b[33m.\u001b[39mingredients)\u001b[33m.\u001b[39mtoBeTruthy()\u001b[33m;\u001b[39m\u001b[0m"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "C:\\Users\\blake\\OneDrive\\Desktop\\NewProjects\\FinalMothersDayV2\\carens-cookbook\\tests\\e2e\\real-analytics-generation.test.ts",
+                            "column": 27,
+                            "line": 114
+                          },
+                          "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeTruthy\u001b[2m()\u001b[22m\n\nReceived: \u001b[31mnull\u001b[39m\n\n\u001b[0m \u001b[90m 112 |\u001b[39m       \n \u001b[90m 113 |\u001b[39m       \u001b[90m// Verify extraction was successful\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 114 |\u001b[39m       expect(finalResult)\u001b[33m.\u001b[39mtoBeTruthy()\u001b[33m;\u001b[39m\n \u001b[90m     |\u001b[39m                           \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 115 |\u001b[39m       expect(finalResult\u001b[33m.\u001b[39mrecipe)\u001b[33m.\u001b[39mtoBeTruthy()\u001b[33m;\u001b[39m\n \u001b[90m 116 |\u001b[39m       expect(finalResult\u001b[33m.\u001b[39mrecipe\u001b[33m.\u001b[39mtitle)\u001b[33m.\u001b[39mtoBeTruthy()\u001b[33m;\u001b[39m\n \u001b[90m 117 |\u001b[39m       expect(finalResult\u001b[33m.\u001b[39mrecipe\u001b[33m.\u001b[39mingredients)\u001b[33m.\u001b[39mtoBeTruthy()\u001b[33m;\u001b[39m\u001b[0m\n\u001b[2m    at C:\\Users\\blake\\OneDrive\\Desktop\\NewProjects\\FinalMothersDayV2\\carens-cookbook\\tests\\e2e\\real-analytics-generation.test.ts:114:27\u001b[22m"
+                        }
+                      ],
+                      "stdout": [
+                        {
+                          "text": "🔍 Testing extraction from: https://www.kingarthurbaking.com/recipes/chocolate-chip-cookies-recipe\n"
+                        },
+                        {
+                          "text": "⏱️  Request completed in 25043ms\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-06-10T08:03:41.359Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "_error-context-0",
+                          "contentType": "text/markdown",
+                          "path": "C:\\Users\\blake\\OneDrive\\Desktop\\NewProjects\\FinalMothersDayV2\\carens-cookbook\\test-results\\e2e-real-analytics-generat-bb223-lytics-data-from-kingarthur-Mobile-Chrome\\error-context.md"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "C:\\Users\\blake\\OneDrive\\Desktop\\NewProjects\\FinalMothersDayV2\\carens-cookbook\\tests\\e2e\\real-analytics-generation.test.ts",
+                        "column": 27,
+                        "line": 114
+                      }
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "c9669f548a4885756099-16f222c9302c90eb3cd4",
+              "file": "e2e/real-analytics-generation.test.ts",
+              "line": 72,
+              "column": 9
+            },
+            {
+              "title": "Extract real analytics data from tasteofhome",
+              "ok": false,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "Mobile Chrome",
+                  "projectName": "Mobile Chrome",
+                  "results": [
+                    {
+                      "workerIndex": 16,
+                      "parallelIndex": 9,
+                      "status": "failed",
+                      "duration": 33835,
+                      "error": {
+                        "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeTruthy\u001b[2m()\u001b[22m\n\nReceived: \u001b[31mnull\u001b[39m",
+                        "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeTruthy\u001b[2m()\u001b[22m\n\nReceived: \u001b[31mnull\u001b[39m\n    at C:\\Users\\blake\\OneDrive\\Desktop\\NewProjects\\FinalMothersDayV2\\carens-cookbook\\tests\\e2e\\real-analytics-generation.test.ts:114:27",
+                        "location": {
+                          "file": "C:\\Users\\blake\\OneDrive\\Desktop\\NewProjects\\FinalMothersDayV2\\carens-cookbook\\tests\\e2e\\real-analytics-generation.test.ts",
+                          "column": 27,
+                          "line": 114
+                        },
+                        "snippet": "\u001b[0m \u001b[90m 112 |\u001b[39m       \n \u001b[90m 113 |\u001b[39m       \u001b[90m// Verify extraction was successful\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 114 |\u001b[39m       expect(finalResult)\u001b[33m.\u001b[39mtoBeTruthy()\u001b[33m;\u001b[39m\n \u001b[90m     |\u001b[39m                           \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 115 |\u001b[39m       expect(finalResult\u001b[33m.\u001b[39mrecipe)\u001b[33m.\u001b[39mtoBeTruthy()\u001b[33m;\u001b[39m\n \u001b[90m 116 |\u001b[39m       expect(finalResult\u001b[33m.\u001b[39mrecipe\u001b[33m.\u001b[39mtitle)\u001b[33m.\u001b[39mtoBeTruthy()\u001b[33m;\u001b[39m\n \u001b[90m 117 |\u001b[39m       expect(finalResult\u001b[33m.\u001b[39mrecipe\u001b[33m.\u001b[39mingredients)\u001b[33m.\u001b[39mtoBeTruthy()\u001b[33m;\u001b[39m\u001b[0m"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "C:\\Users\\blake\\OneDrive\\Desktop\\NewProjects\\FinalMothersDayV2\\carens-cookbook\\tests\\e2e\\real-analytics-generation.test.ts",
+                            "column": 27,
+                            "line": 114
+                          },
+                          "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeTruthy\u001b[2m()\u001b[22m\n\nReceived: \u001b[31mnull\u001b[39m\n\n\u001b[0m \u001b[90m 112 |\u001b[39m       \n \u001b[90m 113 |\u001b[39m       \u001b[90m// Verify extraction was successful\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 114 |\u001b[39m       expect(finalResult)\u001b[33m.\u001b[39mtoBeTruthy()\u001b[33m;\u001b[39m\n \u001b[90m     |\u001b[39m                           \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 115 |\u001b[39m       expect(finalResult\u001b[33m.\u001b[39mrecipe)\u001b[33m.\u001b[39mtoBeTruthy()\u001b[33m;\u001b[39m\n \u001b[90m 116 |\u001b[39m       expect(finalResult\u001b[33m.\u001b[39mrecipe\u001b[33m.\u001b[39mtitle)\u001b[33m.\u001b[39mtoBeTruthy()\u001b[33m;\u001b[39m\n \u001b[90m 117 |\u001b[39m       expect(finalResult\u001b[33m.\u001b[39mrecipe\u001b[33m.\u001b[39mingredients)\u001b[33m.\u001b[39mtoBeTruthy()\u001b[33m;\u001b[39m\u001b[0m\n\u001b[2m    at C:\\Users\\blake\\OneDrive\\Desktop\\NewProjects\\FinalMothersDayV2\\carens-cookbook\\tests\\e2e\\real-analytics-generation.test.ts:114:27\u001b[22m"
+                        }
+                      ],
+                      "stdout": [
+                        {
+                          "text": "🔍 Testing extraction from: https://www.tasteofhome.com/recipes/makeover-creamy-macaroni-and-cheese/\n"
+                        },
+                        {
+                          "text": "⏱️  Request completed in 33822ms\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-06-10T08:03:42.077Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "_error-context-0",
+                          "contentType": "text/markdown",
+                          "path": "C:\\Users\\blake\\OneDrive\\Desktop\\NewProjects\\FinalMothersDayV2\\carens-cookbook\\test-results\\e2e-real-analytics-generat-1fef4-ytics-data-from-tasteofhome-Mobile-Chrome\\error-context.md"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "C:\\Users\\blake\\OneDrive\\Desktop\\NewProjects\\FinalMothersDayV2\\carens-cookbook\\tests\\e2e\\real-analytics-generation.test.ts",
+                        "column": 27,
+                        "line": 114
+                      }
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "c9669f548a4885756099-91d77c4cb2017d73db9b",
+              "file": "e2e/real-analytics-generation.test.ts",
+              "line": 72,
+              "column": 9
+            },
+            {
+              "title": "Verify analytics dashboard can display real data",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "Mobile Chrome",
+                  "projectName": "Mobile Chrome",
+                  "results": [
+                    {
+                      "workerIndex": 17,
+                      "parallelIndex": 1,
+                      "status": "passed",
+                      "duration": 2502,
+                      "errors": [],
+                      "stdout": [
+                        {
+                          "text": "✅ Analytics dashboard loaded successfully with real data\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-06-10T08:03:45.843Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "c9669f548a4885756099-60428e6dd8f63bd27ef4",
+              "file": "e2e/real-analytics-generation.test.ts",
+              "line": 165,
+              "column": 7
+            },
+            {
+              "title": "Verify analytics aggregation functions work with real data",
+              "ok": false,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "Mobile Chrome",
+                  "projectName": "Mobile Chrome",
+                  "results": [
+                    {
+                      "workerIndex": 18,
+                      "parallelIndex": 0,
+                      "status": "failed",
+                      "duration": 98,
+                      "error": {
+                        "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeGreaterThan\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nExpected: > \u001b[32m0\u001b[39m\nReceived:   \u001b[31m0\u001b[39m",
+                        "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeGreaterThan\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nExpected: > \u001b[32m0\u001b[39m\nReceived:   \u001b[31m0\u001b[39m\n    at C:\\Users\\blake\\OneDrive\\Desktop\\NewProjects\\FinalMothersDayV2\\carens-cookbook\\tests\\e2e\\real-analytics-generation.test.ts:197:30",
+                        "location": {
+                          "file": "C:\\Users\\blake\\OneDrive\\Desktop\\NewProjects\\FinalMothersDayV2\\carens-cookbook\\tests\\e2e\\real-analytics-generation.test.ts",
+                          "column": 30,
+                          "line": 197
+                        },
+                        "snippet": "\u001b[0m \u001b[90m 195 |\u001b[39m     })\u001b[33m;\u001b[39m\n \u001b[90m 196 |\u001b[39m     \n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 197 |\u001b[39m     expect(totalExtractions)\u001b[33m.\u001b[39mtoBeGreaterThan(\u001b[35m0\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m     |\u001b[39m                              \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 198 |\u001b[39m     \n \u001b[90m 199 |\u001b[39m     \u001b[36mconst\u001b[39m successfulExtractions \u001b[33m=\u001b[39m \u001b[36mawait\u001b[39m prisma\u001b[33m.\u001b[39mrecipeExtractionMetrics\u001b[33m.\u001b[39mcount({\n \u001b[90m 200 |\u001b[39m       where\u001b[33m:\u001b[39m {\u001b[0m"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "C:\\Users\\blake\\OneDrive\\Desktop\\NewProjects\\FinalMothersDayV2\\carens-cookbook\\tests\\e2e\\real-analytics-generation.test.ts",
+                            "column": 30,
+                            "line": 197
+                          },
+                          "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeGreaterThan\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nExpected: > \u001b[32m0\u001b[39m\nReceived:   \u001b[31m0\u001b[39m\n\n\u001b[0m \u001b[90m 195 |\u001b[39m     })\u001b[33m;\u001b[39m\n \u001b[90m 196 |\u001b[39m     \n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 197 |\u001b[39m     expect(totalExtractions)\u001b[33m.\u001b[39mtoBeGreaterThan(\u001b[35m0\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m     |\u001b[39m                              \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 198 |\u001b[39m     \n \u001b[90m 199 |\u001b[39m     \u001b[36mconst\u001b[39m successfulExtractions \u001b[33m=\u001b[39m \u001b[36mawait\u001b[39m prisma\u001b[33m.\u001b[39mrecipeExtractionMetrics\u001b[33m.\u001b[39mcount({\n \u001b[90m 200 |\u001b[39m       where\u001b[33m:\u001b[39m {\u001b[0m\n\u001b[2m    at C:\\Users\\blake\\OneDrive\\Desktop\\NewProjects\\FinalMothersDayV2\\carens-cookbook\\tests\\e2e\\real-analytics-generation.test.ts:197:30\u001b[22m"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-06-10T08:03:46.972Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "_error-context-0",
+                          "contentType": "text/markdown",
+                          "path": "C:\\Users\\blake\\OneDrive\\Desktop\\NewProjects\\FinalMothersDayV2\\carens-cookbook\\test-results\\e2e-real-analytics-generat-38db6-nctions-work-with-real-data-Mobile-Chrome\\error-context.md"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "C:\\Users\\blake\\OneDrive\\Desktop\\NewProjects\\FinalMothersDayV2\\carens-cookbook\\tests\\e2e\\real-analytics-generation.test.ts",
+                        "column": 30,
+                        "line": 197
+                      }
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "c9669f548a4885756099-4d91148fede83b4ef0cc",
+              "file": "e2e/real-analytics-generation.test.ts",
+              "line": 191,
+              "column": 7
+            },
+            {
+              "title": "Extract real analytics data from allrecipes",
+              "ok": false,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "Mobile Safari",
+                  "projectName": "Mobile Safari",
+                  "results": [
+                    {
+                      "workerIndex": 19,
+                      "parallelIndex": 6,
+                      "status": "failed",
+                      "duration": 32293,
+                      "error": {
+                        "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeTruthy\u001b[2m()\u001b[22m\n\nReceived: \u001b[31mnull\u001b[39m",
+                        "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeTruthy\u001b[2m()\u001b[22m\n\nReceived: \u001b[31mnull\u001b[39m\n    at C:\\Users\\blake\\OneDrive\\Desktop\\NewProjects\\FinalMothersDayV2\\carens-cookbook\\tests\\e2e\\real-analytics-generation.test.ts:114:27",
+                        "location": {
+                          "file": "C:\\Users\\blake\\OneDrive\\Desktop\\NewProjects\\FinalMothersDayV2\\carens-cookbook\\tests\\e2e\\real-analytics-generation.test.ts",
+                          "column": 27,
+                          "line": 114
+                        },
+                        "snippet": "\u001b[0m \u001b[90m 112 |\u001b[39m       \n \u001b[90m 113 |\u001b[39m       \u001b[90m// Verify extraction was successful\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 114 |\u001b[39m       expect(finalResult)\u001b[33m.\u001b[39mtoBeTruthy()\u001b[33m;\u001b[39m\n \u001b[90m     |\u001b[39m                           \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 115 |\u001b[39m       expect(finalResult\u001b[33m.\u001b[39mrecipe)\u001b[33m.\u001b[39mtoBeTruthy()\u001b[33m;\u001b[39m\n \u001b[90m 116 |\u001b[39m       expect(finalResult\u001b[33m.\u001b[39mrecipe\u001b[33m.\u001b[39mtitle)\u001b[33m.\u001b[39mtoBeTruthy()\u001b[33m;\u001b[39m\n \u001b[90m 117 |\u001b[39m       expect(finalResult\u001b[33m.\u001b[39mrecipe\u001b[33m.\u001b[39mingredients)\u001b[33m.\u001b[39mtoBeTruthy()\u001b[33m;\u001b[39m\u001b[0m"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "C:\\Users\\blake\\OneDrive\\Desktop\\NewProjects\\FinalMothersDayV2\\carens-cookbook\\tests\\e2e\\real-analytics-generation.test.ts",
+                            "column": 27,
+                            "line": 114
+                          },
+                          "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeTruthy\u001b[2m()\u001b[22m\n\nReceived: \u001b[31mnull\u001b[39m\n\n\u001b[0m \u001b[90m 112 |\u001b[39m       \n \u001b[90m 113 |\u001b[39m       \u001b[90m// Verify extraction was successful\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 114 |\u001b[39m       expect(finalResult)\u001b[33m.\u001b[39mtoBeTruthy()\u001b[33m;\u001b[39m\n \u001b[90m     |\u001b[39m                           \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 115 |\u001b[39m       expect(finalResult\u001b[33m.\u001b[39mrecipe)\u001b[33m.\u001b[39mtoBeTruthy()\u001b[33m;\u001b[39m\n \u001b[90m 116 |\u001b[39m       expect(finalResult\u001b[33m.\u001b[39mrecipe\u001b[33m.\u001b[39mtitle)\u001b[33m.\u001b[39mtoBeTruthy()\u001b[33m;\u001b[39m\n \u001b[90m 117 |\u001b[39m       expect(finalResult\u001b[33m.\u001b[39mrecipe\u001b[33m.\u001b[39mingredients)\u001b[33m.\u001b[39mtoBeTruthy()\u001b[33m;\u001b[39m\u001b[0m\n\u001b[2m    at C:\\Users\\blake\\OneDrive\\Desktop\\NewProjects\\FinalMothersDayV2\\carens-cookbook\\tests\\e2e\\real-analytics-generation.test.ts:114:27\u001b[22m"
+                        }
+                      ],
+                      "stdout": [
+                        {
+                          "text": "🔍 Testing extraction from: https://www.allrecipes.com/recipe/213742/cheesy-chicken-broccoli-casserole/\n"
+                        },
+                        {
+                          "text": "⏱️  Request completed in 32279ms\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-06-10T08:03:47.507Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "_error-context-0",
+                          "contentType": "text/markdown",
+                          "path": "C:\\Users\\blake\\OneDrive\\Desktop\\NewProjects\\FinalMothersDayV2\\carens-cookbook\\test-results\\e2e-real-analytics-generat-0c068-lytics-data-from-allrecipes-Mobile-Safari\\error-context.md"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "C:\\Users\\blake\\OneDrive\\Desktop\\NewProjects\\FinalMothersDayV2\\carens-cookbook\\tests\\e2e\\real-analytics-generation.test.ts",
+                        "column": 27,
+                        "line": 114
+                      }
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "c9669f548a4885756099-e1e90be49c6d59ffb5a3",
+              "file": "e2e/real-analytics-generation.test.ts",
+              "line": 72,
+              "column": 9
+            },
+            {
+              "title": "Extract real analytics data from kingarthur",
+              "ok": false,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "Mobile Safari",
+                  "projectName": "Mobile Safari",
+                  "results": [
+                    {
+                      "workerIndex": 20,
+                      "parallelIndex": 5,
+                      "status": "failed",
+                      "duration": 27410,
+                      "error": {
+                        "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeTruthy\u001b[2m()\u001b[22m\n\nReceived: \u001b[31mnull\u001b[39m",
+                        "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeTruthy\u001b[2m()\u001b[22m\n\nReceived: \u001b[31mnull\u001b[39m\n    at C:\\Users\\blake\\OneDrive\\Desktop\\NewProjects\\FinalMothersDayV2\\carens-cookbook\\tests\\e2e\\real-analytics-generation.test.ts:114:27",
+                        "location": {
+                          "file": "C:\\Users\\blake\\OneDrive\\Desktop\\NewProjects\\FinalMothersDayV2\\carens-cookbook\\tests\\e2e\\real-analytics-generation.test.ts",
+                          "column": 27,
+                          "line": 114
+                        },
+                        "snippet": "\u001b[0m \u001b[90m 112 |\u001b[39m       \n \u001b[90m 113 |\u001b[39m       \u001b[90m// Verify extraction was successful\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 114 |\u001b[39m       expect(finalResult)\u001b[33m.\u001b[39mtoBeTruthy()\u001b[33m;\u001b[39m\n \u001b[90m     |\u001b[39m                           \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 115 |\u001b[39m       expect(finalResult\u001b[33m.\u001b[39mrecipe)\u001b[33m.\u001b[39mtoBeTruthy()\u001b[33m;\u001b[39m\n \u001b[90m 116 |\u001b[39m       expect(finalResult\u001b[33m.\u001b[39mrecipe\u001b[33m.\u001b[39mtitle)\u001b[33m.\u001b[39mtoBeTruthy()\u001b[33m;\u001b[39m\n \u001b[90m 117 |\u001b[39m       expect(finalResult\u001b[33m.\u001b[39mrecipe\u001b[33m.\u001b[39mingredients)\u001b[33m.\u001b[39mtoBeTruthy()\u001b[33m;\u001b[39m\u001b[0m"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "C:\\Users\\blake\\OneDrive\\Desktop\\NewProjects\\FinalMothersDayV2\\carens-cookbook\\tests\\e2e\\real-analytics-generation.test.ts",
+                            "column": 27,
+                            "line": 114
+                          },
+                          "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeTruthy\u001b[2m()\u001b[22m\n\nReceived: \u001b[31mnull\u001b[39m\n\n\u001b[0m \u001b[90m 112 |\u001b[39m       \n \u001b[90m 113 |\u001b[39m       \u001b[90m// Verify extraction was successful\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 114 |\u001b[39m       expect(finalResult)\u001b[33m.\u001b[39mtoBeTruthy()\u001b[33m;\u001b[39m\n \u001b[90m     |\u001b[39m                           \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 115 |\u001b[39m       expect(finalResult\u001b[33m.\u001b[39mrecipe)\u001b[33m.\u001b[39mtoBeTruthy()\u001b[33m;\u001b[39m\n \u001b[90m 116 |\u001b[39m       expect(finalResult\u001b[33m.\u001b[39mrecipe\u001b[33m.\u001b[39mtitle)\u001b[33m.\u001b[39mtoBeTruthy()\u001b[33m;\u001b[39m\n \u001b[90m 117 |\u001b[39m       expect(finalResult\u001b[33m.\u001b[39mrecipe\u001b[33m.\u001b[39mingredients)\u001b[33m.\u001b[39mtoBeTruthy()\u001b[33m;\u001b[39m\u001b[0m\n\u001b[2m    at C:\\Users\\blake\\OneDrive\\Desktop\\NewProjects\\FinalMothersDayV2\\carens-cookbook\\tests\\e2e\\real-analytics-generation.test.ts:114:27\u001b[22m"
+                        }
+                      ],
+                      "stdout": [
+                        {
+                          "text": "🔍 Testing extraction from: https://www.kingarthurbaking.com/recipes/chocolate-chip-cookies-recipe\n"
+                        },
+                        {
+                          "text": "⏱️  Request completed in 27397ms\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-06-10T08:03:47.635Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "_error-context-0",
+                          "contentType": "text/markdown",
+                          "path": "C:\\Users\\blake\\OneDrive\\Desktop\\NewProjects\\FinalMothersDayV2\\carens-cookbook\\test-results\\e2e-real-analytics-generat-bb223-lytics-data-from-kingarthur-Mobile-Safari\\error-context.md"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "C:\\Users\\blake\\OneDrive\\Desktop\\NewProjects\\FinalMothersDayV2\\carens-cookbook\\tests\\e2e\\real-analytics-generation.test.ts",
+                        "column": 27,
+                        "line": 114
+                      }
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "c9669f548a4885756099-ca0b5b80eac2ce4fc0f7",
+              "file": "e2e/real-analytics-generation.test.ts",
+              "line": 72,
+              "column": 9
+            },
+            {
+              "title": "Extract real analytics data from tasteofhome",
+              "ok": false,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "Mobile Safari",
+                  "projectName": "Mobile Safari",
+                  "results": [
+                    {
+                      "workerIndex": 21,
+                      "parallelIndex": 0,
+                      "status": "failed",
+                      "duration": 31666,
+                      "error": {
+                        "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeTruthy\u001b[2m()\u001b[22m\n\nReceived: \u001b[31mnull\u001b[39m",
+                        "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeTruthy\u001b[2m()\u001b[22m\n\nReceived: \u001b[31mnull\u001b[39m\n    at C:\\Users\\blake\\OneDrive\\Desktop\\NewProjects\\FinalMothersDayV2\\carens-cookbook\\tests\\e2e\\real-analytics-generation.test.ts:114:27",
+                        "location": {
+                          "file": "C:\\Users\\blake\\OneDrive\\Desktop\\NewProjects\\FinalMothersDayV2\\carens-cookbook\\tests\\e2e\\real-analytics-generation.test.ts",
+                          "column": 27,
+                          "line": 114
+                        },
+                        "snippet": "\u001b[0m \u001b[90m 112 |\u001b[39m       \n \u001b[90m 113 |\u001b[39m       \u001b[90m// Verify extraction was successful\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 114 |\u001b[39m       expect(finalResult)\u001b[33m.\u001b[39mtoBeTruthy()\u001b[33m;\u001b[39m\n \u001b[90m     |\u001b[39m                           \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 115 |\u001b[39m       expect(finalResult\u001b[33m.\u001b[39mrecipe)\u001b[33m.\u001b[39mtoBeTruthy()\u001b[33m;\u001b[39m\n \u001b[90m 116 |\u001b[39m       expect(finalResult\u001b[33m.\u001b[39mrecipe\u001b[33m.\u001b[39mtitle)\u001b[33m.\u001b[39mtoBeTruthy()\u001b[33m;\u001b[39m\n \u001b[90m 117 |\u001b[39m       expect(finalResult\u001b[33m.\u001b[39mrecipe\u001b[33m.\u001b[39mingredients)\u001b[33m.\u001b[39mtoBeTruthy()\u001b[33m;\u001b[39m\u001b[0m"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "C:\\Users\\blake\\OneDrive\\Desktop\\NewProjects\\FinalMothersDayV2\\carens-cookbook\\tests\\e2e\\real-analytics-generation.test.ts",
+                            "column": 27,
+                            "line": 114
+                          },
+                          "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeTruthy\u001b[2m()\u001b[22m\n\nReceived: \u001b[31mnull\u001b[39m\n\n\u001b[0m \u001b[90m 112 |\u001b[39m       \n \u001b[90m 113 |\u001b[39m       \u001b[90m// Verify extraction was successful\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 114 |\u001b[39m       expect(finalResult)\u001b[33m.\u001b[39mtoBeTruthy()\u001b[33m;\u001b[39m\n \u001b[90m     |\u001b[39m                           \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 115 |\u001b[39m       expect(finalResult\u001b[33m.\u001b[39mrecipe)\u001b[33m.\u001b[39mtoBeTruthy()\u001b[33m;\u001b[39m\n \u001b[90m 116 |\u001b[39m       expect(finalResult\u001b[33m.\u001b[39mrecipe\u001b[33m.\u001b[39mtitle)\u001b[33m.\u001b[39mtoBeTruthy()\u001b[33m;\u001b[39m\n \u001b[90m 117 |\u001b[39m       expect(finalResult\u001b[33m.\u001b[39mrecipe\u001b[33m.\u001b[39mingredients)\u001b[33m.\u001b[39mtoBeTruthy()\u001b[33m;\u001b[39m\u001b[0m\n\u001b[2m    at C:\\Users\\blake\\OneDrive\\Desktop\\NewProjects\\FinalMothersDayV2\\carens-cookbook\\tests\\e2e\\real-analytics-generation.test.ts:114:27\u001b[22m"
+                        }
+                      ],
+                      "stdout": [
+                        {
+                          "text": "🔍 Testing extraction from: https://www.tasteofhome.com/recipes/makeover-creamy-macaroni-and-cheese/\n"
+                        },
+                        {
+                          "text": "⏱️  Request completed in 31652ms\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-06-10T08:03:48.542Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "_error-context-0",
+                          "contentType": "text/markdown",
+                          "path": "C:\\Users\\blake\\OneDrive\\Desktop\\NewProjects\\FinalMothersDayV2\\carens-cookbook\\test-results\\e2e-real-analytics-generat-1fef4-ytics-data-from-tasteofhome-Mobile-Safari\\error-context.md"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "C:\\Users\\blake\\OneDrive\\Desktop\\NewProjects\\FinalMothersDayV2\\carens-cookbook\\tests\\e2e\\real-analytics-generation.test.ts",
+                        "column": 27,
+                        "line": 114
+                      }
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "c9669f548a4885756099-325307755f074514b0f0",
+              "file": "e2e/real-analytics-generation.test.ts",
+              "line": 72,
+              "column": 9
+            },
+            {
+              "title": "Verify analytics dashboard can display real data",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "Mobile Safari",
+                  "projectName": "Mobile Safari",
+                  "results": [
+                    {
+                      "workerIndex": 22,
+                      "parallelIndex": 1,
+                      "status": "passed",
+                      "duration": 2496,
+                      "errors": [],
+                      "stdout": [
+                        {
+                          "text": "✅ Analytics dashboard loaded successfully with real data\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-06-10T08:03:49.859Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "c9669f548a4885756099-3c6932ac4b1a5b937faf",
+              "file": "e2e/real-analytics-generation.test.ts",
+              "line": 165,
+              "column": 7
+            },
+            {
+              "title": "Verify analytics aggregation functions work with real data",
+              "ok": false,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "Mobile Safari",
+                  "projectName": "Mobile Safari",
+                  "results": [
+                    {
+                      "workerIndex": 23,
+                      "parallelIndex": 4,
+                      "status": "failed",
+                      "duration": 88,
+                      "error": {
+                        "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeGreaterThan\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nExpected: > \u001b[32m0\u001b[39m\nReceived:   \u001b[31m0\u001b[39m",
+                        "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeGreaterThan\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nExpected: > \u001b[32m0\u001b[39m\nReceived:   \u001b[31m0\u001b[39m\n    at C:\\Users\\blake\\OneDrive\\Desktop\\NewProjects\\FinalMothersDayV2\\carens-cookbook\\tests\\e2e\\real-analytics-generation.test.ts:197:30",
+                        "location": {
+                          "file": "C:\\Users\\blake\\OneDrive\\Desktop\\NewProjects\\FinalMothersDayV2\\carens-cookbook\\tests\\e2e\\real-analytics-generation.test.ts",
+                          "column": 30,
+                          "line": 197
+                        },
+                        "snippet": "\u001b[0m \u001b[90m 195 |\u001b[39m     })\u001b[33m;\u001b[39m\n \u001b[90m 196 |\u001b[39m     \n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 197 |\u001b[39m     expect(totalExtractions)\u001b[33m.\u001b[39mtoBeGreaterThan(\u001b[35m0\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m     |\u001b[39m                              \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 198 |\u001b[39m     \n \u001b[90m 199 |\u001b[39m     \u001b[36mconst\u001b[39m successfulExtractions \u001b[33m=\u001b[39m \u001b[36mawait\u001b[39m prisma\u001b[33m.\u001b[39mrecipeExtractionMetrics\u001b[33m.\u001b[39mcount({\n \u001b[90m 200 |\u001b[39m       where\u001b[33m:\u001b[39m {\u001b[0m"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "C:\\Users\\blake\\OneDrive\\Desktop\\NewProjects\\FinalMothersDayV2\\carens-cookbook\\tests\\e2e\\real-analytics-generation.test.ts",
+                            "column": 30,
+                            "line": 197
+                          },
+                          "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeGreaterThan\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nExpected: > \u001b[32m0\u001b[39m\nReceived:   \u001b[31m0\u001b[39m\n\n\u001b[0m \u001b[90m 195 |\u001b[39m     })\u001b[33m;\u001b[39m\n \u001b[90m 196 |\u001b[39m     \n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 197 |\u001b[39m     expect(totalExtractions)\u001b[33m.\u001b[39mtoBeGreaterThan(\u001b[35m0\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m     |\u001b[39m                              \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 198 |\u001b[39m     \n \u001b[90m 199 |\u001b[39m     \u001b[36mconst\u001b[39m successfulExtractions \u001b[33m=\u001b[39m \u001b[36mawait\u001b[39m prisma\u001b[33m.\u001b[39mrecipeExtractionMetrics\u001b[33m.\u001b[39mcount({\n \u001b[90m 200 |\u001b[39m       where\u001b[33m:\u001b[39m {\u001b[0m\n\u001b[2m    at C:\\Users\\blake\\OneDrive\\Desktop\\NewProjects\\FinalMothersDayV2\\carens-cookbook\\tests\\e2e\\real-analytics-generation.test.ts:197:30\u001b[22m"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-06-10T08:03:52.630Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "_error-context-0",
+                          "contentType": "text/markdown",
+                          "path": "C:\\Users\\blake\\OneDrive\\Desktop\\NewProjects\\FinalMothersDayV2\\carens-cookbook\\test-results\\e2e-real-analytics-generat-38db6-nctions-work-with-real-data-Mobile-Safari\\error-context.md"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "C:\\Users\\blake\\OneDrive\\Desktop\\NewProjects\\FinalMothersDayV2\\carens-cookbook\\tests\\e2e\\real-analytics-generation.test.ts",
+                        "column": 30,
+                        "line": 197
+                      }
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "c9669f548a4885756099-95e4e28270c4882f6080",
+              "file": "e2e/real-analytics-generation.test.ts",
+              "line": 191,
+              "column": 7
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2025-06-10T08:03:02.645Z",
+    "duration": 78550.39700000001,
+    "expected": 5,
+    "skipped": 0,
+    "unexpected": 20,
+    "flaky": 0
+  }
+}
