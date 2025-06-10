@@ -17,7 +17,7 @@ import {
   ChefHat
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
-import type { RecipeData } from './FirstRecipeFlow';
+import type { RecipeData } from './first-recipe-flow/utils/types';
 
 export interface ImageScanningPathwayProps {
   onComplete: (recipe: RecipeData) => void;

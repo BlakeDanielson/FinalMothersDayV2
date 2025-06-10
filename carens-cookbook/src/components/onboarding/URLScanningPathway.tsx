@@ -20,7 +20,7 @@ import {
   Save
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
-import type { RecipeData } from './FirstRecipeFlow';
+import type { RecipeData } from './first-recipe-flow/utils/types';
 
 export interface URLScanningPathwayProps {
   onComplete: (recipe: RecipeData) => void;
