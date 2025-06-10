@@ -5,7 +5,7 @@ import { ConversionAnalytics } from '@/lib/services/conversionAnalytics';
 import { ConversionEventType } from '@/generated/prisma';
 import { auth } from '@clerk/nextjs/server';
 import { prisma } from '@/lib/db';
-import { RecipeExtractionAnalytics, trackExtractionWithRecipe } from '@/lib/services/recipe-extraction-analytics';
+import { trackExtractionWithRecipe } from '@/lib/services/recipe-extraction-analytics';
 import { ExtractionStrategy, AIProvider } from '@/generated/prisma';
 import { z } from 'zod';
 

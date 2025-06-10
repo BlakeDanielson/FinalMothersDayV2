@@ -15,6 +15,7 @@ interface ActionBarProps {
   onToggleBulkMode: () => void;
 }
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 export function ActionBar({
   canUndo,
   canRedo,

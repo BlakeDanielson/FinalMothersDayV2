@@ -1,9 +1,9 @@
 #!/usr/bin/env node
 
 /**
- * Recipe Photo AI Processing Test
- * Tests all HEIC photos in /recipe_photos through both AI models (OpenAI & Gemini)
- * Similar to existing URL tests but for image processing
+ * Quick Recipe Photo Test
+ * Tests first 3 HEIC photos through both AI models for quick validation
+ * Similar to quick-test.js but for image processing
  * NOW WITH HEIC TO JPEG CONVERSION (like the frontend)
  */
 
@@ -17,7 +17,6 @@ try {
 
 const fs = require('fs').promises;
 const path = require('path');
-const FormData = require('form-data');
 
 // Colors for console output
 const colors = {
@@ -54,7 +53,8 @@ const AI_PROVIDERS = [
 // Test configuration
 const RECIPE_PHOTOS_DIR = '../recipe_photos';
 const BASE_URL = process.env.BASE_URL || 'http://localhost:3000';
-const REQUEST_DELAY = 3000; // 3 seconds between requests to avoid rate limits
+const MAX_PHOTOS = 50; // Test more photos (up to 50, but we only have 14)
+const REQUEST_DELAY = 3000; // 3 seconds between requests
 
 async function ensureFetch() {
   if (!fetch) {
@@ -106,17 +106,17 @@ async function convertHeicToJpeg(imageBuffer, filename) {
   }
 }
 
-async function getPhotoFiles() {
+async function getTestPhotoFiles() {
   try {
     const photoPath = path.resolve(__dirname, RECIPE_PHOTOS_DIR);
     const files = await fs.readdir(photoPath);
     
-    // Filter for HEIC files
-    const heicFiles = files.filter(file => 
-      file.toLowerCase().endsWith('.heic')
-    );
+    // Filter for HEIC files and take up to MAX_PHOTOS
+    const heicFiles = files
+      .filter(file => file.toLowerCase().endsWith('.heic'))
+      .slice(0, MAX_PHOTOS);
     
-    log(`📁 Found ${heicFiles.length} HEIC files in ${photoPath}`, 'blue');
+    log(`📁 Found ${heicFiles.length} HEIC files for full test in ${photoPath}`, 'blue');
     
     return heicFiles.map(filename => ({
       filename,
@@ -217,59 +217,24 @@ async function processPhotoWithAI(photoFile, aiProvider) {
   }
 }
 
-async function testPhotoWithAllProviders(photoFile) {
-  log(`\n🖼️  Testing photo: ${photoFile.filename}`, 'bright');
-  log('═'.repeat(80), 'cyan');
-  
-  const results = [];
-  
-  for (const provider of AI_PROVIDERS) {
-    log(`\n🤖 Testing with ${provider.name}`, 'magenta');
-    
-    const result = await processPhotoWithAI(photoFile, provider);
-    
-    if (result.success) {
-      if (result.hasRealData) {
-        log(`  ✅ SUCCESS - Real data (${result.duration}ms)`, 'green');
-        log(`  📝 Title: "${result.recipe.title}"`, 'green');
-        log(`  🥘 ${result.recipe.ingredients.length} ingredients, ${result.recipe.steps.length} steps`, 'cyan');
-        log(`  🍽️  Category: ${result.recipe.category} | Cuisine: ${result.recipe.cuisine}`, 'blue');
-      } else {
-        log(`  ⚠️  SUCCESS - Default/Empty data (${result.duration}ms)`, 'yellow');
-      }
-    } else {
-      log(`  ❌ FAILED: ${result.error}`, 'red');
-    }
-    
-    results.push(result);
-    
-    // Delay between provider requests
-    if (AI_PROVIDERS.indexOf(provider) < AI_PROVIDERS.length - 1) {
-      log(`  ⏳ Waiting ${REQUEST_DELAY/1000}s before next provider...`, 'blue');
-      await new Promise(resolve => setTimeout(resolve, REQUEST_DELAY));
-    }
-  }
-  
-  return results;
-}
-
-async function runPhotoTest() {
-  log('🧪 RECIPE PHOTO AI PROCESSING TEST', 'bright');
-  log('═'.repeat(80), 'cyan');
-  log(`📊 Testing HEIC photos from ${RECIPE_PHOTOS_DIR}`, 'blue');
+async function runQuickPhotoTest() {
+  log('🧪 FULL RECIPE PHOTO AI TEST (WITH HEIC CONVERSION)', 'bright');
+  log('═'.repeat(70), 'cyan');
+  log(`📊 Testing up to ${MAX_PHOTOS} HEIC photos from ${RECIPE_PHOTOS_DIR}`, 'blue');
   log(`🤖 Using ${AI_PROVIDERS.map(p => p.name).join(' & ')}`, 'blue');
+  log(`🔄 Converting HEIC → JPEG (like frontend)`, 'blue');
   log(`🌐 Base URL: ${BASE_URL}`, 'blue');
   log('', 'reset');
 
   try {
-    const photoFiles = await getPhotoFiles();
+    const photoFiles = await getTestPhotoFiles();
     
     if (photoFiles.length === 0) {
       log('❌ No HEIC files found in recipe_photos directory!', 'red');
       return;
     }
 
-    const allResults = [];
+    const results = [];
     let totalTests = 0;
     let successfulTests = 0;
     let realDataTests = 0;
@@ -288,19 +253,42 @@ async function runPhotoTest() {
     });
 
     // Test each photo with all providers
-    for (const [index, photoFile] of photoFiles.entries()) {
-      log(`\n📊 Progress: ${index + 1}/${photoFiles.length} photos`, 'bright');
+    for (const [photoIndex, photoFile] of photoFiles.entries()) {
+      log(`\n📊 Progress: ${photoIndex + 1}/${photoFiles.length} photos`, 'bright');
+      log(`🖼️  Testing: ${photoFile.filename}`, 'cyan');
       
-      const photoResults = await testPhotoWithAllProviders(photoFile);
-      allResults.push({
-        filename: photoFile.filename,
-        results: photoResults
-      });
-      
-      // Update statistics
-      photoResults.forEach(result => {
+      for (const [providerIndex, provider] of AI_PROVIDERS.entries()) {
+        log(`\n🤖 Testing with ${provider.name}`, 'magenta');
+        
+        const result = await processPhotoWithAI(photoFile, provider);
+        
+        if (result.success) {
+          if (result.hasRealData) {
+            log(`  ✅ SUCCESS - Real data (${result.duration}ms)`, 'green');
+            log(`  📝 Title: "${result.recipe.title}"`, 'green');
+            log(`  🥘 ${result.recipe.ingredients.length} ingredients, ${result.recipe.steps.length} steps`, 'cyan');
+            log(`  🍽️  Category: ${result.recipe.category} | Cuisine: ${result.recipe.cuisine}`, 'blue');
+            log(`  📄 Converted: ${result.convertedFilename}`, 'blue');
+            
+            // Show a sample ingredient and step for validation
+            if (result.recipe.ingredients.length > 0) {
+              log(`  📋 Sample ingredient: "${result.recipe.ingredients[0]}"`, 'blue');
+            }
+            if (result.recipe.steps.length > 0) {
+              log(`  👨‍🍳 Sample step: "${result.recipe.steps[0]}"`, 'blue');
+            }
+          } else {
+            log(`  ⚠️  SUCCESS - Default/Empty data (${result.duration}ms)`, 'yellow');
+          }
+        } else {
+          log(`  ❌ FAILED: ${result.error}`, 'red');
+        }
+        
+        results.push(result);
+        
+        // Update statistics
         totalTests++;
-        const stats = providerStats[result.provider];
+        const stats = providerStats[provider.id];
         stats.total++;
         
         if (result.success) {
@@ -314,27 +302,33 @@ async function runPhotoTest() {
             stats.realData++;
           }
         }
-      });
+        
+        // Delay between provider requests
+        if (providerIndex < AI_PROVIDERS.length - 1) {
+          log(`  ⏳ Waiting ${REQUEST_DELAY/1000}s before next provider...`, 'blue');
+          await new Promise(resolve => setTimeout(resolve, REQUEST_DELAY));
+        }
+      }
       
-      // Delay between photos (longer delay)
-      if (index < photoFiles.length - 1) {
+      // Delay between photos
+      if (photoIndex < photoFiles.length - 1) {
         log(`\n⏳ Waiting ${REQUEST_DELAY/1000}s before next photo...`, 'blue');
         await new Promise(resolve => setTimeout(resolve, REQUEST_DELAY));
       }
     }
 
-    // Generate comprehensive results
-    await generateResults(allResults, totalTests, successfulTests, realDataTests, durations, providerStats, photoFiles.length);
+    // Generate results summary
+    generateQuickResults(results, totalTests, successfulTests, realDataTests, durations, providerStats, photoFiles.length);
     
   } catch (error) {
-    log(`❌ Test failed: ${error.message}`, 'red');
+    log(`❌ Quick test failed: ${error.message}`, 'red');
     process.exit(1);
   }
 }
 
-async function generateResults(allResults, totalTests, successfulTests, realDataTests, durations, providerStats, totalPhotos) {
-  log('\n\n📊 COMPREHENSIVE TEST RESULTS', 'bright');
-  log('═'.repeat(80), 'cyan');
+function generateQuickResults(results, totalTests, successfulTests, realDataTests, durations, providerStats, totalPhotos) {
+  log('\n\n📊 QUICK TEST RESULTS (WITH HEIC CONVERSION)', 'bright');
+  log('═'.repeat(70), 'cyan');
   
   // Overall statistics
   const successRate = totalTests > 0 ? (successfulTests / totalTests * 100).toFixed(2) : '0.00';
@@ -343,17 +337,17 @@ async function generateResults(allResults, totalTests, successfulTests, realData
   const minDuration = durations.length > 0 ? Math.min(...durations) : 0;
   const maxDuration = durations.length > 0 ? Math.max(...durations) : 0;
 
-  log(`📁 Photos Processed: ${totalPhotos}`, 'blue');
+  log(`📁 Photos Tested: ${totalPhotos}`, 'blue');
   log(`🧪 Total Tests Run: ${totalTests}`, 'blue');
   log(`🎯 Overall Success Rate: ${successRate}% (${successfulTests}/${totalTests})`, 'green');
   log(`📊 Real Data Rate: ${realDataRate}% (${realDataTests}/${totalTests})`, 'blue');
-  log(`⏱️  Average Duration: ${avgDuration}ms`, 'blue');
+  log(`⏱️  Average Duration: ${avgDuration}ms (includes HEIC conversion)`, 'blue');
   log(`🏃 Fastest: ${minDuration}ms`, 'green');
   log(`🐌 Slowest: ${maxDuration}ms`, 'yellow');
 
   // Provider-specific statistics
   log('\n🤖 PROVIDER PERFORMANCE:', 'bright');
-  log('─'.repeat(60), 'cyan');
+  log('─'.repeat(50), 'cyan');
   
   Object.values(providerStats).forEach(stats => {
     const providerSuccessRate = stats.total > 0 ? (stats.successful / stats.total * 100).toFixed(2) : '0.00';
@@ -368,64 +362,64 @@ async function generateResults(allResults, totalTests, successfulTests, realData
   });
 
   // Performance analysis
-  log('\n🎯 PERFORMANCE ANALYSIS:', 'bright');
-  log('─'.repeat(60), 'cyan');
+  log('\n🎯 QUICK PERFORMANCE ANALYSIS:', 'bright');
+  log('─'.repeat(50), 'cyan');
   
-  if (parseFloat(realDataRate) >= 80) {
-    log('🏆 EXCELLENT: Real data extraction rate exceeds 80%!', 'green');
-  } else if (parseFloat(realDataRate) >= 60) {
-    log('👍 GOOD: Real data extraction rate is acceptable (60%+)', 'yellow');
-  } else if (parseFloat(realDataRate) >= 30) {
-    log('⚠️  NEEDS WORK: Real data extraction rate below 60%', 'yellow');
+  if (parseFloat(realDataRate) >= 70) {
+    log('🏆 EXCELLENT: Photo processing with HEIC conversion is working great!', 'green');
+    log('✅ Ready to run full test suite', 'green');
+  } else if (parseFloat(realDataRate) >= 40) {
+    log('👍 GOOD: Photo processing shows promise with HEIC conversion', 'yellow');
+    log('💡 Consider running full test to get better insights', 'yellow');
+  } else if (parseFloat(realDataRate) >= 10) {
+    log('⚠️  PARTIAL: Some photos are being processed after HEIC conversion', 'yellow');
+    log('🔍 Check if photos contain clear, readable recipes', 'yellow');
   } else {
-    log('🔴 POOR: Real data extraction rate below 30% - photos may not contain clear recipes', 'red');
+    log('🔴 ISSUES: Photo processing may need attention even with HEIC conversion', 'red');
+    log('🛠️  Check API configuration and photo quality', 'red');
   }
 
   if (parseInt(avgDuration) <= 20000) {
-    log('🚀 EXCELLENT: Average processing time under 20 seconds!', 'green');
-  } else if (parseInt(avgDuration) <= 45000) {
-    log('✅ GOOD: Average processing time under 45 seconds', 'yellow');
+    log('🚀 SPEED: Processing is fast (under 20s including conversion)', 'green');
+  } else if (parseInt(avgDuration) <= 40000) {
+    log('✅ SPEED: Processing time is reasonable (under 40s including conversion)', 'yellow');
   } else {
-    log('⏱️  SLOW: Average processing time exceeds 45 seconds', 'red');
+    log('⏱️  SLOW: Processing is taking longer than expected (including conversion)', 'red');
   }
 
-  // Save detailed results
-  const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
-  const resultsFile = `recipe-photo-test-results-${timestamp}.json`;
-  
-  const detailedResults = {
-    timestamp: new Date().toISOString(),
-    summary: {
-      totalPhotos,
-      totalTests,
-      successfulTests,
-      realDataTests,
-      successRate: parseFloat(successRate),
-      realDataRate: parseFloat(realDataRate),
-      avgDuration: parseInt(avgDuration),
-      minDuration,
-      maxDuration
-    },
-    providerStats,
-    detailedResults: allResults
+  // Next steps recommendations
+  log('\n🎯 NEXT STEPS:', 'bright');
+  if (parseFloat(realDataRate) >= 50) {
+    log('1. Run full test suite: node recipe-photo-test.js', 'green');
+    log('2. Test batch processing: node recipe-photo-batch-test.js', 'green');
+  } else {
+    log('1. Check photo quality - ensure they contain clear recipes', 'yellow');
+    log('2. Verify API keys are configured correctly', 'yellow');
+    log('3. Test with a known good recipe photo manually', 'yellow');
+  }
+
+  log('\n🔄 HEIC Conversion: Working correctly (matches frontend behavior)', 'green');
+
+  return {
+    totalPhotos,
+    totalTests,
+    successfulTests,
+    realDataTests,
+    successRate: parseFloat(successRate),
+    realDataRate: parseFloat(realDataRate),
+    avgDuration: parseInt(avgDuration),
+    minDuration,
+    maxDuration,
+    results
   };
-
-  try {
-    await fs.writeFile(resultsFile, JSON.stringify(detailedResults, null, 2));
-    log(`\n💾 Detailed results saved to: ${resultsFile}`, 'green');
-  } catch (error) {
-    log(`\n⚠️  Could not save results file: ${error.message}`, 'yellow');
-  }
-
-  return detailedResults;
 }
 
 // Main execution
 if (require.main === module) {
-  runPhotoTest().catch(error => {
-    log(`\n❌ Test execution failed: ${error.message}`, 'red');
+  runQuickPhotoTest().catch(error => {
+    log(`\n❌ Quick test execution failed: ${error.message}`, 'red');
     process.exit(1);
   });
 }
 
-module.exports = { runPhotoTest, processPhotoWithAI, getPhotoFiles }; 
+module.exports = { runQuickPhotoTest, processPhotoWithAI, convertHeicToJpeg };

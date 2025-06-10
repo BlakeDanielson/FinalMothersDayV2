@@ -1,0 +1,326 @@
+{
+  "timestamp": "2025-06-10T22:12:51.843Z",
+  "summary": {
+    "totalPhotos": 14,
+    "totalTests": 28,
+    "successfulTests": 0,
+    "realDataTests": 0,
+    "successRate": 0,
+    "realDataRate": 0,
+    "avgDuration": 0,
+    "minDuration": 0,
+    "maxDuration": 0
+  },
+  "providerStats": {
+    "openai": {
+      "name": "OpenAI GPT-4o",
+      "total": 14,
+      "successful": 0,
+      "realData": 0,
+      "durations": []
+    },
+    "gemini": {
+      "name": "Google Gemini 2.5 Flash",
+      "total": 14,
+      "successful": 0,
+      "realData": 0,
+      "durations": []
+    }
+  },
+  "detailedResults": [
+    {
+      "filename": "IMG_6534.HEIC",
+      "results": [
+        {
+          "success": false,
+          "duration": 0,
+          "error": "source.on is not a function",
+          "hasRealData": false,
+          "provider": "openai",
+          "filename": "IMG_6534.HEIC"
+        },
+        {
+          "success": false,
+          "duration": 0,
+          "error": "source.on is not a function",
+          "hasRealData": false,
+          "provider": "gemini",
+          "filename": "IMG_6534.HEIC"
+        }
+      ]
+    },
+    {
+      "filename": "IMG_6535.HEIC",
+      "results": [
+        {
+          "success": false,
+          "duration": 0,
+          "error": "source.on is not a function",
+          "hasRealData": false,
+          "provider": "openai",
+          "filename": "IMG_6535.HEIC"
+        },
+        {
+          "success": false,
+          "duration": 0,
+          "error": "source.on is not a function",
+          "hasRealData": false,
+          "provider": "gemini",
+          "filename": "IMG_6535.HEIC"
+        }
+      ]
+    },
+    {
+      "filename": "IMG_6536.HEIC",
+      "results": [
+        {
+          "success": false,
+          "duration": 0,
+          "error": "source.on is not a function",
+          "hasRealData": false,
+          "provider": "openai",
+          "filename": "IMG_6536.HEIC"
+        },
+        {
+          "success": false,
+          "duration": 0,
+          "error": "source.on is not a function",
+          "hasRealData": false,
+          "provider": "gemini",
+          "filename": "IMG_6536.HEIC"
+        }
+      ]
+    },
+    {
+      "filename": "IMG_6537.HEIC",
+      "results": [
+        {
+          "success": false,
+          "duration": 0,
+          "error": "source.on is not a function",
+          "hasRealData": false,
+          "provider": "openai",
+          "filename": "IMG_6537.HEIC"
+        },
+        {
+          "success": false,
+          "duration": 0,
+          "error": "source.on is not a function",
+          "hasRealData": false,
+          "provider": "gemini",
+          "filename": "IMG_6537.HEIC"
+        }
+      ]
+    },
+    {
+      "filename": "IMG_6538.HEIC",
+      "results": [
+        {
+          "success": false,
+          "duration": 0,
+          "error": "source.on is not a function",
+          "hasRealData": false,
+          "provider": "openai",
+          "filename": "IMG_6538.HEIC"
+        },
+        {
+          "success": false,
+          "duration": 0,
+          "error": "source.on is not a function",
+          "hasRealData": false,
+          "provider": "gemini",
+          "filename": "IMG_6538.HEIC"
+        }
+      ]
+    },
+    {
+      "filename": "IMG_6539.HEIC",
+      "results": [
+        {
+          "success": false,
+          "duration": 0,
+          "error": "source.on is not a function",
+          "hasRealData": false,
+          "provider": "openai",
+          "filename": "IMG_6539.HEIC"
+        },
+        {
+          "success": false,
+          "duration": 0,
+          "error": "source.on is not a function",
+          "hasRealData": false,
+          "provider": "gemini",
+          "filename": "IMG_6539.HEIC"
+        }
+      ]
+    },
+    {
+      "filename": "IMG_6540.HEIC",
+      "results": [
+        {
+          "success": false,
+          "duration": 0,
+          "error": "source.on is not a function",
+          "hasRealData": false,
+          "provider": "openai",
+          "filename": "IMG_6540.HEIC"
+        },
+        {
+          "success": false,
+          "duration": 0,
+          "error": "source.on is not a function",
+          "hasRealData": false,
+          "provider": "gemini",
+          "filename": "IMG_6540.HEIC"
+        }
+      ]
+    },
+    {
+      "filename": "IMG_6541.HEIC",
+      "results": [
+        {
+          "success": false,
+          "duration": 0,
+          "error": "source.on is not a function",
+          "hasRealData": false,
+          "provider": "openai",
+          "filename": "IMG_6541.HEIC"
+        },
+        {
+          "success": false,
+          "duration": 0,
+          "error": "source.on is not a function",
+          "hasRealData": false,
+          "provider": "gemini",
+          "filename": "IMG_6541.HEIC"
+        }
+      ]
+    },
+    {
+      "filename": "IMG_6542.HEIC",
+      "results": [
+        {
+          "success": false,
+          "duration": 0,
+          "error": "source.on is not a function",
+          "hasRealData": false,
+          "provider": "openai",
+          "filename": "IMG_6542.HEIC"
+        },
+        {
+          "success": false,
+          "duration": 0,
+          "error": "source.on is not a function",
+          "hasRealData": false,
+          "provider": "gemini",
+          "filename": "IMG_6542.HEIC"
+        }
+      ]
+    },
+    {
+      "filename": "IMG_6543.HEIC",
+      "results": [
+        {
+          "success": false,
+          "duration": 0,
+          "error": "source.on is not a function",
+          "hasRealData": false,
+          "provider": "openai",
+          "filename": "IMG_6543.HEIC"
+        },
+        {
+          "success": false,
+          "duration": 0,
+          "error": "source.on is not a function",
+          "hasRealData": false,
+          "provider": "gemini",
+          "filename": "IMG_6543.HEIC"
+        }
+      ]
+    },
+    {
+      "filename": "IMG_6544.HEIC",
+      "results": [
+        {
+          "success": false,
+          "duration": 0,
+          "error": "source.on is not a function",
+          "hasRealData": false,
+          "provider": "openai",
+          "filename": "IMG_6544.HEIC"
+        },
+        {
+          "success": false,
+          "duration": 0,
+          "error": "source.on is not a function",
+          "hasRealData": false,
+          "provider": "gemini",
+          "filename": "IMG_6544.HEIC"
+        }
+      ]
+    },
+    {
+      "filename": "IMG_6545.HEIC",
+      "results": [
+        {
+          "success": false,
+          "duration": 0,
+          "error": "source.on is not a function",
+          "hasRealData": false,
+          "provider": "openai",
+          "filename": "IMG_6545.HEIC"
+        },
+        {
+          "success": false,
+          "duration": 0,
+          "error": "source.on is not a function",
+          "hasRealData": false,
+          "provider": "gemini",
+          "filename": "IMG_6545.HEIC"
+        }
+      ]
+    },
+    {
+      "filename": "IMG_6562.HEIC",
+      "results": [
+        {
+          "success": false,
+          "duration": 0,
+          "error": "source.on is not a function",
+          "hasRealData": false,
+          "provider": "openai",
+          "filename": "IMG_6562.HEIC"
+        },
+        {
+          "success": false,
+          "duration": 0,
+          "error": "source.on is not a function",
+          "hasRealData": false,
+          "provider": "gemini",
+          "filename": "IMG_6562.HEIC"
+        }
+      ]
+    },
+    {
+      "filename": "IMG_6563.HEIC",
+      "results": [
+        {
+          "success": false,
+          "duration": 0,
+          "error": "source.on is not a function",
+          "hasRealData": false,
+          "provider": "openai",
+          "filename": "IMG_6563.HEIC"
+        },
+        {
+          "success": false,
+          "duration": 0,
+          "error": "source.on is not a function",
+          "hasRealData": false,
+          "provider": "gemini",
+          "filename": "IMG_6563.HEIC"
+        }
+      ]
+    }
+  ]
+}

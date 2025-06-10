@@ -27,7 +27,7 @@ export interface ConversionEventData {
   signupSource?: string;
   featureName?: string;
   errorMessage?: string;
-  [key: string]: any;
+  [key: string]: string | number | boolean | null | undefined;
 }
 
 export class ConversionAnalytics {

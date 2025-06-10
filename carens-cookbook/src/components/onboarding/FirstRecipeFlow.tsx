@@ -32,9 +32,9 @@ import { useFirstRecipeFlow } from './first-recipe-flow/hooks';
 
 export function FirstRecipeFlow({ 
   onComplete, 
-  onSkip, 
+  // onSkip, 
   userCategories = [], 
-  userSkillLevel = 'BEGINNER',
+  // userSkillLevel = 'BEGINNER',
   className 
 }: FirstRecipeFlowProps) {
   const {
@@ -51,7 +51,7 @@ export function FirstRecipeFlow({
     handlePathwaySelect,
     handleBack,
     handleRecipeComplete,
-    trackInteraction
+    // trackInteraction
   } = useFirstRecipeFlow();
 
   // Keyboard shortcuts and accessibility
@@ -100,7 +100,7 @@ export function FirstRecipeFlow({
       <div className="space-y-4">
         <h1 className="text-3xl font-bold text-gray-900">Add Your First Recipe! 🍳</h1>
         <p className="text-lg text-gray-600 max-w-2xl mx-auto leading-relaxed">
-          Let's get you started with your recipe collection. Choose the method that works best for you:
+          Let&apos;s get you started with your recipe collection. Choose the method that works best for you:
         </p>
       </div>
 

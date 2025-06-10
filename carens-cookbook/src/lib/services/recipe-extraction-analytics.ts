@@ -29,7 +29,7 @@ export interface ExtractionMetrics {
   
   // Success & Quality Metrics
   extractionSuccess: boolean;
-  validationErrors?: any[];
+  validationErrors?: unknown[];
   missingFields?: string[];
   completenessScore?: number;
   
@@ -106,12 +106,11 @@ function calculateEstimatedCost(
 }
 
 // Recipe completeness scoring
-function calculateCompletenessScore(recipe: any, missingFields: string[]): number {
+function calculateCompletenessScore(recipe: Record<string, unknown>, missingFields: string[]): number {
   const criticalFields = ['title', 'ingredients', 'steps'];
   const importantFields = ['description', 'cuisine', 'category', 'prepTime'];
   const optionalFields = ['cleanupTime', 'image'];
   
-  const totalFields = criticalFields.length + importantFields.length + optionalFields.length;
   let score = 0;
 
   // Critical fields are worth 40% (0.4 / 3 = 0.133 each)
@@ -148,7 +147,7 @@ function extractDomain(url: string): string {
 }
 
 // Identify missing fields in extracted recipe
-function identifyMissingFields(recipe: any): string[] {
+function identifyMissingFields(recipe: Record<string, unknown>): string[] {
   const fields = ['title', 'ingredients', 'steps', 'description', 'cuisine', 'category', 'prepTime', 'cleanupTime', 'image'];
   return fields.filter(field => !recipe[field] || 
     (Array.isArray(recipe[field]) && recipe[field].length === 0) ||
@@ -159,15 +158,15 @@ function identifyMissingFields(recipe: any): string[] {
 }
 
 // Map UI provider strings to enum values
-function mapUIProviderToEnum(uiProvider: string): AIProvider {
-  const mapping: Record<string, AIProvider> = {
-    'openai-mini': AIProvider.OPENAI_MINI,
-    'openai-main': AIProvider.OPENAI_MAIN,
-    'gemini-main': AIProvider.GEMINI_MAIN,
-    'gemini-flash': AIProvider.GEMINI_FLASH
-  };
-  return mapping[uiProvider] || AIProvider.OPENAI_MINI;
-}
+// function mapUIProviderToEnum(uiProvider: string): AIProvider {
+//   const mapping: Record<string, AIProvider> = {
+//     'openai-mini': AIProvider.OPENAI_MINI,
+//     'openai-main': AIProvider.OPENAI_MAIN,
+//     'gemini-main': AIProvider.GEMINI_MAIN,
+//     'gemini-flash': AIProvider.GEMINI_FLASH
+//   };
+//   return mapping[uiProvider] || AIProvider.OPENAI_MINI;
+// }
 
 // Main analytics service class
 export class RecipeExtractionAnalytics {
@@ -383,7 +382,7 @@ export class RecipeExtractionAnalytics {
 // Helper function to create analytics tracking with recipe data
 export async function trackExtractionWithRecipe(
   metrics: Omit<ExtractionMetrics, 'missingFields' | 'completenessScore'>,
-  recipe?: any
+  recipe?: Record<string, unknown>
 ): Promise<void> {
   let missingFields: string[] = [];
   let completenessScore: number | undefined;
