@@ -35,7 +35,7 @@ export const AI_SETTINGS = {
       MAX_INPUT_TOKENS: parseInt(process.env.GEMINI_MAX_INPUT_TOKENS || '1800000'), // Leave buffer from 2M limit
       MAX_OUTPUT_TOKENS: parseInt(process.env.GEMINI_MAX_OUTPUT_TOKENS || '32000'),
       ENABLE_FULL_HTML: process.env.GEMINI_ENABLE_FULL_HTML === 'true',
-      ENABLE_URL_DIRECT: process.env.GEMINI_ENABLE_URL_DIRECT === 'true',
+      ENABLE_URL_DIRECT: process.env.GEMINI_ENABLE_URL_DIRECT !== 'false', // Default to true unless explicitly disabled
     }
   },
 
