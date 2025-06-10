@@ -6,45 +6,15 @@
 # Error details
 
 ```
-Error: apiRequestContext.post: Target page, context or browser has been closed
-Call log:
-  - → POST http://localhost:3000/api/fetch-recipe-stream
-    - user-agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:137.0) Gecko/20100101 Firefox/137.0
-    - accept: */*
-    - accept-encoding: gzip,deflate,br
-    - content-type: application/json
-    - content-length: 124
-  - ← 200 OK
-    - x-clerk-auth-reason: dev-browser-missing
-    - x-clerk-auth-status: signed-out
-    - x-middleware-rewrite: /api/fetch-recipe-stream
-    - access-control-allow-headers: Cache-Control
-    - access-control-allow-origin: *
-    - cache-control: no-cache
-    - connection: keep-alive
-    - content-type: text/event-stream
-    - date: Tue, 10 Jun 2025 07:53:21 GMT
-    - transfer-encoding: chunked
+Error: expect(received).toBeTruthy()
 
-    at C:\Users\blake\OneDrive\Desktop\NewProjects\FinalMothersDayV2\carens-cookbook\tests\e2e\real-analytics-generation.test.ts:78:38
+Received: null
+    at C:\Users\blake\OneDrive\Desktop\NewProjects\FinalMothersDayV2\carens-cookbook\tests\e2e\real-analytics-generation.test.ts:114:27
 ```
 
 # Test source
 
 ```ts
-   1 | import { test, expect } from '@playwright/test';
-   2 | import { PrismaClient } from '../../src/generated/prisma';
-   3 |
-   4 | const prisma = new PrismaClient();
-   5 |
-   6 | // Test recipes from different sites with varying complexity
-   7 | const TEST_RECIPES = [
-   8 |   {
-   9 |     url: 'https://www.allrecipes.com/recipe/213742/cheesy-chicken-broccoli-casserole/',
-   10 |     source: 'allrecipes',
-   11 |     expectedStrategy: 'url-direct',
-   12 |     difficulty: 'medium'
-   13 |   },
    14 |   {
    15 |     url: 'https://www.kingarthurbaking.com/recipes/chocolate-chip-cookies-recipe',
    16 |     source: 'kingarthur',
@@ -109,8 +79,7 @@ Call log:
    75 |       const startTime = Date.now();
    76 |       
    77 |       // Make actual API call to extraction endpoint
->  78 |       const response = await request.post(`${baseURL}/api/fetch-recipe-stream`, {
-      |                                      ^ Error: apiRequestContext.post: Target page, context or browser has been closed
+   78 |       const response = await request.post(`${baseURL}/api/fetch-recipe-stream`, {
    79 |         data: {
    80 |           url: testRecipe.url,
    81 |           userId: TEST_USER_ID
@@ -146,7 +115,8 @@ Call log:
   111 |       }
   112 |       
   113 |       // Verify extraction was successful
-  114 |       expect(finalResult).toBeTruthy();
+> 114 |       expect(finalResult).toBeTruthy();
+      |                           ^ Error: expect(received).toBeTruthy()
   115 |       expect(finalResult.recipe).toBeTruthy();
   116 |       expect(finalResult.recipe.title).toBeTruthy();
   117 |       expect(finalResult.recipe.ingredients).toBeTruthy();
@@ -211,4 +181,40 @@ Call log:
   176 |     expect(pageContent).toBeTruthy();
   177 |     
   178 |     // Look for analytics-related content
+  179 |     const hasAnalyticsContent = 
+  180 |       pageContent!.includes('extraction') ||
+  181 |       pageContent!.includes('success') ||
+  182 |       pageContent!.includes('strategy') ||
+  183 |       pageContent!.includes('token') ||
+  184 |       pageContent!.includes('metrics');
+  185 |     
+  186 |     expect(hasAnalyticsContent).toBe(true);
+  187 |     
+  188 |     console.log('✅ Analytics dashboard loaded successfully with real data');
+  189 |   });
+  190 |
+  191 |   test('Verify analytics aggregation functions work with real data', async () => {
+  192 |     // Test analytics aggregation with real data
+  193 |     const totalExtractions = await prisma.recipeExtractionMetrics.count({
+  194 |       where: { userId: TEST_USER_ID }
+  195 |     });
+  196 |     
+  197 |     expect(totalExtractions).toBeGreaterThan(0);
+  198 |     
+  199 |     const successfulExtractions = await prisma.recipeExtractionMetrics.count({
+  200 |       where: {
+  201 |         userId: TEST_USER_ID,
+  202 |         extractionSuccess: true
+  203 |       }
+  204 |     });
+  205 |     
+  206 |     expect(successfulExtractions).toBeGreaterThan(0);
+  207 |     
+  208 |     // Calculate success rate
+  209 |     const successRate = (successfulExtractions / totalExtractions) * 100;
+  210 |     console.log(`📊 Success rate: ${successRate.toFixed(1)}% (${successfulExtractions}/${totalExtractions})`);
+  211 |     
+  212 |     // Test strategy distribution
+  213 |     const strategyStats = await prisma.recipeExtractionMetrics.groupBy({
+  214 |       by: ['primaryStrategy'],
 ```
