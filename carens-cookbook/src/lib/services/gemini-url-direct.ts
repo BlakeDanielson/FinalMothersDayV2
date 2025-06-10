@@ -34,7 +34,7 @@ export async function extractRecipeViaUrlDirect(
   const { 
     uiProvider = 'gemini-pro',
     maxRetries = 3,
-    timeout = 30000 
+    timeout = 45000 
   } = options;
 
   if (!process.env.GOOGLE_API_KEY) {
@@ -53,7 +53,10 @@ export async function extractRecipeViaUrlDirect(
 
 IMPORTANT: Visit the actual webpage and analyze the complete content to extract recipe details.
 
-Return ONLY a valid JSON object with these exact fields (no additional text or formatting):
+CRITICAL: Return ONLY raw JSON - no markdown formatting, no code blocks, no additional text.
+The response must start with { and end with } and be valid JSON that can be parsed directly.
+
+Required JSON format:
 {
   "title": "recipe name",
   "ingredients": ["ingredient 1", "ingredient 2"],
@@ -66,7 +69,7 @@ Return ONLY a valid JSON object with these exact fields (no additional text or f
   "cleanupTime": "cleanup time"
 }
 
-If you cannot access the URL or it doesn't contain a recipe, return an empty object: {}`;
+If you cannot access the URL or it doesn't contain a recipe, return exactly: {}`;
 
   console.log(`🚀 Gemini URL-Direct: Processing ${url} with ${modelToUse}`);
   console.log(`📊 Estimated prompt tokens: ~${Math.ceil(prompt.length / 4)}`);
@@ -101,9 +104,30 @@ If you cannot access the URL or it doesn't contain a recipe, return an empty obj
       
       // Parse and validate the response
       let parsedResult: UrlDirectResult;
+      let cleanContent = '';
       try {
-        parsedResult = JSON.parse(content);
+        // Handle Gemini's tendency to wrap JSON in markdown code blocks
+        cleanContent = content.trim();
+        
+        // Remove ALL types of markdown code block formatting
+        cleanContent = cleanContent.replace(/^```(?:json)?\s*\n?/i, '').replace(/\n?```\s*$/i, '');
+        
+        // Handle single backticks as well
+        cleanContent = cleanContent.replace(/^`+\s*/, '').replace(/\s*`+$/, '');
+        
+        // Extract JSON if it's embedded in other text (find the first complete JSON object)
+        const jsonMatch = cleanContent.match(/\{[\s\S]*?\}(?=\s*$|\s*\n|$)/);
+        if (jsonMatch) {
+          cleanContent = jsonMatch[0];
+        }
+        
+        // Additional cleanup for common Gemini artifacts
+        cleanContent = cleanContent.replace(/^[^{]*/, '').replace(/[^}]*$/, '');
+        
+        parsedResult = JSON.parse(cleanContent);
       } catch (parseError) {
+        console.error(`❌ JSON parsing failed. Raw content (first 500 chars):`, content.substring(0, 500));
+        console.error(`❌ Cleaned content:`, cleanContent?.substring(0, 300));
         throw new Error(`Failed to parse JSON response: ${parseError instanceof Error ? parseError.message : 'Unknown parse error'}`);
       }
 

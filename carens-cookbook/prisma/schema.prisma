@@ -41,6 +41,26 @@ enum ProcessingMethod {
   GEMINI
 }
 
+// Enum for category source tracking
+enum CategorySource {
+  PREDEFINED    // Category was matched to a predefined category
+  AI_GENERATED  // Category was suggested by AI and kept as-is
+  USER_CREATED  // Category was created by user or represents a new category
+}
+
+// Enums for analytics tracking
+enum ExtractionStrategy {
+  URL_DIRECT     // Direct URL processing (Gemini)
+  HTML_FALLBACK  // HTML processing fallback
+}
+
+enum AIProvider {
+  OPENAI_MINI    // gpt-4o-mini
+  OPENAI_MAIN    // gpt-4o
+  GEMINI_MAIN    // gemini-pro
+  GEMINI_FLASH   // gemini-flash
+}
+
 // User model for Clerk integration
 model User {
   id        String   @id // This will be the Clerk user ID
@@ -71,13 +91,7 @@ model User {
   recipes   Recipe[]
   favorites RecipeFavorite[]
   onboardingProgress UserOnboardingProgress[] // Detailed step tracking
-}
-
-// Enum for category source tracking
-enum CategorySource {
-  PREDEFINED    // Category was matched to a predefined category
-  AI_GENERATED  // Category was suggested by AI and kept as-is
-  USER_CREATED  // Category was created by user or represents a new category
+  extractionMetrics RecipeExtractionMetrics[] // Analytics tracking
 }
 
 model Recipe {
@@ -106,6 +120,7 @@ model Recipe {
   // Relations
   favorites     RecipeFavorite[]
   images        RecipeImage[]
+  extractionMetrics RecipeExtractionMetrics[] // Analytics tracking
 
   @@index([userId])
   @@index([userId, category]) // Performance index for category queries
@@ -163,4 +178,232 @@ model UserOnboardingProgress {
   @@unique([userId, stepId])
   @@index([userId])
   @@index([userId, stepId])
+}
+
+// Analytics: Primary metrics tracking table
+model RecipeExtractionMetrics {
+  id                    String   @id @default(cuid())
+  
+  // Request Context
+  userId                String
+  recipeUrl             String
+  domain                String   // extracted from URL
+  requestTimestamp      DateTime @default(now())
+  
+  // Strategy & Provider Info
+  primaryStrategy       ExtractionStrategy
+  aiProvider            AIProvider
+  fallbackUsed          Boolean  @default(false)
+  fallbackReason        String?  // why fallback was triggered
+  
+  // Timing Metrics (all in milliseconds)
+  totalDuration         Int
+  htmlFetchDuration     Int?
+  aiProcessingDuration  Int
+  validationDuration    Int?
+  databaseSaveDuration  Int?
+  
+  // Content & Processing Info
+  htmlContentSize       Int?     // bytes
+  cleanedContentSize    Int?     // bytes
+  promptTokens          Int?
+  responseTokens        Int?
+  totalTokens           Int?
+  
+  // Success & Quality Metrics
+  extractionSuccess     Boolean
+  validationErrors      Json?    // array of validation errors
+  missingFields         String[] // array of field names that were missing/null
+  completenessScore     Float?   // 0.00 to 1.00
+  
+  // AI Response Quality
+  categoryConfidence    Float?   // from existing recipe.categoryConfidence
+  hasStructuredData     Boolean? // whether site had JSON-LD
+  
+  // Cost Tracking (in USD)
+  estimatedCost         Float?   // calculated cost for this extraction
+  
+  // Final Recipe Reference
+  recipeId              String?  // null if extraction failed
+  
+  // Performance Flags
+  wasOptimal            Boolean  @default(false) // used optimal strategy
+  
+  createdAt             DateTime @default(now())
+  updatedAt             DateTime @updatedAt
+
+  // Relations
+  user   User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  recipe Recipe? @relation(fields: [recipeId], references: [id], onDelete: SetNull)
+
+  @@index([userId])
+  @@index([domain])
+  @@index([aiProvider])
+  @@index([primaryStrategy])
+  @@index([extractionSuccess])
+  @@index([requestTimestamp])
+  @@index([userId, requestTimestamp]) // for user-specific analytics
+  @@index([domain, extractionSuccess]) // for domain performance
+}
+
+// Analytics: Domain performance summary table
+model DomainPerformanceMetrics {
+  id                    String   @id @default(cuid())
+  domain                String   @unique
+  
+  // Aggregated Performance
+  totalExtractions      Int      @default(0)
+  successfulExtractions Int      @default(0)
+  averageExtractTime    Int?     // milliseconds
+  averageTokens         Int?
+  averageCost           Float?
+  
+  // Optimal Strategy
+  optimalStrategy       ExtractionStrategy?
+  optimalProvider       AIProvider?
+  
+  // Quality Metrics
+  averageCompleteness   Float?   // 0.00 to 1.00
+  hasStructuredDataPct  Float?   // percentage with JSON-LD
+  
+  lastUpdated           DateTime @default(now())
+  createdAt             DateTime @default(now())
+  updatedAt             DateTime @updatedAt
+
+  @@index([domain])
+  @@index([totalExtractions])
+  @@index([lastUpdated])
+}
+
+// Analytics: AI Provider cost tracking
+model AIProviderCosts {
+  id                    String   @id @default(cuid())
+  provider              String   // 'openai' | 'gemini'
+  model                 String   // 'gpt-4o-mini' | 'gemini-pro' etc.
+  
+  // Pricing (per 1000 tokens)
+  inputTokenCost        Float
+  outputTokenCost       Float
+  
+  effectiveDate         DateTime
+  createdAt             DateTime @default(now())
+
+  @@index([provider, model])
+  @@index([effectiveDate])
+}
+
+// Analytics: Anonymous user session tracking
+model AnonymousSession {
+  id                    String   @id @default(cuid())
+  sessionId             String   @unique // Generated UUID for anonymous tracking
+  
+  // Device & Context
+  ipAddress             String   // For rate limiting and geo insights
+  userAgent             String
+  deviceType            String?  // 'mobile' | 'tablet' | 'desktop'
+  operatingSystem       String?
+  browser               String?
+  screenResolution      String?
+  timezone              String?
+  language              String?
+  
+  // Session Behavior
+  firstSeenAt           DateTime @default(now())
+  lastSeenAt            DateTime @default(now())
+  totalRecipeAttempts   Int      @default(0)
+  totalSuccessfulExtractions Int @default(0)
+  hitRateLimit          Boolean  @default(false)
+  rateLimitHitAt        DateTime?
+  
+  // Conversion Tracking
+  showedSignupPrompt    Boolean  @default(false)
+  signupPromptShownAt   DateTime?
+  convertedToUser       Boolean  @default(false)
+  convertedUserId       String?  // If they sign up
+  convertedAt           DateTime?
+  
+  // Geographic & Traffic
+  referrerDomain        String?
+  countryCode           String?  // Can be derived from IP
+  cityName              String?
+  
+  // Retention: Auto-delete after 90 days
+  expiresAt             DateTime @default(dbgenerated("NOW() + INTERVAL '90 days'"))
+  
+  createdAt             DateTime @default(now())
+  updatedAt             DateTime @updatedAt
+
+  @@index([sessionId])
+  @@index([ipAddress])
+  @@index([firstSeenAt])
+  @@index([convertedToUser])
+  @@index([expiresAt]) // For cleanup queries
+  @@index([hitRateLimit])
+}
+
+// Analytics: Conversion funnel events
+model ConversionEvent {
+  id                    String   @id @default(cuid())
+  
+  // Session Reference
+  sessionId             String   // Links to AnonymousSession.sessionId
+  userId                String?  // null for anonymous events
+  
+  // Event Details
+  eventType             ConversionEventType
+  eventData             Json?    // Additional event-specific data
+  
+  // Context
+  recipeUrl             String?  // If related to recipe extraction
+  pageUrl               String?  // Where the event occurred
+  
+  // Timing
+  sessionDuration       Int?     // Milliseconds since session start
+  
+  // Retention: Auto-delete after 90 days
+  expiresAt             DateTime @default(dbgenerated("NOW() + INTERVAL '90 days'"))
+  
+  createdAt             DateTime @default(now())
+
+  @@index([sessionId])
+  @@index([eventType])
+  @@index([userId])
+  @@index([createdAt])
+  @@index([expiresAt]) // For cleanup
+}
+
+// Analytics: Daily rate limiting tracking
+model DailyRateLimit {
+  id                    String   @id @default(cuid())
+  
+  // Identifier (can be sessionId for anonymous or userId for authenticated)
+  identifier            String
+  identifierType        String   // 'session' | 'user'
+  
+  // Daily tracking
+  date                  DateTime @db.Date // Just the date, no time
+  requestCount          Int      @default(0)
+  lastRequestAt         DateTime?
+  
+  // Context
+  ipAddress             String?  // For additional rate limiting if needed
+  
+  createdAt             DateTime @default(now())
+  updatedAt             DateTime @updatedAt
+
+  @@unique([identifier, identifierType, date])
+  @@index([date])
+  @@index([identifier, identifierType])
+}
+
+// Enum for conversion events
+enum ConversionEventType {
+  SESSION_STARTED       // Anonymous user starts session
+  RECIPE_EXTRACTED      // Successfully extracted a recipe
+  RATE_LIMIT_HIT        // Hit daily limit
+  SIGNUP_PROMPT_SHOWN   // "Sign up to save" message displayed
+  SIGNUP_CLICKED        // User clicked sign up from prompt
+  SIGNUP_COMPLETED      // User successfully signed up
+  RECIPE_SAVE_ATTEMPTED // Tried to save but couldn't (anonymous)
+  FEATURE_INTERACTION   // Interacted with premium features
 }
