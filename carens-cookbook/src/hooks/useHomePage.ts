@@ -292,16 +292,13 @@ export function useHomePage() {
     if (!urlToProcess) return;
     setIsLoading(true); 
     setError(null); 
-    setLoadingProgress(10);
-    setLoadingStepMessage("🚀 Preparing ultra-efficient recipe extraction...");
+    setLoadingProgress(0);
+    setLoadingStepMessage("Starting...");
     
     try {
-      setLoadingProgress(25); 
-      setLoadingStepMessage("🔍 Analyzing URL and selecting optimal strategy...");
-      
-      // Use the new optimized PUT endpoint
-      const response = await fetch(`/api/fetch-recipe`, {
-        method: 'PUT',
+      // Create a fetch request for streaming with POST body
+      const response = await fetch('/api/fetch-recipe-stream', {
+        method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ 
           url: urlToProcess, 
@@ -310,45 +307,89 @@ export function useHomePage() {
           openaiProvider
         }),
       });
-      
+
       if (!response.ok) {
-        const errorData = await response.json().catch(() => ({}));
-        console.error("Error fetching from optimized API:", errorData);
-        throw new Error(errorData.error || 'Failed to fetch recipe from optimized API');
+        throw new Error('Failed to start recipe extraction');
       }
-      
-      setLoadingProgress(75); 
-      setLoadingStepMessage("⚡ Processing with ultra-efficient AI strategy...");
-      const responseData = await response.json();
-      const recipeData: RecipeData = responseData.recipe;
-      
-      // Show optimization results
-      if (responseData.optimization) {
-        const { strategy, efficiency, tokensUsed, efficiencyGain } = responseData.optimization;
-        setLoadingStepMessage(`✨ Success! Used ${strategy} (${efficiency}) • ${tokensUsed} tokens`);
-        console.log("🎯 Optimization results:", responseData.optimization);
+
+      // Read the streaming response
+      const reader = response.body?.getReader();
+      const decoder = new TextDecoder();
+
+      if (!reader) {
+        throw new Error('Unable to read streaming response');
+      }
+
+      // Process the streaming response
+      while (true) {
+        const { done, value } = await reader.read();
         
-        // Show a toast with efficiency info
-        if (strategy === 'gemini-url-direct') {
-          toast.success(`Ultra-efficient extraction! ${efficiencyGain}`, { duration: 4000 });
-        } else {
-          toast.info(`Extracted via fallback: ${strategy}`, { duration: 3000 });
+        if (done) break;
+        
+        const chunk = decoder.decode(value, { stream: true });
+        const lines = chunk.split('\n');
+        
+        for (const line of lines) {
+          if (line.startsWith('data: ')) {
+            try {
+              const data = JSON.parse(line.slice(6)); // Remove 'data: ' prefix
+              
+              if (data.type === 'progress') {
+                setLoadingProgress(data.progress);
+                setLoadingStepMessage(data.message);
+                console.log(`📊 Real-time progress: ${data.progress}% - ${data.message}`);
+              } 
+              else if (data.type === 'success') {
+                const recipeData: RecipeData = data.recipe;
+                
+                // Show optimization results
+                if (data.optimization) {
+                  const { strategy, efficiencyGain } = data.optimization;
+                  console.log("🎯 Optimization results:", data.optimization);
+                  
+                  // Show a toast with efficiency info
+                  if (strategy === 'gemini-url-direct') {
+                    toast.success(`Ultra-efficient extraction! ${efficiencyGain}`, { duration: 4000 });
+                  } else {
+                    toast.info(`Extracted via fallback: ${strategy}`, { duration: 3000 });
+                  }
+                }
+                
+                handleViewRecipe(recipeData);
+                setShowAddRecipeModal(false);
+                
+                // Reset loading state
+                setIsLoading(false);
+                setLoadingProgress(0);
+                setLoadingStepMessage("");
+                
+                return; // Exit the function on success
+              } 
+              else if (data.type === 'error') {
+                console.error("Error from streaming API:", data.error);
+                setError(data.error);
+                
+                // Reset loading state
+                setIsLoading(false);
+                setLoadingProgress(0);
+                setLoadingStepMessage("");
+                
+                return; // Exit the function on error
+              }
+            } catch (parseError) {
+              console.error("Error parsing streaming data:", parseError);
+              // Continue to next line on parse error
+            }
+          }
         }
       }
-      
-      setLoadingProgress(90); 
-      setLoadingStepMessage("Getting it all plated up for you... ✨");
-      handleViewRecipe(recipeData); 
-      setLoadingProgress(100);
-      setShowAddRecipeModal(false);
+
     } catch (err: unknown) {
-      console.error("Error in optimized handleUrlSubmit:", err);
+      console.error("Error in streaming handleUrlSubmit:", err);
       setError(err instanceof Error ? err.message : "An unexpected error occurred.");
-      setLoadingProgress(0);
     } finally { 
-      setIsLoading(false);
-      setLoadingStepMessage("");
-      setLoadingProgress(0);
+      // Note: Don't reset loading state here since SSE will handle completion
+      // The loading state will be reset when we receive success/error events
     }
   }, [handleViewRecipe]);
   
