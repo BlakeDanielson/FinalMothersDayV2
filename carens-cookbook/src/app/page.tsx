@@ -11,16 +11,12 @@ import { BentoGrid } from "@/components/BentoGrid";
 import StatsDashboard from "@/components/StatsDashboard";
 import { CategoryCard } from "@/components/category/CategoryCard";
 import { QuickActionsSection } from "@/components/home/QuickActionsSection";
-import { RecipeImportModal } from "@/components/recipe-import/RecipeImportModal";
+import { SmartRecipeInput } from "@/components/recipe-import/SmartRecipeInput";
 import { useHomePage } from "@/hooks/useHomePage";
 
 function MainPage() {
   const {
     // State
-    url,
-    setUrl,
-    urlProcessingMethod,
-    setUrlProcessingMethod,
     isLoading,
     loadingStepMessage,
     loadingProgress,
@@ -30,8 +26,6 @@ function MainPage() {
     selectedRecipe,
     showAddRecipeModal,
     setShowAddRecipeModal,
-    activeImportTab,
-    setActiveImportTab,
     processedCategories,
     
     // Data
@@ -39,19 +33,12 @@ function MainPage() {
     categoriesError,
     savedRecipes,
     
-    // Image processing
-    imageProcessing,
-    multipleImageProcessing,
-    
     // Handlers
     handleDeleteRecipeFromDisplay,
     handleUpdateRecipeTitle,
-    handleSubmit,
+    handleUrlSubmit,
     handleSaveRecipe,
-    handleImageFileSelect,
-    handleRetryImageProcessing,
     handleMultipleImageFileSelect,
-    handleRetryMultipleImageProcessing,
     handleCategoryClick,
     handleQuickImportURL,
     handleQuickScanPhoto,
@@ -242,29 +229,17 @@ function MainPage() {
         )}
       </div>
 
-      {/* Recipe Import Modal */}
-      <RecipeImportModal
+      {/* Smart Recipe Input */}
+      <SmartRecipeInput
         isOpen={showAddRecipeModal}
         onClose={() => setShowAddRecipeModal(false)}
-        activeTab={activeImportTab}
-        onTabChange={setActiveImportTab}
-        url={url}
-        onUrlChange={setUrl}
-        urlProcessingMethod={urlProcessingMethod}
-        onUrlProcessingMethodChange={setUrlProcessingMethod}
-        onUrlSubmit={handleSubmit}
-        urlError={error}
-        onSingleFileSelect={handleImageFileSelect}
-        onMultipleFilesSelect={handleMultipleImageFileSelect}
-        singleImageError={imageProcessing.error}
-        multipleImageError={multipleImageProcessing.error}
-        onRetrySingleImage={handleRetryImageProcessing}
-        onRetryMultipleImages={handleRetryMultipleImageProcessing}
-        onDismissSingleError={() => imageProcessing.reset()}
-        onDismissMultipleError={() => multipleImageProcessing.reset()}
+        onUrlSubmit={(url, geminiProvider, openaiProvider, forceStrategy) => 
+          handleUrlSubmit(url, geminiProvider, openaiProvider, forceStrategy)}
+        onPhotosSubmit={(files, provider) => handleMultipleImageFileSelect(files, provider)}
         isLoading={isLoading}
         loadingProgress={loadingProgress}
         loadingStepMessage={loadingStepMessage}
+        error={error}
       />
     </div>
   );

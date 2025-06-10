@@ -3,7 +3,7 @@
 import React from "react";
 import { motion } from "framer-motion";
 import { Link, Camera, SearchIcon } from "lucide-react";
-import { AIProvider } from '@/lib/ai-providers';
+import { type AIProvider } from '@/lib/config/ui-models';
 import { RecipeProcessingError } from "@/lib/errors";
 
 import { Button } from "@/components/ui/button";
@@ -13,6 +13,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import RecipeLoadingProgress from "@/components/ui/RecipeLoadingProgress";
 import { EnhancedPhotoUpload } from "./EnhancedPhotoUpload";
+import { getUIModelConfig } from '@/lib/config/ui-models';
 
 interface RecipeImportModalProps {
   isOpen: boolean;
@@ -23,8 +24,8 @@ interface RecipeImportModalProps {
   // URL import props
   url: string;
   onUrlChange: (url: string) => void;
-  urlProcessingMethod: 'openai' | 'gemini';
-  onUrlProcessingMethodChange: (method: 'openai' | 'gemini') => void;
+  urlProcessingMethod: AIProvider;
+  onUrlProcessingMethodChange: (method: AIProvider) => void;
   onUrlSubmit: (e: React.FormEvent) => void;
   urlError: string | null;
   
@@ -129,16 +130,28 @@ export function RecipeImportModal({
                           <SelectValue />
                         </SelectTrigger>
                         <SelectContent>
-                          <SelectItem value="openai">
+                          <SelectItem value="openai-main">
                             <div className="flex flex-col items-start">
-                              <span className="font-medium">GPT-4.1-mini (Primary)</span>
-                              <span className="text-xs text-muted-foreground">Reliable and accurate recipe extraction</span>
+                              <span className="font-medium">{getUIModelConfig('openai-main').name} ({getUIModelConfig('openai-main').actualModel})</span>
+                              <span className="text-xs text-muted-foreground">{getUIModelConfig('openai-main').description}</span>
                             </div>
                           </SelectItem>
-                          <SelectItem value="gemini">
+                          <SelectItem value="openai-mini">
                             <div className="flex flex-col items-start">
-                              <span className="font-medium">GPT-4o-mini (Alternative)</span>
-                              <span className="text-xs text-muted-foreground">Fast processing with enhanced multimodal capabilities</span>
+                              <span className="font-medium">{getUIModelConfig('openai-mini').name} ({getUIModelConfig('openai-mini').actualModel})</span>
+                              <span className="text-xs text-muted-foreground">{getUIModelConfig('openai-mini').description}</span>
+                            </div>
+                          </SelectItem>
+                          <SelectItem value="gemini-main">
+                            <div className="flex flex-col items-start">
+                              <span className="font-medium">{getUIModelConfig('gemini-main').name} ({getUIModelConfig('gemini-main').actualModel})</span>
+                              <span className="text-xs text-muted-foreground">{getUIModelConfig('gemini-main').description}</span>
+                            </div>
+                          </SelectItem>
+                          <SelectItem value="gemini-pro">
+                            <div className="flex flex-col items-start">
+                              <span className="font-medium">{getUIModelConfig('gemini-pro').name} ({getUIModelConfig('gemini-pro').actualModel})</span>
+                              <span className="text-xs text-muted-foreground">{getUIModelConfig('gemini-pro').description}</span>
                             </div>
                           </SelectItem>
                         </SelectContent>
@@ -146,10 +159,13 @@ export function RecipeImportModal({
                       
                       {/* Info about selected method */}
                       <div className="text-xs text-muted-foreground p-3 rounded-md bg-muted/50 border">
-                        {urlProcessingMethod === 'openai' ? (
-                          <>🧠 <strong>GPT-4.1-mini (Primary):</strong> AI-powered recipe extraction with intelligent content parsing</>
-                        ) : (
-                          <>⚡ <strong>GPT-4o-mini (Alternative):</strong> Fast and efficient AI processing with enhanced understanding</>
+                        {urlProcessingMethod && (
+                          <>
+                            {getUIModelConfig(urlProcessingMethod)?.badge === 'Recommended' ? '🧠' : 
+                             getUIModelConfig(urlProcessingMethod)?.badge === 'Fast' ? '⚡' : 
+                             getUIModelConfig(urlProcessingMethod)?.badge === 'Premium' ? '💎' : '💰'} 
+                            <strong>{getUIModelConfig(urlProcessingMethod).name} ({getUIModelConfig(urlProcessingMethod).actualModel}):</strong> {getUIModelConfig(urlProcessingMethod).features.join(', ')}
+                          </>
                         )}
                       </div>
                     </div>

@@ -8,8 +8,8 @@ import {
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { toast } from 'sonner';
-import { AIProvider } from '@/lib/ai-providers';
 import { RecipeProcessingError } from "@/lib/errors";
+import { getUIModelConfig, type AIProvider } from '@/lib/config/ui-models';
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -43,7 +43,7 @@ export function EnhancedPhotoUpload({
   maxFiles = 5
 }: EnhancedPhotoUploadProps) {
   const [uploadMode, setUploadMode] = useState<'single' | 'multiple'>('single');
-  const [selectedProvider, setSelectedProvider] = useState<AIProvider>('openai');
+  const [selectedProvider, setSelectedProvider] = useState<AIProvider>('openai-main');
   const [isDragging, setIsDragging] = useState(false);
   
   // For multiple file upload
@@ -192,29 +192,17 @@ export function EnhancedPhotoUpload({
   };
 
   const getProviderDescription = (provider: AIProvider) => {
-    switch (provider) {
-      case 'openai':
-        return {
-          name: 'GPT-4.1-mini (Primary)',
-          description: 'Reliable and accurate recipe extraction',
-          maxFileSize: '25MB',
-          icon: <CheckCircle2 className="h-4 w-4 text-green-500" />
-        };
-      case 'gemini':
-        return {
-          name: 'GPT-4o-mini (Alternative)',
-          description: 'Fast processing with enhanced multimodal capabilities',
-          maxFileSize: '10MB',
-          icon: <AlertCircle className="h-4 w-4 text-amber-500" />
-        };
-      default:
-        return {
-          name: 'Unknown Provider',
-          description: 'Provider details not available',
-          maxFileSize: 'Unknown',
-          icon: <Info className="h-4 w-4" />
-        };
-    }
+    const config = getUIModelConfig(provider);
+    const iconColor = provider.startsWith('openai') ? 'text-green-500' : 
+                     provider.startsWith('gemini') ? 'text-blue-500' : 'text-gray-500';
+    const IconComponent = provider.startsWith('openai') ? CheckCircle2 : AlertCircle;
+    
+    return {
+      name: `${config.name} (${config.actualModel})`,
+      description: config.description,
+      maxFileSize: '25MB',
+      icon: <IconComponent className={cn("h-4 w-4", iconColor)} />
+    };
   };
 
   const currentProvider = getProviderDescription(selectedProvider);
@@ -296,25 +284,47 @@ export function EnhancedPhotoUpload({
             <SelectValue placeholder="Select AI provider" />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="openai">
+            <SelectItem value="openai-main">
               <div className="flex items-center gap-2">
                 <div className="w-8 h-8 rounded-full bg-green-100 flex items-center justify-center">
                   <CheckCircle2 className="h-4 w-4 text-green-600" />
                 </div>
                 <div className="flex flex-col">
-                  <span className="font-medium">GPT-4.1-mini (Primary)</span>
-                  <span className="text-xs text-muted-foreground">Reliable and accurate recipe extraction</span>
+                  <span className="font-medium">{getUIModelConfig('openai-main').name} ({getUIModelConfig('openai-main').actualModel})</span>
+                  <span className="text-xs text-muted-foreground">{getUIModelConfig('openai-main').description}</span>
                 </div>
               </div>
             </SelectItem>
-            <SelectItem value="gemini">
+            <SelectItem value="openai-mini">
               <div className="flex items-center gap-2">
-                <div className="w-8 h-8 rounded-full bg-amber-100 flex items-center justify-center">
-                  <AlertCircle className="h-4 w-4 text-amber-600" />
+                <div className="w-8 h-8 rounded-full bg-emerald-100 flex items-center justify-center">
+                  <CheckCircle2 className="h-4 w-4 text-emerald-600" />
                 </div>
                 <div className="flex flex-col">
-                  <span className="font-medium">GPT-4o-mini (Alternative)</span>
-                  <span className="text-xs text-muted-foreground">Fast processing with enhanced multimodal capabilities</span>
+                  <span className="font-medium">{getUIModelConfig('openai-mini').name} ({getUIModelConfig('openai-mini').actualModel})</span>
+                  <span className="text-xs text-muted-foreground">{getUIModelConfig('openai-mini').description}</span>
+                </div>
+              </div>
+            </SelectItem>
+            <SelectItem value="gemini-main">
+              <div className="flex items-center gap-2">
+                <div className="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center">
+                  <AlertCircle className="h-4 w-4 text-blue-600" />
+                </div>
+                <div className="flex flex-col">
+                  <span className="font-medium">{getUIModelConfig('gemini-main').name} ({getUIModelConfig('gemini-main').actualModel})</span>
+                  <span className="text-xs text-muted-foreground">{getUIModelConfig('gemini-main').description}</span>
+                </div>
+              </div>
+            </SelectItem>
+            <SelectItem value="gemini-pro">
+              <div className="flex items-center gap-2">
+                <div className="w-8 h-8 rounded-full bg-purple-100 flex items-center justify-center">
+                  <AlertCircle className="h-4 w-4 text-purple-600" />
+                </div>
+                <div className="flex flex-col">
+                  <span className="font-medium">{getUIModelConfig('gemini-pro').name} ({getUIModelConfig('gemini-pro').actualModel})</span>
+                  <span className="text-xs text-muted-foreground">{getUIModelConfig('gemini-pro').description}</span>
                 </div>
               </div>
             </SelectItem>

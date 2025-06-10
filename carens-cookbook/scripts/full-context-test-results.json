@@ -1,0 +1,491 @@
+[
+  {
+    "modelName": "openai-main",
+    "strategy": "current-openai",
+    "url": "https://www.simplyrecipes.com/recipes/banana_bread/",
+    "success": [
+      "Preheat the oven to 350°F (175°C). Butter an 8x4-inch loaf pan.",
+      "In a mixing bowl, mash the ripe bananas with a fork until completely smooth. Stir the melted butter into the mashed bananas.",
+      "Mix in the baking soda and salt. Stir in the sugar, beaten egg, and vanilla extract. Mix in the flour.",
+      "Pour the batter into your prepared loaf pan.",
+      "Bake for 55 to 65 minutes at 350°F (175°C), or until a toothpick or wooden skewer inserted into the center comes out clean.",
+      "Remove from oven and let cool in the pan for a few minutes. Then remove the banana bread from the pan and let cool completely before serving. Slice and serve."
+    ],
+    "duration": 4925,
+    "title": "Banana Bread",
+    "ingredientCount": 8,
+    "instructionCount": 6,
+    "error": null,
+    "contentSize": 9584
+  },
+  {
+    "modelName": "openai-mini",
+    "strategy": "current-openai",
+    "url": "https://www.simplyrecipes.com/recipes/banana_bread/",
+    "success": [
+      "Preheat the oven to 350°F (175°C) and butter an 8x4-inch loaf pan.",
+      "In a mixing bowl, mash the ripe bananas with a fork until completely smooth. Stir the melted butter into the mashed bananas.",
+      "Mix in the baking soda and salt. Stir in the sugar, beaten egg, and vanilla extract. Mix in the flour.",
+      "Pour the batter into your prepared loaf pan.",
+      "Bake for 55 to 65 minutes at 350°F (175°C), or until a toothpick or wooden skewer inserted into the center comes out clean.",
+      "Remove from oven and let cool in the pan for a few minutes. Then remove the banana bread from the pan and let cool completely before serving."
+    ],
+    "duration": 4776,
+    "title": "Banana Bread",
+    "ingredientCount": 8,
+    "instructionCount": 6,
+    "error": null,
+    "contentSize": 9584
+  },
+  {
+    "modelName": "gemini-main",
+    "strategy": "current-gemini",
+    "url": "https://www.simplyrecipes.com/recipes/banana_bread/",
+    "success": [
+      "Preheat the oven to 350°F (175°C): Butter an 8x4-inch loaf pan.",
+      "Mash the bananas and add the butter: In a mixing bowl, mash the ripe bananas with a fork until completely smooth. Stir the melted butter into the mashed bananas.",
+      "Mix in the remaining ingredients: Mix in the baking soda and salt. Stir in the sugar, beaten egg, and vanilla extract. Mix in the flour.",
+      "Bake the bread: Pour the batter into your prepared loaf pan. Bake for 55 to 65 minutes at 350°F (175°C), or until a toothpick or wooden skewer inserted into the center comes out clean. A few dry crumbs are okay; streaks of wet batter are not. If the outside of the loaf is browned but the center is still wet, loosely tent the loaf with foil and continue baking until the loaf is fully baked.",
+      "Cool and serve: Remove from oven and let cool in the pan for a few minutes. Then remove the banana bread from the pan and let cool completely before serving. Slice and serve. (A bread knife helps to make slices that aren't crumbly.)"
+    ],
+    "duration": 6581,
+    "title": "Banana Bread",
+    "ingredientCount": 8,
+    "instructionCount": 5,
+    "error": null,
+    "contentSize": 9063
+  },
+  {
+    "modelName": "gemini-main",
+    "strategy": "full-html-gemini",
+    "url": "https://www.simplyrecipes.com/recipes/banana_bread/",
+    "success": [
+      "Preheat the oven to 350°F (175°C): Butter an 8x4-inch loaf pan.",
+      "Mash the bananas and add the butter: In a mixing bowl, mash the ripe bananas with a fork until completely smooth. Stir the melted butter into the mashed bananas.",
+      "Mix in the remaining ingredients: Mix in the baking soda and salt. Stir in the sugar, beaten egg, and vanilla extract. Mix in the flour.",
+      "Bake the bread: Pour the batter into your prepared loaf pan. Bake for 55 to 65 minutes at 350°F (175°C), or until a toothpick or wooden skewer inserted into the center comes out clean. A few dry crumbs are okay; streaks of wet batter are not. If the outside of the loaf is browned but the center is still wet, loosely tent the loaf with foil and continue baking until the loaf is fully baked.",
+      "Cool and serve: Remove from oven and let cool in the pan for a few minutes. Then remove the banana bread from the pan and let cool completely before serving. Slice and serve. (A bread knife helps to make slices that aren't crumbly.) Wrapped well, the banana bread will keep at room temperature for 4 days. For longer storage, refrigerate the loaf up to 5 days, or freeze it ."
+    ],
+    "duration": 21960,
+    "title": "Banana Bread",
+    "ingredientCount": 8,
+    "instructionCount": 5,
+    "error": null,
+    "contentSize": 368290
+  },
+  {
+    "modelName": "gemini-main",
+    "strategy": "url-direct-gemini",
+    "url": "https://www.simplyrecipes.com/recipes/banana_bread/",
+    "success": [
+      "Preheat the oven to 350°F (175°C). Grease and flour a 9x5-inch loaf pan.",
+      "Whisk together the flour, baking soda, and salt in a medium bowl. Set aside.",
+      "In a large bowl, cream together the butter and sugar until light and fluffy.",
+      "Beat in the eggs one at a time, then stir in the vanilla.",
+      "Fold in the mashed bananas until just combined.",
+      "Gradually add the dry ingredients to the wet ingredients, mixing until just combined. Do not overmix.",
+      "Pour the batter into the prepared loaf pan and bake for 50-60 minutes, or until a wooden skewer inserted into the center comes out clean.",
+      "Let the bread cool in the pan for 10 minutes before removing it to a wire rack to cool completely."
+    ],
+    "duration": 5807,
+    "title": "Banana Bread",
+    "ingredientCount": 8,
+    "instructionCount": 8,
+    "error": null,
+    "contentSize": 51
+  },
+  {
+    "modelName": "gemini-pro",
+    "strategy": "current-gemini",
+    "url": "https://www.simplyrecipes.com/recipes/banana_bread/",
+    "success": [
+      "Preheat the oven to 350°F (175°C): Butter an 8x4-inch loaf pan.",
+      "Mash the bananas and add the butter: In a mixing bowl, mash the ripe bananas with a fork until completely smooth. Stir the melted butter into the mashed bananas.",
+      "Mix in the remaining ingredients: Mix in the baking soda and salt. Stir in the sugar, beaten egg, and vanilla extract. Mix in the flour.",
+      "Bake the bread: Pour the batter into your prepared loaf pan. Bake for 55 to 65 minutes at 350°F (175°C), or until a toothpick or wooden skewer inserted into the center comes out clean. A few dry crumbs are okay; streaks of wet batter are not. If the outside of the loaf is browned but the center is still wet, loosely tent the loaf with foil and continue baking until the loaf is fully baked.",
+      "Cool and serve: Remove from oven and let cool in the pan for a few minutes. Then remove the banana bread from the pan and let cool completely before serving. Slice and serve. (A bread knife helps to make slices that aren't crumbly.) Wrapped well, the banana bread will keep at room temperature for 4 days. For longer storage, refrigerate the loaf up to 5 days, or freeze it."
+    ],
+    "duration": 10118,
+    "title": "Banana Bread",
+    "ingredientCount": 8,
+    "instructionCount": 5,
+    "error": null,
+    "contentSize": 9063
+  },
+  {
+    "modelName": "gemini-pro",
+    "strategy": "full-html-gemini",
+    "url": "https://www.simplyrecipes.com/recipes/banana_bread/",
+    "success": [
+      "Preheat the oven to 350°F (175°C): Butter an 8x4-inch loaf pan.",
+      "Mash the bananas and add the butter: In a mixing bowl, mash the ripe bananas with a fork until completely smooth. Stir the melted butter into the mashed bananas.",
+      "Mix in the remaining ingredients: Mix in the baking soda and salt. Stir in the sugar, beaten egg, and vanilla extract. Mix in the flour.",
+      "Bake the bread: Pour the batter into your prepared loaf pan. Bake for 55 to 65 minutes at 350°F (175°C), or until a toothpick or wooden skewer inserted into the center comes out clean. A few dry crumbs are okay; streaks of wet batter are not. If the outside of the loaf is browned but the center is still wet, loosely tent the loaf with foil and continue baking until the loaf is fully baked.",
+      "Cool and serve: Remove from oven and let cool in the pan for a few minutes. Then remove the banana bread from the pan and let cool completely before serving. Slice and serve. (A bread knife helps to make slices that aren't crumbly.) Wrapped well, the banana bread will keep at room temperature for 4 days. For longer storage, refrigerate the loaf up to 5 days, or freeze it ."
+    ],
+    "duration": 20139,
+    "title": "Banana Bread",
+    "ingredientCount": 8,
+    "instructionCount": 5,
+    "error": null,
+    "contentSize": 368243
+  },
+  {
+    "modelName": "gemini-pro",
+    "strategy": "url-direct-gemini",
+    "url": "https://www.simplyrecipes.com/recipes/banana_bread/",
+    "success": [
+      "Preheat the oven to 350°F (175°C). Grease and flour a 9x5-inch loaf pan.",
+      "In a medium bowl, whisk together the flour, baking soda, and salt. Set aside.",
+      "In a large bowl, cream together the butter and sugar until light and fluffy. Beat in the eggs one at a time, then stir in the vanilla.",
+      "In a separate bowl, mash the bananas. Stir the mashed bananas into the wet ingredients until just combined.",
+      "Gradually add the dry ingredients to the wet ingredients, mixing until just combined. Do not overmix.",
+      "Fold in the nuts (if using).",
+      "Pour the batter into the prepared loaf pan and bake for 50-60 minutes, or until a toothpick inserted into the center comes out clean.",
+      "Let the bread cool in the pan for 10 minutes before transferring it to a wire rack to cool completely."
+    ],
+    "duration": 15304,
+    "title": "Banana Bread",
+    "ingredientCount": 9,
+    "instructionCount": 8,
+    "error": null,
+    "contentSize": 51
+  },
+  {
+    "modelName": "openai-main",
+    "strategy": "current-openai",
+    "url": "https://www.kingarthurbaking.com/recipes/rustic-sourdough-bread-recipe",
+    "success": [
+      "Weigh your flour; or measure it by gently spooning it into a cup, then sweeping off any excess. In a large bowl, combine all of the ingredients, kneading to form a smooth dough.",
+      "Allow the dough to rise in a lightly greased, covered bowl until it's doubled in size, about 1 1/2 hours.",
+      "Transfer the dough to a lightly floured surface and divide in half; it'll deflate somewhat. Preshape each piece of dough by pulling the edges into the center, turning it over so the seam is on the bottom, and rolling under your cupped hands to form a ball. Let the dough rest, covered, for 15 minutes.",
+      "To make batards (fat ovals), elongate each ball of dough you've preshaped by gently rolling it back and forth on an unfloured work surface several times. For longer loaves, continue rolling until they're about 10\" to 11\" long.",
+      "Place the loaves on a lightly greased or parchment-lined baking sheet. Cover and let rise until very puffy, about 1 hour. Toward the end of the rising time, preheat the oven to 425°F.",
+      "Spray the loaves with lukewarm water and dust lightly with flour.",
+      "Score the loaves: Make two fairly deep diagonal slashes in the top of each. A serrated bread knife wielded firmly or a lame, works well here.",
+      "Bake the sourdough bread for 25 to 30 minutes, until the crust is deep golden brown. Remove the loaves from the oven, and cool on a rack.",
+      "Store sourdough loaves loosely wrapped, for several days at room temperature; freeze for longer storage."
+    ],
+    "duration": 6241,
+    "title": "Rustic Sourdough Bread",
+    "ingredientCount": 5,
+    "instructionCount": 9,
+    "error": null,
+    "contentSize": 12642
+  },
+  {
+    "modelName": "openai-mini",
+    "strategy": "current-openai",
+    "url": "https://www.kingarthurbaking.com/recipes/rustic-sourdough-bread-recipe",
+    "success": [
+      "Weigh your flour; or measure it by gently spooning it into a cup, then sweeping off any excess. In a large bowl, combine all of the ingredients, kneading to form a smooth dough.",
+      "Allow the dough to rise in a lightly greased, covered bowl until it's doubled in size, about 1 1/2 hours.",
+      "Transfer the dough to a lightly floured surface and divide in half; it'll deflate somewhat. Preshape each piece of dough by pulling the edges into the center, turning it over so the seam is on the bottom, and rolling under your cupped hands to form a ball. Let the dough rest, covered, for 15 minutes.",
+      "To make batards (fat ovals), elongate each ball of dough you've preshaped by gently rolling it back and forth on an unfloured work surface several times. For longer loaves, continue rolling until they're about 10\" to 11\" long.",
+      "Place the loaves on a lightly greased or parchment-lined baking sheet. Cover and let rise until very puffy, about 1 hour. Toward the end of the rising time, preheat the oven to 425°F.",
+      "Spray the loaves with lukewarm water and dust lightly with flour.",
+      "Score the loaves: Make two fairly deep diagonal slashes in the top of each.",
+      "Bake the sourdough bread for 25 to 30 minutes, until the crust is deep golden brown. Remove the loaves from the oven, and cool on a rack.",
+      "Store sourdough loaves loosely wrapped, for several days at room temperature; freeze for longer storage."
+    ],
+    "duration": 9966,
+    "title": "Rustic Sourdough Bread",
+    "ingredientCount": 5,
+    "instructionCount": 9,
+    "error": null,
+    "contentSize": 12642
+  },
+  {
+    "modelName": "gemini-main",
+    "strategy": "current-gemini",
+    "url": "https://www.kingarthurbaking.com/recipes/rustic-sourdough-bread-recipe",
+    "success": [
+      "Weigh your flour; or measure it by gently spooning it into a cup, then sweeping off any excess. In a large bowl, combine all of the ingredients, kneading to form a smooth dough.",
+      "Allow the dough to rise in a lightly greased, covered bowl until it's doubled in size, about 1 1/2 hours.",
+      "Transfer the dough to a lightly floured surface and divide in half; it'll deflate somewhat. Preshape each piece of dough by pulling the edges into the center, turning it over so the seam is on the bottom, and rolling under your cupped hands to form a ball. Let the dough rest, covered, for 15 minutes.",
+      "To make batards (fat ovals), elongate each ball of dough you've preshaped by gently rolling it back and forth on an unfloured work surface several times. For longer loaves, continue rolling until they're about 10\" to 11\" long.",
+      "Place the loaves on a lightly greased or parchment-lined baking sheet. Cover and let rise until very puffy, about 1 hour. Toward the end of the rising time, preheat the oven to 425°F.",
+      "Spray the loaves with lukewarm water and dust lightly with flour.",
+      "Score the loaves: Make two fairly deep diagonal slashes in the top of each. A serrated bread knife wielded firmly or a lame, works well here.",
+      "Bake the sourdough bread for 25 to 30 minutes, until the crust is deep golden brown. Remove the loaves from the oven, and cool on a rack.",
+      "Store sourdough loaves loosely wrapped, for several days at room temperature; freeze for longer storage."
+    ],
+    "duration": 6602,
+    "title": "Sourdough Bread",
+    "ingredientCount": 5,
+    "instructionCount": 9,
+    "error": null,
+    "contentSize": 4888
+  },
+  {
+    "modelName": "gemini-main",
+    "strategy": "full-html-gemini",
+    "url": "https://www.kingarthurbaking.com/recipes/rustic-sourdough-bread-recipe",
+    "success": [
+      "Weigh your flour; or measure it by gently spooning it into a cup, then sweeping off any excess. In a large bowl, combine all of the ingredients, kneading to form a smooth dough.",
+      "Allow the dough to rise in a lightly greased, covered bowl until it's doubled in size, about 1 1/2 hours.",
+      "Transfer the dough to a lightly floured surface and divide in half; it'll deflate somewhat. Preshape each piece of dough by pulling the edges into the center, turning it over so the seam is on the bottom, and rolling under your cupped hands to form a ball. Let the dough rest, covered, for 15 minutes.",
+      "To make batards (fat ovals), elongate each ball of dough you've preshaped by gently rolling it back and forth on an unfloured work surface several times. For longer loaves, continue rolling until they're about 10\" to 11\" long.  ",
+      "Place the loaves on a lightly greased or parchment-lined baking sheet. Cover and let rise until very puffy, about 1 hour. Toward the end of the rising time, preheat the oven to 425°F.",
+      "Spray the loaves with lukewarm water and dust lightly with flour.",
+      "Score the loaves: Make two fairly deep diagonal slashes in the top of each. A serrated bread knife wielded firmly or a lame, works well here.",
+      "Bake the sourdough bread for 25 to 30 minutes, until the crust is deep golden brown. Remove the loaves from the oven, and cool on a rack.",
+      "Store sourdough loaves loosely wrapped, for several days at room temperature; freeze for longer storage. "
+    ],
+    "duration": 22899,
+    "title": "Rustic Sourdough Bread",
+    "ingredientCount": 5,
+    "instructionCount": 9,
+    "error": null,
+    "contentSize": 244654
+  },
+  {
+    "modelName": "gemini-main",
+    "strategy": "url-direct-gemini",
+    "url": "https://www.kingarthurbaking.com/recipes/rustic-sourdough-bread-recipe",
+    "success": [
+      "Combine the starter and water in a large mixing bowl and stir to dissolve. Add both flours and mix thoroughly, until no dry flour remains.",
+      "Cover the bowl and let rest for 30 minutes (autolyse).",
+      "Add the salt and knead the dough until smooth and elastic, about 8 minutes. Or let the dough rise for 4 hours, performing 4 sets of stretch and folds every 30 minutes, then let it rest for another 30 minutes before shaping.",
+      "Transfer the dough to a lightly oiled bowl, cover it, and let it rest at room temperature for 4 to 6 hours, or until almost doubled. Gently turn the dough onto a lightly floured surface. Shape into a round and place it in a well-floured banneton or proofing basket. Cover and let rise at room temperature for 2 to 3 hours, or until almost doubled in size. Or retard the shaped loaf in the refrigerator for 8 to 12 hours.",
+      "Preheat the oven to 450°F (230°C) with your Dutch oven inside for at least 30 minutes, or up to 1 hour.",
+      "Carefully remove the hot Dutch oven from the oven and place the loaf inside. Score the loaf deeply and cover the pot.",
+      "Bake for 20 minutes covered, then remove the lid and continue baking for another 25 to 35 minutes, or until the crust is deeply golden brown and the internal temperature reaches 205°F (95°C).",
+      "Carefully remove the bread from the Dutch oven and let it cool completely on a wire rack before slicing and serving."
+    ],
+    "duration": 8943,
+    "title": "Rustic Sourdough Bread",
+    "ingredientCount": 5,
+    "instructionCount": 8,
+    "error": null,
+    "contentSize": 70
+  },
+  {
+    "modelName": "gemini-pro",
+    "strategy": "current-gemini",
+    "url": "https://www.kingarthurbaking.com/recipes/rustic-sourdough-bread-recipe",
+    "success": [
+      "Weigh your flour; or measure it by gently spooning it into a cup, then sweeping off any excess. In a large bowl, combine all of the ingredients, kneading to form a smooth dough.",
+      "Allow the dough to rise in a lightly greased, covered bowl until it's doubled in size, about 1 1/2 hours.",
+      "Transfer the dough to a lightly floured surface and divide in half; it'll deflate somewhat. Preshape each piece of dough by pulling the edges into the center, turning it over so the seam is on the bottom, and rolling under your cupped hands to form a ball. Let the dough rest, covered, for 15 minutes.",
+      "To make batards (fat ovals), elongate each ball of dough you've preshaped by gently rolling it back and forth on an unfloured work surface several times. For longer loaves, continue rolling until they're about 10\" to 11\" long.",
+      "Place the loaves on a lightly greased or parchment-lined baking sheet. Cover and let rise until very puffy, about 1 hour. Toward the end of the rising time, preheat the oven to 425°F.",
+      "Spray the loaves with lukewarm water and dust lightly with flour.",
+      "Score the loaves: Make two fairly deep diagonal slashes in the top of each. A serrated bread knife wielded firmly or a lame, works well here.",
+      "Bake the sourdough bread for 25 to 30 minutes, until the crust is deep golden brown. Remove the loaves from the oven, and cool on a rack.",
+      "Store sourdough loaves loosely wrapped, for several days at room temperature; freeze for longer storage."
+    ],
+    "duration": 14608,
+    "title": "Sourdough Bread",
+    "ingredientCount": 5,
+    "instructionCount": 9,
+    "error": null,
+    "contentSize": 4888
+  },
+  {
+    "modelName": "gemini-pro",
+    "strategy": "full-html-gemini",
+    "url": "https://www.kingarthurbaking.com/recipes/rustic-sourdough-bread-recipe",
+    "success": [
+      "Weigh your flour; or measure it by gently spooning it into a cup, then sweeping off any excess. In a large bowl, combine all of the ingredients, kneading to form a smooth dough.",
+      "Allow the dough to rise in a lightly greased, covered bowl until it's doubled in size, about 1 1/2 hours.",
+      "Transfer the dough to a lightly floured surface and divide in half; it'll deflate somewhat. Preshape each piece of dough by pulling the edges into the center, turning it over so the seam is on the bottom, and rolling under your cupped hands to form a ball. Let the dough rest, covered, for 15 minutes.",
+      "To make batards (fat ovals), elongate each ball of dough you've preshaped by gently rolling it back and forth on an unfloured work surface several times. For longer loaves, continue rolling until they're about 10\" to 11\" long.  ",
+      "Place the loaves on a lightly greased or parchment-lined baking sheet. Cover and let rise until very puffy, about 1 hour. Toward the end of the rising time, preheat the oven to 425°F.",
+      "Spray the loaves with lukewarm water and dust lightly with flour.",
+      "Score the loaves: Make two fairly deep diagonal slashes in the top of each. A serrated bread knife wielded firmly or a lame, works well here.",
+      "Bake the sourdough bread for 25 to 30 minutes, until the crust is deep golden brown. Remove the loaves from the oven, and cool on a rack.",
+      "Store sourdough loaves loosely wrapped, for several days at room temperature; freeze for longer storage. "
+    ],
+    "duration": 22007,
+    "title": "Rustic Sourdough Bread",
+    "ingredientCount": 5,
+    "instructionCount": 9,
+    "error": null,
+    "contentSize": 244654
+  },
+  {
+    "modelName": "gemini-pro",
+    "strategy": "url-direct-gemini",
+    "url": "https://www.kingarthurbaking.com/recipes/rustic-sourdough-bread-recipe",
+    "success": [
+      "Combine the water and starter in a large mixing bowl. (A 5- to 6-quart bowl or larger works well here.) Stir to dissolve the starter. Add the flour and salt. Mix with your hands or a sturdy spatula until no dry flour remains; the dough will be shaggy. Cover the bowl and let rest for 30 minutes.",
+      "Turn the dough out onto a lightly floured work surface. Gently stretch and fold the dough over itself from each “compass point”: north, south, east, and west. Flip the dough over so the seams are on the bottom. Return the dough to the bowl, cover, and let rest for another 30 minutes.",
+      "Repeat step 2 three more times, for a total of four folds. After the fourth fold, cover the bowl and let the dough rest for 30 minutes.",
+      "Bulk fermentation (first rise): Let the dough rise at room temperature (ideally 70°F to 75°F) for 3 to 4 hours, or until it has almost doubled. The dough’s surface will be domed and slightly bubbly.",
+      "Preshape and bench rest: Turn the dough out onto a lightly floured surface and shape it into a round. To do this, use your fingertips to gently lift the edge of the circle and pull it toward the center. Rotate the dough a quarter turn and repeat, until the dough is taut. Place the dough seam-side up in a well-floured banneton or colander lined with a floured cloth. Cover and let rest for 30 to 60 minutes.",
+      "Final shaping: Remove the dough from the banneton and flip it onto a piece of parchment. Gently stretch the dough into a slightly longer oval shape. Fold the top third down as if you’re folding a business letter, then fold the bottom third up and over to meet the top edge.",
+      "Cold proof: Place the shaped loaf on the parchment and slide it onto a baking peel or rimless baking sheet. Transfer to the refrigerator to proof for at least 12 hours and up to 24 hours.",
+      "Preheat and score: About 30 minutes before you’re ready to bake, place your Dutch oven (with its lid on) inside the oven, and preheat to 500°F.",
+      "Bake covered: Carefully remove the hot Dutch oven from the oven and remove the lid. Gently lift the loaf with the parchment and carefully lower it into the Dutch oven. Cover and bake for 20 minutes.",
+      "Bake uncovered: Reduce the heat to 450°F. Bake for another 20 to 25 minutes, or until golden brown. Remove from the Dutch oven and place on a wire rack to cool for at least an hour before slicing."
+    ],
+    "duration": 24340,
+    "title": "Rustic Sourdough Bread",
+    "ingredientCount": 4,
+    "instructionCount": 10,
+    "error": null,
+    "contentSize": 70
+  },
+  {
+    "modelName": "openai-main",
+    "strategy": "current-openai",
+    "url": "https://www.foodnetwork.com/recipes/alton-brown/baked-macaroni-and-cheese-recipe-1939524",
+    "success": [
+      "Preheat oven to 350 degrees F.",
+      "In a large pot of boiling, salted water cook the pasta to al dente.",
+      "While the pasta is cooking, in a separate pot, melt the butter. Whisk in the flour and mustard and keep it moving for about five minutes. Make sure it's free of lumps. Stir in the milk, onion, bay leaf, and paprika. Simmer for ten minutes and remove the bay leaf.",
+      "Temper in the egg. Stir in 3/4 of the cheese. Season with salt and pepper. Fold the macaroni into the mix and pour into a 2-quart casserole dish. Top with remaining cheese.",
+      "Melt the butter in a saute pan and toss the bread crumbs to coat. Top the macaroni with the bread crumbs. Bake for 30 minutes. Remove from oven and rest for five minutes before serving.",
+      "Remember to save leftovers for fried Macaroni and Cheese."
+    ],
+    "duration": 4694,
+    "title": "Baked Macaroni and Cheese",
+    "ingredientCount": 14,
+    "instructionCount": 6,
+    "error": null,
+    "contentSize": 25108
+  },
+  {
+    "modelName": "openai-mini",
+    "strategy": "current-openai",
+    "url": "https://www.foodnetwork.com/recipes/alton-brown/baked-macaroni-and-cheese-recipe-1939524",
+    "success": [
+      "Preheat oven to 350 degrees F.",
+      "In a large pot of boiling, salted water cook the pasta to al dente.",
+      "While the pasta is cooking, in a separate pot, melt the butter. Whisk in the flour and mustard and keep it moving for about five minutes. Make sure it's free of lumps.",
+      "Stir in the milk, onion, bay leaf, and paprika. Simmer for ten minutes and remove the bay leaf.",
+      "Temper in the egg. Stir in 3/4 of the cheese. Season with salt and pepper.",
+      "Fold the macaroni into the mix and pour into a 2-quart casserole dish. Top with remaining cheese.",
+      "Melt the butter in a saute pan and toss the bread crumbs to coat. Top the macaroni with the bread crumbs.",
+      "Bake for 30 minutes. Remove from oven and rest for five minutes before serving."
+    ],
+    "duration": 7371,
+    "title": "Baked Macaroni and Cheese",
+    "ingredientCount": 14,
+    "instructionCount": 8,
+    "error": null,
+    "contentSize": 25108
+  },
+  {
+    "modelName": "gemini-main",
+    "strategy": "current-gemini",
+    "url": "https://www.foodnetwork.com/recipes/alton-brown/baked-macaroni-and-cheese-recipe-1939524",
+    "success": [
+      "Preheat oven to 350 degrees F.",
+      "In a large pot of boiling, salted water cook the pasta to al dente.",
+      "While the pasta is cooking, in a separate pot, melt the butter. Whisk in the flour and mustard and keep it moving for about five minutes. Make sure it's free of lumps. Stir in the milk, onion, bay leaf, and paprika. Simmer for ten minutes and remove the bay leaf.",
+      "Temper in the egg. Stir in 3/4 of the cheese. Season with salt and pepper. Fold the macaroni into the mix and pour into a 2-quart casserole dish. Top with remaining cheese.",
+      "Melt the butter in a saute pan and toss the bread crumbs to coat. Top the macaroni with the bread crumbs. Bake for 30 minutes. Remove from oven and rest for five minutes before serving.",
+      "Remember to save leftovers for fried Macaroni and Cheese."
+    ],
+    "duration": 6248,
+    "title": "Baked Macaroni and Cheese",
+    "ingredientCount": 14,
+    "instructionCount": 6,
+    "error": null,
+    "contentSize": 33817
+  },
+  {
+    "modelName": "gemini-main",
+    "strategy": "full-html-gemini",
+    "url": "https://www.foodnetwork.com/recipes/alton-brown/baked-macaroni-and-cheese-recipe-1939524",
+    "success": [
+      "Preheat oven to 350 degrees F.",
+      "In a large pot of boiling, salted water cook the pasta to al dente.",
+      "While the pasta is cooking, in a separate pot, melt the butter. Whisk in the flour and mustard and keep it moving for about five minutes. Make sure it's free of lumps. Stir in the milk, onion, bay leaf, and paprika. Simmer for ten minutes and remove the bay leaf.",
+      "Temper in the egg. Stir in 3/4 of the cheese. Season with salt and pepper. Fold the macaroni into the mix and pour into a 2-quart casserole dish. Top with remaining cheese.",
+      "Melt the butter in a saute pan and toss the bread crumbs to coat. Top the macaroni with the bread crumbs. Bake for 30 minutes. Remove from oven and rest for five minutes before serving.",
+      "Remember to save leftovers for fried Macaroni and Cheese."
+    ],
+    "duration": 18442,
+    "title": "Baked Macaroni and Cheese",
+    "ingredientCount": 14,
+    "instructionCount": 6,
+    "error": null,
+    "contentSize": 441809
+  },
+  {
+    "modelName": "gemini-main",
+    "strategy": "url-direct-gemini",
+    "url": "https://www.foodnetwork.com/recipes/alton-brown/baked-macaroni-and-cheese-recipe-1939524",
+    "success": [
+      "Preheat oven to 350 degrees F (175 degrees C).",
+      "Cook macaroni according to package directions. Drain and set aside.",
+      "In a large saucepan, melt butter over medium heat. Whisk in flour and cook for 1 minute, stirring constantly.",
+      "Gradually whisk in milk until smooth. Bring to a simmer, stirring constantly. Reduce heat to low and simmer for 5 minutes, stirring occasionally.",
+      "Stir in salt, pepper, dry mustard, and cayenne pepper (if using).",
+      "Remove from heat and stir in cheddar cheese, Gruyère cheese, and Parmesan cheese until melted and smooth.",
+      "Add macaroni to the cheese sauce and stir to combine.",
+      "Pour macaroni and cheese into a greased 9x13 inch baking dish.",
+      "Sprinkle bread crumbs over the top.",
+      "Bake for 20-25 minutes, or until golden brown and bubbly.",
+      "Let cool for 10 minutes before serving."
+    ],
+    "duration": 5807,
+    "title": "Baked Macaroni and Cheese",
+    "ingredientCount": 12,
+    "instructionCount": 11,
+    "error": null,
+    "contentSize": 88
+  },
+  {
+    "modelName": "gemini-pro",
+    "strategy": "current-gemini",
+    "url": "https://www.foodnetwork.com/recipes/alton-brown/baked-macaroni-and-cheese-recipe-1939524",
+    "success": [
+      "Preheat oven to 350 degrees F.",
+      "In a large pot of boiling, salted water cook the pasta to al dente.",
+      "While the pasta is cooking, in a separate pot, melt the butter. Whisk in the flour and mustard and keep it moving for about five minutes. Make sure it's free of lumps. Stir in the milk, onion, bay leaf, and paprika. Simmer for ten minutes and remove the bay leaf.",
+      "Temper in the egg. Stir in 3/4 of the cheese. Season with salt and pepper. Fold the macaroni into the mix and pour into a 2-quart casserole dish. Top with remaining cheese.",
+      "Melt the butter in a saute pan and toss the bread crumbs to coat. Top the macaroni with the bread crumbs. Bake for 30 minutes. Remove from oven and rest for five minutes before serving.",
+      "Remember to save leftovers for fried Macaroni and Cheese."
+    ],
+    "duration": 16818,
+    "title": "Baked Macaroni and Cheese",
+    "ingredientCount": 14,
+    "instructionCount": 6,
+    "error": null,
+    "contentSize": 33817
+  },
+  {
+    "modelName": "gemini-pro",
+    "strategy": "full-html-gemini",
+    "url": "https://www.foodnetwork.com/recipes/alton-brown/baked-macaroni-and-cheese-recipe-1939524",
+    "success": [
+      "Preheat oven to 350 degrees F.",
+      "In a large pot of boiling, salted water cook the pasta to al dente.",
+      "While the pasta is cooking, in a separate pot, melt the butter. Whisk in the flour and mustard and keep it moving for about five minutes. Make sure it's free of lumps. Stir in the milk, onion, bay leaf, and paprika. Simmer for ten minutes and remove the bay leaf.",
+      "Temper in the egg. Stir in 3/4 of the cheese. Season with salt and pepper. Fold the macaroni into the mix and pour into a 2-quart casserole dish. Top with remaining cheese.",
+      "Melt the butter in a saute pan and toss the bread crumbs to coat. Top the macaroni with the bread crumbs. Bake for 30 minutes. Remove from oven and rest for five minutes before serving.",
+      "Remember to save leftovers for fried Macaroni and Cheese."
+    ],
+    "duration": 19137,
+    "title": "Baked Macaroni and Cheese",
+    "ingredientCount": 14,
+    "instructionCount": 6,
+    "error": null,
+    "contentSize": 441809
+  },
+  {
+    "modelName": "gemini-pro",
+    "strategy": "url-direct-gemini",
+    "url": "https://www.foodnetwork.com/recipes/alton-brown/baked-macaroni-and-cheese-recipe-1939524",
+    "success": [
+      "Preheat oven to 350 degrees F.",
+      "Bring a large pot of salted water to a boil. Add the pasta and cook according to package directions until al dente. Drain well.",
+      "While the pasta is cooking, heat the oil in a large saucepan over medium heat. Whisk in the flour and cook for 1 to 2 minutes, or until lightly browned. Gradually whisk in the milk and bring to a simmer, stirring constantly. Reduce the heat to low and simmer for 5 minutes, stirring occasionally.",
+      "Remove from the heat and stir in the salt, pepper, paprika, cayenne, cheddar and Monterey Jack cheeses. Stir until the cheese is melted and the sauce is smooth.",
+      "Add the drained pasta to the cheese sauce and stir to combine. Pour the macaroni and cheese into a greased 9 by 13-inch baking dish.",
+      "In a small bowl, combine the bread crumbs and melted butter. Sprinkle the bread crumb mixture over the macaroni and cheese.",
+      "Bake for 20 to 25 minutes, or until golden brown and bubbly.",
+      "Let stand for 10 minutes before serving."
+    ],
+    "duration": 13129,
+    "title": "Baked Macaroni and Cheese",
+    "ingredientCount": 12,
+    "instructionCount": 8,
+    "error": null,
+    "contentSize": 88
+  }
+]

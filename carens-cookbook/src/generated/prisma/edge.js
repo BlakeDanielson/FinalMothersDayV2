@@ -237,7 +237,7 @@ const config = {
       "value": "prisma-client-js"
     },
     "output": {
-      "value": "/Users/carendanielson/BlakeProjects/FinalMothersDayV2/carens-cookbook/src/generated/prisma",
+      "value": "C:\\Users\\blake\\OneDrive\\Desktop\\NewProjects\\FinalMothersDayV2\\carens-cookbook\\src\\generated\\prisma",
       "fromEnvVar": null
     },
     "config": {
@@ -246,12 +246,12 @@ const config = {
     "binaryTargets": [
       {
         "fromEnvVar": null,
-        "value": "darwin-arm64",
+        "value": "windows",
         "native": true
       }
     ],
     "previewFeatures": [],
-    "sourceFilePath": "/Users/carendanielson/BlakeProjects/FinalMothersDayV2/carens-cookbook/prisma/schema.prisma",
+    "sourceFilePath": "C:\\Users\\blake\\OneDrive\\Desktop\\NewProjects\\FinalMothersDayV2\\carens-cookbook\\prisma\\schema.prisma",
     "isCustomOutput": true
   },
   "relativeEnvPaths": {

@@ -4,6 +4,7 @@ import type { ChatCompletionContentPart } from 'openai/resources/chat/completion
 import { z } from 'zod';
 import { RecipeProcessingError, ErrorType, logError } from '@/lib/errors';
 import { AIProvider, getProviderConfig } from '@/lib/ai-providers';
+import { AI_MODELS, AI_SETTINGS, getBackendProviderFromUI, getModelFromUIProvider, type UIProvider } from '@/lib/config/ai-models';
 
 // Zod schema for recipe data parsed from multiple images
 const scanMultipleRecipeZodSchema = z.object({
@@ -225,7 +226,8 @@ function handleOpenAIError(error: unknown): never {
 
 async function processMultipleImagesWithOpenAI(
   imageData: Array<{ base64: string; mimeType: string; fileName: string }>, 
-  systemPrompt: string
+  systemPrompt: string,
+  model: string = AI_MODELS.OPENAI_MAIN
 ) {
   // Prepare content array for OpenAI with proper typing
   const content: ChatCompletionContentPart[] = [
@@ -244,7 +246,7 @@ async function processMultipleImagesWithOpenAI(
   });
 
   const chatCompletion = await openaiClient.chat.completions.create({
-    model: "gpt-4.1-mini-2025-04-14",
+    model: model,
     messages: [
       {
         role: "user",
@@ -252,7 +254,7 @@ async function processMultipleImagesWithOpenAI(
       },
     ],
     response_format: { type: "json_object" },
-    max_tokens: 3000, // Increased for multiple images
+    max_tokens: AI_SETTINGS.OPENAI.MAX_TOKENS * 3, // Triple for multiple images
   });
 
   return chatCompletion.choices[0]?.message?.content;
@@ -279,7 +281,7 @@ async function processMultipleImagesWithGPTMini(
   });
 
   const chatCompletion = await openaiClient.chat.completions.create({
-    model: "gpt-4o-mini-2024-07-18",
+    model: AI_MODELS.OPENAI_MINI,
     messages: [
       {
         role: "user",
@@ -287,7 +289,7 @@ async function processMultipleImagesWithGPTMini(
       },
     ],
     response_format: { type: "json_object" },
-    max_tokens: 3000, // Increased for multiple images
+    max_tokens: AI_SETTINGS.OPENAI.MAX_TOKENS * 3, // Triple for multiple images
   });
 
   return chatCompletion.choices[0]?.message?.content;
@@ -312,7 +314,24 @@ export async function POST(req: NextRequest) {
     }
 
     // Extract provider selection and image files from form data
-    const provider = (formData.get('provider') as AIProvider) || 'openai';
+    const providerParam = formData.get('provider') as string | null;
+    
+    // Handle new UI provider system - fallback to old system for backward compatibility
+    let provider: AIProvider;
+    let selectedModel: string;
+    
+    if (providerParam && ['openai-main', 'openai-mini', 'gemini-main', 'gemini-pro'].includes(providerParam)) {
+      // New UI provider system
+      const uiProvider = providerParam as UIProvider;
+      const backendProvider = getBackendProviderFromUI(uiProvider);
+      provider = backendProvider as AIProvider;
+      selectedModel = getModelFromUIProvider(uiProvider);
+    } else {
+      // Fallback to old system
+      provider = (providerParam === 'gemini') ? 'gemini' : 'openai';
+      selectedModel = provider === 'gemini' ? AI_MODELS.GEMINI_MAIN : AI_MODELS.OPENAI_MAIN;
+    }
+    
     const imageFiles: File[] = [];
     const entries = Array.from(formData.entries());
     
@@ -385,7 +404,7 @@ export async function POST(req: NextRequest) {
     
     try {
       if (provider === 'openai') {
-        responseContent = await processMultipleImagesWithOpenAI(imageData, systemPrompt);
+        responseContent = await processMultipleImagesWithOpenAI(imageData, systemPrompt, selectedModel);
       } else if (provider === 'gemini') {
         responseContent = await processMultipleImagesWithGPTMini(imageData, systemPrompt);
       }

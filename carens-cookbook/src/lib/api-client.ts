@@ -1,4 +1,4 @@
-import { AIProvider } from './ai-providers';
+import { type AIProvider } from './config/ui-models';
 import { RecipeProcessingError, ErrorType } from './errors';
 
 export interface ProcessImageResponse {
@@ -29,7 +29,7 @@ export interface ProcessMultipleImagesResponse {
 
 export async function processSingleImage(
   file: File, 
-  provider: AIProvider = 'openai'
+  provider: AIProvider = 'openai-main'
 ): Promise<ProcessImageResponse> {
   const formData = new FormData();
   formData.append('image', file);
@@ -58,7 +58,7 @@ export async function processSingleImage(
 
 export async function processMultipleImages(
   files: File[], 
-  provider: AIProvider = 'openai'
+  provider: AIProvider = 'openai-main'
 ): Promise<ProcessMultipleImagesResponse> {
   const formData = new FormData();
   files.forEach((file, index) => {
