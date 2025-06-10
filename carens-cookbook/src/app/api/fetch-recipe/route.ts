@@ -4,9 +4,40 @@ import { GoogleGenAI } from '@google/genai';
 import { z } from "zod";
 import { withOnboardingGuard } from '@/lib/middleware/onboarding-guard';
 import { AI_SETTINGS, getBackendProviderFromUI, getModelFromUIProvider, type UIProvider } from '@/lib/config/ai-models';
+import { auth } from '@clerk/nextjs/server';
+import { prisma } from '@/lib/db';
 
 // NEW: Import the optimized orchestrator
 import { extractRecipeOptimized, getExtractionEfficiencySummary, checkOptimizationReadiness } from '@/lib/services/recipe-extraction-orchestrator';
+
+// NEW: Import analytics services
+import { 
+  ExtractionTimer, 
+  RecipeExtractionAnalytics, 
+  trackExtractionWithRecipe,
+  type ExtractionMetrics 
+} from '@/lib/services/recipe-extraction-analytics';
+import { ExtractionStrategy, AIProvider } from '@/generated/prisma';
+
+// Helper function to map UI providers to analytics enums
+function mapUIProviderToAIProvider(uiProvider: UIProvider): AIProvider {
+  const mapping: Record<UIProvider, AIProvider> = {
+    'openai-mini': AIProvider.OPENAI_MINI,
+    'openai-main': AIProvider.OPENAI_MAIN,
+    'gemini-main': AIProvider.GEMINI_MAIN,
+    'gemini-pro': AIProvider.GEMINI_MAIN // Map gemini-pro to GEMINI_MAIN
+  };
+  return mapping[uiProvider] || AIProvider.OPENAI_MAIN;
+}
+
+// Helper function to extract domain from URL
+function extractDomain(url: string): string {
+  try {
+    return new URL(url).hostname.replace('www.', '');
+  } catch {
+    return 'unknown';
+  }
+}
 
 // Helper function to fix relative URLs
 function fixImageUrl(url: string | null, baseUrl: string): string | null {
@@ -37,11 +68,11 @@ function fixImageUrl(url: string | null, baseUrl: string): string | null {
   }
 }
 
-// Zod schema for recipe validation (forgiving version)
+// Zod schema for recipe validation (forgiving version that handles AI inconsistencies)
 const RecipeSchema = z.object({
   title: z.string().nullable().default("Recipe"),
-  ingredients: z.array(z.string()).default([]),
-  steps: z.array(z.string()).default([]),
+  ingredients: z.union([z.array(z.string()), z.null()]).transform(val => val || []),
+  steps: z.union([z.array(z.string()), z.null()]).transform(val => val || []),
   image: z.string().nullable().default(null),
   description: z.string().nullable().default(""),
   cuisine: z.string().nullable().default(""),
@@ -55,7 +86,10 @@ const RecipeSchema = z.object({
   cuisine: data.cuisine || "",
   category: data.category || "",
   prepTime: data.prepTime || "",
-  cleanupTime: data.cleanupTime || ""
+  cleanupTime: data.cleanupTime || "",
+  // Ensure arrays are never undefined/null - double safety
+  ingredients: Array.isArray(data.ingredients) ? data.ingredients : [],
+  steps: Array.isArray(data.steps) ? data.steps : []
 }));
 
 // Extract recipe-specific content for Gemini
@@ -272,8 +306,25 @@ export const PUT = withOnboardingGuard(async (request: NextRequest) => {
 
 // EXISTING: Legacy POST handler (maintained for compatibility)
 export const POST = withOnboardingGuard(async (request: NextRequest) => {
+  const timer = new ExtractionTimer();
+  let extractionMetrics: Partial<ExtractionMetrics> = {};
+  
   try {
     const { url, processing_method = 'openai-main' } = await request.json();
+    
+    // Get user ID for analytics
+    const { userId } = await auth();
+    if (!userId) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    }
+    
+    // Initialize metrics
+    extractionMetrics = {
+      userId,
+      recipeUrl: url,
+      primaryStrategy: ExtractionStrategy.HTML_FALLBACK, // Legacy endpoint always uses HTML fallback
+      extractionSuccess: false
+    };
 
     if (!url) {
       return NextResponse.json(
@@ -319,12 +370,22 @@ export const POST = withOnboardingGuard(async (request: NextRequest) => {
     }
 
     const htmlContent = await response.text();
+    const htmlFetchDuration = timer.markStage('htmlFetch');
+    
     console.log(`Raw HTML length: ${htmlContent.length}`);
+    
+    // Update metrics with HTML fetch info
+    extractionMetrics.htmlContentSize = htmlContent.length;
+    extractionMetrics.htmlFetchDuration = htmlFetchDuration;
 
     // Simple HTML cleaning (more aggressive for Gemini)
     const isGemini = backendProcessingMethod === 'gemini';
     const cleanedHtml = cleanHtml(htmlContent, isGemini);
     console.log(`Cleaned HTML length: ${cleanedHtml.length}`);
+    
+    // Update metrics with cleaned content size
+    extractionMetrics.cleanedContentSize = cleanedHtml.length;
+    extractionMetrics.aiProvider = mapUIProviderToAIProvider(uiProvider);
 
     // Check for recipe keywords
     const hasRecipeKeywords = ['recipe', 'ingredient', 'instruction', 'direction'].some(keyword => 
@@ -334,19 +395,23 @@ export const POST = withOnboardingGuard(async (request: NextRequest) => {
 
     // Extract with chosen method
     let content;
+    const aiProcessingStart = Date.now();
     try {
       if (backendProcessingMethod === 'gemini') {
         content = await extractWithGemini(url, htmlContent, uiProvider);
       } else {
         content = await extractWithOpenAI(cleanedHtml, uiProvider);
       }
+      extractionMetrics.aiProcessingDuration = Date.now() - aiProcessingStart;
     } catch (apiError) {
+      extractionMetrics.aiProcessingDuration = Date.now() - aiProcessingStart;
       console.error(`${uiProvider} (${backendProcessingMethod}) extraction failed:`, apiError);
       throw new Error(`${uiProvider} extraction failed: ${apiError instanceof Error ? apiError.message : 'Unknown error'}`);
     }
 
     // Parse JSON response
     let parsedRecipe;
+    const validationStart = Date.now();
     try {
       // Extract JSON from response (handle markdown code blocks and extra text)
       let jsonString = typeof content === 'string' ? content : String(content);
@@ -360,36 +425,103 @@ export const POST = withOnboardingGuard(async (request: NextRequest) => {
       
       parsedRecipe = JSON.parse(jsonString);
     } catch (parseError) {
+      extractionMetrics.validationDuration = Date.now() - validationStart;
+      extractionMetrics.validationErrors = [{ type: 'JSON_PARSE_ERROR', message: parseError instanceof Error ? parseError.message : 'Unknown parse error' }];
       console.error(`Failed to parse ${uiProvider} (${backendProcessingMethod}) response as JSON:`, parseError);
       console.log('Raw response:', content);
       throw new Error(`Invalid JSON response from ${uiProvider}`);
     }
 
     // Validate and fix the recipe
-    const validatedRecipe = RecipeSchema.parse(parsedRecipe);
+    let validatedRecipe;
+    try {
+      validatedRecipe = RecipeSchema.parse(parsedRecipe);
+      extractionMetrics.validationDuration = Date.now() - validationStart;
+    } catch (validationError) {
+      extractionMetrics.validationDuration = Date.now() - validationStart;
+      extractionMetrics.validationErrors = validationError instanceof Error ? [{ type: 'VALIDATION_ERROR', message: validationError.message }] : [{ type: 'UNKNOWN_VALIDATION_ERROR', message: 'Unknown validation error' }];
+      throw validationError;
+    }
 
     // Fix image URL if present
     if (validatedRecipe.image) {
       validatedRecipe.image = fixImageUrl(validatedRecipe.image, url);
     }
 
+    // Save recipe to database
+    const dbSaveStart = Date.now();
+    let savedRecipe;
+    try {
+      savedRecipe = await prisma.recipe.create({
+        data: {
+          title: validatedRecipe.title,
+          description: validatedRecipe.description,
+          ingredients: validatedRecipe.ingredients,
+          steps: validatedRecipe.steps,
+          image: validatedRecipe.image,
+          cuisine: validatedRecipe.cuisine,
+          category: validatedRecipe.category,
+          prepTime: validatedRecipe.prepTime,
+          cleanupTime: validatedRecipe.cleanupTime,
+          userId
+        }
+      });
+      extractionMetrics.databaseSaveDuration = Date.now() - dbSaveStart;
+      extractionMetrics.recipeId = savedRecipe.id;
+      extractionMetrics.extractionSuccess = true;
+    } catch (dbError) {
+      extractionMetrics.databaseSaveDuration = Date.now() - dbSaveStart;
+      console.error('Failed to save recipe to database:', dbError);
+      // Still consider extraction successful even if DB save fails
+      extractionMetrics.extractionSuccess = true;
+    }
+
     console.log(`Recipe extraction successful using ${uiProvider} (${backendProcessingMethod})`);
+
+    // Complete analytics tracking
+    extractionMetrics.totalDuration = timer.getTotalDuration();
+    await trackExtractionWithRecipe(extractionMetrics as ExtractionMetrics, validatedRecipe);
 
     return NextResponse.json({
       success: true,
       recipe: validatedRecipe,
       processing_method: uiProvider,
-      message: `Recipe extracted successfully using ${uiProvider}`
+      message: `Recipe extracted successfully using ${uiProvider}`,
+      analytics: {
+        totalTime: extractionMetrics.totalDuration,
+        strategy: 'html-fallback',
+        provider: uiProvider
+      }
     });
 
   } catch (error) {
     console.error('Recipe extraction error:', error);
     
+    // Track failed extraction
+    extractionMetrics.extractionSuccess = false;
+    extractionMetrics.totalDuration = timer.getTotalDuration();
+    if (!extractionMetrics.validationErrors) {
+      extractionMetrics.validationErrors = [{ 
+        type: 'EXTRACTION_ERROR', 
+        message: error instanceof Error ? error.message : 'Unknown error occurred' 
+      }];
+    }
+    
+    // Track the failed extraction
+    if (extractionMetrics.userId && extractionMetrics.recipeUrl && extractionMetrics.aiProvider !== undefined) {
+      await trackExtractionWithRecipe(extractionMetrics as ExtractionMetrics);
+    }
+    
     return NextResponse.json(
       { 
         success: false, 
         error: error instanceof Error ? error.message : 'Unknown error occurred',
-        processing_method: "unknown"
+        processing_method: extractionMetrics.aiProvider ? 'unknown' : "unknown",
+        analytics: {
+          totalTime: extractionMetrics.totalDuration,
+          strategy: 'html-fallback',
+          success: false
+        }
       },
       { status: 500 }
     );

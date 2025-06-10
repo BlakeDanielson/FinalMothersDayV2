@@ -2,6 +2,8 @@ import { extractRecipeViaUrlDirect, shouldUseUrlDirect, getUrlDirectUsageMetrics
 import { AI_SETTINGS, type UIProvider } from '@/lib/config/ai-models';
 import OpenAI from 'openai';
 import { getModelFromUIProvider } from '@/lib/config/ai-models';
+import { RecipeExtractionAnalytics } from './recipe-extraction-analytics';
+import { ExtractionStrategy, AIProvider } from '@/generated/prisma';
 
 // Helper functions (extracted from existing route for consistency)
 function cleanHtml(html: string, forGemini: boolean = false): string {
@@ -113,14 +115,15 @@ interface ExtractedRecipe {
   cleanupTime: string;
 }
 
-interface ExtractionMetrics {
-  primaryStrategy: 'gemini-url-direct' | 'openai-html-fallback';
+interface OrchestratorMetrics {
+  primaryStrategy: ExtractionStrategy;
   primarySuccess: boolean;
   fallbackUsed: boolean;
   totalTokensEstimated: number;
   efficiencyGain?: string;
   processingTime: number;
   url: string;
+  aiProvider?: AIProvider;
 }
 
 interface OrchestrationOptions {
@@ -140,7 +143,7 @@ interface OrchestrationOptions {
 export async function extractRecipeOptimized(
   url: string, 
   options: OrchestrationOptions = {}
-): Promise<{ recipe: ExtractedRecipe; metrics: ExtractionMetrics }> {
+): Promise<{ recipe: ExtractedRecipe; metrics: OrchestratorMetrics }> {
   const startTime = Date.now();
   const {
     forceStrategy,
@@ -152,8 +155,8 @@ export async function extractRecipeOptimized(
   console.log(`\n🎯 Recipe Extraction Orchestrator: Starting optimization for ${url}`);
   console.log(`📊 Strategy: ${forceStrategy || 'auto-detect'}`);
 
-  const metrics: ExtractionMetrics = {
-    primaryStrategy: 'gemini-url-direct',
+  const metrics: OrchestratorMetrics = {
+    primaryStrategy: ExtractionStrategy.URL_DIRECT,
     primarySuccess: false,
     fallbackUsed: false,
     totalTokensEstimated: 0,
@@ -206,7 +209,7 @@ export async function extractRecipeOptimized(
   // Strategy 2: OpenAI HTML Processing (FALLBACK)
   console.log(`🔄 FALLBACK: Using OpenAI HTML processing strategy`);
   metrics.fallbackUsed = true;
-  metrics.primaryStrategy = 'openai-html-fallback';
+  metrics.primaryStrategy = ExtractionStrategy.HTML_FALLBACK;
 
   try {
     // Step 1: Fetch and clean HTML content
@@ -266,7 +269,7 @@ export async function extractRecipeOptimized(
 /**
  * Get a summary of extraction efficiency for monitoring
  */
-export function getExtractionEfficiencySummary(metrics: ExtractionMetrics) {
+export function getExtractionEfficiencySummary(metrics: OrchestratorMetrics) {
   const strategy = metrics.primarySuccess ? 'Gemini URL-Direct' : 'OpenAI HTML Fallback';
   const efficiency = metrics.primarySuccess ? 'Ultra-High (99%+ token reduction)' : 'Standard (HTML processing)';
   
@@ -306,4 +309,5 @@ export function checkOptimizationReadiness() {
       ? 'Configure OpenAI API key for fallback support'
       : 'System optimally configured'
   };
-} 
+}
+
