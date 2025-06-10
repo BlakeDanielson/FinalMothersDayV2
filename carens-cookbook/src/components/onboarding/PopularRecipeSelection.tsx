@@ -47,7 +47,6 @@ export function PopularRecipeSelection({
   if (isCustomizing && selectedRecipe) {
     return (
       <CustomizationForm
-        selectedRecipe={selectedRecipe}
         customizedRecipe={customizedRecipe}
         setCustomizedRecipe={setCustomizedRecipe}
         userCategories={userCategories}
