@@ -164,21 +164,60 @@ async function extractRecipeOptimizedWithProgress(
     url
   };
 
+  // Helper function for rotating messages during long operations
+  const showRotatingMessages = async (
+    messages: string[], 
+    baseProgress: number, 
+    progressIncrement: number, 
+    intervalMs: number = 2000,
+    data?: Record<string, unknown>
+  ) => {
+    for (let i = 0; i < messages.length; i++) {
+      const currentProgress = baseProgress + (progressIncrement * (i / messages.length));
+      progressCallback(Math.round(currentProgress), messages[i], data);
+      
+      // Don't wait after the last message
+      if (i < messages.length - 1) {
+        await new Promise(resolve => setTimeout(resolve, intervalMs));
+      }
+    }
+  };
+
   // Strategy 1: Gemini URL-Direct (PRIMARY)
   if (forceStrategy !== 'html-fallback') {
     const shouldTryUrlDirect = forceStrategy === 'url-direct' || true; // Simplified for now
 
     if (shouldTryUrlDirect) {
       try {
-        progressCallback(25, "🤖 Our AI chef is reading the recipe...", { strategy: 'url-direct' });
-        
-        // Use the existing orchestrator but intercept its calls
-        const result = await extractRecipeOptimized(url, {
+        // Rotating messages for the longest Gemini processing stage
+        const geminiProcessingMessages = [
+          "🤖 Our AI chef is reading the recipe...",
+          "👀 Scanning for the perfect ingredients...",
+          "📖 Understanding the cooking steps...",
+          "🧠 Memorizing all the delicious details...",
+          "⚡ Almost got it figured out...",
+          "✨ Just putting the finishing touches..."
+        ];
+
+        // Start the rotating messages (25% to 70%)
+        const messagePromise = showRotatingMessages(
+          geminiProcessingMessages, 
+          25, 
+          45, // 70% - 25% = 45% progress range
+          2000, // 2 seconds between messages
+          { strategy: 'url-direct' }
+        );
+
+        // Start the actual processing
+        const processingPromise = extractRecipeOptimized(url, {
           forceStrategy: 'url-direct',
           geminiProvider: geminiProvider as never,
           openaiProvider: openaiProvider as never,
           timeoutMs
         });
+
+        // Wait for both to complete (processing might finish before all messages)
+        const [result] = await Promise.all([processingPromise, messagePromise]);
 
         progressCallback(75, "📝 Organizing ingredients and steps...", { strategy: 'url-direct' });
         
@@ -214,15 +253,35 @@ async function extractRecipeOptimizedWithProgress(
     progressCallback(45, "🔍 Looking for the good stuff...", { strategy: 'html-fallback' });
     await new Promise(resolve => setTimeout(resolve, 300));
     
-    progressCallback(65, "🤖 Our backup AI chef is stepping in...", { strategy: 'html-fallback' });
-    
-    // Use the existing orchestrator for fallback
-    const result = await extractRecipeOptimized(url, {
+    // Rotating messages for the longest OpenAI processing stage
+    const openaiProcessingMessages = [
+      "🤖 Our backup AI chef is stepping in...",
+      "🔬 Analyzing the recipe structure...",
+      "🍯 Extracting the sweet details...",
+      "👨‍🍳 Carefully reading every ingredient...",
+      "📝 Writing down all the steps...",
+      "🎯 Almost there, perfecting the recipe..."
+    ];
+
+    // Start the rotating messages (45% to 80%)
+    const messagePromise = showRotatingMessages(
+      openaiProcessingMessages, 
+      45, 
+      35, // 80% - 45% = 35% progress range
+      2000, // 2 seconds between messages
+      { strategy: 'html-fallback' }
+    );
+
+    // Start the actual processing
+    const processingPromise = extractRecipeOptimized(url, {
       forceStrategy: 'html-fallback',
       geminiProvider: geminiProvider as never,
       openaiProvider: openaiProvider as never,
       timeoutMs
     });
+
+    // Wait for both to complete
+    const [result] = await Promise.all([processingPromise, messagePromise]);
 
     progressCallback(85, "👨‍🍳 Extracting all the delicious details...", { strategy: 'html-fallback' });
     await new Promise(resolve => setTimeout(resolve, 300));
