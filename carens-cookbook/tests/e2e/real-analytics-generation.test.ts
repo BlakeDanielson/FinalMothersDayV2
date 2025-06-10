@@ -7,19 +7,19 @@ const prisma = new PrismaClient();
 const TEST_RECIPES = [
   {
     url: 'https://www.allrecipes.com/recipe/213742/cheesy-chicken-broccoli-casserole/',
-    source: 'allrecipes',
+    source: 'allrecipes.com',
     expectedStrategy: 'url-direct',
     difficulty: 'medium'
   },
   {
     url: 'https://www.kingarthurbaking.com/recipes/chocolate-chip-cookies-recipe',
-    source: 'kingarthur',
+    source: 'kingarthurbaking.com',
     expectedStrategy: 'url-direct', 
     difficulty: 'low'
   },
   {
     url: 'https://www.tasteofhome.com/recipes/makeover-creamy-macaroni-and-cheese/',
-    source: 'tasteofhome',
+    source: 'tasteofhome.com',
     expectedStrategy: 'url-direct',
     difficulty: 'medium'
   }
@@ -32,8 +32,10 @@ test.describe('Real Analytics Generation', () => {
 
   test.beforeAll(async () => {
     baseURL = process.env.BASE_URL || 'http://localhost:3000';
-    
-    // Setup test user
+  });
+
+  test.beforeEach(async () => {
+    // Ensure test user exists before each test (handles parallel execution)
     await prisma.user.upsert({
       where: { id: TEST_USER_ID },
       create: {
