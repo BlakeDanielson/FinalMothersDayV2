@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { AnimatePresence } from 'framer-motion';
 import { useForm } from 'react-hook-form';
 import {
   DndContext,
@@ -17,190 +17,22 @@ import {
   SortableContext,
   sortableKeyboardCoordinates,
   verticalListSortingStrategy,
-  useSortable,
 } from '@dnd-kit/sortable';
-import { CSS } from '@dnd-kit/utilities';
-import {
-  Edit3,
-  Trash2,
-  GitMerge,
-  GripVertical,
-
-  AlertTriangle,
-  Package,
-  ArrowRight,
-} from 'lucide-react';
+import { GitMerge } from 'lucide-react';
 import { toast } from 'sonner';
-
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
 import { Card, CardContent } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
 import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-} from '@/components/ui/dialog';
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/select';
-import { Checkbox } from '@/components/ui/checkbox';
-
-interface CategoryData {
-  name: string;
-  count: number;
-  source?: 'PREDEFINED' | 'AI_GENERATED' | 'USER_CREATED';
-}
-
-interface CategoryManagerProps {
-  categories: CategoryData[];
-  onCategoriesChange: () => void;
-}
-
-interface RenameFormData {
-  newName: string;
-}
-
-interface MergeFormData {
-  targetCategory: string;
-}
-
-interface DeleteFormData {
-  moveToCategory?: string;
-  forceDelete: boolean;
-}
-
-// Sortable Category Item Component
-function SortableCategoryItem({
-  category,
-  onRename,
-  onDelete,
-  onMerge,
-  isSelected,
-  onSelectionChange,
-}: {
-  category: CategoryData;
-  onRename: (categoryName: string) => void;
-  onDelete: (categoryName: string) => void;
-  onMerge: (categoryName: string) => void;
-  isSelected: boolean;
-  onSelectionChange: (categoryName: string, selected: boolean) => void;
-}) {
-  const {
-    attributes,
-    listeners,
-    setNodeRef,
-    transform,
-    transition,
-    isDragging,
-  } = useSortable({ id: category.name });
-
-  const style = {
-    transform: CSS.Transform.toString(transform),
-    transition,
-  };
-
-  const getSourceBadgeColor = (source?: string) => {
-    switch (source) {
-      case 'PREDEFINED':
-        return 'bg-blue-100 text-blue-800';
-      case 'AI_GENERATED':
-        return 'bg-purple-100 text-purple-800';
-      case 'USER_CREATED':
-        return 'bg-green-100 text-green-800';
-      default:
-        return 'bg-gray-100 text-gray-800';
-    }
-  };
-
-  return (
-    <motion.div
-      ref={setNodeRef}
-      style={style}
-      layout
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      exit={{ opacity: 0, y: -20 }}
-      className={`p-4 border rounded-lg bg-white transition-all ${
-        isDragging ? 'shadow-lg z-10' : 'shadow-sm'
-      } ${isSelected ? 'ring-2 ring-primary border-primary' : 'border-gray-200'}`}
-    >
-      <div className="flex items-center gap-3">
-        {/* Drag Handle */}
-        <div
-          {...attributes}
-          {...listeners}
-          className="cursor-grab active:cursor-grabbing text-gray-400 hover:text-gray-600"
-        >
-          <GripVertical className="h-5 w-5" />
-        </div>
-
-        {/* Selection Checkbox */}
-        <Checkbox
-          checked={isSelected}
-          onCheckedChange={(checked) => 
-            onSelectionChange(category.name, checked as boolean)
-          }
-        />
-
-        {/* Category Info */}
-        <div className="flex-1">
-          <div className="flex items-center gap-2 mb-1">
-            <h3 className="font-medium text-gray-900">{category.name}</h3>
-            {category.source && (
-              <Badge variant="secondary" className={`text-xs ${getSourceBadgeColor(category.source)}`}>
-                {category.source === 'PREDEFINED' ? 'Built-in' : 
-                 category.source === 'AI_GENERATED' ? 'AI' : 'Custom'}
-              </Badge>
-            )}
-          </div>
-          <p className="text-sm text-gray-500 flex items-center gap-1">
-            <Package className="h-3 w-3" />
-            {category.count} {category.count === 1 ? 'recipe' : 'recipes'}
-          </p>
-        </div>
-
-        {/* Action Buttons */}
-        <div className="flex items-center gap-1">
-          <Button
-            variant="ghost"
-            size="sm"
-            onClick={() => onRename(category.name)}
-            className="text-blue-600 hover:text-blue-700 hover:bg-blue-50"
-          >
-            <Edit3 className="h-4 w-4" />
-          </Button>
-          
-          <Button
-            variant="ghost"
-            size="sm"
-            onClick={() => onMerge(category.name)}
-            className="text-purple-600 hover:text-purple-700 hover:bg-purple-50"
-            disabled={category.count === 0}
-          >
-            <GitMerge className="h-4 w-4" />
-          </Button>
-          
-          <Button
-            variant="ghost"
-            size="sm"
-            onClick={() => onDelete(category.name)}
-            className="text-red-600 hover:text-red-700 hover:bg-red-50"
-          >
-            <Trash2 className="h-4 w-4" />
-          </Button>
-        </div>
-      </div>
-    </motion.div>
-  );
-}
+  CategoryManagerProps,
+  CategoryData,
+  RenameFormData,
+  MergeFormData,
+  DeleteFormData,
+  SortableCategoryItem,
+  RenameModal,
+  MergeModal,
+  DeleteModal,
+} from './category-manager';
 
 export default function CategoryManager({ categories, onCategoriesChange }: CategoryManagerProps) {
   const [localCategories, setLocalCategories] = useState<CategoryData[]>(categories);
@@ -400,169 +232,32 @@ export default function CategoryManager({ categories, onCategoriesChange }: Cate
         </SortableContext>
       </DndContext>
 
-      {/* Rename Modal */}
-      <Dialog open={renameModal.isOpen} onOpenChange={(open) => 
-        setRenameModal({ isOpen: open, categoryName: open ? renameModal.categoryName : '' })
-      }>
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle>Rename Category</DialogTitle>
-            <DialogDescription>
-              Rename &quot;{renameModal.categoryName}&quot; and update all associated recipes
-            </DialogDescription>
-          </DialogHeader>
-          <form onSubmit={renameForm.handleSubmit((data) => 
-            performRename(renameModal.categoryName, data.newName)
-          )}>
-            <div className="space-y-4">
-              <Input
-                {...renameForm.register('newName', { 
-                  required: 'New name is required',
-                  minLength: { value: 1, message: 'Name cannot be empty' }
-                })}
-                placeholder="Enter new category name"
-                defaultValue={renameModal.categoryName}
-              />
-              {renameForm.formState.errors.newName && (
-                <p className="text-sm text-red-600">
-                  {renameForm.formState.errors.newName.message}
-                </p>
-              )}
-            </div>
-            <DialogFooter className="mt-4">
-              <Button
-                type="button"
-                variant="outline"
-                onClick={() => setRenameModal({ isOpen: false, categoryName: '' })}
-              >
-                Cancel
-              </Button>
-              <Button type="submit">Rename Category</Button>
-            </DialogFooter>
-          </form>
-        </DialogContent>
-      </Dialog>
+      {/* Modals */}
+      <RenameModal
+        isOpen={renameModal.isOpen}
+        categoryName={renameModal.categoryName}
+        onClose={() => setRenameModal({ isOpen: false, categoryName: '' })}
+        onSubmit={(data) => performRename(renameModal.categoryName, data.newName)}
+        form={renameForm}
+      />
 
-      {/* Merge Modal */}
-      <Dialog open={mergeModal.isOpen} onOpenChange={(open) => 
-        setMergeModal({ isOpen: open, sourceCategory: open ? mergeModal.sourceCategory : '' })
-      }>
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle>Merge Categories</DialogTitle>
-            <DialogDescription>
-              Move all recipes from &quot;{mergeModal.sourceCategory}&quot; into another category
-            </DialogDescription>
-          </DialogHeader>
-          <form onSubmit={mergeForm.handleSubmit((data) => 
-            performMerge([mergeModal.sourceCategory], data.targetCategory)
-          )}>
-            <div className="space-y-4">
-              <div className="flex items-center gap-2 p-3 bg-yellow-50 rounded-lg">
-                <ArrowRight className="h-4 w-4 text-yellow-600" />
-                <span className="text-sm">
-                  {mergeModal.sourceCategory} → 
-                </span>
-              </div>
-              
-              <Select onValueChange={(value) => mergeForm.setValue('targetCategory', value)}>
-                <SelectTrigger>
-                  <SelectValue placeholder="Select target category" />
-                </SelectTrigger>
-                <SelectContent>
-                  {localCategories
-                    .filter(c => c.name !== mergeModal.sourceCategory)
-                    .map(category => (
-                      <SelectItem key={category.name} value={category.name}>
-                        {category.name} ({category.count} recipes)
-                      </SelectItem>
-                    ))}
-                </SelectContent>
-              </Select>
-              
-              {mergeForm.formState.errors.targetCategory && (
-                <p className="text-sm text-red-600">Please select a target category</p>
-              )}
-            </div>
-            <DialogFooter className="mt-4">
-              <Button
-                type="button"
-                variant="outline"
-                onClick={() => setMergeModal({ isOpen: false, sourceCategory: '' })}
-              >
-                Cancel
-              </Button>
-              <Button type="submit">Merge Categories</Button>
-            </DialogFooter>
-          </form>
-        </DialogContent>
-      </Dialog>
+      <MergeModal
+        isOpen={mergeModal.isOpen}
+        sourceCategory={mergeModal.sourceCategory}
+        categories={localCategories}
+        onClose={() => setMergeModal({ isOpen: false, sourceCategory: '' })}
+        onSubmit={(data) => performMerge([mergeModal.sourceCategory], data.targetCategory)}
+        form={mergeForm}
+      />
 
-      {/* Delete Modal */}
-      <Dialog open={deleteModal.isOpen} onOpenChange={(open) => 
-        setDeleteModal({ isOpen: open, categoryName: open ? deleteModal.categoryName : '' })
-      }>
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle className="flex items-center gap-2">
-              <AlertTriangle className="h-5 w-5 text-red-600" />
-              Delete Category
-            </DialogTitle>
-            <DialogDescription>
-              What should happen to recipes in &quot;{deleteModal.categoryName}&quot;?
-            </DialogDescription>
-          </DialogHeader>
-          <form onSubmit={deleteForm.handleSubmit((data) => 
-            performDelete(deleteModal.categoryName, data)
-          )}>
-            <div className="space-y-4">
-              <div className="space-y-3">
-                <label className="text-sm font-medium">Move recipes to:</label>
-                <Select onValueChange={(value) => 
-                  deleteForm.setValue('moveToCategory', value === 'none' ? undefined : value)
-                }>
-                  <SelectTrigger>
-                    <SelectValue placeholder="Choose destination category" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="none">Don&apos;t move (prevent deletion)</SelectItem>
-                    {localCategories
-                      .filter(c => c.name !== deleteModal.categoryName)
-                      .map(category => (
-                        <SelectItem key={category.name} value={category.name}>
-                          {category.name}
-                        </SelectItem>
-                      ))}
-                  </SelectContent>
-                </Select>
-              </div>
-
-              <div className="flex items-center space-x-2 p-3 bg-red-50 rounded-lg">
-                <Checkbox
-                  {...deleteForm.register('forceDelete')}
-                  id="forceDelete"
-                  className="border-red-300"
-                />
-                <label htmlFor="forceDelete" className="text-sm text-red-800">
-                  Force delete (permanently remove all recipes)
-                </label>
-              </div>
-            </div>
-            <DialogFooter className="mt-4">
-              <Button
-                type="button"
-                variant="outline"
-                onClick={() => setDeleteModal({ isOpen: false, categoryName: '' })}
-              >
-                Cancel
-              </Button>
-              <Button type="submit" variant="destructive">
-                Delete Category
-              </Button>
-            </DialogFooter>
-          </form>
-        </DialogContent>
-      </Dialog>
+      <DeleteModal
+        isOpen={deleteModal.isOpen}
+        categoryName={deleteModal.categoryName}
+        categories={localCategories}
+        onClose={() => setDeleteModal({ isOpen: false, categoryName: '' })}
+        onSubmit={(data) => performDelete(deleteModal.categoryName, data)}
+        form={deleteForm}
+      />
     </div>
   );
 } 
