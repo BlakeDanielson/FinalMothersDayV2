@@ -8,6 +8,7 @@ import { auth } from '@clerk/nextjs/server';
 import { CategorySource } from '@/generated/prisma';
 import { withOnboardingGuard } from '@/lib/middleware/onboarding-guard';
 import { AI_MODELS, AI_SETTINGS, getBackendProviderFromUI, getModelFromUIProvider, type UIProvider } from '@/lib/config/ai-models';
+import { validateFileSize, getFileSizeErrorMessage } from '@/lib/utils/file-size-validation';
 
 // Zod schema for recipe data parsed from an image
 const scanRecipeZodSchema = z.object({
@@ -83,16 +84,19 @@ function validateFile(imageFile: File, provider: AIProvider = 'openai'): void {
   // Use provider-specific validation
   const config = getProviderConfig(provider);
   
-  // Check file size
-  if (imageFile.size > config.maxFileSize) {
+  // Check file size with conversion awareness
+  const sizeValidation = validateFileSize(imageFile, config.maxFileSize);
+  if (!sizeValidation.isValid) {
     throw new RecipeProcessingError({
       type: ErrorType.FILE_TOO_LARGE,
-      message: `File size ${imageFile.size} exceeds maximum ${config.maxFileSize}`,
-      userMessage: `The image file is too large for ${config.name}.`,
-      actionable: `Please use an image smaller than ${Math.round(config.maxFileSize / (1024 * 1024))}MB.`,
+      message: `File size ${imageFile.size} exceeds maximum ${sizeValidation.effectiveLimit}`,
+      userMessage: getFileSizeErrorMessage(imageFile, config.maxFileSize),
+      actionable: sizeValidation.willBeConverted 
+        ? `Large ${sizeValidation.conversionType?.split(' to ')[0]} files are allowed (up to ${Math.round(sizeValidation.effectiveLimit / (1024 * 1024))}MB) and will be auto-converted.`
+        : `Please use an image smaller than ${Math.round(config.maxFileSize / (1024 * 1024))}MB.`,
       retryable: false,
       statusCode: 413,
-      details: { fileSize: imageFile.size, maxSize: config.maxFileSize, provider }
+      details: { fileSize: imageFile.size, maxSize: sizeValidation.effectiveLimit, provider }
     });
   }
 

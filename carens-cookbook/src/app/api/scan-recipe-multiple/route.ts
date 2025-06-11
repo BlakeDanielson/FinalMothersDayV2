@@ -5,6 +5,7 @@ import { z } from 'zod';
 import { RecipeProcessingError, ErrorType, logError } from '@/lib/errors';
 import { AIProvider, getProviderConfig } from '@/lib/ai-providers';
 import { AI_MODELS, AI_SETTINGS, getBackendProviderFromUI, getModelFromUIProvider, type UIProvider } from '@/lib/config/ai-models';
+import { validateFileSize, getFileSizeErrorMessage } from '@/lib/utils/file-size-validation';
 
 // Zod schema for recipe data parsed from multiple images
 const scanMultipleRecipeZodSchema = z.object({
@@ -105,17 +106,19 @@ function validateFiles(imageFiles: File[], provider: AIProvider = 'openai'): voi
       });
     }
 
-    // Check file size
-    if (file.size > config.maxFileSize) {
-      const maxSizeMB = Math.round(config.maxFileSize / (1024 * 1024));
+    // Check file size with conversion awareness
+    const sizeValidation = validateFileSize(file, config.maxFileSize);
+    if (!sizeValidation.isValid) {
       throw new RecipeProcessingError({
         type: ErrorType.FILE_TOO_LARGE,
-        message: `File "${file.name}" size ${file.size} exceeds maximum ${config.maxFileSize}`,
-        userMessage: `The image "${file.name}" is too large for ${config.name}.`,
-        actionable: `Please use images smaller than ${maxSizeMB}MB each.`,
+        message: `File "${file.name}" size ${file.size} exceeds maximum ${sizeValidation.effectiveLimit}`,
+        userMessage: getFileSizeErrorMessage(file, config.maxFileSize),
+        actionable: sizeValidation.willBeConverted 
+          ? `Large ${sizeValidation.conversionType?.split(' to ')[0]} files are allowed (up to ${Math.round(sizeValidation.effectiveLimit / (1024 * 1024))}MB) and will be auto-converted.`
+          : `Please use images smaller than ${Math.round(config.maxFileSize / (1024 * 1024))}MB each.`,
         retryable: false,
         statusCode: 413,
-        details: { fileName: file.name, fileSize: file.size, maxSize: config.maxFileSize, provider }
+        details: { fileName: file.name, fileSize: file.size, maxSize: sizeValidation.effectiveLimit, provider }
       });
     }
 

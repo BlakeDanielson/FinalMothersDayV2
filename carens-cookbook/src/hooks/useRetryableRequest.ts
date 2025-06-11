@@ -1,5 +1,6 @@
 import { useState, useCallback, useRef } from 'react';
 import { RecipeProcessingError, ErrorType, getErrorDetails } from '@/lib/errors';
+import { validateFileSize, getFileSizeErrorMessage } from '@/lib/utils/file-size-validation';
 
 interface RetryableRequestOptions {
   maxRetries?: number;
@@ -176,14 +177,17 @@ export function useImageProcessing(
 
   // Create a function that validates and processes the file
   const validateAndProcessFile = useCallback(async (file: File, provider: string) => {
-    // File size validation (10MB limit)
+    // File size validation with conversion awareness
     const MAX_FILE_SIZE = 10 * 1024 * 1024; // 10MB
-    if (file.size > MAX_FILE_SIZE) {
+    const sizeValidation = validateFileSize(file, MAX_FILE_SIZE);
+    if (!sizeValidation.isValid) {
       throw new RecipeProcessingError({
         type: ErrorType.FILE_TOO_LARGE,
-        message: `File size ${file.size} exceeds maximum ${MAX_FILE_SIZE}`,
-        userMessage: 'The image file is too large.',
-        actionable: 'Please use an image smaller than 10MB.',
+        message: `File size ${file.size} exceeds maximum ${sizeValidation.effectiveLimit}`,
+        userMessage: getFileSizeErrorMessage(file, MAX_FILE_SIZE),
+        actionable: sizeValidation.willBeConverted 
+          ? `Large ${sizeValidation.conversionType?.split(' to ')[0]} files are allowed (up to ${Math.round(sizeValidation.effectiveLimit / (1024 * 1024))}MB) and will be auto-converted.`
+          : 'Please use a smaller image file.',
         retryable: false
       });
     }

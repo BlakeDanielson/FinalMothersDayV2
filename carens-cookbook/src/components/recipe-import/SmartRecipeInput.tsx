@@ -244,7 +244,7 @@ export function SmartRecipeInput({
                   <div>
                     <p className="font-medium">Drop photos here or click to select</p>
                     <p className="text-sm text-muted-foreground">
-                      Supports JPG, PNG, HEIC • Up to 3 photos • Large PNGs auto-converted
+                      Supports JPG, PNG (50MB), HEIC (25MB) • Up to 3 photos • Large files auto-converted
                     </p>
                   </div>
                 </div>
