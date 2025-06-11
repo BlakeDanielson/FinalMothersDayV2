@@ -422,8 +422,10 @@ const RecipeDisplay = ({
                   layout="fill" 
                   objectFit="cover" 
                   priority
-                  onError={() => {
+                  unoptimized={false} // Let Next.js optimize the image
+                  onError={(e) => {
                     console.warn('Failed to load image:', recipe.image);
+                    console.warn('Image error details:', e);
                     setImageError(true);
                   }}
                   onLoad={() => setImageError(false)}

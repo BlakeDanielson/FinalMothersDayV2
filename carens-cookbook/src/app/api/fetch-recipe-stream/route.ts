@@ -34,6 +34,37 @@ function fixImageUrl(url: string | null, baseUrl: string): string | null {
   }
 }
 
+// Helper function to validate image URL
+async function validateImageUrl(url: string | null): Promise<string | null> {
+  if (!url) return null;
+  
+  try {
+    console.log(`🔍 Validating image URL: ${url}`);
+    
+    // Create abort controller for timeout
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 5000);
+    
+    const response = await fetch(url, { 
+      method: 'HEAD', // Only get headers, not the full image
+      signal: controller.signal
+    });
+    
+    clearTimeout(timeoutId);
+    
+    if (response.ok && response.headers.get('content-type')?.startsWith('image/')) {
+      console.log(`✅ Image URL valid: ${url}`);
+      return url;
+    } else {
+      console.warn(`❌ Image URL invalid (${response.status}): ${url}`);
+      return null;
+    }
+  } catch (error) {
+    console.warn(`❌ Image URL validation failed: ${url}`, error);
+    return null;
+  }
+}
+
 // Progress event helper
 function createProgressEvent(progress: number, message: string, data?: Record<string, unknown>) {
   return `data: ${JSON.stringify({ 
@@ -140,9 +171,10 @@ export const POST = withOnboardingGuard(async (request: NextRequest) => {
           progressCallback
         });
 
-        // Fix image URL if present
+        // Fix and validate image URL if present
         if (recipe.image) {
-          recipe.image = fixImageUrl(recipe.image, url);
+          const fixedImageUrl = fixImageUrl(recipe.image, url);
+          recipe.image = await validateImageUrl(fixedImageUrl);
         }
 
         const efficiencySummary = {
