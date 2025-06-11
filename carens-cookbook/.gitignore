@@ -53,3 +53,10 @@ next-env.d.ts
 
 # clerk configuration (can include secrets)
 /.clerk/
+
+/recipe_photos/
+/tests/
+/test-results/
+/scripts/
+/cursor_docs/
+/tasks/
