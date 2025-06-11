@@ -17,6 +17,7 @@ import {
   ChefHat
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { validateFileSize, getFileSizeErrorMessage } from '@/lib/utils/file-size-validation';
 import type { RecipeData } from './FirstRecipeFlow';
 
 export interface ImageScanningPathwayProps {
@@ -96,8 +97,9 @@ export function ImageScanningPathway({
       return 'Please upload a JPEG, PNG, HEIC, or WebP image file.';
     }
     
-    if (file.size > MAX_FILE_SIZE) {
-      return 'File size must be less than 10MB.';
+    const sizeValidation = validateFileSize(file, MAX_FILE_SIZE);
+    if (!sizeValidation.isValid) {
+      return getFileSizeErrorMessage(file, MAX_FILE_SIZE);
     }
     
     return null;
@@ -254,7 +256,7 @@ export function ImageScanningPathway({
               </p>
             </div>
             <div className="text-sm text-gray-500">
-              Supports JPEG, PNG, HEIC, and WebP files up to 10MB • Large PNGs auto-converted
+              Supports JPEG, PNG (up to 50MB), HEIC (up to 25MB), and WebP files • Large files auto-converted
             </div>
           </div>
           <input
