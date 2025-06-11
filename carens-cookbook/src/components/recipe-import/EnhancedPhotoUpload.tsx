@@ -402,7 +402,7 @@ export function EnhancedPhotoUpload({
                   or drag and drop an image here
                 </p>
                 <p className="text-xs text-muted-foreground mt-2">
-                  Supports JPG, PNG, HEIC formats
+                  Supports JPG, PNG, HEIC formats • Large PNGs auto-converted to JPEG
                 </p>
               </div>
             </div>
