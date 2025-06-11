@@ -196,6 +196,59 @@ export function useImageProcessingWithStreaming({
         }
       }
 
+      // PNG to JPEG conversion for large files (>2MB threshold)
+      const PNG_SIZE_THRESHOLD = 2 * 1024 * 1024; // 2MB
+      if ((file.type === 'image/png' || file.name.toLowerCase().endsWith('.png')) && 
+          file.size > PNG_SIZE_THRESHOLD) {
+        
+        onProgress?.(10, `Converting large PNG '${file.name}' to JPEG for better performance... ⏳`);
+        toast.info(`Converting large PNG image to JPEG...`);
+        
+        try {
+          // Create canvas to convert PNG to JPEG
+          const canvas = document.createElement('canvas');
+          const ctx = canvas.getContext('2d');
+          const img = new Image();
+          
+          await new Promise((resolve, reject) => {
+            img.onload = resolve;
+            img.onerror = reject;
+            img.src = URL.createObjectURL(file);
+          });
+          
+          canvas.width = img.width;
+          canvas.height = img.height;
+          
+          // Fill with white background (important for transparency)
+          ctx!.fillStyle = 'white';
+          ctx!.fillRect(0, 0, canvas.width, canvas.height);
+          ctx!.drawImage(img, 0, 0);
+          
+          // Convert to JPEG blob
+          const jpegBlob = await new Promise<Blob>((resolve) => {
+            canvas.toBlob(resolve, 'image/jpeg', 0.85);
+          });
+          
+          if (jpegBlob) {
+            const originalNameWithoutExt = file.name.split('.').slice(0, -1).join('.');
+            fileToProcess = new File([jpegBlob], `${originalNameWithoutExt}.jpeg`, { type: 'image/jpeg' });
+            
+            const compressionRatio = ((file.size - jpegBlob.size) / file.size * 100).toFixed(1);
+            toast.success(`PNG converted to JPEG! ${compressionRatio}% size reduction`);
+            console.log(`PNG compression: ${file.size} → ${jpegBlob.size} bytes (${compressionRatio}% reduction)`);
+          }
+          
+          // Clean up
+          URL.revokeObjectURL(img.src);
+          
+        } catch (conversionError: unknown) {
+          console.error("Error converting PNG to JPEG:", conversionError);
+          const errorMessage = conversionError instanceof Error ? conversionError.message : 'Unknown error';
+          toast.error(`PNG conversion failed, using original file: ${errorMessage}`);
+          // Continue with original PNG file instead of failing
+        }
+      }
+
       // Use streaming for enhanced progress feedback
       await handleImageStreamingSubmit(fileToProcess, provider);
       

@@ -254,7 +254,7 @@ export function ImageScanningPathway({
               </p>
             </div>
             <div className="text-sm text-gray-500">
-              Supports JPEG, PNG, HEIC, and WebP files up to 10MB
+              Supports JPEG, PNG, HEIC, and WebP files up to 10MB • Large PNGs auto-converted
             </div>
           </div>
           <input

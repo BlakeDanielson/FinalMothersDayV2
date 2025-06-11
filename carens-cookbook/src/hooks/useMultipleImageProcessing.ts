@@ -102,7 +102,9 @@ export function useMultipleImageProcessing(
       for (let i = 0; i < files.length; i++) {
         const file = files[i];
         const progress = 15 + (i / files.length) * 30; // 15-45% for conversion
+        let currentFile = file;
         
+        // HEIC conversion
         if (file.type === 'image/heic' || file.type === 'image/heif' || 
             file.name.toLowerCase().endsWith('.heic') || file.name.toLowerCase().endsWith('.heif')) {
           
@@ -118,9 +120,8 @@ export function useMultipleImageProcessing(
             
             const convertedBlob = Array.isArray(conversionResult) ? conversionResult[0] : conversionResult;
             const originalNameWithoutExt = file.name.split('.').slice(0, -1).join('.');
-            const convertedFile = new File([convertedBlob], `${originalNameWithoutExt}.jpeg`, { type: 'image/jpeg' });
+            currentFile = new File([convertedBlob], `${originalNameWithoutExt}.jpeg`, { type: 'image/jpeg' });
             
-            processedFiles.push(convertedFile);
           } catch (conversionError: unknown) {
             throw new RecipeProcessingError({
               type: ErrorType.FILE_CONVERSION_FAILED,
@@ -131,9 +132,58 @@ export function useMultipleImageProcessing(
               details: { fileName: file.name, error: conversionError }
             });
           }
-        } else {
-          processedFiles.push(file);
         }
+
+        // PNG to JPEG conversion for large files (>2MB threshold)
+        const PNG_SIZE_THRESHOLD = 2 * 1024 * 1024; // 2MB
+        if ((currentFile.type === 'image/png' || currentFile.name.toLowerCase().endsWith('.png')) && 
+            currentFile.size > PNG_SIZE_THRESHOLD) {
+          
+          options.onProgress?.(progress + 5, `Converting large PNG '${currentFile.name}' to JPEG...`);
+          
+          try {
+            // Create canvas to convert PNG to JPEG
+            const canvas = document.createElement('canvas');
+            const ctx = canvas.getContext('2d');
+            const img = new Image();
+            
+            await new Promise((resolve, reject) => {
+              img.onload = resolve;
+              img.onerror = reject;
+              img.src = URL.createObjectURL(currentFile);
+            });
+            
+            canvas.width = img.width;
+            canvas.height = img.height;
+            
+            // Fill with white background (important for transparency)
+            ctx!.fillStyle = 'white';
+            ctx!.fillRect(0, 0, canvas.width, canvas.height);
+            ctx!.drawImage(img, 0, 0);
+            
+            // Convert to JPEG blob
+            const jpegBlob = await new Promise<Blob>((resolve) => {
+              canvas.toBlob(resolve, 'image/jpeg', 0.85);
+            });
+            
+            if (jpegBlob) {
+              const originalNameWithoutExt = currentFile.name.split('.').slice(0, -1).join('.');
+              currentFile = new File([jpegBlob], `${originalNameWithoutExt}.jpeg`, { type: 'image/jpeg' });
+              
+              const compressionRatio = ((file.size - jpegBlob.size) / file.size * 100).toFixed(1);
+              console.log(`PNG compression for ${file.name}: ${file.size} → ${jpegBlob.size} bytes (${compressionRatio}% reduction)`);
+            }
+            
+            // Clean up
+            URL.revokeObjectURL(img.src);
+            
+          } catch (conversionError: unknown) {
+            console.error(`Error converting PNG to JPEG for ${currentFile.name}:`, conversionError);
+            // Continue with original PNG file instead of failing
+          }
+        }
+        
+        processedFiles.push(currentFile);
       }
       
       options.onProgress?.(50, `Processing ${processedFiles.length} images with AI...`);
