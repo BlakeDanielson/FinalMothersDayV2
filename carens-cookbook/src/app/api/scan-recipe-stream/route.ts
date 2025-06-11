@@ -322,7 +322,7 @@ async function extractRecipeFromImageWithProgress(
 
   // Validate the file
   const backendProvider = getBackendProviderFromUI(provider);
-  validateFile(imageFile, backendProvider);
+  validateFile(imageFile, backendProvider as AIProvider); // Cast since we know it's either 'openai' or 'gemini'
 
   progressCallback(10, "🔍 Validating image format and size...", { stage: 'validation' });
   await new Promise(resolve => setTimeout(resolve, 300));
@@ -373,7 +373,7 @@ async function extractRecipeFromImageWithProgress(
   } catch (parseError) {
     console.error(`[${requestId}] ❌ JSON parsing failed:`, parseError);
     throw new RecipeProcessingError({
-      type: ErrorType.AI_RESPONSE_INVALID,
+      type: ErrorType.AI_PROCESSING_FAILED,
       message: 'AI returned invalid JSON response',
       userMessage: 'The AI had trouble reading your recipe image.',
       actionable: 'Please try a clearer image or different photo.',
@@ -386,7 +386,7 @@ async function extractRecipeFromImageWithProgress(
   // Check if AI detected no recipe
   if (!parsedRecipe || Object.keys(parsedRecipe).length === 0) {
     throw new RecipeProcessingError({
-      type: ErrorType.NO_RECIPE_DETECTED,
+      type: ErrorType.RECIPE_NOT_DETECTED,
       message: 'No recipe detected in image',
       userMessage: 'We couldn\'t find a recipe in this image.',
       actionable: 'Please try an image that clearly shows a recipe with ingredients and steps.',
@@ -400,7 +400,7 @@ async function extractRecipeFromImageWithProgress(
   if (!validationResult.success) {
     console.error(`[${requestId}] ❌ Schema validation failed:`, validationResult.error);
     throw new RecipeProcessingError({
-      type: ErrorType.AI_RESPONSE_INVALID,
+      type: ErrorType.AI_PROCESSING_FAILED,
       message: 'Recipe data validation failed',
       userMessage: 'The extracted recipe data is incomplete.',
       actionable: 'Please try a clearer image showing all recipe details.',
@@ -473,8 +473,7 @@ export const POST = withOnboardingGuard(async (request: NextRequest) => {
   let userCategories: string[] = [];
   try {
     if (userId) {
-      const categories = await categoryService.getAllUserCategories(userId);
-      userCategories = categories.map(cat => cat.name);
+      userCategories = await categoryService.getUserCategories(userId);
     }
   } catch (error) {
     console.error('Failed to fetch user categories:', error);
@@ -565,23 +564,7 @@ export const POST = withOnboardingGuard(async (request: NextRequest) => {
 
         controller.enqueue(encoder.encode(createErrorEvent(errorMessage)));
 
-        // Track error
-        if (sessionContext) {
-          try {
-            await ConversionAnalytics.trackEvent(
-              sessionContext.sessionId,
-              ConversionEventType.EXTRACTION_FAILED,
-              {
-                imageFile: imageFile.name,
-                provider: provider,
-                error: error instanceof Error ? error.message : 'Unknown error'
-              },
-              userId || undefined
-            );
-          } catch (analyticsError) {
-            console.error('Error analytics tracking failed:', analyticsError);
-          }
-        }
+        // Note: Could add extraction failure analytics tracking here if needed
 
         if (error instanceof RecipeProcessingError) {
           logError(error, { imageFile: imageFile.name, provider });
