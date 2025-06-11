@@ -44,38 +44,55 @@ async function testPngPhoto(photoPath, model = 'openai') {
     
     log(`📸 Testing ${filename} with ${model.toUpperCase()}...`, 'cyan');
     
-    // Create form data
+    // Create form data - use form-data package directly with buffer
     const formData = new FormData();
-    formData.append('file', photoBuffer, {
+    formData.append('image', photoBuffer, {
       filename: filename,
       contentType: 'image/png'
     });
+    formData.append('provider', model);
     
     // Make API request
     const endpoint = '/api/scan-recipe';
     const response = await fetch(`${API_BASE_URL}${endpoint}`, {
       method: 'POST',
-      body: formData,
-      headers: {
-        'X-Test-Model': model // Custom header to specify model
-      }
+      body: formData
     });
     
     const processingTime = Date.now() - startTime;
     
     if (!response.ok) {
-      throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+      const errorData = await response.json().catch(() => ({}));
+      throw new Error(`HTTP ${response.status}: ${errorData.error || errorData.userMessage || 'Unknown error'}`);
     }
     
-    const result = await response.json();
+    const data = await response.json();
+    
+    // Handle both wrapped {success: true, recipe: {...}} and direct recipe responses
+    let recipe = null;
+    let success = false;
+    
+    if (data.success && data.recipe) {
+      // Wrapped format: {success: true, recipe: {...}}
+      recipe = data.recipe;
+      success = true;
+    } else if (data.title && data.ingredients && data.steps) {
+      // Direct format: {title: "...", ingredients: [...], steps: [...]}
+      recipe = data;
+      success = true;
+    }
+    
+    if (!success || !recipe) {
+      throw new Error(data.error || data.userMessage || 'No recipe data returned');
+    }
     
     // Validate result structure
-    const isValid = result && 
-                   result.title && 
-                   result.ingredients && 
-                   result.instructions && 
-                   Array.isArray(result.ingredients) && 
-                   Array.isArray(result.instructions);
+    const isValid = recipe && 
+                   recipe.title && 
+                   recipe.ingredients && 
+                   recipe.steps && 
+                   Array.isArray(recipe.ingredients) && 
+                   Array.isArray(recipe.steps);
     
     const testResult = {
       filename,
@@ -83,18 +100,18 @@ async function testPngPhoto(photoPath, model = 'openai') {
       processingTime,
       success: true,
       valid: isValid,
-      title: result.title || 'No title',
-      ingredientCount: result.ingredients ? result.ingredients.length : 0,
-      instructionCount: result.instructions ? result.instructions.length : 0,
+      title: recipe.title || 'No title',
+      ingredientCount: recipe.ingredients ? recipe.ingredients.length : 0,
+      instructionCount: recipe.steps ? recipe.steps.length : 0,
       fileSize: photoBuffer.length,
       timestamp: new Date().toISOString()
     };
     
     log(`✅ ${model.toUpperCase()} - ${filename}:`, 'green');
     log(`   ⏱️  Processing time: ${processingTime}ms`, 'yellow');
-    log(`   📝 Title: ${result.title || 'No title'}`, 'cyan');
-    log(`   🥕 Ingredients: ${result.ingredients ? result.ingredients.length : 0}`, 'cyan');
-    log(`   📋 Instructions: ${result.instructions ? result.instructions.length : 0}`, 'cyan');
+    log(`   📝 Title: ${recipe.title || 'No title'}`, 'cyan');
+    log(`   🥕 Ingredients: ${recipe.ingredients ? recipe.ingredients.length : 0}`, 'cyan');
+    log(`   📋 Instructions: ${recipe.steps ? recipe.steps.length : 0}`, 'cyan');
     log(`   📏 File size: ${(photoBuffer.length / 1024).toFixed(1)}KB`, 'cyan');
     
     return testResult;
@@ -193,6 +210,8 @@ async function testAllPngPhotos() {
     log(`📝 Results saved to: ${path.basename(resultsPath)}`, 'cyan');
     
     log('\n🎉 PNG photo testing completed!', 'green');
+    
+    return results;
     
   } catch (error) {
     log(`❌ Error during PNG photo testing: ${error.message}`, 'red');

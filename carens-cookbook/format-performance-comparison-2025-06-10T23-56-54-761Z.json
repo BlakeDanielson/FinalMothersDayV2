@@ -1,0 +1,32 @@
+{
+  "timestamp": "2025-06-10T23:56:54.759Z",
+  "totalTestDuration": 186800,
+  "png": {
+    "totalTests": 10,
+    "openaiSuccess": 0,
+    "geminiSuccess": 5,
+    "openaiSuccessRate": "0.0",
+    "geminiSuccessRate": "100.0",
+    "openaiAvgTime": 0,
+    "geminiAvgTime": 10589,
+    "testDuration": 63710
+  },
+  "jpeg": {
+    "totalTests": 10,
+    "openaiSuccess": 5,
+    "geminiSuccess": 5,
+    "openaiSuccessRate": "100.0",
+    "geminiSuccessRate": "100.0",
+    "openaiAvgTime": 13479,
+    "geminiAvgTime": 8733,
+    "testDuration": 121075
+  },
+  "comparison": {
+    "openaiTimeDiff": 13479,
+    "geminiTimeDiff": -1856,
+    "pngFaster": {
+      "openai": true,
+      "gemini": false
+    }
+  }
+}

@@ -1,0 +1,116 @@
+{
+  "openai": [
+    {
+      "filename": "IMG_6534.png",
+      "model": "openai",
+      "processingTime": 174,
+      "success": false,
+      "error": "HTTP 413: The image file is too large for OpenAI GPT-4o.",
+      "timestamp": "2025-06-10T23:53:48.134Z"
+    },
+    {
+      "filename": "IMG_6535.png",
+      "model": "openai",
+      "processingTime": 128,
+      "success": false,
+      "error": "HTTP 413: The image file is too large for OpenAI GPT-4o.",
+      "timestamp": "2025-06-10T23:54:02.778Z"
+    },
+    {
+      "filename": "IMG_6536.png",
+      "model": "openai",
+      "processingTime": 154,
+      "success": false,
+      "error": "HTTP 413: The image file is too large for OpenAI GPT-4o.",
+      "timestamp": "2025-06-10T23:54:15.113Z"
+    },
+    {
+      "filename": "IMG_6537.png",
+      "model": "openai",
+      "processingTime": 161,
+      "success": false,
+      "error": "HTTP 413: The image file is too large for OpenAI GPT-4o.",
+      "timestamp": "2025-06-10T23:54:26.392Z"
+    },
+    {
+      "filename": "IMG_6538.png",
+      "model": "openai",
+      "processingTime": 138,
+      "success": false,
+      "error": "HTTP 413: The image file is too large for OpenAI GPT-4o.",
+      "timestamp": "2025-06-10T23:54:36.538Z"
+    }
+  ],
+  "gemini": [
+    {
+      "filename": "IMG_6534.png",
+      "model": "gemini",
+      "processingTime": 12512,
+      "success": true,
+      "valid": true,
+      "title": "Loaded Greek Hummus",
+      "ingredientCount": 13,
+      "instructionCount": 2,
+      "fileSize": 12323408,
+      "timestamp": "2025-06-10T23:54:01.648Z"
+    },
+    {
+      "filename": "IMG_6535.png",
+      "model": "gemini",
+      "processingTime": 10179,
+      "success": true,
+      "valid": true,
+      "title": "The BEST Fried Rice!",
+      "ingredientCount": 12,
+      "instructionCount": 4,
+      "fileSize": 12862418,
+      "timestamp": "2025-06-10T23:54:13.958Z"
+    },
+    {
+      "filename": "IMG_6536.png",
+      "model": "gemini",
+      "processingTime": 9116,
+      "success": true,
+      "valid": true,
+      "title": "The Best Egg Salad",
+      "ingredientCount": 8,
+      "instructionCount": 6,
+      "fileSize": 13557444,
+      "timestamp": "2025-06-10T23:54:25.229Z"
+    },
+    {
+      "filename": "IMG_6537.png",
+      "model": "gemini",
+      "processingTime": 8007,
+      "success": true,
+      "valid": true,
+      "title": "Chicken and Veggie Stir Fry",
+      "ingredientCount": 12,
+      "instructionCount": 1,
+      "fileSize": 13845020,
+      "timestamp": "2025-06-10T23:54:35.399Z"
+    },
+    {
+      "filename": "IMG_6538.png",
+      "model": "gemini",
+      "processingTime": 13130,
+      "success": true,
+      "valid": true,
+      "title": "Weeknight Bolognese",
+      "ingredientCount": 14,
+      "instructionCount": 3,
+      "fileSize": 12862798,
+      "timestamp": "2025-06-10T23:54:50.668Z"
+    }
+  ],
+  "summary": {
+    "totalTests": 10,
+    "openaiSuccess": 0,
+    "geminiSuccess": 5,
+    "openaiSuccessRate": "0.0",
+    "geminiSuccessRate": "100.0",
+    "openaiAvgTime": 0,
+    "geminiAvgTime": 10589,
+    "testDuration": 63710
+  }
+}
