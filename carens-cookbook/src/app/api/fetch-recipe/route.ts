@@ -6,29 +6,10 @@ import { withOnboardingGuard } from '@/lib/middleware/onboarding-guard';
 import { AI_SETTINGS, getBackendProviderFromUI, getModelFromUIProvider, type UIProvider } from '@/lib/config/ai-models';
 import { auth } from '@clerk/nextjs/server';
 import { prisma } from '@/lib/db';
-import { InternalRecipeAnalytics } from '@/lib/services/internal-recipe-analytics';
-
 // NEW: Import the optimized orchestrator
 import { extractRecipeOptimized, getExtractionEfficiencySummary, checkOptimizationReadiness } from '@/lib/services/recipe-extraction-orchestrator';
 
-// NEW: Import analytics services
-import { 
-  ExtractionTimer, 
-  trackExtractionWithRecipe,
-  type ExtractionMetrics 
-} from '@/lib/services/recipe-extraction-analytics';
-import { ExtractionStrategy, AIProvider } from '@/generated/prisma';
 
-// Helper function to map UI providers to analytics enums
-function mapUIProviderToAIProvider(uiProvider: UIProvider): AIProvider {
-  const mapping: Record<UIProvider, AIProvider> = {
-    'openai-mini': AIProvider.OPENAI_MINI,
-    'openai-main': AIProvider.OPENAI_MAIN,
-    'gemini-main': AIProvider.GEMINI_MAIN,
-    'gemini-pro': AIProvider.GEMINI_MAIN // Map gemini-pro to GEMINI_MAIN
-  };
-  return mapping[uiProvider] || AIProvider.OPENAI_MAIN;
-}
 
 // Helper function to fix relative URLs
 function fixImageUrl(url: string | null, baseUrl: string): string | null {
@@ -297,25 +278,16 @@ export const PUT = withOnboardingGuard(async (request: NextRequest) => {
 
 // EXISTING: Legacy POST handler (maintained for compatibility)
 export const POST = withOnboardingGuard(async (request: NextRequest) => {
-  const timer = new ExtractionTimer();
-  let extractionMetrics: Partial<ExtractionMetrics> = {};
+  let uiProvider: UIProvider = 'openai-main'; // Default value
   
   try {
     const { url, processing_method = 'openai-main' } = await request.json();
     
-    // Get user ID for analytics
+    // Get user ID for authentication
     const { userId } = await auth();
     if (!userId) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
-    
-    // Initialize metrics
-    extractionMetrics = {
-      userId,
-      recipeUrl: url,
-      primaryStrategy: ExtractionStrategy.HTML_FALLBACK, // Legacy endpoint always uses HTML fallback
-      extractionSuccess: false
-    };
 
     if (!url) {
       return NextResponse.json(
@@ -326,7 +298,6 @@ export const POST = withOnboardingGuard(async (request: NextRequest) => {
 
     // Convert UI provider to backend processing method
     let backendProcessingMethod: string;
-    let uiProvider: UIProvider;
     
     // Support both old format (openai/gemini) and new format (openai-main/gemini-main/etc)
     if (processing_method === 'openai' || processing_method === 'gemini') {
@@ -361,22 +332,13 @@ export const POST = withOnboardingGuard(async (request: NextRequest) => {
     }
 
     const htmlContent = await response.text();
-    const htmlFetchDuration = timer.markStage('htmlFetch');
     
     console.log(`Raw HTML length: ${htmlContent.length}`);
-    
-    // Update metrics with HTML fetch info
-    extractionMetrics.htmlContentSize = htmlContent.length;
-    extractionMetrics.htmlFetchDuration = htmlFetchDuration;
 
     // Simple HTML cleaning (more aggressive for Gemini)
     const isGemini = backendProcessingMethod === 'gemini';
     const cleanedHtml = cleanHtml(htmlContent, isGemini);
     console.log(`Cleaned HTML length: ${cleanedHtml.length}`);
-    
-    // Update metrics with cleaned content size
-    extractionMetrics.cleanedContentSize = cleanedHtml.length;
-    extractionMetrics.aiProvider = mapUIProviderToAIProvider(uiProvider);
 
     // Check for recipe keywords
     const hasRecipeKeywords = ['recipe', 'ingredient', 'instruction', 'direction'].some(keyword => 
@@ -386,23 +348,19 @@ export const POST = withOnboardingGuard(async (request: NextRequest) => {
 
     // Extract with chosen method
     let content;
-    const aiProcessingStart = Date.now();
     try {
       if (backendProcessingMethod === 'gemini') {
         content = await extractWithGemini(url, htmlContent, uiProvider);
       } else {
         content = await extractWithOpenAI(cleanedHtml, uiProvider);
       }
-      extractionMetrics.aiProcessingDuration = Date.now() - aiProcessingStart;
     } catch (apiError) {
-      extractionMetrics.aiProcessingDuration = Date.now() - aiProcessingStart;
       console.error(`${uiProvider} (${backendProcessingMethod}) extraction failed:`, apiError);
       throw new Error(`${uiProvider} extraction failed: ${apiError instanceof Error ? apiError.message : 'Unknown error'}`);
     }
 
     // Parse JSON response
     let parsedRecipe;
-    const validationStart = Date.now();
     try {
       // Extract JSON from response (handle markdown code blocks and extra text)
       let jsonString = typeof content === 'string' ? content : String(content);
@@ -416,8 +374,6 @@ export const POST = withOnboardingGuard(async (request: NextRequest) => {
       
       parsedRecipe = JSON.parse(jsonString);
     } catch (parseError) {
-      extractionMetrics.validationDuration = Date.now() - validationStart;
-      extractionMetrics.validationErrors = [{ type: 'JSON_PARSE_ERROR', message: parseError instanceof Error ? parseError.message : 'Unknown parse error' }];
       console.error(`Failed to parse ${uiProvider} (${backendProcessingMethod}) response as JSON:`, parseError);
       console.log('Raw response:', content);
       throw new Error(`Invalid JSON response from ${uiProvider}`);
@@ -427,10 +383,7 @@ export const POST = withOnboardingGuard(async (request: NextRequest) => {
     let validatedRecipe;
     try {
       validatedRecipe = RecipeSchema.parse(parsedRecipe);
-      extractionMetrics.validationDuration = Date.now() - validationStart;
     } catch (validationError) {
-      extractionMetrics.validationDuration = Date.now() - validationStart;
-      extractionMetrics.validationErrors = validationError instanceof Error ? [{ type: 'VALIDATION_ERROR', message: validationError.message }] : [{ type: 'UNKNOWN_VALIDATION_ERROR', message: 'Unknown validation error' }];
       throw validationError;
     }
 
@@ -439,37 +392,9 @@ export const POST = withOnboardingGuard(async (request: NextRequest) => {
       validatedRecipe.image = fixImageUrl(validatedRecipe.image, url);
     }
 
-    // 📊 SAVE INTERNAL RECIPE DATA FOR BUSINESS INTELLIGENCE (Both authenticated & anonymous)
-    try {
-      await InternalRecipeAnalytics.saveRecipeData({
-        // Basic recipe info
-        title: validatedRecipe.title,
-        
-        // Source context
-        sourceUrl: url,
-        
-        // Processing method
-        extractionStrategy: ExtractionStrategy.HTML_FALLBACK, // This endpoint always uses HTML fallback
-        aiProvider: mapUIProviderToAIProvider(uiProvider),
-        
-        // Performance metrics
-        totalProcessingTimeMs: extractionMetrics.totalDuration || 0,
-        fetchTimeMs: extractionMetrics.htmlFetchDuration,
-        parseTimeMs: extractionMetrics.cleanedContentSize ? Math.floor((extractionMetrics.totalDuration || 0) * 0.2) : undefined,
-        aiTimeMs: extractionMetrics.aiProcessingDuration
-      });
-      
-      console.log(`📊 Internal recipe data saved for analysis: ${validatedRecipe.title}`);
-    } catch (internalDataError) {
-      console.error('Failed to save internal recipe data (non-blocking):', internalDataError);
-      // Don't fail the request for internal analytics errors
-    }
-
     // Save recipe to database
-    const dbSaveStart = Date.now();
-    let savedRecipe;
     try {
-      savedRecipe = await prisma.recipe.create({
+      await prisma.recipe.create({
         data: {
           title: validatedRecipe.title,
           description: validatedRecipe.description,
@@ -483,62 +408,28 @@ export const POST = withOnboardingGuard(async (request: NextRequest) => {
           userId
         }
       });
-      extractionMetrics.databaseSaveDuration = Date.now() - dbSaveStart;
-      extractionMetrics.recipeId = savedRecipe.id;
-      extractionMetrics.extractionSuccess = true;
     } catch (dbError) {
-      extractionMetrics.databaseSaveDuration = Date.now() - dbSaveStart;
       console.error('Failed to save recipe to database:', dbError);
-      // Still consider extraction successful even if DB save fails
-      extractionMetrics.extractionSuccess = true;
+      throw new Error('Failed to save recipe to database');
     }
 
     console.log(`Recipe extraction successful using ${uiProvider} (${backendProcessingMethod})`);
-
-    // Complete analytics tracking
-    extractionMetrics.totalDuration = timer.getTotalDuration();
-    await trackExtractionWithRecipe(extractionMetrics as ExtractionMetrics, validatedRecipe);
 
     return NextResponse.json({
       success: true,
       recipe: validatedRecipe,
       processing_method: uiProvider,
-      message: `Recipe extracted successfully using ${uiProvider}`,
-      analytics: {
-        totalTime: extractionMetrics.totalDuration,
-        strategy: 'html-fallback',
-        provider: uiProvider
-      }
+      message: `Recipe extracted successfully using ${uiProvider}`
     });
 
   } catch (error) {
     console.error('Recipe extraction error:', error);
     
-    // Track failed extraction
-    extractionMetrics.extractionSuccess = false;
-    extractionMetrics.totalDuration = timer.getTotalDuration();
-    if (!extractionMetrics.validationErrors) {
-      extractionMetrics.validationErrors = [{ 
-        type: 'EXTRACTION_ERROR', 
-        message: error instanceof Error ? error.message : 'Unknown error occurred' 
-      }];
-    }
-    
-    // Track the failed extraction
-    if (extractionMetrics.userId && extractionMetrics.recipeUrl && extractionMetrics.aiProvider !== undefined) {
-      await trackExtractionWithRecipe(extractionMetrics as ExtractionMetrics);
-    }
-    
     return NextResponse.json(
       { 
         success: false, 
         error: error instanceof Error ? error.message : 'Unknown error occurred',
-        processing_method: extractionMetrics.aiProvider ? 'unknown' : "unknown",
-        analytics: {
-          totalTime: extractionMetrics.totalDuration,
-          strategy: 'html-fallback',
-          success: false
-        }
+        processing_method: uiProvider || 'unknown'
       },
       { status: 500 }
     );

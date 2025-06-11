@@ -1,10 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { withOnboardingGuard } from '@/lib/middleware/onboarding-guard';
 import { extractRecipeOptimized, checkOptimizationReadiness } from '@/lib/services/recipe-extraction-orchestrator';
-import { ConversionAnalytics } from '@/lib/services/conversionAnalytics';
-import { ConversionEventType, ExtractionStrategy, AIProvider } from '@/generated/prisma';
 import { auth } from '@clerk/nextjs/server';
-import { InternalRecipeAnalytics } from '@/lib/services/internal-recipe-analytics';
 
 // Helper function to fix relative URLs
 function fixImageUrl(url: string | null, baseUrl: string): string | null {
@@ -92,7 +89,7 @@ function createErrorEvent(error: string) {
 }
 
 export const POST = withOnboardingGuard(async (request: NextRequest) => {
-  const { url, forceStrategy, geminiProvider = 'gemini-pro', openaiProvider = 'openai-main', sessionId } = await request.json();
+  const { url, forceStrategy, geminiProvider = 'gemini-pro', openaiProvider = 'openai-main' } = await request.json();
 
   if (!url) {
     return NextResponse.json(
@@ -101,39 +98,10 @@ export const POST = withOnboardingGuard(async (request: NextRequest) => {
     );
   }
 
-  // Get user info and session context
+  // Get user info for authentication
   const { userId } = await auth();
-  let sessionContext;
-  
-  try {
-    sessionContext = await ConversionAnalytics.getOrCreateSession(sessionId || undefined, { userId: userId || undefined });
-  } catch (error) {
-    console.error('Failed to get session context:', error);
-    // Continue without analytics rather than failing the request
-    sessionContext = null;
-  }
-
-  // Check rate limits for anonymous users
-  if (!userId && sessionContext) {
-    const rateLimitResult = await ConversionAnalytics.checkRateLimit(sessionContext.sessionId);
-    if (!rateLimitResult.allowed) {
-      // Track rate limit hit
-      await ConversionAnalytics.trackRateLimitHit(sessionContext.sessionId, {
-        recipeUrl: url,
-        remainingRequests: rateLimitResult.remainingRequests
-      });
-      
-      return NextResponse.json({
-        success: false,
-        error: 'Daily limit reached',
-        rateLimitInfo: {
-          limit: 20,
-          remaining: rateLimitResult.remainingRequests,
-          resetTime: rateLimitResult.resetTime,
-          message: 'Sign up to save unlimited recipes!'
-        }
-      }, { status: 429 });
-    }
+  if (!userId) {
+    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   }
 
   // Set up SSE response headers
@@ -184,72 +152,7 @@ export const POST = withOnboardingGuard(async (request: NextRequest) => {
           processingTime: metrics.processingTime
         };
 
-        // 📊 SAVE INTERNAL RECIPE DATA FOR BUSINESS INTELLIGENCE (Both authenticated & anonymous)
-        try {
-          const extractionStrategy = metrics.primarySuccess ? ExtractionStrategy.URL_DIRECT : ExtractionStrategy.HTML_FALLBACK;
-          const aiProvider = metrics.primarySuccess ? AIProvider.GEMINI_FLASH : AIProvider.OPENAI_MAIN;
-          
-          await InternalRecipeAnalytics.saveRecipeData({
-            // Basic recipe info
-            title: recipe.title,
-            
-            // Source context
-            sourceUrl: url,
-            
-            // Processing method
-            extractionStrategy,
-            aiProvider,
-            
-            // Performance metrics
-            totalProcessingTimeMs: metrics.processingTime,
-            fetchTimeMs: Math.floor(metrics.processingTime * 0.2), // Estimate 20% for fetch
-            parseTimeMs: Math.floor(metrics.processingTime * 0.3), // Estimate 30% for parsing
-            aiTimeMs: Math.floor(metrics.processingTime * 0.5)     // Estimate 50% for AI processing
-          });
-          
-          console.log(`📊 Internal recipe data saved for analysis: ${recipe.title}`);
-        } catch (internalDataError) {
-          console.error('Failed to save internal recipe data (non-blocking):', internalDataError);
-          // Don't fail the request for internal analytics errors
-        }
 
-        // Track successful extraction
-        if (sessionContext) {
-          try {
-            // Increment rate limit counter
-            await ConversionAnalytics.incrementRateLimit(sessionContext.sessionId, userId || undefined);
-            
-            // Track extraction event
-            await ConversionAnalytics.trackEvent(
-              sessionContext.sessionId,
-              ConversionEventType.RECIPE_EXTRACTED,
-              {
-                recipeUrl: url,
-                strategy: metrics.primarySuccess ? 'gemini-url-direct' : 'openai-html-fallback',
-                tokensUsed: metrics.totalTokensEstimated,
-                processingTime: metrics.processingTime,
-                fallbackUsed: metrics.fallbackUsed
-              },
-              userId || undefined
-            );
-
-            // Check if user should see signup prompt (anonymous users who have extracted recipes)
-            if (!userId) {
-              const rateLimitResult = await ConversionAnalytics.checkRateLimit(sessionContext.sessionId);
-              if (rateLimitResult.remainingRequests <= 5) {
-                // Show signup prompt when getting close to limit
-                await ConversionAnalytics.trackSignupPromptShown(sessionContext.sessionId, {
-                  recipeUrl: url,
-                  remainingRequests: rateLimitResult.remainingRequests,
-                  trigger: 'approaching_limit'
-                });
-              }
-            }
-          } catch (analyticsError) {
-            console.error('Analytics tracking failed:', analyticsError);
-            // Don't fail the request for analytics errors
-          }
-        }
 
         // Send success event
         controller.enqueue(encoder.encode(createSuccessEvent(recipe, {
@@ -262,8 +165,7 @@ export const POST = withOnboardingGuard(async (request: NextRequest) => {
           recommendation: efficiencySummary.efficiency === 'Ultra-Efficient' ? 
             'Perfect! Used our fastest method' : 
             'Successfully extracted using our reliable backup method',
-          // Include rate limit info for anonymous users
-          rateLimitInfo: !userId && sessionContext ? await ConversionAnalytics.checkRateLimit(sessionContext.sessionId) : undefined
+
         })));
 
         console.log(`✅ STREAMING SUCCESS: Strategy=${metrics.primarySuccess ? 'Gemini URL-Direct' : 'OpenAI HTML Fallback'}`);

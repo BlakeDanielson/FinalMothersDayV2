@@ -190,137 +190,6 @@ exports.Prisma.UserOnboardingProgressScalarFieldEnum = {
   updatedAt: 'updatedAt'
 };
 
-exports.Prisma.RecipeExtractionMetricsScalarFieldEnum = {
-  id: 'id',
-  userId: 'userId',
-  sessionId: 'sessionId',
-  recipeUrl: 'recipeUrl',
-  domain: 'domain',
-  requestTimestamp: 'requestTimestamp',
-  primaryStrategy: 'primaryStrategy',
-  aiProvider: 'aiProvider',
-  fallbackUsed: 'fallbackUsed',
-  fallbackReason: 'fallbackReason',
-  totalDuration: 'totalDuration',
-  htmlFetchDuration: 'htmlFetchDuration',
-  aiProcessingDuration: 'aiProcessingDuration',
-  validationDuration: 'validationDuration',
-  databaseSaveDuration: 'databaseSaveDuration',
-  htmlContentSize: 'htmlContentSize',
-  cleanedContentSize: 'cleanedContentSize',
-  promptTokens: 'promptTokens',
-  responseTokens: 'responseTokens',
-  totalTokens: 'totalTokens',
-  extractionSuccess: 'extractionSuccess',
-  validationErrors: 'validationErrors',
-  missingFields: 'missingFields',
-  completenessScore: 'completenessScore',
-  categoryConfidence: 'categoryConfidence',
-  hasStructuredData: 'hasStructuredData',
-  estimatedCost: 'estimatedCost',
-  recipeId: 'recipeId',
-  wasOptimal: 'wasOptimal',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
-};
-
-exports.Prisma.DomainPerformanceMetricsScalarFieldEnum = {
-  id: 'id',
-  domain: 'domain',
-  totalExtractions: 'totalExtractions',
-  successfulExtractions: 'successfulExtractions',
-  averageExtractTime: 'averageExtractTime',
-  averageTokens: 'averageTokens',
-  averageCost: 'averageCost',
-  optimalStrategy: 'optimalStrategy',
-  optimalProvider: 'optimalProvider',
-  averageCompleteness: 'averageCompleteness',
-  hasStructuredDataPct: 'hasStructuredDataPct',
-  lastUpdated: 'lastUpdated',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
-};
-
-exports.Prisma.AIProviderCostsScalarFieldEnum = {
-  id: 'id',
-  provider: 'provider',
-  model: 'model',
-  inputTokenCost: 'inputTokenCost',
-  outputTokenCost: 'outputTokenCost',
-  effectiveDate: 'effectiveDate',
-  createdAt: 'createdAt'
-};
-
-exports.Prisma.AnonymousSessionScalarFieldEnum = {
-  id: 'id',
-  sessionId: 'sessionId',
-  ipAddress: 'ipAddress',
-  userAgent: 'userAgent',
-  deviceType: 'deviceType',
-  operatingSystem: 'operatingSystem',
-  browser: 'browser',
-  screenResolution: 'screenResolution',
-  timezone: 'timezone',
-  language: 'language',
-  firstSeenAt: 'firstSeenAt',
-  lastSeenAt: 'lastSeenAt',
-  totalRecipeAttempts: 'totalRecipeAttempts',
-  totalSuccessfulExtractions: 'totalSuccessfulExtractions',
-  hitRateLimit: 'hitRateLimit',
-  rateLimitHitAt: 'rateLimitHitAt',
-  showedSignupPrompt: 'showedSignupPrompt',
-  signupPromptShownAt: 'signupPromptShownAt',
-  convertedToUser: 'convertedToUser',
-  convertedUserId: 'convertedUserId',
-  convertedAt: 'convertedAt',
-  referrerDomain: 'referrerDomain',
-  countryCode: 'countryCode',
-  cityName: 'cityName',
-  expiresAt: 'expiresAt',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
-};
-
-exports.Prisma.ConversionEventScalarFieldEnum = {
-  id: 'id',
-  sessionId: 'sessionId',
-  userId: 'userId',
-  eventType: 'eventType',
-  eventData: 'eventData',
-  recipeUrl: 'recipeUrl',
-  pageUrl: 'pageUrl',
-  sessionDuration: 'sessionDuration',
-  expiresAt: 'expiresAt',
-  createdAt: 'createdAt'
-};
-
-exports.Prisma.DailyRateLimitScalarFieldEnum = {
-  id: 'id',
-  identifier: 'identifier',
-  identifierType: 'identifierType',
-  date: 'date',
-  requestCount: 'requestCount',
-  lastRequestAt: 'lastRequestAt',
-  ipAddress: 'ipAddress',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
-};
-
-exports.Prisma.InternalRecipeDataScalarFieldEnum = {
-  id: 'id',
-  title: 'title',
-  sourceUrl: 'sourceUrl',
-  domain: 'domain',
-  extractedAt: 'extractedAt',
-  createdAt: 'createdAt',
-  extractionStrategy: 'extractionStrategy',
-  aiProvider: 'aiProvider',
-  totalProcessingTimeMs: 'totalProcessingTimeMs',
-  fetchTimeMs: 'fetchTimeMs',
-  parseTimeMs: 'parseTimeMs',
-  aiTimeMs: 'aiTimeMs'
-};
-
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -378,42 +247,12 @@ exports.CategorySource = exports.$Enums.CategorySource = {
   USER_CREATED: 'USER_CREATED'
 };
 
-exports.ExtractionStrategy = exports.$Enums.ExtractionStrategy = {
-  URL_DIRECT: 'URL_DIRECT',
-  HTML_FALLBACK: 'HTML_FALLBACK'
-};
-
-exports.AIProvider = exports.$Enums.AIProvider = {
-  OPENAI_MINI: 'OPENAI_MINI',
-  OPENAI_MAIN: 'OPENAI_MAIN',
-  GEMINI_MAIN: 'GEMINI_MAIN',
-  GEMINI_FLASH: 'GEMINI_FLASH'
-};
-
-exports.ConversionEventType = exports.$Enums.ConversionEventType = {
-  SESSION_STARTED: 'SESSION_STARTED',
-  RECIPE_EXTRACTED: 'RECIPE_EXTRACTED',
-  RATE_LIMIT_HIT: 'RATE_LIMIT_HIT',
-  SIGNUP_PROMPT_SHOWN: 'SIGNUP_PROMPT_SHOWN',
-  SIGNUP_CLICKED: 'SIGNUP_CLICKED',
-  SIGNUP_COMPLETED: 'SIGNUP_COMPLETED',
-  RECIPE_SAVE_ATTEMPTED: 'RECIPE_SAVE_ATTEMPTED',
-  FEATURE_INTERACTION: 'FEATURE_INTERACTION'
-};
-
 exports.Prisma.ModelName = {
   User: 'User',
   Recipe: 'Recipe',
   RecipeImage: 'RecipeImage',
   RecipeFavorite: 'RecipeFavorite',
-  UserOnboardingProgress: 'UserOnboardingProgress',
-  RecipeExtractionMetrics: 'RecipeExtractionMetrics',
-  DomainPerformanceMetrics: 'DomainPerformanceMetrics',
-  AIProviderCosts: 'AIProviderCosts',
-  AnonymousSession: 'AnonymousSession',
-  ConversionEvent: 'ConversionEvent',
-  DailyRateLimit: 'DailyRateLimit',
-  InternalRecipeData: 'InternalRecipeData'
+  UserOnboardingProgress: 'UserOnboardingProgress'
 };
 
 /**

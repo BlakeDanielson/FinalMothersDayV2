@@ -8,8 +8,6 @@ import { auth } from '@clerk/nextjs/server';
 
 import { withOnboardingGuard } from '@/lib/middleware/onboarding-guard';
 import { AI_SETTINGS, getBackendProviderFromUI, getModelFromUIProvider, type UIProvider } from '@/lib/config/ai-models';
-import { ConversionAnalytics } from '@/lib/services/conversionAnalytics';
-import { ConversionEventType } from '@/generated/prisma';
 import { validateFileSize, getFileSizeErrorMessage } from '@/lib/utils/file-size-validation';
 
 // Zod schema for recipe data parsed from an image
@@ -431,7 +429,6 @@ export const POST = withOnboardingGuard(async (request: NextRequest) => {
   const formData = await request.formData();
   const imageFile = formData.get('image') as File;
   const provider = (formData.get('provider') as UIProvider) || 'openai-main';
-  const sessionId = formData.get('sessionId') as string;
 
   if (!imageFile) {
     return NextResponse.json(
@@ -440,37 +437,10 @@ export const POST = withOnboardingGuard(async (request: NextRequest) => {
     );
   }
 
-  // Get user info and session context
+  // Get user info for authentication  
   const { userId } = await auth();
-  let sessionContext;
-  
-  try {
-    sessionContext = await ConversionAnalytics.getOrCreateSession(sessionId || undefined, { userId: userId || undefined });
-  } catch (error) {
-    console.error('Failed to get session context:', error);
-    sessionContext = null;
-  }
-
-  // Check rate limits for anonymous users
-  if (!userId && sessionContext) {
-    const rateLimitResult = await ConversionAnalytics.checkRateLimit(sessionContext.sessionId);
-    if (!rateLimitResult.allowed) {
-      await ConversionAnalytics.trackRateLimitHit(sessionContext.sessionId, {
-        imageFile: imageFile.name,
-        remainingRequests: rateLimitResult.remainingRequests
-      });
-      
-      return NextResponse.json({
-        success: false,
-        error: 'Daily limit reached',
-        rateLimitInfo: {
-          limit: 20,
-          remaining: rateLimitResult.remainingRequests,
-          resetTime: rateLimitResult.resetTime,
-          message: 'Sign up to save unlimited recipes!'
-        }
-      }, { status: 429 });
-    }
+  if (!userId) {
+    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   }
 
   // Get user categories
@@ -517,38 +487,7 @@ export const POST = withOnboardingGuard(async (request: NextRequest) => {
           progressCallback
         );
 
-        // Track successful extraction
-        if (sessionContext) {
-          try {
-            await ConversionAnalytics.incrementRateLimit(sessionContext.sessionId, userId || undefined);
-            
-            await ConversionAnalytics.trackEvent(
-              sessionContext.sessionId,
-              ConversionEventType.RECIPE_EXTRACTED,
-              {
-                imageFile: imageFile.name,
-                provider: provider,
-                tokensUsed: metrics.tokensUsed,
-                processingTime: metrics.processingTime,
-                imageSize: metrics.imageSize
-              },
-              userId || undefined
-            );
 
-            if (!userId) {
-              const rateLimitResult = await ConversionAnalytics.checkRateLimit(sessionContext.sessionId);
-              if (rateLimitResult.remainingRequests <= 5) {
-                await ConversionAnalytics.trackSignupPromptShown(sessionContext.sessionId, {
-                  imageFile: imageFile.name,
-                  remainingRequests: rateLimitResult.remainingRequests,
-                  trigger: 'approaching_limit'
-                });
-              }
-            }
-          } catch (analyticsError) {
-            console.error('Analytics tracking failed:', analyticsError);
-          }
-        }
 
         // Send success event
         controller.enqueue(encoder.encode(createSuccessEvent(recipe, {
