@@ -254,7 +254,7 @@ async function processMultipleImagesWithOpenAI(
       },
     ],
     response_format: { type: "json_object" },
-    max_tokens: AI_SETTINGS.OPENAI.MAX_TOKENS * 3, // Triple for multiple images
+    max_tokens: Math.min(AI_SETTINGS.OPENAI.MAX_TOKENS * 3, 16000), // Triple for multiple images, but cap at model limit
   });
 
   return chatCompletion.choices[0]?.message?.content;
@@ -289,7 +289,7 @@ async function processMultipleImagesWithGPTMini(
       },
     ],
     response_format: { type: "json_object" },
-    max_tokens: AI_SETTINGS.OPENAI.MAX_TOKENS * 3, // Triple for multiple images
+    max_tokens: Math.min(AI_SETTINGS.OPENAI.MAX_TOKENS * 3, 16000), // Triple for multiple images, but cap at model limit
   });
 
   return chatCompletion.choices[0]?.message?.content;
