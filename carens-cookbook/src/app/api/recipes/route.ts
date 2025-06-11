@@ -71,7 +71,15 @@ export const POST = withOnboardingGuard(async (req: NextRequest) => {
 
     const newRecipe = await prisma.recipe.create({
       data: {
-        ...recipeData,
+        title: recipeData.title,
+        description: recipeData.description,
+        ingredients: recipeData.ingredients,
+        steps: recipeData.steps,
+        image: recipeData.image,
+        cuisine: recipeData.cuisine,
+        category: recipeData.category,
+        prepTime: recipeData.prepTime,
+        cleanupTime: recipeData.cleanupTime,
         userId: userId
       },
     });
