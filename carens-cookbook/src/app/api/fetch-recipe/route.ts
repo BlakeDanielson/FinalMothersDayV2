@@ -6,6 +6,7 @@ import { withOnboardingGuard } from '@/lib/middleware/onboarding-guard';
 import { AI_SETTINGS, getBackendProviderFromUI, getModelFromUIProvider, type UIProvider } from '@/lib/config/ai-models';
 import { auth } from '@clerk/nextjs/server';
 import { prisma } from '@/lib/db';
+import { InternalRecipeAnalytics } from '@/lib/services/internal-recipe-analytics';
 
 // NEW: Import the optimized orchestrator
 import { extractRecipeOptimized, getExtractionEfficiencySummary, checkOptimizationReadiness } from '@/lib/services/recipe-extraction-orchestrator';
@@ -436,6 +437,44 @@ export const POST = withOnboardingGuard(async (request: NextRequest) => {
     // Fix image URL if present
     if (validatedRecipe.image) {
       validatedRecipe.image = fixImageUrl(validatedRecipe.image, url);
+    }
+
+    // 📊 SAVE INTERNAL RECIPE DATA FOR BUSINESS INTELLIGENCE (Both authenticated & anonymous)
+    try {
+      await InternalRecipeAnalytics.saveRecipeData({
+        // Recipe content
+        title: validatedRecipe.title,
+        description: validatedRecipe.description,
+        ingredients: validatedRecipe.ingredients,
+        steps: validatedRecipe.steps,
+        image: validatedRecipe.image,
+        cuisine: validatedRecipe.cuisine,
+        category: validatedRecipe.category,
+        prepTime: validatedRecipe.prepTime,
+        cleanupTime: validatedRecipe.cleanupTime,
+        
+        // Source context
+        sourceUrl: url,
+        
+        // User context (works for both authenticated and anonymous)
+        userId: userId || null,
+        sessionId: null, // This endpoint doesn't have session tracking yet
+        
+        // Processing metadata
+        extractionStrategy: ExtractionStrategy.HTML_FALLBACK, // This endpoint always uses HTML fallback
+        aiProvider: mapUIProviderToAIProvider(uiProvider),
+        fallbackUsed: false, // This endpoint doesn't have primary/fallback concept
+        processingTimeMs: extractionMetrics.totalDuration || 0,
+        tokenCount: undefined, // Could be enhanced to track tokens
+        
+        // Quality metrics
+        hasStructuredData: false // Could be enhanced to detect JSON-LD
+      });
+      
+      console.log(`📊 Internal recipe data saved for analysis: ${validatedRecipe.title}`);
+    } catch (internalDataError) {
+      console.error('Failed to save internal recipe data (non-blocking):', internalDataError);
+      // Don't fail the request for internal analytics errors
     }
 
     // Save recipe to database

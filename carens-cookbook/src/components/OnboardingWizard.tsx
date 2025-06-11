@@ -9,6 +9,10 @@ import { ChevronLeft, ChevronRight, Check, X } from 'lucide-react';
 import { useOnboarding } from '@/contexts/OnboardingContext';
 import { ONBOARDING_STEPS } from '@/lib/constants/user-preferences';
 import { FirstRecipeFlow, RecipeData } from '@/components/onboarding/FirstRecipeFlow';
+import { ProfileSetupStep } from '@/components/onboarding/ProfileSetupStep';
+import { DietaryPreferencesStep } from '@/components/onboarding/DietaryPreferencesStep';
+import { CookingPreferencesStep } from '@/components/onboarding/CookingPreferencesStep';
+import { CategorySelectionStep } from '@/components/onboarding/CategorySelectionStep';
 import { RecipeBasicsTourTrigger } from '@/components/tour/TourTrigger';
 
 interface OnboardingWizardProps {
@@ -118,46 +122,50 @@ export function OnboardingWizard({ onComplete, onSkip, className }: OnboardingWi
       
       case 'PROFILE_SETUP':
         return (
-          <div className="space-y-4">
-            <h3 className="text-lg font-medium">Profile Setup</h3>
-            <p className="text-gray-600">Tell us a bit about yourself to personalize your experience.</p>
-            <div className="bg-gray-50 p-4 rounded-lg">
-              <p className="text-sm text-gray-500">Profile setup form will be implemented here.</p>
-            </div>
-          </div>
+          <ProfileSetupStep
+            onComplete={(data) => {
+              console.log('Profile setup data:', data);
+              handleNext({ profileData: data });
+            }}
+            onSkip={() => handleNext({ profileSkipped: true })}
+            isLoading={isProcessing}
+          />
         );
       
       case 'DIETARY_PREFERENCES':
         return (
-          <div className="space-y-4">
-            <h3 className="text-lg font-medium">Dietary Preferences</h3>
-            <p className="text-gray-600">Let us know about any dietary restrictions or preferences.</p>
-            <div className="bg-gray-50 p-4 rounded-lg">
-              <p className="text-sm text-gray-500">Dietary preferences form will be implemented here.</p>
-            </div>
-          </div>
+          <DietaryPreferencesStep
+            onComplete={(data) => {
+              console.log('Dietary preferences data:', data);
+              handleNext({ dietaryData: data });
+            }}
+            onSkip={() => handleNext({ dietarySkipped: true })}
+            isLoading={isProcessing}
+          />
         );
       
       case 'COOKING_PREFERENCES':
         return (
-          <div className="space-y-4">
-            <h3 className="text-lg font-medium">Cooking Preferences</h3>
-            <p className="text-gray-600">Tell us about your cooking style and experience level.</p>
-            <div className="bg-gray-50 p-4 rounded-lg">
-              <p className="text-sm text-gray-500">Cooking preferences form will be implemented here.</p>
-            </div>
-          </div>
+          <CookingPreferencesStep
+            onComplete={(data) => {
+              console.log('Cooking preferences data:', data);
+              handleNext({ cookingData: data });
+            }}
+            onSkip={() => handleNext({ cookingSkipped: true })}
+            isLoading={isProcessing}
+          />
         );
       
       case 'CATEGORY_SETUP':
         return (
-          <div className="space-y-4">
-            <h3 className="text-lg font-medium">Category Setup</h3>
-            <p className="text-gray-600">Choose your favorite recipe categories to get started.</p>
-            <div className="bg-gray-50 p-4 rounded-lg">
-              <p className="text-sm text-gray-500">Category selection will be implemented here.</p>
-            </div>
-          </div>
+          <CategorySelectionStep
+            onNext={(data) => {
+              console.log('Category setup data:', data);
+              handleNext({ categoryData: data });
+            }}
+            onBack={handlePrevious}
+            isLoading={isProcessing}
+          />
         );
       
       case 'FIRST_RECIPE':
@@ -230,28 +238,33 @@ export function OnboardingWizard({ onComplete, onSkip, className }: OnboardingWi
         </div>
       </div>
 
-      {/* Main Content */}
-      <Card>
-        <CardHeader>
-          <CardTitle className="flex items-center gap-2">
-            {currentStepInfo.title}
-            {currentStepInfo.isOptional && (
-              <Badge variant="secondary" className="text-xs">Optional</Badge>
+      {/* Main Content - Different layout for embedded forms vs simple content */}
+      {['PROFILE_SETUP', 'DIETARY_PREFERENCES', 'COOKING_PREFERENCES', 'CATEGORY_SETUP', 'FIRST_RECIPE'].includes(currentStepInfo.key) ? (
+        <div className="space-y-6">
+          {renderStepContent()}
+        </div>
+      ) : (
+        <Card>
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              {currentStepInfo.title}
+              {currentStepInfo.isOptional && (
+                <Badge variant="secondary" className="text-xs">Optional</Badge>
+              )}
+            </CardTitle>
+            {currentStepInfo.description && (
+              <CardDescription>{currentStepInfo.description}</CardDescription>
             )}
-          </CardTitle>
-          {currentStepInfo.description && (
-            <CardDescription>{currentStepInfo.description}</CardDescription>
-          )}
-        </CardHeader>
-        
-        <CardContent className="space-y-6">
-          {/* Step Content */}
-          <div className={currentStepInfo.key === 'FIRST_RECIPE' ? '' : 'min-h-[200px]'}>
-            {renderStepContent()}
-          </div>
+          </CardHeader>
+          
+          <CardContent className="space-y-6">
+            {/* Step Content */}
+            <div className="min-h-[200px]">
+              {renderStepContent()}
+            </div>
 
-          {/* Navigation */}
-          <div className="flex items-center justify-between pt-6 border-t">
+            {/* Navigation */}
+            <div className="flex items-center justify-between pt-6 border-t">
             <div className="flex gap-2">
               {!isFirstStep && (
                 <Button
@@ -307,6 +320,7 @@ export function OnboardingWizard({ onComplete, onSkip, className }: OnboardingWi
           </div>
         </CardContent>
       </Card>
+      )}
 
       {/* Step Indicators */}
       <div className="flex justify-center">

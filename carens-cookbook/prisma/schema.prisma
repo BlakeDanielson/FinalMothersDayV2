@@ -185,7 +185,8 @@ model RecipeExtractionMetrics {
   id                    String   @id @default(cuid())
   
   // Request Context
-  userId                String
+  userId                String?  // nullable for anonymous users
+  sessionId             String?  // for anonymous user tracking
   recipeUrl             String
   domain                String   // extracted from URL
   requestTimestamp      DateTime @default(now())
@@ -233,7 +234,7 @@ model RecipeExtractionMetrics {
   updatedAt             DateTime @updatedAt
 
   // Relations
-  user   User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user   User?   @relation(fields: [userId], references: [id], onDelete: Cascade)
   recipe Recipe? @relation(fields: [recipeId], references: [id], onDelete: SetNull)
 
   @@index([userId])
@@ -406,4 +407,66 @@ enum ConversionEventType {
   SIGNUP_COMPLETED      // User successfully signed up
   RECIPE_SAVE_ATTEMPTED // Tried to save but couldn't (anonymous)
   FEATURE_INTERACTION   // Interacted with premium features
+}
+
+// Analytics: Internal recipe data collection for all extractions (authenticated + anonymous)
+model InternalRecipeData {
+  id                    String   @id @default(cuid())
+  
+  // Recipe Content (full recipe data for analysis)
+  title                 String
+  description           String
+  ingredients           String[] // Postgres array of strings
+  steps                 String[] // Postgres array of strings
+  image                 String?
+  cuisine               String
+  category              String
+  prepTime              String
+  cleanupTime           String
+  
+  // Source Context
+  sourceUrl             String
+  domain                String   // extracted from URL
+  extractedAt           DateTime @default(now())
+  
+  // User Context (nullable for anonymous users)
+  userId                String?  // null for anonymous users
+  sessionId             String?  // for anonymous user tracking
+  
+  // Processing Metadata
+  extractionStrategy    ExtractionStrategy
+  aiProvider            AIProvider
+  fallbackUsed          Boolean  @default(false)
+  processingTimeMs      Int
+  tokenCount            Int?
+  estimatedCost         Float?
+  
+  // Quality Metrics
+  categoryConfidence    Float?   // 0.0-1.0
+  completenessScore     Float?   // 0.0-1.0
+  hasStructuredData     Boolean? // whether site had JSON-LD
+  validationErrors      Json?    // array of any validation issues
+  
+  // Business Intelligence Fields
+  recipeComplexity      String?  // 'simple' | 'moderate' | 'complex'
+  estimatedCookTime     Int?     // parsed total time in minutes
+  ingredientCount       Int?     // number of ingredients
+  stepCount             Int?     // number of cooking steps
+  
+  // Retention: Keep for analysis (longer retention than anonymous sessions)
+  expiresAt             DateTime @default(dbgenerated("NOW() + INTERVAL '365 days'"))
+  
+  createdAt             DateTime @default(now())
+  updatedAt             DateTime @updatedAt
+
+  @@index([domain])
+  @@index([extractedAt])
+  @@index([userId])
+  @@index([sessionId])
+  @@index([aiProvider])
+  @@index([extractionStrategy])
+  @@index([category])
+  @@index([cuisine])
+  @@index([domain, extractedAt]) // for domain performance analysis over time
+  @@index([expiresAt]) // for cleanup queries
 }
