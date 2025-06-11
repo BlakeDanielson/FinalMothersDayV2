@@ -92,6 +92,23 @@ export async function GET(request: NextRequest) {
         });
 
         // Group and calculate averages in JavaScript
+        interface DomainStatAccumulator {
+          domain: string;
+          _count: { _all: number };
+          _avg: {
+            totalProcessingTimeMs: number;
+            fetchTimeMs: number;
+            parseTimeMs: number;
+            aiTimeMs: number;
+          };
+          _sum: {
+            totalProcessingTimeMs: number;
+            fetchTimeMs: number;
+            parseTimeMs: number;
+            aiTimeMs: number;
+          };
+        }
+
         const domainStats = domainData.reduce((acc, item) => {
           const domain = item.domain;
           if (!acc[domain]) {
@@ -120,7 +137,7 @@ export async function GET(request: NextRequest) {
           acc[domain]._sum.aiTimeMs += item.aiTimeMs || 0;
           
           return acc;
-        }, {} as Record<string, any>);
+        }, {} as Record<string, DomainStatAccumulator>);
 
         // Calculate averages and convert to array
         const domainStatsArray = Object.values(domainStats).map(stat => ({

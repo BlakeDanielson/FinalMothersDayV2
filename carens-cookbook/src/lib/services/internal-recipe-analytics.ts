@@ -71,7 +71,15 @@ export class InternalRecipeAnalytics {
     aiProvider?: AIProvider;
   } = {}) {
     // Build simple where clause
-    const where: any = {};
+    const where: {
+      domain?: string;
+      extractionStrategy?: ExtractionStrategy;
+      aiProvider?: AIProvider;
+      extractedAt?: {
+        gte?: Date;
+        lte?: Date;
+      };
+    } = {};
     if (options.domain) where.domain = options.domain;
     if (options.strategy) where.extractionStrategy = options.strategy;
     if (options.aiProvider) where.aiProvider = options.aiProvider;
