@@ -220,7 +220,7 @@ async function processImageWithOpenAI(imageBase64: string, imageMimeType: string
       },
     ],
     response_format: { type: "json_object" },
-    max_tokens: AI_SETTINGS.OPENAI.MAX_TOKENS * 2, // Double for image processing
+    max_tokens: Math.min(AI_SETTINGS.OPENAI.MAX_TOKENS * 2, 16000), // Double for image processing, but cap at model limit
   });
 
   return chatCompletion.choices[0]?.message?.content;
@@ -245,7 +245,7 @@ async function processImageWithGPTMini(imageBase64: string, imageMimeType: strin
       },
     ],
     response_format: { type: "json_object" },
-    max_tokens: AI_SETTINGS.OPENAI.MAX_TOKENS * 2, // Double for image processing
+    max_tokens: Math.min(AI_SETTINGS.OPENAI.MAX_TOKENS * 2, 16000), // Double for image processing, but cap at model limit
   });
 
   return chatCompletion.choices[0]?.message?.content;
