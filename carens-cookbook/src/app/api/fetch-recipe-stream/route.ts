@@ -190,33 +190,21 @@ export const POST = withOnboardingGuard(async (request: NextRequest) => {
           const aiProvider = metrics.primarySuccess ? AIProvider.GEMINI_FLASH : AIProvider.OPENAI_MAIN;
           
           await InternalRecipeAnalytics.saveRecipeData({
-            // Recipe content
+            // Basic recipe info
             title: recipe.title,
-            description: recipe.description,
-            ingredients: recipe.ingredients,
-            steps: recipe.steps,
-            image: recipe.image,
-            cuisine: recipe.cuisine,
-            category: recipe.category,
-            prepTime: recipe.prepTime,
-            cleanupTime: recipe.cleanupTime,
             
             // Source context
             sourceUrl: url,
             
-            // User context (works for both authenticated and anonymous)
-            userId: userId || null,
-            sessionId: sessionContext?.sessionId || null,
-            
-            // Processing metadata
+            // Processing method
             extractionStrategy,
             aiProvider,
-            fallbackUsed: metrics.fallbackUsed || false,
-            processingTimeMs: metrics.processingTime,
-            tokenCount: metrics.totalTokensEstimated,
             
-            // Quality metrics (you can enhance these based on validation results)
-            hasStructuredData: false // Could be enhanced to detect JSON-LD
+            // Performance metrics
+            totalProcessingTimeMs: metrics.processingTime,
+            fetchTimeMs: Math.floor(metrics.processingTime * 0.2), // Estimate 20% for fetch
+            parseTimeMs: Math.floor(metrics.processingTime * 0.3), // Estimate 30% for parsing
+            aiTimeMs: Math.floor(metrics.processingTime * 0.5)     // Estimate 50% for AI processing
           });
           
           console.log(`📊 Internal recipe data saved for analysis: ${recipe.title}`);

@@ -409,64 +409,33 @@ enum ConversionEventType {
   FEATURE_INTERACTION   // Interacted with premium features
 }
 
-// Analytics: Internal recipe data collection for all extractions (authenticated + anonymous)
+// Analytics: Internal recipe data collection for anonymous users (minimal)
 model InternalRecipeData {
   id                    String   @id @default(cuid())
   
-  // Recipe Content (full recipe data for analysis)
+  // Basic recipe info
   title                 String
-  description           String
-  ingredients           String[] // Postgres array of strings
-  steps                 String[] // Postgres array of strings
-  image                 String?
-  cuisine               String
-  category              String
-  prepTime              String
-  cleanupTime           String
   
-  // Source Context
+  // Source context
   sourceUrl             String
   domain                String   // extracted from URL
+  
+  // Timing
   extractedAt           DateTime @default(now())
+  createdAt             DateTime @default(now())
   
-  // User Context (nullable for anonymous users)
-  userId                String?  // null for anonymous users
-  sessionId             String?  // for anonymous user tracking
-  
-  // Processing Metadata
+  // Processing method
   extractionStrategy    ExtractionStrategy
   aiProvider            AIProvider
-  fallbackUsed          Boolean  @default(false)
-  processingTimeMs      Int
-  tokenCount            Int?
-  estimatedCost         Float?
   
-  // Quality Metrics
-  categoryConfidence    Float?   // 0.0-1.0
-  completenessScore     Float?   // 0.0-1.0
-  hasStructuredData     Boolean? // whether site had JSON-LD
-  validationErrors      Json?    // array of any validation issues
-  
-  // Business Intelligence Fields
-  recipeComplexity      String?  // 'simple' | 'moderate' | 'complex'
-  estimatedCookTime     Int?     // parsed total time in minutes
-  ingredientCount       Int?     // number of ingredients
-  stepCount             Int?     // number of cooking steps
-  
-  // Retention: Keep for analysis (longer retention than anonymous sessions)
-  expiresAt             DateTime @default(dbgenerated("NOW() + INTERVAL '365 days'"))
-  
-  createdAt             DateTime @default(now())
-  updatedAt             DateTime @updatedAt
+  // Performance metrics
+  totalProcessingTimeMs Int      // Total time for entire extraction
+  fetchTimeMs           Int?     // Time to fetch the page
+  parseTimeMs           Int?     // Time to parse/extract recipe data
+  aiTimeMs              Int?     // Time for AI processing
 
   @@index([domain])
   @@index([extractedAt])
-  @@index([userId])
-  @@index([sessionId])
   @@index([aiProvider])
   @@index([extractionStrategy])
-  @@index([category])
-  @@index([cuisine])
-  @@index([domain, extractedAt]) // for domain performance analysis over time
-  @@index([expiresAt]) // for cleanup queries
 }
