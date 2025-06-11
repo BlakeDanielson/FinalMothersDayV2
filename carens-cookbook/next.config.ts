@@ -24,111 +24,26 @@ const nextConfig: NextConfig = {
     return config;
   },
   images: {
+    // More permissive configuration - allows any HTTPS hostname
     remotePatterns: [
       {
         protocol: 'https',
-        hostname: 'images.unsplash.com',
+        hostname: '**',
         port: '',
         pathname: '/**',
       },
-      {
-        protocol: 'https',
-        hostname: 'res.cloudinary.com',
-        port: '',
-        pathname: '/**',
-      },
-      {
-        protocol: 'https',
-        hostname: 'cdn.loveandlemons.com',
-        port: '',
-        pathname: '/**',
-      },
-      {
-        protocol: 'https',
-        hostname: 'www.loveandlemons.com',
-        port: '',
-        pathname: '/**',
-      },
-      {
-        protocol: 'https',
-        hostname: 'images.immediate.co.uk',
-        port: '',
-        pathname: '/**',
-      },
-      {
-        protocol: 'https',
-        hostname: 'www.bbcgoodfood.com',
-        port: '',
-        pathname: '/**',
-      },
-      {
-        protocol: 'https',
-        hostname: 'static01.nyt.com',
-        port: '',
-        pathname: '/**',
-      },
-      {
-        protocol: 'https',
-        hostname: 'www.foodandwine.com',
-        port: '',
-        pathname: '/**',
-      },
-      {
-        protocol: 'https',
-        hostname: 'assets.epicurious.com',
-        port: '',
-        pathname: '/**',
-      },
-      {
-        protocol: 'https',
-        hostname: 'www.simplyrecipes.com',
-        port: '',
-        pathname: '/**',
-      },
-      {
-        protocol: 'https',
-        hostname: 'www.allrecipes.com',
-        port: '',
-        pathname: '/**',
-      },
-      {
-        protocol: 'https',
-        hostname: 'imagesvc.meredithcorp.io',
-        port: '',
-        pathname: '/**',
-      },
-      {
-        protocol: 'https',
-        hostname: 'www.tasteofhome.com',
-        port: '',
-        pathname: '/**',
-      },
-      {
-        protocol: 'https',
-        hostname: 'assets.bonappetit.com',
-        port: '',
-        pathname: '/**',
-      },
-      {
-        protocol: 'https',
-        hostname: 'www.seriouseats.com',
-        port: '',
-        pathname: '/**',
-      },
-      {
-        protocol: 'https',
-        hostname: 'cdn.pixabay.com',
-        port: '',
-        pathname: '/**',
-      },
-      {
-        protocol: 'https',
-        hostname: 'images.pexels.com',
-        port: '',
-        pathname: '/**',
-      },
-      // Add more domains as needed for recipe sites
     ],
+    // Alternative: You can also use domains array for broader compatibility
+    // domains: ['*'], // This would allow any domain, but remotePatterns is more secure
+    
+    // Keep some common recipe sites explicitly for documentation
+    // These are now covered by the wildcard pattern above
+    // Common recipe sites: images.unsplash.com, res.cloudinary.com, 
+    // cdn.loveandlemons.com, www.loveandlemons.com, images.immediate.co.uk,
+    // www.bbcgoodfood.com, static01.nyt.com, www.foodandwine.com,
+    // assets.epicurious.com, www.simplyrecipes.com, www.allrecipes.com,
+    // imagesvc.meredithcorp.io, www.tasteofhome.com, assets.bonappetit.com,
+    // www.seriouseats.com, cdn.pixabay.com, images.pexels.com, thecozycook.com
   },
 };
 
