@@ -1,0 +1,189 @@
+{
+  "timestamp": "2025-06-10T23:46:33.626Z",
+  "sourceDirectory": "C:\\Users\\blake\\OneDrive\\Desktop\\NewProjects\\FinalMothersDayV2\\recipe_photos",
+  "summary": {
+    "totalConverted": 12,
+    "totalFiles": 12,
+    "pngCount": 12,
+    "jpegCount": 12,
+    "errorCount": 0,
+    "totalOriginalSize": 30199975,
+    "totalPngSize": 160296545,
+    "totalJpegSize": 32160708
+  },
+  "files": {
+    "png": [
+      {
+        "filename": "IMG_6534.png",
+        "size": 12323408,
+        "path": "C:\\Users\\blake\\OneDrive\\Desktop\\NewProjects\\FinalMothersDayV2\\recipe_photos\\pngRecipes\\IMG_6534.png",
+        "originalFile": "IMG_6534.HEIC",
+        "originalSize": 2311233
+      },
+      {
+        "filename": "IMG_6535.png",
+        "size": 12862418,
+        "path": "C:\\Users\\blake\\OneDrive\\Desktop\\NewProjects\\FinalMothersDayV2\\recipe_photos\\pngRecipes\\IMG_6535.png",
+        "originalFile": "IMG_6535.HEIC",
+        "originalSize": 2476841
+      },
+      {
+        "filename": "IMG_6536.png",
+        "size": 13557444,
+        "path": "C:\\Users\\blake\\OneDrive\\Desktop\\NewProjects\\FinalMothersDayV2\\recipe_photos\\pngRecipes\\IMG_6536.png",
+        "originalFile": "IMG_6536.HEIC",
+        "originalSize": 2463591
+      },
+      {
+        "filename": "IMG_6537.png",
+        "size": 13845020,
+        "path": "C:\\Users\\blake\\OneDrive\\Desktop\\NewProjects\\FinalMothersDayV2\\recipe_photos\\pngRecipes\\IMG_6537.png",
+        "originalFile": "IMG_6537.HEIC",
+        "originalSize": 2275239
+      },
+      {
+        "filename": "IMG_6538.png",
+        "size": 12862798,
+        "path": "C:\\Users\\blake\\OneDrive\\Desktop\\NewProjects\\FinalMothersDayV2\\recipe_photos\\pngRecipes\\IMG_6538.png",
+        "originalFile": "IMG_6538.HEIC",
+        "originalSize": 2628822
+      },
+      {
+        "filename": "IMG_6539.png",
+        "size": 13644378,
+        "path": "C:\\Users\\blake\\OneDrive\\Desktop\\NewProjects\\FinalMothersDayV2\\recipe_photos\\pngRecipes\\IMG_6539.png",
+        "originalFile": "IMG_6539.HEIC",
+        "originalSize": 2606055
+      },
+      {
+        "filename": "IMG_6540.png",
+        "size": 12546737,
+        "path": "C:\\Users\\blake\\OneDrive\\Desktop\\NewProjects\\FinalMothersDayV2\\recipe_photos\\pngRecipes\\IMG_6540.png",
+        "originalFile": "IMG_6540.HEIC",
+        "originalSize": 2381377
+      },
+      {
+        "filename": "IMG_6541.png",
+        "size": 12874652,
+        "path": "C:\\Users\\blake\\OneDrive\\Desktop\\NewProjects\\FinalMothersDayV2\\recipe_photos\\pngRecipes\\IMG_6541.png",
+        "originalFile": "IMG_6541.HEIC",
+        "originalSize": 2406821
+      },
+      {
+        "filename": "IMG_6542.png",
+        "size": 14250464,
+        "path": "C:\\Users\\blake\\OneDrive\\Desktop\\NewProjects\\FinalMothersDayV2\\recipe_photos\\pngRecipes\\IMG_6542.png",
+        "originalFile": "IMG_6542.HEIC",
+        "originalSize": 2630083
+      },
+      {
+        "filename": "IMG_6543.png",
+        "size": 13184353,
+        "path": "C:\\Users\\blake\\OneDrive\\Desktop\\NewProjects\\FinalMothersDayV2\\recipe_photos\\pngRecipes\\IMG_6543.png",
+        "originalFile": "IMG_6543.HEIC",
+        "originalSize": 2641789
+      },
+      {
+        "filename": "IMG_6544.png",
+        "size": 13009419,
+        "path": "C:\\Users\\blake\\OneDrive\\Desktop\\NewProjects\\FinalMothersDayV2\\recipe_photos\\pngRecipes\\IMG_6544.png",
+        "originalFile": "IMG_6544.HEIC",
+        "originalSize": 2490865
+      },
+      {
+        "filename": "IMG_6545.png",
+        "size": 15335454,
+        "path": "C:\\Users\\blake\\OneDrive\\Desktop\\NewProjects\\FinalMothersDayV2\\recipe_photos\\pngRecipes\\IMG_6545.png",
+        "originalFile": "IMG_6545.HEIC",
+        "originalSize": 2887259
+      }
+    ],
+    "jpeg": [
+      {
+        "filename": "IMG_6534.jpeg",
+        "size": 2564257,
+        "path": "C:\\Users\\blake\\OneDrive\\Desktop\\NewProjects\\FinalMothersDayV2\\recipe_photos\\jpegRecipes\\IMG_6534.jpeg",
+        "originalFile": "IMG_6534.HEIC",
+        "originalSize": 2311233
+      },
+      {
+        "filename": "IMG_6535.jpeg",
+        "size": 2579391,
+        "path": "C:\\Users\\blake\\OneDrive\\Desktop\\NewProjects\\FinalMothersDayV2\\recipe_photos\\jpegRecipes\\IMG_6535.jpeg",
+        "originalFile": "IMG_6535.HEIC",
+        "originalSize": 2476841
+      },
+      {
+        "filename": "IMG_6536.jpeg",
+        "size": 2729654,
+        "path": "C:\\Users\\blake\\OneDrive\\Desktop\\NewProjects\\FinalMothersDayV2\\recipe_photos\\jpegRecipes\\IMG_6536.jpeg",
+        "originalFile": "IMG_6536.HEIC",
+        "originalSize": 2463591
+      },
+      {
+        "filename": "IMG_6537.jpeg",
+        "size": 2507397,
+        "path": "C:\\Users\\blake\\OneDrive\\Desktop\\NewProjects\\FinalMothersDayV2\\recipe_photos\\jpegRecipes\\IMG_6537.jpeg",
+        "originalFile": "IMG_6537.HEIC",
+        "originalSize": 2275239
+      },
+      {
+        "filename": "IMG_6538.jpeg",
+        "size": 2533882,
+        "path": "C:\\Users\\blake\\OneDrive\\Desktop\\NewProjects\\FinalMothersDayV2\\recipe_photos\\jpegRecipes\\IMG_6538.jpeg",
+        "originalFile": "IMG_6538.HEIC",
+        "originalSize": 2628822
+      },
+      {
+        "filename": "IMG_6539.jpeg",
+        "size": 2699911,
+        "path": "C:\\Users\\blake\\OneDrive\\Desktop\\NewProjects\\FinalMothersDayV2\\recipe_photos\\jpegRecipes\\IMG_6539.jpeg",
+        "originalFile": "IMG_6539.HEIC",
+        "originalSize": 2606055
+      },
+      {
+        "filename": "IMG_6540.jpeg",
+        "size": 2271871,
+        "path": "C:\\Users\\blake\\OneDrive\\Desktop\\NewProjects\\FinalMothersDayV2\\recipe_photos\\jpegRecipes\\IMG_6540.jpeg",
+        "originalFile": "IMG_6540.HEIC",
+        "originalSize": 2381377
+      },
+      {
+        "filename": "IMG_6541.jpeg",
+        "size": 2651183,
+        "path": "C:\\Users\\blake\\OneDrive\\Desktop\\NewProjects\\FinalMothersDayV2\\recipe_photos\\jpegRecipes\\IMG_6541.jpeg",
+        "originalFile": "IMG_6541.HEIC",
+        "originalSize": 2406821
+      },
+      {
+        "filename": "IMG_6542.jpeg",
+        "size": 2933486,
+        "path": "C:\\Users\\blake\\OneDrive\\Desktop\\NewProjects\\FinalMothersDayV2\\recipe_photos\\jpegRecipes\\IMG_6542.jpeg",
+        "originalFile": "IMG_6542.HEIC",
+        "originalSize": 2630083
+      },
+      {
+        "filename": "IMG_6543.jpeg",
+        "size": 2802385,
+        "path": "C:\\Users\\blake\\OneDrive\\Desktop\\NewProjects\\FinalMothersDayV2\\recipe_photos\\jpegRecipes\\IMG_6543.jpeg",
+        "originalFile": "IMG_6543.HEIC",
+        "originalSize": 2641789
+      },
+      {
+        "filename": "IMG_6544.jpeg",
+        "size": 2656289,
+        "path": "C:\\Users\\blake\\OneDrive\\Desktop\\NewProjects\\FinalMothersDayV2\\recipe_photos\\jpegRecipes\\IMG_6544.jpeg",
+        "originalFile": "IMG_6544.HEIC",
+        "originalSize": 2490865
+      },
+      {
+        "filename": "IMG_6545.jpeg",
+        "size": 3231002,
+        "path": "C:\\Users\\blake\\OneDrive\\Desktop\\NewProjects\\FinalMothersDayV2\\recipe_photos\\jpegRecipes\\IMG_6545.jpeg",
+        "originalFile": "IMG_6545.HEIC",
+        "originalSize": 2887259
+      }
+    ]
+  },
+  "errors": []
+}
