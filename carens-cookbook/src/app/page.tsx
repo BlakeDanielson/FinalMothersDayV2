@@ -11,7 +11,7 @@ import { BentoGrid } from "@/components/BentoGrid";
 import StatsDashboard from "@/components/StatsDashboard";
 import { CategoryCard } from "@/components/category/CategoryCard";
 import { QuickActionsSection } from "@/components/home/QuickActionsSection";
-import { SmartRecipeInput } from "@/components/recipe-import/SmartRecipeInput";
+import { RecipeImportModal } from "@/components/recipe-import/RecipeImportModal";
 import { useHomePage } from "@/hooks/useHomePage";
 
 function MainPage() {
@@ -26,6 +26,11 @@ function MainPage() {
     selectedRecipe,
     showAddRecipeModal,
     setShowAddRecipeModal,
+    activeImportTab,
+    url,
+    setUrl,
+    urlProcessingMethod,
+    setUrlProcessingMethod,
     processedCategories,
     
     // Data
@@ -33,16 +38,19 @@ function MainPage() {
     categoriesError,
     savedRecipes,
     
+    // Image processing (keeping for potential future use)
+    
     // Handlers
     handleDeleteRecipeFromDisplay,
     handleUpdateRecipeTitle,
     handleUrlSubmit,
     handleSaveRecipe,
+    handleImageFileSelect,
     handleMultipleImageFileSelect,
     handleCategoryClick,
     handleQuickImportURL,
     handleQuickScanPhoto,
-    handleShowStats,
+    handleQuickScanMultiPhoto,
   } = useHomePage();
 
   if (currentView === 'recipe' && selectedRecipe) {
@@ -85,8 +93,8 @@ function MainPage() {
         {/* Quick Actions Section */}
         <QuickActionsSection
           onImportURL={handleQuickImportURL}
-          onScanPhoto={handleQuickScanPhoto}
-          onShowStats={handleShowStats}
+          onScanSinglePhoto={handleQuickScanPhoto}
+          onScanMultiPhoto={handleQuickScanMultiPhoto}
         />
 
         {currentView !== 'list' && (
@@ -229,17 +237,33 @@ function MainPage() {
         )}
       </div>
 
-      {/* Smart Recipe Input */}
-      <SmartRecipeInput
+      {/* Recipe Import Modal */}
+      <RecipeImportModal
         isOpen={showAddRecipeModal}
         onClose={() => setShowAddRecipeModal(false)}
-        onUrlSubmit={(url, geminiProvider, openaiProvider, forceStrategy) => 
-          handleUrlSubmit(url, geminiProvider, openaiProvider, forceStrategy)}
-        onPhotosSubmit={(files, provider) => handleMultipleImageFileSelect(files, provider)}
+        activeTab={activeImportTab}
+        
+        // URL import props
+        url={url}
+        onUrlChange={setUrl}
+        urlProcessingMethod={urlProcessingMethod}
+        onUrlProcessingMethodChange={setUrlProcessingMethod}
+        onUrlSubmit={(e) => {
+          e.preventDefault();
+          const formData = new FormData(e.target as HTMLFormElement);
+          const urlValue = formData.get('url') as string || url;
+          handleUrlSubmit(urlValue, 'gemini-main', urlProcessingMethod);
+        }}
+        urlError={error}
+        
+        // Photo upload props
+        onSingleFileSelect={(file, provider) => handleImageFileSelect(file, provider)}
+        onMultipleFilesSelect={(files, provider) => handleMultipleImageFileSelect(files, provider)}
+        
+        // Loading state
         isLoading={isLoading}
         loadingProgress={loadingProgress}
         loadingStepMessage={loadingStepMessage}
-        error={error}
       />
     </div>
   );

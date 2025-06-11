@@ -2,19 +2,19 @@
 
 import React from "react";
 import { motion } from "framer-motion";
-import { SearchIcon, Camera, BarChart3 } from "lucide-react";
+import { SearchIcon, Camera, Images } from "lucide-react";
 import { Card } from "@/components/ui/card";
 
 interface QuickActionsSectionProps {
   onImportURL: () => void;
-  onScanPhoto: () => void;
-  onShowStats: () => void;
+  onScanSinglePhoto: () => void;
+  onScanMultiPhoto: () => void;
 }
 
 export function QuickActionsSection({
   onImportURL,
-  onScanPhoto,
-  onShowStats,
+  onScanSinglePhoto,
+  onScanMultiPhoto,
 }: QuickActionsSectionProps) {
   return (
     <motion.section
@@ -44,28 +44,28 @@ export function QuickActionsSection({
         
         <Card 
           className="p-8 cursor-pointer hover:shadow-xl transition-all duration-300 group border-2 hover:border-emerald-500 hover:bg-emerald-50/50"
-          onClick={onScanPhoto}
+          onClick={onScanSinglePhoto}
           data-tour="scan-recipe-button"
         >
           <div className="text-center">
             <div className="mx-auto w-20 h-20 bg-emerald-500 rounded-full flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
               <Camera className="h-10 w-10 text-white" />
             </div>
-            <h3 className="text-xl font-medium mb-3 text-emerald-700">Scan Recipe</h3>
-            <p className="text-muted-foreground text-base font-light">Upload a photo to extract recipe</p>
+            <h3 className="text-xl font-medium mb-3 text-emerald-700">Scan Recipe Picture</h3>
+            <p className="text-muted-foreground text-base font-light">Upload a single photo to extract recipe</p>
           </div>
         </Card>
         
         <Card 
           className="p-8 cursor-pointer hover:shadow-xl transition-all duration-300 group border-2 hover:border-purple-500 hover:bg-purple-50/50"
-          onClick={onShowStats}
+          onClick={onScanMultiPhoto}
         >
           <div className="text-center">
             <div className="mx-auto w-20 h-20 bg-purple-500 rounded-full flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
-              <BarChart3 className="h-10 w-10 text-white" />
+              <Images className="h-10 w-10 text-white" />
             </div>
-            <h3 className="text-xl font-medium mb-3 text-purple-700">Collection Stats</h3>
-            <p className="text-muted-foreground text-base font-light">View insights about your recipes</p>
+            <h3 className="text-xl font-medium mb-3 text-purple-700">Scan Multi-Picture Recipe</h3>
+            <p className="text-muted-foreground text-base font-light">Upload multiple photos of one recipe</p>
           </div>
         </Card>
       </div>

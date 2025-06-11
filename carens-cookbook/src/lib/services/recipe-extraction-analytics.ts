@@ -372,7 +372,7 @@ export class RecipeExtractionAnalytics {
 }
 
 // Export the trackExtraction with recipe utility
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
+ 
 export async function trackExtractionWithRecipe(
   metrics: Omit<ExtractionMetrics, 'missingFields' | 'completenessScore'>,
   // eslint-disable-next-line @typescript-eslint/no-explicit-any

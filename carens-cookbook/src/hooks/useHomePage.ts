@@ -26,7 +26,7 @@ export function useHomePage() {
   const [currentView, setCurrentView] = useState<ViewType>('list');
   const [selectedRecipe, setSelectedRecipe] = useState<RecipeData | null>(null);
   const [showAddRecipeModal, setShowAddRecipeModal] = useState(false);
-  const [activeImportTab, setActiveImportTab] = useState<'url' | 'photo'>('url');
+  const [activeImportTab, setActiveImportTab] = useState<'url' | 'single-photo' | 'multi-photo'>('url');
 
   // Use extracted hooks
   const {
@@ -298,7 +298,12 @@ export function useHomePage() {
   }, []);
 
   const handleQuickScanPhoto = useCallback(() => {
-    setActiveImportTab('photo');
+    setActiveImportTab('single-photo');
+    setShowAddRecipeModal(true);
+  }, []);
+
+  const handleQuickScanMultiPhoto = useCallback(() => {
+    setActiveImportTab('multi-photo');
     setShowAddRecipeModal(true);
   }, []);
 
@@ -349,6 +354,7 @@ export function useHomePage() {
     handleCategoryClick,
     handleQuickImportURL,
     handleQuickScanPhoto,
+    handleQuickScanMultiPhoto,
     handleShowStats,
   };
 } 
