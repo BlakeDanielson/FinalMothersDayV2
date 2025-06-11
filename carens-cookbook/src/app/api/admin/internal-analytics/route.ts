@@ -57,15 +57,12 @@ export async function GET(request: NextRequest) {
             domain: true,
             sourceUrl: true,
             extractedAt: true,
-            processingTimeMs: true,
+            totalProcessingTimeMs: true,
+            fetchTimeMs: true,
+            parseTimeMs: true,
+            aiTimeMs: true,
             extractionStrategy: true,
-            aiProvider: true,
-            fallbackUsed: true,
-            ingredientCount: true,
-            stepCount: true,
-            recipeComplexity: true,
-            userId: true,
-            sessionId: true
+            aiProvider: true
           }
         });
 
@@ -78,27 +75,67 @@ export async function GET(request: NextRequest) {
         });
 
       case 'performance-by-domain':
-        const domainStats = await prisma.internalRecipeData.groupBy({
-          by: ['domain'],
+        // Use simpler approach to avoid circular reference issues
+        const domainData = await prisma.internalRecipeData.findMany({
           where: {
             extractedAt: { gte: startDate },
             ...(strategy && { extractionStrategy: strategy }),
             ...(aiProvider && { aiProvider })
           },
-          _count: { _all: true },
-          _avg: {
-            processingTimeMs: true,
-            tokenCount: true,
-            ingredientCount: true,
-            stepCount: true
-          },
-          orderBy: { _count: { _all: 'desc' } },
-          take: 20
+          select: {
+            domain: true,
+            totalProcessingTimeMs: true,
+            fetchTimeMs: true,
+            parseTimeMs: true,
+            aiTimeMs: true
+          }
         });
+
+        // Group and calculate averages in JavaScript
+        const domainStats = domainData.reduce((acc, item) => {
+          const domain = item.domain;
+          if (!acc[domain]) {
+            acc[domain] = {
+              domain,
+              _count: { _all: 0 },
+              _avg: {
+                totalProcessingTimeMs: 0,
+                fetchTimeMs: 0,
+                parseTimeMs: 0,
+                aiTimeMs: 0
+              },
+              _sum: {
+                totalProcessingTimeMs: 0,
+                fetchTimeMs: 0,
+                parseTimeMs: 0,
+                aiTimeMs: 0
+              }
+            };
+          }
+          
+          acc[domain]._count._all++;
+          acc[domain]._sum.totalProcessingTimeMs += item.totalProcessingTimeMs;
+          acc[domain]._sum.fetchTimeMs += item.fetchTimeMs || 0;
+          acc[domain]._sum.parseTimeMs += item.parseTimeMs || 0;
+          acc[domain]._sum.aiTimeMs += item.aiTimeMs || 0;
+          
+          return acc;
+        }, {} as Record<string, any>);
+
+        // Calculate averages and convert to array
+        const domainStatsArray = Object.values(domainStats).map(stat => ({
+          ...stat,
+          _avg: {
+            totalProcessingTimeMs: stat._sum.totalProcessingTimeMs / stat._count._all,
+            fetchTimeMs: stat._sum.fetchTimeMs / stat._count._all,
+            parseTimeMs: stat._sum.parseTimeMs / stat._count._all,
+            aiTimeMs: stat._sum.aiTimeMs / stat._count._all
+          }
+        })).sort((a, b) => b._count._all - a._count._all).slice(0, 20);
 
         return NextResponse.json({
           success: true,
-          data: domainStats,
+          data: domainStatsArray,
           period: `Last ${days} days`,
           filters: { strategy, aiProvider }
         });

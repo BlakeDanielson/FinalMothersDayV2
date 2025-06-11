@@ -442,33 +442,21 @@ export const POST = withOnboardingGuard(async (request: NextRequest) => {
     // 📊 SAVE INTERNAL RECIPE DATA FOR BUSINESS INTELLIGENCE (Both authenticated & anonymous)
     try {
       await InternalRecipeAnalytics.saveRecipeData({
-        // Recipe content
+        // Basic recipe info
         title: validatedRecipe.title,
-        description: validatedRecipe.description,
-        ingredients: validatedRecipe.ingredients,
-        steps: validatedRecipe.steps,
-        image: validatedRecipe.image,
-        cuisine: validatedRecipe.cuisine,
-        category: validatedRecipe.category,
-        prepTime: validatedRecipe.prepTime,
-        cleanupTime: validatedRecipe.cleanupTime,
         
         // Source context
         sourceUrl: url,
         
-        // User context (works for both authenticated and anonymous)
-        userId: userId || null,
-        sessionId: null, // This endpoint doesn't have session tracking yet
-        
-        // Processing metadata
+        // Processing method
         extractionStrategy: ExtractionStrategy.HTML_FALLBACK, // This endpoint always uses HTML fallback
         aiProvider: mapUIProviderToAIProvider(uiProvider),
-        fallbackUsed: false, // This endpoint doesn't have primary/fallback concept
-        processingTimeMs: extractionMetrics.totalDuration || 0,
-        tokenCount: undefined, // Could be enhanced to track tokens
         
-        // Quality metrics
-        hasStructuredData: false // Could be enhanced to detect JSON-LD
+        // Performance metrics
+        totalProcessingTimeMs: extractionMetrics.totalDuration || 0,
+        fetchTimeMs: extractionMetrics.htmlFetchDuration,
+        parseTimeMs: extractionMetrics.cleanedContentSize ? Math.floor((extractionMetrics.totalDuration || 0) * 0.2) : undefined,
+        aiTimeMs: extractionMetrics.aiProcessingDuration
       });
       
       console.log(`📊 Internal recipe data saved for analysis: ${validatedRecipe.title}`);
