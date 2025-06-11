@@ -55,7 +55,7 @@ export async function POST(req: NextRequest) {
       case 'user.created':
         const userEmail = email_addresses?.[0]?.email_address;
         
-        // Create user with default categories
+        // Create user with default categories and onboarding setup
         await prisma.user.create({
           data: {
             id,
@@ -64,12 +64,15 @@ export async function POST(req: NextRequest) {
             lastName: last_name,
             imageUrl: image_url,
             // Initialize with default categories
-            preferredCategories: ['Breakfast', 'Lunch', 'Dinner', 'Snacks', 'Desserts']
+            preferredCategories: ['Breakfast', 'Lunch', 'Dinner', 'Snacks', 'Desserts'],
+            // Initialize onboarding for new users
+            onboardingCompleted: false,
+            onboardingStep: 0,
           },
         });
 
-        // Log category initialization
-        console.log(`Initialized default categories for new user: ${id}`);
+        // Log initialization
+        console.log(`Initialized new user with onboarding: ${id} (email: ${userEmail || 'none'})`);
         break;
 
       case 'user.updated':

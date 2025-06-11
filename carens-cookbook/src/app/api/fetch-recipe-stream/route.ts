@@ -2,8 +2,9 @@ import { NextRequest, NextResponse } from 'next/server';
 import { withOnboardingGuard } from '@/lib/middleware/onboarding-guard';
 import { extractRecipeOptimized, checkOptimizationReadiness } from '@/lib/services/recipe-extraction-orchestrator';
 import { ConversionAnalytics } from '@/lib/services/conversionAnalytics';
-import { ConversionEventType } from '@/generated/prisma';
+import { ConversionEventType, ExtractionStrategy, AIProvider } from '@/generated/prisma';
 import { auth } from '@clerk/nextjs/server';
+import { InternalRecipeAnalytics } from '@/lib/services/internal-recipe-analytics';
 
 // Helper function to fix relative URLs
 function fixImageUrl(url: string | null, baseUrl: string): string | null {
@@ -182,6 +183,47 @@ export const POST = withOnboardingGuard(async (request: NextRequest) => {
           tokensUsed: metrics.totalTokensEstimated,
           processingTime: metrics.processingTime
         };
+
+        // 📊 SAVE INTERNAL RECIPE DATA FOR BUSINESS INTELLIGENCE (Both authenticated & anonymous)
+        try {
+          const extractionStrategy = metrics.primarySuccess ? ExtractionStrategy.URL_DIRECT : ExtractionStrategy.HTML_FALLBACK;
+          const aiProvider = metrics.primarySuccess ? AIProvider.GEMINI_FLASH : AIProvider.OPENAI_MAIN;
+          
+          await InternalRecipeAnalytics.saveRecipeData({
+            // Recipe content
+            title: recipe.title,
+            description: recipe.description,
+            ingredients: recipe.ingredients,
+            steps: recipe.steps,
+            image: recipe.image,
+            cuisine: recipe.cuisine,
+            category: recipe.category,
+            prepTime: recipe.prepTime,
+            cleanupTime: recipe.cleanupTime,
+            
+            // Source context
+            sourceUrl: url,
+            
+            // User context (works for both authenticated and anonymous)
+            userId: userId || null,
+            sessionId: sessionContext?.sessionId || null,
+            
+            // Processing metadata
+            extractionStrategy,
+            aiProvider,
+            fallbackUsed: metrics.fallbackUsed || false,
+            processingTimeMs: metrics.processingTime,
+            tokenCount: metrics.totalTokensEstimated,
+            
+            // Quality metrics (you can enhance these based on validation results)
+            hasStructuredData: false // Could be enhanced to detect JSON-LD
+          });
+          
+          console.log(`📊 Internal recipe data saved for analysis: ${recipe.title}`);
+        } catch (internalDataError) {
+          console.error('Failed to save internal recipe data (non-blocking):', internalDataError);
+          // Don't fail the request for internal analytics errors
+        }
 
         // Track successful extraction
         if (sessionContext) {
