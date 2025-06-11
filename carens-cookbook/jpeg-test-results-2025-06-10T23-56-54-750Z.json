@@ -1,0 +1,136 @@
+{
+  "openai": [
+    {
+      "filename": "IMG_6534.jpeg",
+      "model": "openai",
+      "processingTime": 17090,
+      "success": true,
+      "valid": true,
+      "title": "Loaded Greek Hummus",
+      "ingredientCount": 13,
+      "instructionCount": 2,
+      "fileSize": 2564257,
+      "timestamp": "2025-06-10T23:55:10.765Z"
+    },
+    {
+      "filename": "IMG_6535.jpeg",
+      "model": "openai",
+      "processingTime": 16255,
+      "success": true,
+      "valid": true,
+      "title": "THE BEST FRIED RICE!",
+      "ingredientCount": 12,
+      "instructionCount": 3,
+      "fileSize": 2579391,
+      "timestamp": "2025-06-10T23:55:37.436Z"
+    },
+    {
+      "filename": "IMG_6536.jpeg",
+      "model": "openai",
+      "processingTime": 11226,
+      "success": true,
+      "valid": true,
+      "title": "The Best Egg Salad",
+      "ingredientCount": 8,
+      "instructionCount": 4,
+      "fileSize": 2729654,
+      "timestamp": "2025-06-10T23:56:00.240Z"
+    },
+    {
+      "filename": "IMG_6537.jpeg",
+      "model": "openai",
+      "processingTime": 10300,
+      "success": true,
+      "valid": true,
+      "title": "Chicken Veggie Stir Fry",
+      "ingredientCount": 13,
+      "instructionCount": 7,
+      "fileSize": 2507397,
+      "timestamp": "2025-06-10T23:56:19.563Z"
+    },
+    {
+      "filename": "IMG_6538.jpeg",
+      "model": "openai",
+      "processingTime": 12524,
+      "success": true,
+      "valid": true,
+      "title": "Weeknight Bolognese",
+      "ingredientCount": 14,
+      "instructionCount": 5,
+      "fileSize": 2533882,
+      "timestamp": "2025-06-10T23:56:40.984Z"
+    }
+  ],
+  "gemini": [
+    {
+      "filename": "IMG_6534.jpeg",
+      "model": "gemini",
+      "processingTime": 8414,
+      "success": true,
+      "valid": true,
+      "title": "Loaded Greek Hummus",
+      "ingredientCount": 12,
+      "instructionCount": 2,
+      "fileSize": 2564257,
+      "timestamp": "2025-06-10T23:55:20.180Z"
+    },
+    {
+      "filename": "IMG_6535.jpeg",
+      "model": "gemini",
+      "processingTime": 9577,
+      "success": true,
+      "valid": true,
+      "title": "THE BEST FRIED RICE!",
+      "ingredientCount": 12,
+      "instructionCount": 3,
+      "fileSize": 2579391,
+      "timestamp": "2025-06-10T23:55:48.014Z"
+    },
+    {
+      "filename": "IMG_6536.jpeg",
+      "model": "gemini",
+      "processingTime": 7021,
+      "success": true,
+      "valid": true,
+      "title": "The Best Egg Salad",
+      "ingredientCount": 7,
+      "instructionCount": 3,
+      "fileSize": 2729654,
+      "timestamp": "2025-06-10T23:56:08.262Z"
+    },
+    {
+      "filename": "IMG_6537.jpeg",
+      "model": "gemini",
+      "processingTime": 6892,
+      "success": true,
+      "valid": true,
+      "title": "Chicken Veggie Stir Fry",
+      "ingredientCount": 13,
+      "instructionCount": 1,
+      "fileSize": 2507397,
+      "timestamp": "2025-06-10T23:56:27.457Z"
+    },
+    {
+      "filename": "IMG_6538.jpeg",
+      "model": "gemini",
+      "processingTime": 11762,
+      "success": true,
+      "valid": true,
+      "title": "Weeknight Bolognese",
+      "ingredientCount": 13,
+      "instructionCount": 3,
+      "fileSize": 2533882,
+      "timestamp": "2025-06-10T23:56:53.749Z"
+    }
+  ],
+  "summary": {
+    "totalTests": 10,
+    "openaiSuccess": 5,
+    "geminiSuccess": 5,
+    "openaiSuccessRate": "100.0",
+    "geminiSuccessRate": "100.0",
+    "openaiAvgTime": 13479,
+    "geminiAvgTime": 8733,
+    "testDuration": 121075
+  }
+}
