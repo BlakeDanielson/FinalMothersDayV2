@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useCallback } from 'react';
+import { useCallback } from 'react';
 import { toast } from 'sonner';
 import { type AIProvider } from '@/lib/config/ui-models';
 import { processSingleImage, processMultipleImages } from '@/lib/api-client';

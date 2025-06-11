@@ -3,11 +3,11 @@ import OpenAI from 'openai';
 import { z } from 'zod';
 import { RecipeProcessingError, ErrorType, logError } from '@/lib/errors';
 import { AIProvider, getProviderConfig } from '@/lib/ai-providers';
-import { categoryService, categoryResolver } from '@/lib/categories';
+import { categoryService } from '@/lib/categories';
 import { auth } from '@clerk/nextjs/server';
-import { CategorySource } from '@/generated/prisma';
+
 import { withOnboardingGuard } from '@/lib/middleware/onboarding-guard';
-import { AI_MODELS, AI_SETTINGS, getBackendProviderFromUI, getModelFromUIProvider, type UIProvider } from '@/lib/config/ai-models';
+import { AI_SETTINGS, getBackendProviderFromUI, getModelFromUIProvider, type UIProvider } from '@/lib/config/ai-models';
 import { ConversionAnalytics } from '@/lib/services/conversionAnalytics';
 import { ConversionEventType } from '@/generated/prisma';
 
