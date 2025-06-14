@@ -31,6 +31,28 @@ export const PUBLIC_ROUTES: RouteConfig[] = [
   }
 ];
 
+// API routes that are completely public (no auth required)
+export const PUBLIC_API_ROUTES: RouteConfig[] = [
+  {
+    path: '/api/scan-recipe-stream',
+    requiresOnboarding: false,
+    requiresAuth: false,
+    description: 'Recipe scanning streaming API - accessible to guest users'
+  },
+  {
+    path: '/api/fetch-recipe-stream',
+    requiresOnboarding: false,
+    requiresAuth: false,
+    description: 'Recipe fetching streaming API - accessible to guest users'
+  },
+  {
+    path: '/api/guest',
+    requiresOnboarding: false,
+    requiresAuth: false,
+    description: 'Guest API routes - accessible to all users'
+  }
+];
+
 // Routes that require authentication but NOT onboarding completion
 export const AUTH_ONLY_ROUTES: RouteConfig[] = [
   {
@@ -116,6 +138,7 @@ export const AUTH_API_ROUTES: RouteConfig[] = [
 // Combine all route configurations
 export const ALL_ROUTES = [
   ...PUBLIC_ROUTES,
+  ...PUBLIC_API_ROUTES,
   ...AUTH_ONLY_ROUTES,
   ...PROTECTED_ROUTES,
   ...PROTECTED_API_ROUTES,

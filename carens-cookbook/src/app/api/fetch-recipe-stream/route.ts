@@ -1,5 +1,4 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { withOnboardingGuard } from '@/lib/middleware/onboarding-guard';
 import { extractRecipeOptimized, checkOptimizationReadiness } from '@/lib/services/recipe-extraction-orchestrator';
 import { auth } from '@clerk/nextjs/server';
 
@@ -88,7 +87,7 @@ function createErrorEvent(error: string) {
   })}\n\n`;
 }
 
-export const POST = withOnboardingGuard(async (request: NextRequest) => {
+export const POST = async (request: NextRequest) => {
   const { url, forceStrategy, geminiProvider = 'gemini-pro', openaiProvider = 'openai-main' } = await request.json();
 
   if (!url) {
@@ -98,11 +97,8 @@ export const POST = withOnboardingGuard(async (request: NextRequest) => {
     );
   }
 
-  // Get user info for authentication
+  // Get user info for authentication (optional for guest users)
   const { userId } = await auth();
-  if (!userId) {
-    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-  }
 
   // Set up SSE response headers
   const responseHeaders = {
@@ -119,7 +115,7 @@ export const POST = withOnboardingGuard(async (request: NextRequest) => {
       const encoder = new TextEncoder();
       
       try {
-        console.log(`🎯 STREAMING EXTRACTION: Processing ${url}`);
+        console.log(`🎯 STREAMING EXTRACTION: Processing ${url} ${userId ? `(User: ${userId})` : '(Guest)'}`);
         console.log(`📊 System readiness:`, checkOptimizationReadiness());
 
         // Initial connection message
@@ -152,8 +148,6 @@ export const POST = withOnboardingGuard(async (request: NextRequest) => {
           processingTime: metrics.processingTime
         };
 
-
-
         // Send success event
         controller.enqueue(encoder.encode(createSuccessEvent(recipe, {
           strategy: metrics.primarySuccess ? 'gemini-url-direct' : 'openai-html-fallback',
@@ -182,7 +176,7 @@ export const POST = withOnboardingGuard(async (request: NextRequest) => {
   });
 
   return new NextResponse(stream, { headers: responseHeaders });
-});
+};
 
 // Enhanced orchestrator with progress tracking
 async function extractRecipeOptimizedWithProgress(

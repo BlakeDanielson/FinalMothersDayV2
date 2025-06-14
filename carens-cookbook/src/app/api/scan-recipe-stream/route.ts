@@ -6,7 +6,6 @@ import { AIProvider, getProviderConfig } from '@/lib/ai-providers';
 import { categoryService } from '@/lib/categories';
 import { auth } from '@clerk/nextjs/server';
 
-import { withOnboardingGuard } from '@/lib/middleware/onboarding-guard';
 import { AI_SETTINGS, getBackendProviderFromUI, getModelFromUIProvider, type UIProvider } from '@/lib/config/ai-models';
 import { validateFileSize, getFileSizeErrorMessage } from '@/lib/utils/file-size-validation';
 
@@ -425,7 +424,7 @@ async function extractRecipeFromImageWithProgress(
   };
 }
 
-export const POST = withOnboardingGuard(async (request: NextRequest) => {
+export const POST = async (request: NextRequest) => {
   const formData = await request.formData();
   const imageFile = formData.get('image') as File;
   const provider = (formData.get('provider') as UIProvider) || 'openai-main';
@@ -437,13 +436,10 @@ export const POST = withOnboardingGuard(async (request: NextRequest) => {
     );
   }
 
-  // Get user info for authentication  
+  // Get user info for authentication (optional for guest users)
   const { userId } = await auth();
-  if (!userId) {
-    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-  }
 
-  // Get user categories
+  // Get user categories (empty array for guest users)
   let userCategories: string[] = [];
   try {
     if (userId) {
@@ -468,7 +464,7 @@ export const POST = withOnboardingGuard(async (request: NextRequest) => {
       const encoder = new TextEncoder();
       
       try {
-        console.log(`🎯 STREAMING IMAGE EXTRACTION: Processing ${imageFile.name}`);
+        console.log(`🎯 STREAMING IMAGE EXTRACTION: Processing ${imageFile.name} ${userId ? `(User: ${userId})` : '(Guest)'}`);
 
         // Initial connection message
         controller.enqueue(encoder.encode(createProgressEvent(0, "📷 Starting recipe scan...", { stage: 'initializing' })));
@@ -486,8 +482,6 @@ export const POST = withOnboardingGuard(async (request: NextRequest) => {
           userCategories,
           progressCallback
         );
-
-
 
         // Send success event
         controller.enqueue(encoder.encode(createSuccessEvent(recipe, {
@@ -507,8 +501,6 @@ export const POST = withOnboardingGuard(async (request: NextRequest) => {
 
         controller.enqueue(encoder.encode(createErrorEvent(errorMessage)));
 
-        // Note: Could add extraction failure analytics tracking here if needed
-
         if (error instanceof RecipeProcessingError) {
           logError(error, { imageFile: imageFile.name, provider });
         }
@@ -519,4 +511,4 @@ export const POST = withOnboardingGuard(async (request: NextRequest) => {
   });
 
   return new NextResponse(stream, { headers: responseHeaders });
-}); 
+}; 
