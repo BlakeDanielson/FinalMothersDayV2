@@ -9,6 +9,7 @@ import { ClerkProvider } from '@clerk/nextjs';
 import { FeatureTourProvider } from "@/contexts/FeatureTourContext";
 import { TourOverlay } from "@/components/tour/TourOverlay";
 import { QueryProvider } from "@/components/providers/QueryProvider";
+import { Analytics } from "@vercel/analytics/next";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -59,6 +60,7 @@ export default function RootLayout({
             src="/registerServiceWorker.js"
             strategy="lazyOnload"
           />
+          <Analytics />
         </body>
       </html>
     </ClerkProvider>
