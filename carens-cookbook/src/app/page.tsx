@@ -2,7 +2,7 @@
 
 import React from "react";
 import { motion } from "framer-motion";
-import { HomeIcon, Camera } from "lucide-react";
+import { HomeIcon, Camera, SearchIcon, Images } from "lucide-react";
 import { Toaster } from 'sonner';
 
 import { Button } from "@/components/ui/button";
@@ -10,11 +10,10 @@ import RecipeDisplay from "@/components/RecipeDisplay";
 import { BentoGrid } from "@/components/BentoGrid";
 import StatsDashboard from "@/components/StatsDashboard";
 import { CategoryCard } from "@/components/category/CategoryCard";
-import { QuickActionsSection } from "@/components/home/QuickActionsSection";
 import { RecipeImportModal } from "@/components/recipe-import/RecipeImportModal";
 import { useHomePage } from "@/hooks/useHomePage";
 
-function MainPage() {
+export default function HomePage() {
   const {
     // State
     isLoading,
@@ -37,8 +36,6 @@ function MainPage() {
     categoriesLoading,
     categoriesError,
     savedRecipes,
-    
-    // Image processing (keeping for potential future use)
     
     // Handlers
     handleDeleteRecipeFromDisplay,
@@ -70,171 +67,296 @@ function MainPage() {
   return (
     <div className="min-h-screen bg-background text-foreground">
       <Toaster richColors position="top-right" />
-      <div className="container mx-auto px-4 py-8">
-        <header className="mb-10 text-center">
-          <motion.h1
-            className="text-5xl md:text-6xl font-black tracking-tight mb-3 text-primary"
-            initial={{ opacity: 0, y: -20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5 }}
-          >
-            Caren&apos;s Cookbook
-          </motion.h1>
-          <motion.p
-            className="text-xl md:text-2xl text-muted-foreground max-w-2xl mx-auto font-light"
-            initial={{ opacity: 0, y: -10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.2 }}
-          >
-            Your personal recipe collection
-          </motion.p>
-        </header>
+      
+      {/* Hero Section with Photo Background */}
+      <div className="relative overflow-hidden bg-background">
+        {/* Full-background auto-crossfading photo carousel */}
+        <div className="absolute inset-0 w-full h-full">
+          <div className="relative w-full h-full overflow-hidden">
+            {/* Background images that crossfade - now in pairs side by side */}
+            {[
+              // Pair 1
+              {
+                left: "https://images.unsplash.com/photo-1565299624946-b28f40a0ca4b?auto=format&fit=crop&w=1920&q=80",
+                right: "https://images.unsplash.com/photo-1540189549336-e6e99c3679fe?auto=format&fit=crop&w=1920&q=80"
+              },
+              // Pair 2
+              {
+                left: "https://images.unsplash.com/photo-1567620905732-2d1ec7ab7445?auto=format&fit=crop&w=1920&q=80",
+                right: "https://images.unsplash.com/photo-1455619452474-d2be8b1e70cd?auto=format&fit=crop&w=1920&q=80"
+              },
+              // Pair 3
+              {
+                left: "https://images.unsplash.com/photo-1571091718767-18b5b1457add?auto=format&fit=crop&w=1920&q=80",
+                right: "https://images.unsplash.com/photo-1555939594-58d7cb561ad1?auto=format&fit=crop&w=1920&q=80"
+              },
+              // Pair 4
+              {
+                left: "https://images.unsplash.com/photo-1484723091739-30a097e8f929?auto=format&fit=crop&w=1920&q=80",
+                right: "https://images.unsplash.com/photo-1547592180-85f173990554?auto=format&fit=crop&w=1920&q=80"
+              }
+            ].map((pair, idx) => (
+              <div 
+                key={idx} 
+                className="absolute inset-0 w-full h-full grid grid-cols-2"
+                style={{
+                  animation: `heroFade 20s infinite ${idx * 5}s`,
+                  opacity: 0
+                }}
+              >
+                {/* Left image */}
+                <div className="w-full h-full">
+                  <img
+                    src={pair.left}
+                    alt={`Recipe background left ${idx + 1}`}
+                    className="w-full h-full object-cover object-center"
+                    draggable={false}
+                  />
+                </div>
+                {/* Subtle divider */}
+                <div className="absolute left-1/2 top-0 bottom-0 w-px bg-white/20 transform -translate-x-1/2 z-10"></div>
+                {/* Right image */}
+                <div className="w-full h-full">
+                  <img
+                    src={pair.right}
+                    alt={`Recipe background right ${idx + 1}`}
+                    className="w-full h-full object-cover object-center"
+                    draggable={false}
+                  />
+                </div>
+              </div>
+            ))}
+          </div>
+          {/* Dark overlay for text readability */}
+          <div className="absolute inset-0 bg-black/50" />
+          {/* Gradient overlay for better text contrast */}
+          <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-transparent to-black/60" />
+        </div>
 
-        {/* Quick Actions Section */}
-        <QuickActionsSection
-          onImportURL={handleQuickImportURL}
-          onScanSinglePhoto={handleQuickScanPhoto}
-          onScanMultiPhoto={handleQuickScanMultiPhoto}
-        />
+        {/* Hero Content overlay */}
+        <div className="relative z-10">
+          <div className="container mx-auto px-4 py-12">
+            <header className="mb-16 text-center">
+              <motion.h1
+                className="text-6xl md:text-7xl lg:text-8xl font-black tracking-tight mb-6 text-white"
+                style={{
+                  textShadow: '0 4px 20px rgba(0,0,0,0.8), 0 8px 40px rgba(0,0,0,0.4)'
+                }}
+                initial={{ opacity: 0, y: -20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5 }}
+              >
+                Caren&apos;s Cookbook
+              </motion.h1>
+              <motion.div
+                className="backdrop-blur-md bg-white/10 rounded-2xl px-8 py-4 inline-block border border-white/20 shadow-2xl"
+                initial={{ opacity: 0, y: -10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: 0.2 }}
+              >
+                <p className="text-xl md:text-2xl lg:text-3xl text-white font-light">
+                  Your personal recipe collection
+                </p>
+              </motion.div>
+            </header>
 
-        {currentView !== 'list' && (
-          <motion.div
-            className="mb-12"
-            initial={{ opacity: 0, y: -10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.3 }}
-          >
-            <Button 
-              onClick={() => setCurrentView('list')}
-              variant="outline"
-              className="flex items-center gap-3 text-lg p-6 mx-auto sm:mx-0 font-medium hover:bg-primary hover:text-primary-foreground transition-all duration-300 border-primary/30 hover:border-primary"
+            {/* Enhanced Quick Actions Section */}
+            <motion.section
+              className="mb-8"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.4 }}
             >
-              <HomeIcon className="h-5 w-5" />
-              Back to Recipe List
-            </Button>
-          </motion.div>
-        )}
-
-        {currentView === 'list' && (
-          <motion.div
-            className="mb-8"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 0.5, delay: 0.6 }}
-          >
-            <div className="text-center mb-10">
-              <h2 className="text-3xl font-medium text-foreground mb-3">
-                Recipe Categories
-              </h2>
-              <p className="text-lg text-muted-foreground font-light max-w-2xl mx-auto">
-                Browse recipes by category • {savedRecipes.length} total recipes
-              </p>
-            </div>
-
-            {/* Loading State */}
-            {categoriesLoading && (
-              <div className="text-center py-16">
+              <div className="text-center mb-12">
+                <div className="backdrop-blur-md bg-white/10 rounded-2xl px-6 py-3 inline-block border border-white/20 shadow-xl mb-4">
+                  <h2 className="text-3xl md:text-4xl font-bold text-white">Quick Actions</h2>
+                </div>
+                <p className="text-lg md:text-xl text-white/90 font-medium" style={{textShadow: '0 2px 10px rgba(0,0,0,0.6)'}}>
+                  Start your cooking journey
+                </p>
+              </div>
+              
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto" data-tour="recipe-pathways">
                 <motion.div
-                  animate={{ rotate: 360 }}
-                  transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
-                  className="h-12 w-12 border-4 border-primary border-t-transparent rounded-full mx-auto mb-4"
-                />
-                <p className="text-lg text-muted-foreground font-light">Loading your recipe categories...</p>
+                  className="backdrop-blur-lg bg-white/15 hover:bg-white/25 rounded-3xl p-8 cursor-pointer transition-all duration-300 group border border-white/30 hover:border-white/50 shadow-2xl hover:shadow-[0_20px_60px_rgba(0,0,0,0.4)] hover:scale-105"
+                  onClick={handleQuickImportURL}
+                  data-tour="add-recipe-button"
+                  whileHover={{ y: -5 }}
+                  transition={{ duration: 0.2 }}
+                >
+                  <div className="text-center">
+                    <div className="mx-auto w-24 h-24 bg-indigo-500 hover:bg-indigo-400 rounded-full flex items-center justify-center mb-6 group-hover:scale-110 transition-all duration-300 shadow-xl">
+                      <SearchIcon className="h-12 w-12 text-white" />
+                    </div>
+                    <h3 className="text-2xl font-bold mb-3 text-white" style={{textShadow: '0 2px 10px rgba(0,0,0,0.6)'}}>
+                      Import from URL
+                    </h3>
+                    <p className="text-white/80 text-base font-medium" style={{textShadow: '0 1px 5px rgba(0,0,0,0.5)'}}>
+                      Paste any recipe link to import
+                    </p>
+                  </div>
+                </motion.div>
+                
+                <motion.div
+                  className="backdrop-blur-lg bg-white/15 hover:bg-white/25 rounded-3xl p-8 cursor-pointer transition-all duration-300 group border border-white/30 hover:border-white/50 shadow-2xl hover:shadow-[0_20px_60px_rgba(0,0,0,0.4)] hover:scale-105"
+                  onClick={handleQuickScanPhoto}
+                  data-tour="scan-recipe-button"
+                  whileHover={{ y: -5 }}
+                  transition={{ duration: 0.2 }}
+                >
+                  <div className="text-center">
+                    <div className="mx-auto w-24 h-24 bg-emerald-500 hover:bg-emerald-400 rounded-full flex items-center justify-center mb-6 group-hover:scale-110 transition-all duration-300 shadow-xl">
+                      <Camera className="h-12 w-12 text-white" />
+                    </div>
+                    <h3 className="text-2xl font-bold mb-3 text-white" style={{textShadow: '0 2px 10px rgba(0,0,0,0.6)'}}>
+                      Scan Recipe Photo
+                    </h3>
+                    <p className="text-white/80 text-base font-medium" style={{textShadow: '0 1px 5px rgba(0,0,0,0.5)'}}>
+                      Upload a photo to extract recipe
+                    </p>
+                  </div>
+                </motion.div>
+                
+                <motion.div
+                  className="backdrop-blur-lg bg-white/15 hover:bg-white/25 rounded-3xl p-8 cursor-pointer transition-all duration-300 group border border-white/30 hover:border-white/50 shadow-2xl hover:shadow-[0_20px_60px_rgba(0,0,0,0.4)] hover:scale-105"
+                  onClick={handleQuickScanMultiPhoto}
+                  whileHover={{ y: -5 }}
+                  transition={{ duration: 0.2 }}
+                >
+                  <div className="text-center">
+                    <div className="mx-auto w-24 h-24 bg-purple-500 hover:bg-purple-400 rounded-full flex items-center justify-center mb-6 group-hover:scale-110 transition-all duration-300 shadow-xl">
+                      <Images className="h-12 w-12 text-white" />
+                    </div>
+                    <h3 className="text-2xl font-bold mb-3 text-white" style={{textShadow: '0 2px 10px rgba(0,0,0,0.6)'}}>
+                      Multi-Recipe Scan
+                    </h3>
+                    <p className="text-white/80 text-base font-medium" style={{textShadow: '0 1px 5px rgba(0,0,0,0.5)'}}>
+                      Upload multiple photos of one recipe
+                    </p>
+                  </div>
+                </motion.div>
               </div>
-            )}
+            </motion.section>
+          </div>
+        </div>
+      </div>
 
-            {/* Error State */}
-            {categoriesError && !categoriesLoading && (
-              <div className="text-center py-16">
-                <div className="bg-red-50 border border-red-200 rounded-lg p-6 max-w-md mx-auto">
-                  <p className="text-red-800 font-medium mb-2">Unable to load categories</p>
-                  <p className="text-red-600 text-sm mb-4">{categoriesError}</p>
-                  <Button 
-                    onClick={() => window.location.reload()}
-                    variant="outline"
-                    className="border-red-300 text-red-700 hover:bg-red-50"
-                  >
-                    Try Again
-                  </Button>
-                </div>
+      {/* Recipe Categories Section with White Background */}
+      <div className="bg-white">
+        <div className="container mx-auto px-4 py-8">
+          {currentView !== 'list' && (
+            <motion.div
+              className="mb-12"
+              initial={{ opacity: 0, y: -10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.3 }}
+            >
+              <Button 
+                onClick={() => setCurrentView('list')}
+                variant="outline"
+                className="flex items-center gap-3 text-lg p-6 mx-auto sm:mx-0 font-medium hover:bg-primary hover:text-primary-foreground transition-all duration-300 border-primary/30 hover:border-primary"
+              >
+                <HomeIcon className="h-5 w-5" />
+                Back to Recipe List
+              </Button>
+            </motion.div>
+          )}
+
+          {currentView === 'list' && (
+            <motion.div
+              className="mb-8"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 0.5, delay: 0.6 }}
+            >
+              <div className="text-center mb-10">
+                <h2 className="text-3xl font-medium text-foreground mb-3">
+                  Recipe Categories
+                </h2>
+                <p className="text-lg text-muted-foreground font-light max-w-2xl mx-auto">
+                  Browse recipes by category • {savedRecipes.length} total recipes
+                </p>
               </div>
-            )}
 
-            {/* Categories Grid */}
-            {!categoriesLoading && !categoriesError && (
-              <BentoGrid className="gap-8" data-tour="recipe-categories">
-                {processedCategories.map((category, index) => (
+              {/* Loading State */}
+              {categoriesLoading && (
+                <div className="text-center py-16">
                   <motion.div
-                    key={category.name + index}
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.3, delay: 0.1 * index }}
-                    className="h-full min-h-[350px]"
-                  >
-                    <CategoryCard 
-                      categoryName={category.name} 
-                      itemCount={category.count}
-                      imageUrl={category.imageUrl}
-                      onClick={() => handleCategoryClick(category.name)} 
-                    />
-                  </motion.div>
-                ))}
-              </BentoGrid>
-            )}
-
-            {/* Empty State for when no categories are loaded */}
-            {!categoriesLoading && !categoriesError && processedCategories.length === 0 && (
-              <div className="text-center py-16">
-                <div className="bg-muted/30 border border-muted rounded-lg p-8 max-w-md mx-auto">
-                  <Camera className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
-                  <p className="text-lg font-medium mb-2">No categories yet</p>
-                  <p className="text-muted-foreground text-sm mb-4">
-                    Start by importing your first recipe to see categories here
-                  </p>
-                  <Button onClick={handleQuickImportURL} className="mr-2">
-                    Import Recipe
-                  </Button>
-                  <Button onClick={handleQuickScanPhoto} variant="outline">
-                    Scan Photo
-                  </Button>
+                    animate={{ rotate: 360 }}
+                    transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
+                    className="h-12 w-12 border-4 border-primary border-t-transparent rounded-full mx-auto mb-4"
+                  />
+                  <p className="text-lg text-muted-foreground font-light">Loading your recipe categories...</p>
                 </div>
-              </div>
-            )}
-          </motion.div>
-        )}
+              )}
 
-        {currentView === 'save' && (
-          <motion.div
-            key="save-recipe"
-            initial={{ opacity: 0, x: 20 }}
-            animate={{ opacity: 1, x: 0 }}
-            exit={{ opacity: 0, x: -20 }}
-            transition={{ duration: 0.3 }}
-          >
-            <div className="text-center py-16">
-              <p className="text-muted-foreground font-light text-lg">Save functionality not implemented yet</p>
-            </div>
-          </motion.div>
-        )}
+              {/* Error State */}
+              {categoriesError && !categoriesLoading && (
+                <div className="text-center py-16">
+                  <div className="bg-red-50 border border-red-200 rounded-lg p-6 max-w-md mx-auto">
+                    <p className="text-red-800 font-medium mb-2">Unable to load categories</p>
+                    <p className="text-red-600 text-sm mb-4">{categoriesError}</p>
+                    <Button 
+                      onClick={() => window.location.reload()}
+                      variant="outline"
+                      className="border-red-300 text-red-700 hover:bg-red-50"
+                    >
+                      Try Again
+                    </Button>
+                  </div>
+                </div>
+              )}
 
-        {currentView === 'stats' && (
-          <motion.div
-            key="stats-dashboard"
-            initial={{ opacity: 0, x: 20 }}
-            animate={{ opacity: 1, x: 0 }}
-            exit={{ opacity: 0, x: -20 }}
-            transition={{ duration: 0.3 }}
-            className="max-w-7xl mx-auto"
-          >
-            <div className="text-center mb-10">
-              <h2 className="text-3xl font-light text-foreground mb-3">Collection Insights</h2>
-              <p className="text-lg text-muted-foreground font-light max-w-2xl mx-auto">
-                Discover patterns and trends in your recipe collection
-              </p>
-            </div>
-            <StatsDashboard recipes={savedRecipes} />
-          </motion.div>
-        )}
+              {/* Categories Grid */}
+              {!categoriesLoading && !categoriesError && (
+                <BentoGrid className="gap-8" data-tour="recipe-categories">
+                  {processedCategories.map((category, index) => (
+                    <motion.div
+                      key={category.name + index}
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ duration: 0.3, delay: 0.1 * index }}
+                      className="h-full min-h-[350px]"
+                    >
+                      <CategoryCard 
+                        categoryName={category.name} 
+                        itemCount={category.count}
+                        imageUrl={category.imageUrl}
+                        onClick={() => handleCategoryClick(category.name)} 
+                      />
+                    </motion.div>
+                  ))}
+                </BentoGrid>
+              )}
+
+              {/* Empty State for when no categories are loaded */}
+              {!categoriesLoading && !categoriesError && processedCategories.length === 0 && (
+                <div className="text-center py-16">
+                  <div className="bg-muted/30 border border-muted rounded-lg p-8 max-w-md mx-auto">
+                    <Camera className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
+                    <p className="text-lg font-medium mb-2">No categories yet</p>
+                    <p className="text-muted-foreground text-sm mb-4">
+                      Start by importing your first recipe to see categories here
+                    </p>
+                    <Button onClick={handleQuickImportURL} className="mr-2">
+                      Import Recipe
+                    </Button>
+                    <Button onClick={handleQuickScanPhoto} variant="outline">
+                      Scan Photo
+                    </Button>
+                  </div>
+                </div>
+              )}
+            </motion.div>
+          )}
+
+          {/* Stats Dashboard */}
+          {currentView === 'stats' && (
+            <StatsDashboard 
+              recipes={savedRecipes}
+            />
+          )}
+        </div>
       </div>
 
       {/* Recipe Import Modal */}
@@ -267,6 +389,4 @@ function MainPage() {
       />
     </div>
   );
-}
-
-export default MainPage;
+} 
