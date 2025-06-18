@@ -160,22 +160,13 @@ export default function HomePage() {
               </motion.div>
             </header>
 
-            {/* Enhanced Quick Actions Section */}
+            {/* Enhanced Action Cards Section */}
             <motion.section
               className="mb-8"
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: 0.4 }}
             >
-              <div className="text-center mb-12">
-                <div className="backdrop-blur-md bg-white/10 rounded-2xl px-6 py-3 inline-block border border-white/20 shadow-xl mb-4">
-                  <h2 className="text-3xl md:text-4xl font-bold text-white">Quick Actions</h2>
-                </div>
-                <p className="text-lg md:text-xl text-white/90 font-medium" style={{textShadow: '0 2px 10px rgba(0,0,0,0.6)'}}>
-                  Start your cooking journey
-                </p>
-              </div>
-              
               <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto" data-tour="recipe-pathways">
                 <motion.div
                   className="backdrop-blur-lg bg-white/15 hover:bg-white/25 rounded-3xl p-8 cursor-pointer transition-all duration-300 group border border-white/30 hover:border-white/50 shadow-2xl hover:shadow-[0_20px_60px_rgba(0,0,0,0.4)] hover:scale-105"
