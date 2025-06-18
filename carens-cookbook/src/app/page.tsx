@@ -68,8 +68,8 @@ export default function HomePage() {
     <div className="min-h-screen bg-background text-foreground">
       <Toaster richColors position="top-right" />
       
-      {/* Hero Section with Photo Background */}
-      <div className="relative overflow-hidden bg-background">
+      {/* Full-Screen Hero Section with Crossfading Background */}
+      <div className="relative min-h-screen overflow-hidden">
         {/* Full-background auto-crossfading photo carousel */}
         <div className="absolute inset-0 w-full h-full">
           <div className="relative w-full h-full overflow-hidden">
@@ -96,12 +96,13 @@ export default function HomePage() {
                 right: "https://images.unsplash.com/photo-1547592180-85f173990554?auto=format&fit=crop&w=1920&q=80"
               }
             ].map((pair, idx) => (
-              <div 
-                key={idx} 
-                className="absolute inset-0 w-full h-full grid grid-cols-2"
+              <div
+                key={idx}
+                className="absolute inset-0 w-full h-full flex heroFade"
                 style={{
-                  animation: `heroFade 20s infinite ${idx * 5}s`,
-                  opacity: 0
+                  animationDelay: `${idx * 5}s`,
+                  animationDuration: '20s',
+                  animationIterationCount: 'infinite'
                 }}
               >
                 {/* Left image */}
@@ -127,16 +128,16 @@ export default function HomePage() {
               </div>
             ))}
           </div>
-          {/* Dark overlay for text readability */}
-          <div className="absolute inset-0 bg-black/50" />
-          {/* Gradient overlay for better text contrast */}
-          <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-transparent to-black/60" />
         </div>
 
-        {/* Hero Content overlay */}
-        <div className="relative z-10">
-          <div className="container mx-auto px-4 py-12">
-            <header className="mb-16 text-center">
+        {/* Dark overlay for text readability */}
+        <div className="absolute inset-0 bg-black/40 z-10"></div>
+
+        {/* Content Container - Centered in full viewport */}
+        <div className="relative z-20 flex flex-col justify-center items-center min-h-screen px-4 py-8">
+          <div className="container mx-auto text-center">
+            {/* Main Header */}
+            <header className="mb-16">
               <motion.h1
                 className="text-6xl md:text-7xl lg:text-8xl font-black tracking-tight mb-6 text-white"
                 style={{
@@ -229,6 +230,31 @@ export default function HomePage() {
               </div>
             </motion.section>
           </div>
+          
+          {/* Scroll Indicator */}
+          <motion.div
+            className="absolute bottom-8 left-1/2 transform -translate-x-1/2 z-30"
+            initial={{ opacity: 0, y: -10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 1 }}
+          >
+            <div className="flex flex-col items-center text-white/80">
+              <p className="text-sm font-medium mb-2" style={{textShadow: '0 2px 10px rgba(0,0,0,0.8)'}}>
+                Scroll to browse recipes
+              </p>
+              <motion.div
+                animate={{ y: [0, 8, 0] }}
+                transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+                className="w-6 h-10 border-2 border-white/60 rounded-full flex justify-center backdrop-blur-sm bg-white/10"
+              >
+                <motion.div
+                  animate={{ y: [0, 12, 0] }}
+                  transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+                  className="w-1 h-3 bg-white/80 rounded-full mt-2"
+                />
+              </motion.div>
+            </div>
+          </motion.div>
         </div>
       </div>
 
