@@ -4,6 +4,7 @@ import React from "react";
 import { motion } from "framer-motion";
 import { HomeIcon, Camera, SearchIcon, Images } from "lucide-react";
 import { Toaster } from 'sonner';
+import { cn } from "@/lib/utils";
 
 import { Button } from "@/components/ui/button";
 import RecipeDisplay from "@/components/RecipeDisplay";
@@ -241,9 +242,17 @@ export default function HomePage() {
         </div>
       </div>
 
-      {/* Recipe Categories Section with White Background */}
-      <div className="bg-white">
-        <div className="container mx-auto px-4 py-8">
+      {/* Recipe Categories Section with Enhanced Background */}
+      <div className="relative bg-gradient-to-b from-white/95 via-white to-gray-50/80 backdrop-blur-sm">
+        {/* Subtle pattern overlay */}
+        <div className="absolute inset-0 opacity-30">
+          <div className="absolute inset-0" style={{
+            backgroundImage: `radial-gradient(circle at 25% 25%, rgba(99, 102, 241, 0.1) 0%, transparent 50%), 
+                              radial-gradient(circle at 75% 75%, rgba(236, 72, 153, 0.1) 0%, transparent 50%)`
+          }}></div>
+        </div>
+        
+        <div className="relative container mx-auto px-4 py-16">
           {currentView !== 'list' && (
             <motion.div
               className="mb-12"
@@ -254,7 +263,7 @@ export default function HomePage() {
               <Button 
                 onClick={() => setCurrentView('list')}
                 variant="outline"
-                className="flex items-center gap-3 text-lg p-6 mx-auto sm:mx-0 font-medium hover:bg-primary hover:text-primary-foreground transition-all duration-300 border-primary/30 hover:border-primary"
+                className="flex items-center gap-3 text-lg p-6 mx-auto sm:mx-0 font-medium hover:bg-primary hover:text-primary-foreground transition-all duration-300 border-primary/30 hover:border-primary backdrop-blur-sm bg-white/80"
               >
                 <HomeIcon className="h-5 w-5" />
                 Back to Recipe List
@@ -269,13 +278,20 @@ export default function HomePage() {
               animate={{ opacity: 1 }}
               transition={{ duration: 0.5, delay: 0.6 }}
             >
-              <div className="text-center mb-10">
-                <h2 className="text-3xl font-medium text-foreground mb-3">
-                  Recipe Categories
-                </h2>
-                <p className="text-lg text-muted-foreground font-light max-w-2xl mx-auto">
-                  Browse recipes by category • {savedRecipes.length} total recipes
-                </p>
+              <div className="text-center mb-16">
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.6 }}
+                  className="backdrop-blur-sm bg-white/60 rounded-3xl p-8 max-w-2xl mx-auto border border-white/40 shadow-xl"
+                >
+                  <h2 className="text-4xl font-bold bg-gradient-to-r from-gray-900 via-gray-700 to-gray-900 bg-clip-text text-transparent mb-4">
+                    Recipe Categories
+                  </h2>
+                  <p className="text-xl text-gray-600 font-light">
+                    Browse your culinary collection • <span className="font-semibold text-primary">{savedRecipes.length}</span> total recipes
+                  </p>
+                </motion.div>
               </div>
 
               {/* Loading State */}
@@ -309,24 +325,39 @@ export default function HomePage() {
 
               {/* Categories Grid */}
               {!categoriesLoading && !categoriesError && (
-                <BentoGrid className="gap-8" data-tour="recipe-categories">
-                  {processedCategories.map((category, index) => (
-                    <motion.div
-                      key={category.name + index}
-                      initial={{ opacity: 0, y: 20 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ duration: 0.3, delay: 0.1 * index }}
-                      className="h-full min-h-[350px]"
-                    >
-                      <CategoryCard 
-                        categoryName={category.name} 
-                        itemCount={category.count}
-                        imageUrl={category.imageUrl}
-                        onClick={() => handleCategoryClick(category.name)} 
-                      />
-                    </motion.div>
-                  ))}
-                </BentoGrid>
+                <motion.div
+                  initial={{ opacity: 0, y: 30 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.8, delay: 0.3 }}
+                >
+                  <BentoGrid className="gap-8" data-tour="recipe-categories">
+                    {processedCategories.map((category, index) => (
+                      <motion.div
+                        key={category.name + index}
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ 
+                          duration: 0.5, 
+                          delay: 0.1 * index,
+                          ease: "easeOut"
+                        }}
+                        className={cn(
+                          "h-full min-h-[400px]",
+                          // Add some variety to card sizes for visual interest
+                          index % 7 === 0 ? "sm:col-span-2" : "",
+                          index % 11 === 0 ? "lg:row-span-2" : "",
+                        )}
+                      >
+                        <CategoryCard 
+                          categoryName={category.name} 
+                          itemCount={category.count}
+                          imageUrl={category.imageUrl}
+                          onClick={() => handleCategoryClick(category.name)} 
+                        />
+                      </motion.div>
+                    ))}
+                  </BentoGrid>
+                </motion.div>
               )}
 
               {/* Empty State for when no categories are loaded */}
