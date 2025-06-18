@@ -4,7 +4,6 @@ import React from "react";
 import { motion } from "framer-motion";
 import { HomeIcon, Camera, SearchIcon, Images } from "lucide-react";
 import { Toaster } from 'sonner';
-import { cn } from "@/lib/utils";
 
 import { Button } from "@/components/ui/button";
 import RecipeDisplay from "@/components/RecipeDisplay";
@@ -341,12 +340,7 @@ export default function HomePage() {
                           delay: 0.1 * index,
                           ease: "easeOut"
                         }}
-                        className={cn(
-                          "h-full min-h-[400px]",
-                          // Add some variety to card sizes for visual interest
-                          index % 7 === 0 ? "sm:col-span-2" : "",
-                          index % 11 === 0 ? "lg:row-span-2" : "",
-                        )}
+                        className="h-full min-h-[450px]"
                       >
                         <CategoryCard 
                           categoryName={category.name} 

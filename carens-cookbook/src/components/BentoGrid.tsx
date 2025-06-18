@@ -13,14 +13,12 @@ export const BentoGrid = ({
   return (
     <div
       className={cn(
-        "grid w-full auto-rows-auto gap-6",
-        // Enhanced responsive grid with variable sizing
+        "grid w-full gap-8",
+        // Clean 3-column layout with consistent sizing
         "grid-cols-1",
-        "sm:grid-cols-2", 
+        "md:grid-cols-2", 
         "lg:grid-cols-3",
-        "xl:grid-cols-4",
-        // Add masonry-like flow
-        "grid-flow-dense",
+        // Remove masonry flow for uniform layout
         className,
       )}
     >
