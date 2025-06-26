@@ -128,16 +128,16 @@ exports.Prisma.UserScalarFieldEnum = {
   imageUrl: 'imageUrl',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
-  onboardingCompleted: 'onboardingCompleted',
-  onboardingStep: 'onboardingStep',
   cookingSkillLevel: 'cookingSkillLevel',
+  defaultProcessingMethod: 'defaultProcessingMethod',
   dietaryPreferences: 'dietaryPreferences',
   favoriteCuisines: 'favoriteCuisines',
   householdSize: 'householdSize',
-  defaultProcessingMethod: 'defaultProcessingMethod',
+  measurementSystem: 'measurementSystem',
+  onboardingCompleted: 'onboardingCompleted',
+  onboardingStep: 'onboardingStep',
   preferredCategories: 'preferredCategories',
-  timezone: 'timezone',
-  measurementSystem: 'measurementSystem'
+  timezone: 'timezone'
 };
 
 exports.Prisma.RecipeScalarFieldEnum = {
@@ -153,10 +153,11 @@ exports.Prisma.RecipeScalarFieldEnum = {
   cleanupTime: 'cleanupTime',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
-  categorySource: 'categorySource',
+  userId: 'userId',
   categoryConfidence: 'categoryConfidence',
+  categorySource: 'categorySource',
   originalCategory: 'originalCategory',
-  userId: 'userId'
+  mealType: 'mealType'
 };
 
 exports.Prisma.RecipeImageScalarFieldEnum = {

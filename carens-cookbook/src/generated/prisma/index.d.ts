@@ -20,7 +20,7 @@ export type PrismaPromise<T> = $Public.PrismaPromise<T>
 export type User = $Result.DefaultSelection<Prisma.$UserPayload>
 /**
  * Model Recipe
- * 
+ * This model contains an expression index which requires additional setup for migrations. Visit https://pris.ly/d/expression-indexes for more info.
  */
 export type Recipe = $Result.DefaultSelection<Prisma.$RecipePayload>
 /**
@@ -1425,13 +1425,13 @@ export namespace Prisma {
   }
 
   export type UserAvgAggregateOutputType = {
-    onboardingStep: number | null
     householdSize: number | null
+    onboardingStep: number | null
   }
 
   export type UserSumAggregateOutputType = {
-    onboardingStep: number | null
     householdSize: number | null
+    onboardingStep: number | null
   }
 
   export type UserMinAggregateOutputType = {
@@ -1442,13 +1442,13 @@ export namespace Prisma {
     imageUrl: string | null
     createdAt: Date | null
     updatedAt: Date | null
+    cookingSkillLevel: $Enums.CookingSkillLevel | null
+    defaultProcessingMethod: $Enums.ProcessingMethod | null
+    householdSize: number | null
+    measurementSystem: string | null
     onboardingCompleted: boolean | null
     onboardingStep: number | null
-    cookingSkillLevel: $Enums.CookingSkillLevel | null
-    householdSize: number | null
-    defaultProcessingMethod: $Enums.ProcessingMethod | null
     timezone: string | null
-    measurementSystem: string | null
   }
 
   export type UserMaxAggregateOutputType = {
@@ -1459,13 +1459,13 @@ export namespace Prisma {
     imageUrl: string | null
     createdAt: Date | null
     updatedAt: Date | null
+    cookingSkillLevel: $Enums.CookingSkillLevel | null
+    defaultProcessingMethod: $Enums.ProcessingMethod | null
+    householdSize: number | null
+    measurementSystem: string | null
     onboardingCompleted: boolean | null
     onboardingStep: number | null
-    cookingSkillLevel: $Enums.CookingSkillLevel | null
-    householdSize: number | null
-    defaultProcessingMethod: $Enums.ProcessingMethod | null
     timezone: string | null
-    measurementSystem: string | null
   }
 
   export type UserCountAggregateOutputType = {
@@ -1476,28 +1476,28 @@ export namespace Prisma {
     imageUrl: number
     createdAt: number
     updatedAt: number
-    onboardingCompleted: number
-    onboardingStep: number
     cookingSkillLevel: number
+    defaultProcessingMethod: number
     dietaryPreferences: number
     favoriteCuisines: number
     householdSize: number
-    defaultProcessingMethod: number
+    measurementSystem: number
+    onboardingCompleted: number
+    onboardingStep: number
     preferredCategories: number
     timezone: number
-    measurementSystem: number
     _all: number
   }
 
 
   export type UserAvgAggregateInputType = {
-    onboardingStep?: true
     householdSize?: true
+    onboardingStep?: true
   }
 
   export type UserSumAggregateInputType = {
-    onboardingStep?: true
     householdSize?: true
+    onboardingStep?: true
   }
 
   export type UserMinAggregateInputType = {
@@ -1508,13 +1508,13 @@ export namespace Prisma {
     imageUrl?: true
     createdAt?: true
     updatedAt?: true
+    cookingSkillLevel?: true
+    defaultProcessingMethod?: true
+    householdSize?: true
+    measurementSystem?: true
     onboardingCompleted?: true
     onboardingStep?: true
-    cookingSkillLevel?: true
-    householdSize?: true
-    defaultProcessingMethod?: true
     timezone?: true
-    measurementSystem?: true
   }
 
   export type UserMaxAggregateInputType = {
@@ -1525,13 +1525,13 @@ export namespace Prisma {
     imageUrl?: true
     createdAt?: true
     updatedAt?: true
+    cookingSkillLevel?: true
+    defaultProcessingMethod?: true
+    householdSize?: true
+    measurementSystem?: true
     onboardingCompleted?: true
     onboardingStep?: true
-    cookingSkillLevel?: true
-    householdSize?: true
-    defaultProcessingMethod?: true
     timezone?: true
-    measurementSystem?: true
   }
 
   export type UserCountAggregateInputType = {
@@ -1542,16 +1542,16 @@ export namespace Prisma {
     imageUrl?: true
     createdAt?: true
     updatedAt?: true
-    onboardingCompleted?: true
-    onboardingStep?: true
     cookingSkillLevel?: true
+    defaultProcessingMethod?: true
     dietaryPreferences?: true
     favoriteCuisines?: true
     householdSize?: true
-    defaultProcessingMethod?: true
+    measurementSystem?: true
+    onboardingCompleted?: true
+    onboardingStep?: true
     preferredCategories?: true
     timezone?: true
-    measurementSystem?: true
     _all?: true
   }
 
@@ -1649,16 +1649,16 @@ export namespace Prisma {
     imageUrl: string | null
     createdAt: Date
     updatedAt: Date
-    onboardingCompleted: boolean
-    onboardingStep: number | null
     cookingSkillLevel: $Enums.CookingSkillLevel | null
+    defaultProcessingMethod: $Enums.ProcessingMethod
     dietaryPreferences: $Enums.DietaryPreference[]
     favoriteCuisines: string[]
     householdSize: number | null
-    defaultProcessingMethod: $Enums.ProcessingMethod
+    measurementSystem: string | null
+    onboardingCompleted: boolean
+    onboardingStep: number | null
     preferredCategories: string[]
     timezone: string | null
-    measurementSystem: string | null
     _count: UserCountAggregateOutputType | null
     _avg: UserAvgAggregateOutputType | null
     _sum: UserSumAggregateOutputType | null
@@ -1688,16 +1688,16 @@ export namespace Prisma {
     imageUrl?: boolean
     createdAt?: boolean
     updatedAt?: boolean
-    onboardingCompleted?: boolean
-    onboardingStep?: boolean
     cookingSkillLevel?: boolean
+    defaultProcessingMethod?: boolean
     dietaryPreferences?: boolean
     favoriteCuisines?: boolean
     householdSize?: boolean
-    defaultProcessingMethod?: boolean
+    measurementSystem?: boolean
+    onboardingCompleted?: boolean
+    onboardingStep?: boolean
     preferredCategories?: boolean
     timezone?: boolean
-    measurementSystem?: boolean
     recipes?: boolean | User$recipesArgs<ExtArgs>
     favorites?: boolean | User$favoritesArgs<ExtArgs>
     onboardingProgress?: boolean | User$onboardingProgressArgs<ExtArgs>
@@ -1712,16 +1712,16 @@ export namespace Prisma {
     imageUrl?: boolean
     createdAt?: boolean
     updatedAt?: boolean
-    onboardingCompleted?: boolean
-    onboardingStep?: boolean
     cookingSkillLevel?: boolean
+    defaultProcessingMethod?: boolean
     dietaryPreferences?: boolean
     favoriteCuisines?: boolean
     householdSize?: boolean
-    defaultProcessingMethod?: boolean
+    measurementSystem?: boolean
+    onboardingCompleted?: boolean
+    onboardingStep?: boolean
     preferredCategories?: boolean
     timezone?: boolean
-    measurementSystem?: boolean
   }, ExtArgs["result"]["user"]>
 
   export type UserSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -1732,16 +1732,16 @@ export namespace Prisma {
     imageUrl?: boolean
     createdAt?: boolean
     updatedAt?: boolean
-    onboardingCompleted?: boolean
-    onboardingStep?: boolean
     cookingSkillLevel?: boolean
+    defaultProcessingMethod?: boolean
     dietaryPreferences?: boolean
     favoriteCuisines?: boolean
     householdSize?: boolean
-    defaultProcessingMethod?: boolean
+    measurementSystem?: boolean
+    onboardingCompleted?: boolean
+    onboardingStep?: boolean
     preferredCategories?: boolean
     timezone?: boolean
-    measurementSystem?: boolean
   }, ExtArgs["result"]["user"]>
 
   export type UserSelectScalar = {
@@ -1752,19 +1752,19 @@ export namespace Prisma {
     imageUrl?: boolean
     createdAt?: boolean
     updatedAt?: boolean
-    onboardingCompleted?: boolean
-    onboardingStep?: boolean
     cookingSkillLevel?: boolean
+    defaultProcessingMethod?: boolean
     dietaryPreferences?: boolean
     favoriteCuisines?: boolean
     householdSize?: boolean
-    defaultProcessingMethod?: boolean
+    measurementSystem?: boolean
+    onboardingCompleted?: boolean
+    onboardingStep?: boolean
     preferredCategories?: boolean
     timezone?: boolean
-    measurementSystem?: boolean
   }
 
-  export type UserOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "email" | "firstName" | "lastName" | "imageUrl" | "createdAt" | "updatedAt" | "onboardingCompleted" | "onboardingStep" | "cookingSkillLevel" | "dietaryPreferences" | "favoriteCuisines" | "householdSize" | "defaultProcessingMethod" | "preferredCategories" | "timezone" | "measurementSystem", ExtArgs["result"]["user"]>
+  export type UserOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "email" | "firstName" | "lastName" | "imageUrl" | "createdAt" | "updatedAt" | "cookingSkillLevel" | "defaultProcessingMethod" | "dietaryPreferences" | "favoriteCuisines" | "householdSize" | "measurementSystem" | "onboardingCompleted" | "onboardingStep" | "preferredCategories" | "timezone", ExtArgs["result"]["user"]>
   export type UserInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     recipes?: boolean | User$recipesArgs<ExtArgs>
     favorites?: boolean | User$favoritesArgs<ExtArgs>
@@ -1789,16 +1789,16 @@ export namespace Prisma {
       imageUrl: string | null
       createdAt: Date
       updatedAt: Date
-      onboardingCompleted: boolean
-      onboardingStep: number | null
       cookingSkillLevel: $Enums.CookingSkillLevel | null
+      defaultProcessingMethod: $Enums.ProcessingMethod
       dietaryPreferences: $Enums.DietaryPreference[]
       favoriteCuisines: string[]
       householdSize: number | null
-      defaultProcessingMethod: $Enums.ProcessingMethod
+      measurementSystem: string | null
+      onboardingCompleted: boolean
+      onboardingStep: number | null
       preferredCategories: string[]
       timezone: string | null
-      measurementSystem: string | null
     }, ExtArgs["result"]["user"]>
     composites: {}
   }
@@ -2232,16 +2232,16 @@ export namespace Prisma {
     readonly imageUrl: FieldRef<"User", 'String'>
     readonly createdAt: FieldRef<"User", 'DateTime'>
     readonly updatedAt: FieldRef<"User", 'DateTime'>
-    readonly onboardingCompleted: FieldRef<"User", 'Boolean'>
-    readonly onboardingStep: FieldRef<"User", 'Int'>
     readonly cookingSkillLevel: FieldRef<"User", 'CookingSkillLevel'>
+    readonly defaultProcessingMethod: FieldRef<"User", 'ProcessingMethod'>
     readonly dietaryPreferences: FieldRef<"User", 'DietaryPreference[]'>
     readonly favoriteCuisines: FieldRef<"User", 'String[]'>
     readonly householdSize: FieldRef<"User", 'Int'>
-    readonly defaultProcessingMethod: FieldRef<"User", 'ProcessingMethod'>
+    readonly measurementSystem: FieldRef<"User", 'String'>
+    readonly onboardingCompleted: FieldRef<"User", 'Boolean'>
+    readonly onboardingStep: FieldRef<"User", 'Int'>
     readonly preferredCategories: FieldRef<"User", 'String[]'>
     readonly timezone: FieldRef<"User", 'String'>
-    readonly measurementSystem: FieldRef<"User", 'String'>
   }
     
 
@@ -2751,10 +2751,11 @@ export namespace Prisma {
     cleanupTime: string | null
     createdAt: Date | null
     updatedAt: Date | null
-    categorySource: $Enums.CategorySource | null
-    categoryConfidence: number | null
-    originalCategory: string | null
     userId: string | null
+    categoryConfidence: number | null
+    categorySource: $Enums.CategorySource | null
+    originalCategory: string | null
+    mealType: string | null
   }
 
   export type RecipeMaxAggregateOutputType = {
@@ -2768,10 +2769,11 @@ export namespace Prisma {
     cleanupTime: string | null
     createdAt: Date | null
     updatedAt: Date | null
-    categorySource: $Enums.CategorySource | null
-    categoryConfidence: number | null
-    originalCategory: string | null
     userId: string | null
+    categoryConfidence: number | null
+    categorySource: $Enums.CategorySource | null
+    originalCategory: string | null
+    mealType: string | null
   }
 
   export type RecipeCountAggregateOutputType = {
@@ -2787,10 +2789,11 @@ export namespace Prisma {
     cleanupTime: number
     createdAt: number
     updatedAt: number
-    categorySource: number
-    categoryConfidence: number
-    originalCategory: number
     userId: number
+    categoryConfidence: number
+    categorySource: number
+    originalCategory: number
+    mealType: number
     _all: number
   }
 
@@ -2814,10 +2817,11 @@ export namespace Prisma {
     cleanupTime?: true
     createdAt?: true
     updatedAt?: true
-    categorySource?: true
-    categoryConfidence?: true
-    originalCategory?: true
     userId?: true
+    categoryConfidence?: true
+    categorySource?: true
+    originalCategory?: true
+    mealType?: true
   }
 
   export type RecipeMaxAggregateInputType = {
@@ -2831,10 +2835,11 @@ export namespace Prisma {
     cleanupTime?: true
     createdAt?: true
     updatedAt?: true
-    categorySource?: true
-    categoryConfidence?: true
-    originalCategory?: true
     userId?: true
+    categoryConfidence?: true
+    categorySource?: true
+    originalCategory?: true
+    mealType?: true
   }
 
   export type RecipeCountAggregateInputType = {
@@ -2850,10 +2855,11 @@ export namespace Prisma {
     cleanupTime?: true
     createdAt?: true
     updatedAt?: true
-    categorySource?: true
-    categoryConfidence?: true
-    originalCategory?: true
     userId?: true
+    categoryConfidence?: true
+    categorySource?: true
+    originalCategory?: true
+    mealType?: true
     _all?: true
   }
 
@@ -2956,10 +2962,11 @@ export namespace Prisma {
     cleanupTime: string
     createdAt: Date
     updatedAt: Date
-    categorySource: $Enums.CategorySource | null
-    categoryConfidence: number | null
-    originalCategory: string | null
     userId: string
+    categoryConfidence: number | null
+    categorySource: $Enums.CategorySource | null
+    originalCategory: string | null
+    mealType: string | null
     _count: RecipeCountAggregateOutputType | null
     _avg: RecipeAvgAggregateOutputType | null
     _sum: RecipeSumAggregateOutputType | null
@@ -2994,10 +3001,11 @@ export namespace Prisma {
     cleanupTime?: boolean
     createdAt?: boolean
     updatedAt?: boolean
-    categorySource?: boolean
-    categoryConfidence?: boolean
-    originalCategory?: boolean
     userId?: boolean
+    categoryConfidence?: boolean
+    categorySource?: boolean
+    originalCategory?: boolean
+    mealType?: boolean
     user?: boolean | UserDefaultArgs<ExtArgs>
     favorites?: boolean | Recipe$favoritesArgs<ExtArgs>
     images?: boolean | Recipe$imagesArgs<ExtArgs>
@@ -3017,10 +3025,11 @@ export namespace Prisma {
     cleanupTime?: boolean
     createdAt?: boolean
     updatedAt?: boolean
-    categorySource?: boolean
-    categoryConfidence?: boolean
-    originalCategory?: boolean
     userId?: boolean
+    categoryConfidence?: boolean
+    categorySource?: boolean
+    originalCategory?: boolean
+    mealType?: boolean
     user?: boolean | UserDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["recipe"]>
 
@@ -3037,10 +3046,11 @@ export namespace Prisma {
     cleanupTime?: boolean
     createdAt?: boolean
     updatedAt?: boolean
-    categorySource?: boolean
-    categoryConfidence?: boolean
-    originalCategory?: boolean
     userId?: boolean
+    categoryConfidence?: boolean
+    categorySource?: boolean
+    originalCategory?: boolean
+    mealType?: boolean
     user?: boolean | UserDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["recipe"]>
 
@@ -3057,13 +3067,14 @@ export namespace Prisma {
     cleanupTime?: boolean
     createdAt?: boolean
     updatedAt?: boolean
-    categorySource?: boolean
-    categoryConfidence?: boolean
-    originalCategory?: boolean
     userId?: boolean
+    categoryConfidence?: boolean
+    categorySource?: boolean
+    originalCategory?: boolean
+    mealType?: boolean
   }
 
-  export type RecipeOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "title" | "description" | "ingredients" | "steps" | "image" | "cuisine" | "category" | "prepTime" | "cleanupTime" | "createdAt" | "updatedAt" | "categorySource" | "categoryConfidence" | "originalCategory" | "userId", ExtArgs["result"]["recipe"]>
+  export type RecipeOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "title" | "description" | "ingredients" | "steps" | "image" | "cuisine" | "category" | "prepTime" | "cleanupTime" | "createdAt" | "updatedAt" | "userId" | "categoryConfidence" | "categorySource" | "originalCategory" | "mealType", ExtArgs["result"]["recipe"]>
   export type RecipeInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     user?: boolean | UserDefaultArgs<ExtArgs>
     favorites?: boolean | Recipe$favoritesArgs<ExtArgs>
@@ -3097,10 +3108,11 @@ export namespace Prisma {
       cleanupTime: string
       createdAt: Date
       updatedAt: Date
-      categorySource: $Enums.CategorySource | null
-      categoryConfidence: number | null
-      originalCategory: string | null
       userId: string
+      categoryConfidence: number | null
+      categorySource: $Enums.CategorySource | null
+      originalCategory: string | null
+      mealType: string | null
     }, ExtArgs["result"]["recipe"]>
     composites: {}
   }
@@ -3539,10 +3551,11 @@ export namespace Prisma {
     readonly cleanupTime: FieldRef<"Recipe", 'String'>
     readonly createdAt: FieldRef<"Recipe", 'DateTime'>
     readonly updatedAt: FieldRef<"Recipe", 'DateTime'>
-    readonly categorySource: FieldRef<"Recipe", 'CategorySource'>
-    readonly categoryConfidence: FieldRef<"Recipe", 'Float'>
-    readonly originalCategory: FieldRef<"Recipe", 'String'>
     readonly userId: FieldRef<"Recipe", 'String'>
+    readonly categoryConfidence: FieldRef<"Recipe", 'Float'>
+    readonly categorySource: FieldRef<"Recipe", 'CategorySource'>
+    readonly originalCategory: FieldRef<"Recipe", 'String'>
+    readonly mealType: FieldRef<"Recipe", 'String'>
   }
     
 
@@ -5292,8 +5305,8 @@ export namespace Prisma {
     userId?: boolean
     recipeId?: boolean
     createdAt?: boolean
-    user?: boolean | UserDefaultArgs<ExtArgs>
     recipe?: boolean | RecipeDefaultArgs<ExtArgs>
+    user?: boolean | UserDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["recipeFavorite"]>
 
   export type RecipeFavoriteSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -5301,8 +5314,8 @@ export namespace Prisma {
     userId?: boolean
     recipeId?: boolean
     createdAt?: boolean
-    user?: boolean | UserDefaultArgs<ExtArgs>
     recipe?: boolean | RecipeDefaultArgs<ExtArgs>
+    user?: boolean | UserDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["recipeFavorite"]>
 
   export type RecipeFavoriteSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -5310,8 +5323,8 @@ export namespace Prisma {
     userId?: boolean
     recipeId?: boolean
     createdAt?: boolean
-    user?: boolean | UserDefaultArgs<ExtArgs>
     recipe?: boolean | RecipeDefaultArgs<ExtArgs>
+    user?: boolean | UserDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["recipeFavorite"]>
 
   export type RecipeFavoriteSelectScalar = {
@@ -5323,23 +5336,23 @@ export namespace Prisma {
 
   export type RecipeFavoriteOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "userId" | "recipeId" | "createdAt", ExtArgs["result"]["recipeFavorite"]>
   export type RecipeFavoriteInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    user?: boolean | UserDefaultArgs<ExtArgs>
     recipe?: boolean | RecipeDefaultArgs<ExtArgs>
+    user?: boolean | UserDefaultArgs<ExtArgs>
   }
   export type RecipeFavoriteIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    user?: boolean | UserDefaultArgs<ExtArgs>
     recipe?: boolean | RecipeDefaultArgs<ExtArgs>
+    user?: boolean | UserDefaultArgs<ExtArgs>
   }
   export type RecipeFavoriteIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    user?: boolean | UserDefaultArgs<ExtArgs>
     recipe?: boolean | RecipeDefaultArgs<ExtArgs>
+    user?: boolean | UserDefaultArgs<ExtArgs>
   }
 
   export type $RecipeFavoritePayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "RecipeFavorite"
     objects: {
-      user: Prisma.$UserPayload<ExtArgs>
       recipe: Prisma.$RecipePayload<ExtArgs>
+      user: Prisma.$UserPayload<ExtArgs>
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -5740,8 +5753,8 @@ export namespace Prisma {
    */
   export interface Prisma__RecipeFavoriteClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
-    user<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     recipe<T extends RecipeDefaultArgs<ExtArgs> = {}>(args?: Subset<T, RecipeDefaultArgs<ExtArgs>>): Prisma__RecipeClient<$Result.GetResult<Prisma.$RecipePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    user<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -7364,16 +7377,16 @@ export namespace Prisma {
     imageUrl: 'imageUrl',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt',
-    onboardingCompleted: 'onboardingCompleted',
-    onboardingStep: 'onboardingStep',
     cookingSkillLevel: 'cookingSkillLevel',
+    defaultProcessingMethod: 'defaultProcessingMethod',
     dietaryPreferences: 'dietaryPreferences',
     favoriteCuisines: 'favoriteCuisines',
     householdSize: 'householdSize',
-    defaultProcessingMethod: 'defaultProcessingMethod',
+    measurementSystem: 'measurementSystem',
+    onboardingCompleted: 'onboardingCompleted',
+    onboardingStep: 'onboardingStep',
     preferredCategories: 'preferredCategories',
-    timezone: 'timezone',
-    measurementSystem: 'measurementSystem'
+    timezone: 'timezone'
   };
 
   export type UserScalarFieldEnum = (typeof UserScalarFieldEnum)[keyof typeof UserScalarFieldEnum]
@@ -7392,10 +7405,11 @@ export namespace Prisma {
     cleanupTime: 'cleanupTime',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt',
-    categorySource: 'categorySource',
+    userId: 'userId',
     categoryConfidence: 'categoryConfidence',
+    categorySource: 'categorySource',
     originalCategory: 'originalCategory',
-    userId: 'userId'
+    mealType: 'mealType'
   };
 
   export type RecipeScalarFieldEnum = (typeof RecipeScalarFieldEnum)[keyof typeof RecipeScalarFieldEnum]
@@ -7516,27 +7530,6 @@ export namespace Prisma {
 
 
   /**
-   * Reference to a field of type 'Boolean'
-   */
-  export type BooleanFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Boolean'>
-    
-
-
-  /**
-   * Reference to a field of type 'Int'
-   */
-  export type IntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int'>
-    
-
-
-  /**
-   * Reference to a field of type 'Int[]'
-   */
-  export type ListIntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int[]'>
-    
-
-
-  /**
    * Reference to a field of type 'CookingSkillLevel'
    */
   export type EnumCookingSkillLevelFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'CookingSkillLevel'>
@@ -7547,20 +7540,6 @@ export namespace Prisma {
    * Reference to a field of type 'CookingSkillLevel[]'
    */
   export type ListEnumCookingSkillLevelFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'CookingSkillLevel[]'>
-    
-
-
-  /**
-   * Reference to a field of type 'DietaryPreference[]'
-   */
-  export type ListEnumDietaryPreferenceFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'DietaryPreference[]'>
-    
-
-
-  /**
-   * Reference to a field of type 'DietaryPreference'
-   */
-  export type EnumDietaryPreferenceFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'DietaryPreference'>
     
 
 
@@ -7579,16 +7558,37 @@ export namespace Prisma {
 
 
   /**
-   * Reference to a field of type 'CategorySource'
+   * Reference to a field of type 'DietaryPreference[]'
    */
-  export type EnumCategorySourceFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'CategorySource'>
+  export type ListEnumDietaryPreferenceFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'DietaryPreference[]'>
     
 
 
   /**
-   * Reference to a field of type 'CategorySource[]'
+   * Reference to a field of type 'DietaryPreference'
    */
-  export type ListEnumCategorySourceFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'CategorySource[]'>
+  export type EnumDietaryPreferenceFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'DietaryPreference'>
+    
+
+
+  /**
+   * Reference to a field of type 'Int'
+   */
+  export type IntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int'>
+    
+
+
+  /**
+   * Reference to a field of type 'Int[]'
+   */
+  export type ListIntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int[]'>
+    
+
+
+  /**
+   * Reference to a field of type 'Boolean'
+   */
+  export type BooleanFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Boolean'>
     
 
 
@@ -7603,6 +7603,20 @@ export namespace Prisma {
    * Reference to a field of type 'Float[]'
    */
   export type ListFloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Float[]'>
+    
+
+
+  /**
+   * Reference to a field of type 'CategorySource'
+   */
+  export type EnumCategorySourceFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'CategorySource'>
+    
+
+
+  /**
+   * Reference to a field of type 'CategorySource[]'
+   */
+  export type ListEnumCategorySourceFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'CategorySource[]'>
     
 
 
@@ -7634,16 +7648,16 @@ export namespace Prisma {
     imageUrl?: StringNullableFilter<"User"> | string | null
     createdAt?: DateTimeFilter<"User"> | Date | string
     updatedAt?: DateTimeFilter<"User"> | Date | string
-    onboardingCompleted?: BoolFilter<"User"> | boolean
-    onboardingStep?: IntNullableFilter<"User"> | number | null
     cookingSkillLevel?: EnumCookingSkillLevelNullableFilter<"User"> | $Enums.CookingSkillLevel | null
+    defaultProcessingMethod?: EnumProcessingMethodFilter<"User"> | $Enums.ProcessingMethod
     dietaryPreferences?: EnumDietaryPreferenceNullableListFilter<"User">
     favoriteCuisines?: StringNullableListFilter<"User">
     householdSize?: IntNullableFilter<"User"> | number | null
-    defaultProcessingMethod?: EnumProcessingMethodFilter<"User"> | $Enums.ProcessingMethod
+    measurementSystem?: StringNullableFilter<"User"> | string | null
+    onboardingCompleted?: BoolFilter<"User"> | boolean
+    onboardingStep?: IntNullableFilter<"User"> | number | null
     preferredCategories?: StringNullableListFilter<"User">
     timezone?: StringNullableFilter<"User"> | string | null
-    measurementSystem?: StringNullableFilter<"User"> | string | null
     recipes?: RecipeListRelationFilter
     favorites?: RecipeFavoriteListRelationFilter
     onboardingProgress?: UserOnboardingProgressListRelationFilter
@@ -7657,16 +7671,16 @@ export namespace Prisma {
     imageUrl?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
-    onboardingCompleted?: SortOrder
-    onboardingStep?: SortOrderInput | SortOrder
     cookingSkillLevel?: SortOrderInput | SortOrder
+    defaultProcessingMethod?: SortOrder
     dietaryPreferences?: SortOrder
     favoriteCuisines?: SortOrder
     householdSize?: SortOrderInput | SortOrder
-    defaultProcessingMethod?: SortOrder
+    measurementSystem?: SortOrderInput | SortOrder
+    onboardingCompleted?: SortOrder
+    onboardingStep?: SortOrderInput | SortOrder
     preferredCategories?: SortOrder
     timezone?: SortOrderInput | SortOrder
-    measurementSystem?: SortOrderInput | SortOrder
     recipes?: RecipeOrderByRelationAggregateInput
     favorites?: RecipeFavoriteOrderByRelationAggregateInput
     onboardingProgress?: UserOnboardingProgressOrderByRelationAggregateInput
@@ -7683,16 +7697,16 @@ export namespace Prisma {
     imageUrl?: StringNullableFilter<"User"> | string | null
     createdAt?: DateTimeFilter<"User"> | Date | string
     updatedAt?: DateTimeFilter<"User"> | Date | string
-    onboardingCompleted?: BoolFilter<"User"> | boolean
-    onboardingStep?: IntNullableFilter<"User"> | number | null
     cookingSkillLevel?: EnumCookingSkillLevelNullableFilter<"User"> | $Enums.CookingSkillLevel | null
+    defaultProcessingMethod?: EnumProcessingMethodFilter<"User"> | $Enums.ProcessingMethod
     dietaryPreferences?: EnumDietaryPreferenceNullableListFilter<"User">
     favoriteCuisines?: StringNullableListFilter<"User">
     householdSize?: IntNullableFilter<"User"> | number | null
-    defaultProcessingMethod?: EnumProcessingMethodFilter<"User"> | $Enums.ProcessingMethod
+    measurementSystem?: StringNullableFilter<"User"> | string | null
+    onboardingCompleted?: BoolFilter<"User"> | boolean
+    onboardingStep?: IntNullableFilter<"User"> | number | null
     preferredCategories?: StringNullableListFilter<"User">
     timezone?: StringNullableFilter<"User"> | string | null
-    measurementSystem?: StringNullableFilter<"User"> | string | null
     recipes?: RecipeListRelationFilter
     favorites?: RecipeFavoriteListRelationFilter
     onboardingProgress?: UserOnboardingProgressListRelationFilter
@@ -7706,16 +7720,16 @@ export namespace Prisma {
     imageUrl?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
-    onboardingCompleted?: SortOrder
-    onboardingStep?: SortOrderInput | SortOrder
     cookingSkillLevel?: SortOrderInput | SortOrder
+    defaultProcessingMethod?: SortOrder
     dietaryPreferences?: SortOrder
     favoriteCuisines?: SortOrder
     householdSize?: SortOrderInput | SortOrder
-    defaultProcessingMethod?: SortOrder
+    measurementSystem?: SortOrderInput | SortOrder
+    onboardingCompleted?: SortOrder
+    onboardingStep?: SortOrderInput | SortOrder
     preferredCategories?: SortOrder
     timezone?: SortOrderInput | SortOrder
-    measurementSystem?: SortOrderInput | SortOrder
     _count?: UserCountOrderByAggregateInput
     _avg?: UserAvgOrderByAggregateInput
     _max?: UserMaxOrderByAggregateInput
@@ -7734,16 +7748,16 @@ export namespace Prisma {
     imageUrl?: StringNullableWithAggregatesFilter<"User"> | string | null
     createdAt?: DateTimeWithAggregatesFilter<"User"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"User"> | Date | string
-    onboardingCompleted?: BoolWithAggregatesFilter<"User"> | boolean
-    onboardingStep?: IntNullableWithAggregatesFilter<"User"> | number | null
     cookingSkillLevel?: EnumCookingSkillLevelNullableWithAggregatesFilter<"User"> | $Enums.CookingSkillLevel | null
+    defaultProcessingMethod?: EnumProcessingMethodWithAggregatesFilter<"User"> | $Enums.ProcessingMethod
     dietaryPreferences?: EnumDietaryPreferenceNullableListFilter<"User">
     favoriteCuisines?: StringNullableListFilter<"User">
     householdSize?: IntNullableWithAggregatesFilter<"User"> | number | null
-    defaultProcessingMethod?: EnumProcessingMethodWithAggregatesFilter<"User"> | $Enums.ProcessingMethod
+    measurementSystem?: StringNullableWithAggregatesFilter<"User"> | string | null
+    onboardingCompleted?: BoolWithAggregatesFilter<"User"> | boolean
+    onboardingStep?: IntNullableWithAggregatesFilter<"User"> | number | null
     preferredCategories?: StringNullableListFilter<"User">
     timezone?: StringNullableWithAggregatesFilter<"User"> | string | null
-    measurementSystem?: StringNullableWithAggregatesFilter<"User"> | string | null
   }
 
   export type RecipeWhereInput = {
@@ -7762,10 +7776,11 @@ export namespace Prisma {
     cleanupTime?: StringFilter<"Recipe"> | string
     createdAt?: DateTimeFilter<"Recipe"> | Date | string
     updatedAt?: DateTimeFilter<"Recipe"> | Date | string
-    categorySource?: EnumCategorySourceNullableFilter<"Recipe"> | $Enums.CategorySource | null
-    categoryConfidence?: FloatNullableFilter<"Recipe"> | number | null
-    originalCategory?: StringNullableFilter<"Recipe"> | string | null
     userId?: StringFilter<"Recipe"> | string
+    categoryConfidence?: FloatNullableFilter<"Recipe"> | number | null
+    categorySource?: EnumCategorySourceNullableFilter<"Recipe"> | $Enums.CategorySource | null
+    originalCategory?: StringNullableFilter<"Recipe"> | string | null
+    mealType?: StringNullableFilter<"Recipe"> | string | null
     user?: XOR<UserScalarRelationFilter, UserWhereInput>
     favorites?: RecipeFavoriteListRelationFilter
     images?: RecipeImageListRelationFilter
@@ -7784,10 +7799,11 @@ export namespace Prisma {
     cleanupTime?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
-    categorySource?: SortOrderInput | SortOrder
-    categoryConfidence?: SortOrderInput | SortOrder
-    originalCategory?: SortOrderInput | SortOrder
     userId?: SortOrder
+    categoryConfidence?: SortOrderInput | SortOrder
+    categorySource?: SortOrderInput | SortOrder
+    originalCategory?: SortOrderInput | SortOrder
+    mealType?: SortOrderInput | SortOrder
     user?: UserOrderByWithRelationInput
     favorites?: RecipeFavoriteOrderByRelationAggregateInput
     images?: RecipeImageOrderByRelationAggregateInput
@@ -7809,10 +7825,11 @@ export namespace Prisma {
     cleanupTime?: StringFilter<"Recipe"> | string
     createdAt?: DateTimeFilter<"Recipe"> | Date | string
     updatedAt?: DateTimeFilter<"Recipe"> | Date | string
-    categorySource?: EnumCategorySourceNullableFilter<"Recipe"> | $Enums.CategorySource | null
-    categoryConfidence?: FloatNullableFilter<"Recipe"> | number | null
-    originalCategory?: StringNullableFilter<"Recipe"> | string | null
     userId?: StringFilter<"Recipe"> | string
+    categoryConfidence?: FloatNullableFilter<"Recipe"> | number | null
+    categorySource?: EnumCategorySourceNullableFilter<"Recipe"> | $Enums.CategorySource | null
+    originalCategory?: StringNullableFilter<"Recipe"> | string | null
+    mealType?: StringNullableFilter<"Recipe"> | string | null
     user?: XOR<UserScalarRelationFilter, UserWhereInput>
     favorites?: RecipeFavoriteListRelationFilter
     images?: RecipeImageListRelationFilter
@@ -7831,10 +7848,11 @@ export namespace Prisma {
     cleanupTime?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
-    categorySource?: SortOrderInput | SortOrder
-    categoryConfidence?: SortOrderInput | SortOrder
-    originalCategory?: SortOrderInput | SortOrder
     userId?: SortOrder
+    categoryConfidence?: SortOrderInput | SortOrder
+    categorySource?: SortOrderInput | SortOrder
+    originalCategory?: SortOrderInput | SortOrder
+    mealType?: SortOrderInput | SortOrder
     _count?: RecipeCountOrderByAggregateInput
     _avg?: RecipeAvgOrderByAggregateInput
     _max?: RecipeMaxOrderByAggregateInput
@@ -7858,10 +7876,11 @@ export namespace Prisma {
     cleanupTime?: StringWithAggregatesFilter<"Recipe"> | string
     createdAt?: DateTimeWithAggregatesFilter<"Recipe"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"Recipe"> | Date | string
-    categorySource?: EnumCategorySourceNullableWithAggregatesFilter<"Recipe"> | $Enums.CategorySource | null
-    categoryConfidence?: FloatNullableWithAggregatesFilter<"Recipe"> | number | null
-    originalCategory?: StringNullableWithAggregatesFilter<"Recipe"> | string | null
     userId?: StringWithAggregatesFilter<"Recipe"> | string
+    categoryConfidence?: FloatNullableWithAggregatesFilter<"Recipe"> | number | null
+    categorySource?: EnumCategorySourceNullableWithAggregatesFilter<"Recipe"> | $Enums.CategorySource | null
+    originalCategory?: StringNullableWithAggregatesFilter<"Recipe"> | string | null
+    mealType?: StringNullableWithAggregatesFilter<"Recipe"> | string | null
   }
 
   export type RecipeImageWhereInput = {
@@ -7944,8 +7963,8 @@ export namespace Prisma {
     userId?: StringFilter<"RecipeFavorite"> | string
     recipeId?: StringFilter<"RecipeFavorite"> | string
     createdAt?: DateTimeFilter<"RecipeFavorite"> | Date | string
-    user?: XOR<UserScalarRelationFilter, UserWhereInput>
     recipe?: XOR<RecipeScalarRelationFilter, RecipeWhereInput>
+    user?: XOR<UserScalarRelationFilter, UserWhereInput>
   }
 
   export type RecipeFavoriteOrderByWithRelationInput = {
@@ -7953,8 +7972,8 @@ export namespace Prisma {
     userId?: SortOrder
     recipeId?: SortOrder
     createdAt?: SortOrder
-    user?: UserOrderByWithRelationInput
     recipe?: RecipeOrderByWithRelationInput
+    user?: UserOrderByWithRelationInput
   }
 
   export type RecipeFavoriteWhereUniqueInput = Prisma.AtLeast<{
@@ -7966,8 +7985,8 @@ export namespace Prisma {
     userId?: StringFilter<"RecipeFavorite"> | string
     recipeId?: StringFilter<"RecipeFavorite"> | string
     createdAt?: DateTimeFilter<"RecipeFavorite"> | Date | string
-    user?: XOR<UserScalarRelationFilter, UserWhereInput>
     recipe?: XOR<RecipeScalarRelationFilter, RecipeWhereInput>
+    user?: XOR<UserScalarRelationFilter, UserWhereInput>
   }, "id" | "userId_recipeId">
 
   export type RecipeFavoriteOrderByWithAggregationInput = {
@@ -8081,16 +8100,16 @@ export namespace Prisma {
     imageUrl?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    onboardingCompleted?: boolean
-    onboardingStep?: number | null
     cookingSkillLevel?: $Enums.CookingSkillLevel | null
+    defaultProcessingMethod?: $Enums.ProcessingMethod
     dietaryPreferences?: UserCreatedietaryPreferencesInput | $Enums.DietaryPreference[]
     favoriteCuisines?: UserCreatefavoriteCuisinesInput | string[]
     householdSize?: number | null
-    defaultProcessingMethod?: $Enums.ProcessingMethod
+    measurementSystem?: string | null
+    onboardingCompleted?: boolean
+    onboardingStep?: number | null
     preferredCategories?: UserCreatepreferredCategoriesInput | string[]
     timezone?: string | null
-    measurementSystem?: string | null
     recipes?: RecipeCreateNestedManyWithoutUserInput
     favorites?: RecipeFavoriteCreateNestedManyWithoutUserInput
     onboardingProgress?: UserOnboardingProgressCreateNestedManyWithoutUserInput
@@ -8104,16 +8123,16 @@ export namespace Prisma {
     imageUrl?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    onboardingCompleted?: boolean
-    onboardingStep?: number | null
     cookingSkillLevel?: $Enums.CookingSkillLevel | null
+    defaultProcessingMethod?: $Enums.ProcessingMethod
     dietaryPreferences?: UserCreatedietaryPreferencesInput | $Enums.DietaryPreference[]
     favoriteCuisines?: UserCreatefavoriteCuisinesInput | string[]
     householdSize?: number | null
-    defaultProcessingMethod?: $Enums.ProcessingMethod
+    measurementSystem?: string | null
+    onboardingCompleted?: boolean
+    onboardingStep?: number | null
     preferredCategories?: UserCreatepreferredCategoriesInput | string[]
     timezone?: string | null
-    measurementSystem?: string | null
     recipes?: RecipeUncheckedCreateNestedManyWithoutUserInput
     favorites?: RecipeFavoriteUncheckedCreateNestedManyWithoutUserInput
     onboardingProgress?: UserOnboardingProgressUncheckedCreateNestedManyWithoutUserInput
@@ -8127,16 +8146,16 @@ export namespace Prisma {
     imageUrl?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    onboardingCompleted?: BoolFieldUpdateOperationsInput | boolean
-    onboardingStep?: NullableIntFieldUpdateOperationsInput | number | null
     cookingSkillLevel?: NullableEnumCookingSkillLevelFieldUpdateOperationsInput | $Enums.CookingSkillLevel | null
+    defaultProcessingMethod?: EnumProcessingMethodFieldUpdateOperationsInput | $Enums.ProcessingMethod
     dietaryPreferences?: UserUpdatedietaryPreferencesInput | $Enums.DietaryPreference[]
     favoriteCuisines?: UserUpdatefavoriteCuisinesInput | string[]
     householdSize?: NullableIntFieldUpdateOperationsInput | number | null
-    defaultProcessingMethod?: EnumProcessingMethodFieldUpdateOperationsInput | $Enums.ProcessingMethod
+    measurementSystem?: NullableStringFieldUpdateOperationsInput | string | null
+    onboardingCompleted?: BoolFieldUpdateOperationsInput | boolean
+    onboardingStep?: NullableIntFieldUpdateOperationsInput | number | null
     preferredCategories?: UserUpdatepreferredCategoriesInput | string[]
     timezone?: NullableStringFieldUpdateOperationsInput | string | null
-    measurementSystem?: NullableStringFieldUpdateOperationsInput | string | null
     recipes?: RecipeUpdateManyWithoutUserNestedInput
     favorites?: RecipeFavoriteUpdateManyWithoutUserNestedInput
     onboardingProgress?: UserOnboardingProgressUpdateManyWithoutUserNestedInput
@@ -8150,16 +8169,16 @@ export namespace Prisma {
     imageUrl?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    onboardingCompleted?: BoolFieldUpdateOperationsInput | boolean
-    onboardingStep?: NullableIntFieldUpdateOperationsInput | number | null
     cookingSkillLevel?: NullableEnumCookingSkillLevelFieldUpdateOperationsInput | $Enums.CookingSkillLevel | null
+    defaultProcessingMethod?: EnumProcessingMethodFieldUpdateOperationsInput | $Enums.ProcessingMethod
     dietaryPreferences?: UserUpdatedietaryPreferencesInput | $Enums.DietaryPreference[]
     favoriteCuisines?: UserUpdatefavoriteCuisinesInput | string[]
     householdSize?: NullableIntFieldUpdateOperationsInput | number | null
-    defaultProcessingMethod?: EnumProcessingMethodFieldUpdateOperationsInput | $Enums.ProcessingMethod
+    measurementSystem?: NullableStringFieldUpdateOperationsInput | string | null
+    onboardingCompleted?: BoolFieldUpdateOperationsInput | boolean
+    onboardingStep?: NullableIntFieldUpdateOperationsInput | number | null
     preferredCategories?: UserUpdatepreferredCategoriesInput | string[]
     timezone?: NullableStringFieldUpdateOperationsInput | string | null
-    measurementSystem?: NullableStringFieldUpdateOperationsInput | string | null
     recipes?: RecipeUncheckedUpdateManyWithoutUserNestedInput
     favorites?: RecipeFavoriteUncheckedUpdateManyWithoutUserNestedInput
     onboardingProgress?: UserOnboardingProgressUncheckedUpdateManyWithoutUserNestedInput
@@ -8173,16 +8192,16 @@ export namespace Prisma {
     imageUrl?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    onboardingCompleted?: boolean
-    onboardingStep?: number | null
     cookingSkillLevel?: $Enums.CookingSkillLevel | null
+    defaultProcessingMethod?: $Enums.ProcessingMethod
     dietaryPreferences?: UserCreatedietaryPreferencesInput | $Enums.DietaryPreference[]
     favoriteCuisines?: UserCreatefavoriteCuisinesInput | string[]
     householdSize?: number | null
-    defaultProcessingMethod?: $Enums.ProcessingMethod
+    measurementSystem?: string | null
+    onboardingCompleted?: boolean
+    onboardingStep?: number | null
     preferredCategories?: UserCreatepreferredCategoriesInput | string[]
     timezone?: string | null
-    measurementSystem?: string | null
   }
 
   export type UserUpdateManyMutationInput = {
@@ -8193,16 +8212,16 @@ export namespace Prisma {
     imageUrl?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    onboardingCompleted?: BoolFieldUpdateOperationsInput | boolean
-    onboardingStep?: NullableIntFieldUpdateOperationsInput | number | null
     cookingSkillLevel?: NullableEnumCookingSkillLevelFieldUpdateOperationsInput | $Enums.CookingSkillLevel | null
+    defaultProcessingMethod?: EnumProcessingMethodFieldUpdateOperationsInput | $Enums.ProcessingMethod
     dietaryPreferences?: UserUpdatedietaryPreferencesInput | $Enums.DietaryPreference[]
     favoriteCuisines?: UserUpdatefavoriteCuisinesInput | string[]
     householdSize?: NullableIntFieldUpdateOperationsInput | number | null
-    defaultProcessingMethod?: EnumProcessingMethodFieldUpdateOperationsInput | $Enums.ProcessingMethod
+    measurementSystem?: NullableStringFieldUpdateOperationsInput | string | null
+    onboardingCompleted?: BoolFieldUpdateOperationsInput | boolean
+    onboardingStep?: NullableIntFieldUpdateOperationsInput | number | null
     preferredCategories?: UserUpdatepreferredCategoriesInput | string[]
     timezone?: NullableStringFieldUpdateOperationsInput | string | null
-    measurementSystem?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type UserUncheckedUpdateManyInput = {
@@ -8213,16 +8232,16 @@ export namespace Prisma {
     imageUrl?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    onboardingCompleted?: BoolFieldUpdateOperationsInput | boolean
-    onboardingStep?: NullableIntFieldUpdateOperationsInput | number | null
     cookingSkillLevel?: NullableEnumCookingSkillLevelFieldUpdateOperationsInput | $Enums.CookingSkillLevel | null
+    defaultProcessingMethod?: EnumProcessingMethodFieldUpdateOperationsInput | $Enums.ProcessingMethod
     dietaryPreferences?: UserUpdatedietaryPreferencesInput | $Enums.DietaryPreference[]
     favoriteCuisines?: UserUpdatefavoriteCuisinesInput | string[]
     householdSize?: NullableIntFieldUpdateOperationsInput | number | null
-    defaultProcessingMethod?: EnumProcessingMethodFieldUpdateOperationsInput | $Enums.ProcessingMethod
+    measurementSystem?: NullableStringFieldUpdateOperationsInput | string | null
+    onboardingCompleted?: BoolFieldUpdateOperationsInput | boolean
+    onboardingStep?: NullableIntFieldUpdateOperationsInput | number | null
     preferredCategories?: UserUpdatepreferredCategoriesInput | string[]
     timezone?: NullableStringFieldUpdateOperationsInput | string | null
-    measurementSystem?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type RecipeCreateInput = {
@@ -8238,9 +8257,10 @@ export namespace Prisma {
     cleanupTime: string
     createdAt?: Date | string
     updatedAt?: Date | string
-    categorySource?: $Enums.CategorySource | null
     categoryConfidence?: number | null
+    categorySource?: $Enums.CategorySource | null
     originalCategory?: string | null
+    mealType?: string | null
     user: UserCreateNestedOneWithoutRecipesInput
     favorites?: RecipeFavoriteCreateNestedManyWithoutRecipeInput
     images?: RecipeImageCreateNestedManyWithoutRecipeInput
@@ -8259,10 +8279,11 @@ export namespace Prisma {
     cleanupTime: string
     createdAt?: Date | string
     updatedAt?: Date | string
-    categorySource?: $Enums.CategorySource | null
-    categoryConfidence?: number | null
-    originalCategory?: string | null
     userId: string
+    categoryConfidence?: number | null
+    categorySource?: $Enums.CategorySource | null
+    originalCategory?: string | null
+    mealType?: string | null
     favorites?: RecipeFavoriteUncheckedCreateNestedManyWithoutRecipeInput
     images?: RecipeImageUncheckedCreateNestedManyWithoutRecipeInput
   }
@@ -8280,9 +8301,10 @@ export namespace Prisma {
     cleanupTime?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    categorySource?: NullableEnumCategorySourceFieldUpdateOperationsInput | $Enums.CategorySource | null
     categoryConfidence?: NullableFloatFieldUpdateOperationsInput | number | null
+    categorySource?: NullableEnumCategorySourceFieldUpdateOperationsInput | $Enums.CategorySource | null
     originalCategory?: NullableStringFieldUpdateOperationsInput | string | null
+    mealType?: NullableStringFieldUpdateOperationsInput | string | null
     user?: UserUpdateOneRequiredWithoutRecipesNestedInput
     favorites?: RecipeFavoriteUpdateManyWithoutRecipeNestedInput
     images?: RecipeImageUpdateManyWithoutRecipeNestedInput
@@ -8301,10 +8323,11 @@ export namespace Prisma {
     cleanupTime?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    categorySource?: NullableEnumCategorySourceFieldUpdateOperationsInput | $Enums.CategorySource | null
-    categoryConfidence?: NullableFloatFieldUpdateOperationsInput | number | null
-    originalCategory?: NullableStringFieldUpdateOperationsInput | string | null
     userId?: StringFieldUpdateOperationsInput | string
+    categoryConfidence?: NullableFloatFieldUpdateOperationsInput | number | null
+    categorySource?: NullableEnumCategorySourceFieldUpdateOperationsInput | $Enums.CategorySource | null
+    originalCategory?: NullableStringFieldUpdateOperationsInput | string | null
+    mealType?: NullableStringFieldUpdateOperationsInput | string | null
     favorites?: RecipeFavoriteUncheckedUpdateManyWithoutRecipeNestedInput
     images?: RecipeImageUncheckedUpdateManyWithoutRecipeNestedInput
   }
@@ -8322,10 +8345,11 @@ export namespace Prisma {
     cleanupTime: string
     createdAt?: Date | string
     updatedAt?: Date | string
-    categorySource?: $Enums.CategorySource | null
-    categoryConfidence?: number | null
-    originalCategory?: string | null
     userId: string
+    categoryConfidence?: number | null
+    categorySource?: $Enums.CategorySource | null
+    originalCategory?: string | null
+    mealType?: string | null
   }
 
   export type RecipeUpdateManyMutationInput = {
@@ -8341,9 +8365,10 @@ export namespace Prisma {
     cleanupTime?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    categorySource?: NullableEnumCategorySourceFieldUpdateOperationsInput | $Enums.CategorySource | null
     categoryConfidence?: NullableFloatFieldUpdateOperationsInput | number | null
+    categorySource?: NullableEnumCategorySourceFieldUpdateOperationsInput | $Enums.CategorySource | null
     originalCategory?: NullableStringFieldUpdateOperationsInput | string | null
+    mealType?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type RecipeUncheckedUpdateManyInput = {
@@ -8359,10 +8384,11 @@ export namespace Prisma {
     cleanupTime?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    categorySource?: NullableEnumCategorySourceFieldUpdateOperationsInput | $Enums.CategorySource | null
-    categoryConfidence?: NullableFloatFieldUpdateOperationsInput | number | null
-    originalCategory?: NullableStringFieldUpdateOperationsInput | string | null
     userId?: StringFieldUpdateOperationsInput | string
+    categoryConfidence?: NullableFloatFieldUpdateOperationsInput | number | null
+    categorySource?: NullableEnumCategorySourceFieldUpdateOperationsInput | $Enums.CategorySource | null
+    originalCategory?: NullableStringFieldUpdateOperationsInput | string | null
+    mealType?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type RecipeImageCreateInput = {
@@ -8444,8 +8470,8 @@ export namespace Prisma {
   export type RecipeFavoriteCreateInput = {
     id?: string
     createdAt?: Date | string
-    user: UserCreateNestedOneWithoutFavoritesInput
     recipe: RecipeCreateNestedOneWithoutFavoritesInput
+    user: UserCreateNestedOneWithoutFavoritesInput
   }
 
   export type RecipeFavoriteUncheckedCreateInput = {
@@ -8458,8 +8484,8 @@ export namespace Prisma {
   export type RecipeFavoriteUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    user?: UserUpdateOneRequiredWithoutFavoritesNestedInput
     recipe?: RecipeUpdateOneRequiredWithoutFavoritesNestedInput
+    user?: UserUpdateOneRequiredWithoutFavoritesNestedInput
   }
 
   export type RecipeFavoriteUncheckedUpdateInput = {
@@ -8619,27 +8645,18 @@ export namespace Prisma {
     not?: NestedDateTimeFilter<$PrismaModel> | Date | string
   }
 
-  export type BoolFilter<$PrismaModel = never> = {
-    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
-    not?: NestedBoolFilter<$PrismaModel> | boolean
-  }
-
-  export type IntNullableFilter<$PrismaModel = never> = {
-    equals?: number | IntFieldRefInput<$PrismaModel> | null
-    in?: number[] | ListIntFieldRefInput<$PrismaModel> | null
-    notIn?: number[] | ListIntFieldRefInput<$PrismaModel> | null
-    lt?: number | IntFieldRefInput<$PrismaModel>
-    lte?: number | IntFieldRefInput<$PrismaModel>
-    gt?: number | IntFieldRefInput<$PrismaModel>
-    gte?: number | IntFieldRefInput<$PrismaModel>
-    not?: NestedIntNullableFilter<$PrismaModel> | number | null
-  }
-
   export type EnumCookingSkillLevelNullableFilter<$PrismaModel = never> = {
     equals?: $Enums.CookingSkillLevel | EnumCookingSkillLevelFieldRefInput<$PrismaModel> | null
     in?: $Enums.CookingSkillLevel[] | ListEnumCookingSkillLevelFieldRefInput<$PrismaModel> | null
     notIn?: $Enums.CookingSkillLevel[] | ListEnumCookingSkillLevelFieldRefInput<$PrismaModel> | null
     not?: NestedEnumCookingSkillLevelNullableFilter<$PrismaModel> | $Enums.CookingSkillLevel | null
+  }
+
+  export type EnumProcessingMethodFilter<$PrismaModel = never> = {
+    equals?: $Enums.ProcessingMethod | EnumProcessingMethodFieldRefInput<$PrismaModel>
+    in?: $Enums.ProcessingMethod[] | ListEnumProcessingMethodFieldRefInput<$PrismaModel>
+    notIn?: $Enums.ProcessingMethod[] | ListEnumProcessingMethodFieldRefInput<$PrismaModel>
+    not?: NestedEnumProcessingMethodFilter<$PrismaModel> | $Enums.ProcessingMethod
   }
 
   export type EnumDietaryPreferenceNullableListFilter<$PrismaModel = never> = {
@@ -8658,11 +8675,20 @@ export namespace Prisma {
     isEmpty?: boolean
   }
 
-  export type EnumProcessingMethodFilter<$PrismaModel = never> = {
-    equals?: $Enums.ProcessingMethod | EnumProcessingMethodFieldRefInput<$PrismaModel>
-    in?: $Enums.ProcessingMethod[] | ListEnumProcessingMethodFieldRefInput<$PrismaModel>
-    notIn?: $Enums.ProcessingMethod[] | ListEnumProcessingMethodFieldRefInput<$PrismaModel>
-    not?: NestedEnumProcessingMethodFilter<$PrismaModel> | $Enums.ProcessingMethod
+  export type IntNullableFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel> | null
+    in?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntNullableFilter<$PrismaModel> | number | null
+  }
+
+  export type BoolFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
+    not?: NestedBoolFilter<$PrismaModel> | boolean
   }
 
   export type RecipeListRelationFilter = {
@@ -8708,21 +8734,21 @@ export namespace Prisma {
     imageUrl?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
-    onboardingCompleted?: SortOrder
-    onboardingStep?: SortOrder
     cookingSkillLevel?: SortOrder
+    defaultProcessingMethod?: SortOrder
     dietaryPreferences?: SortOrder
     favoriteCuisines?: SortOrder
     householdSize?: SortOrder
-    defaultProcessingMethod?: SortOrder
+    measurementSystem?: SortOrder
+    onboardingCompleted?: SortOrder
+    onboardingStep?: SortOrder
     preferredCategories?: SortOrder
     timezone?: SortOrder
-    measurementSystem?: SortOrder
   }
 
   export type UserAvgOrderByAggregateInput = {
-    onboardingStep?: SortOrder
     householdSize?: SortOrder
+    onboardingStep?: SortOrder
   }
 
   export type UserMaxOrderByAggregateInput = {
@@ -8733,13 +8759,13 @@ export namespace Prisma {
     imageUrl?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+    cookingSkillLevel?: SortOrder
+    defaultProcessingMethod?: SortOrder
+    householdSize?: SortOrder
+    measurementSystem?: SortOrder
     onboardingCompleted?: SortOrder
     onboardingStep?: SortOrder
-    cookingSkillLevel?: SortOrder
-    householdSize?: SortOrder
-    defaultProcessingMethod?: SortOrder
     timezone?: SortOrder
-    measurementSystem?: SortOrder
   }
 
   export type UserMinOrderByAggregateInput = {
@@ -8750,18 +8776,18 @@ export namespace Prisma {
     imageUrl?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+    cookingSkillLevel?: SortOrder
+    defaultProcessingMethod?: SortOrder
+    householdSize?: SortOrder
+    measurementSystem?: SortOrder
     onboardingCompleted?: SortOrder
     onboardingStep?: SortOrder
-    cookingSkillLevel?: SortOrder
-    householdSize?: SortOrder
-    defaultProcessingMethod?: SortOrder
     timezone?: SortOrder
-    measurementSystem?: SortOrder
   }
 
   export type UserSumOrderByAggregateInput = {
-    onboardingStep?: SortOrder
     householdSize?: SortOrder
+    onboardingStep?: SortOrder
   }
 
   export type StringWithAggregatesFilter<$PrismaModel = never> = {
@@ -8814,30 +8840,6 @@ export namespace Prisma {
     _max?: NestedDateTimeFilter<$PrismaModel>
   }
 
-  export type BoolWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
-    not?: NestedBoolWithAggregatesFilter<$PrismaModel> | boolean
-    _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedBoolFilter<$PrismaModel>
-    _max?: NestedBoolFilter<$PrismaModel>
-  }
-
-  export type IntNullableWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: number | IntFieldRefInput<$PrismaModel> | null
-    in?: number[] | ListIntFieldRefInput<$PrismaModel> | null
-    notIn?: number[] | ListIntFieldRefInput<$PrismaModel> | null
-    lt?: number | IntFieldRefInput<$PrismaModel>
-    lte?: number | IntFieldRefInput<$PrismaModel>
-    gt?: number | IntFieldRefInput<$PrismaModel>
-    gte?: number | IntFieldRefInput<$PrismaModel>
-    not?: NestedIntNullableWithAggregatesFilter<$PrismaModel> | number | null
-    _count?: NestedIntNullableFilter<$PrismaModel>
-    _avg?: NestedFloatNullableFilter<$PrismaModel>
-    _sum?: NestedIntNullableFilter<$PrismaModel>
-    _min?: NestedIntNullableFilter<$PrismaModel>
-    _max?: NestedIntNullableFilter<$PrismaModel>
-  }
-
   export type EnumCookingSkillLevelNullableWithAggregatesFilter<$PrismaModel = never> = {
     equals?: $Enums.CookingSkillLevel | EnumCookingSkillLevelFieldRefInput<$PrismaModel> | null
     in?: $Enums.CookingSkillLevel[] | ListEnumCookingSkillLevelFieldRefInput<$PrismaModel> | null
@@ -8858,11 +8860,28 @@ export namespace Prisma {
     _max?: NestedEnumProcessingMethodFilter<$PrismaModel>
   }
 
-  export type EnumCategorySourceNullableFilter<$PrismaModel = never> = {
-    equals?: $Enums.CategorySource | EnumCategorySourceFieldRefInput<$PrismaModel> | null
-    in?: $Enums.CategorySource[] | ListEnumCategorySourceFieldRefInput<$PrismaModel> | null
-    notIn?: $Enums.CategorySource[] | ListEnumCategorySourceFieldRefInput<$PrismaModel> | null
-    not?: NestedEnumCategorySourceNullableFilter<$PrismaModel> | $Enums.CategorySource | null
+  export type IntNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel> | null
+    in?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntNullableWithAggregatesFilter<$PrismaModel> | number | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _avg?: NestedFloatNullableFilter<$PrismaModel>
+    _sum?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedIntNullableFilter<$PrismaModel>
+    _max?: NestedIntNullableFilter<$PrismaModel>
+  }
+
+  export type BoolWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
+    not?: NestedBoolWithAggregatesFilter<$PrismaModel> | boolean
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedBoolFilter<$PrismaModel>
+    _max?: NestedBoolFilter<$PrismaModel>
   }
 
   export type FloatNullableFilter<$PrismaModel = never> = {
@@ -8874,6 +8893,13 @@ export namespace Prisma {
     gt?: number | FloatFieldRefInput<$PrismaModel>
     gte?: number | FloatFieldRefInput<$PrismaModel>
     not?: NestedFloatNullableFilter<$PrismaModel> | number | null
+  }
+
+  export type EnumCategorySourceNullableFilter<$PrismaModel = never> = {
+    equals?: $Enums.CategorySource | EnumCategorySourceFieldRefInput<$PrismaModel> | null
+    in?: $Enums.CategorySource[] | ListEnumCategorySourceFieldRefInput<$PrismaModel> | null
+    notIn?: $Enums.CategorySource[] | ListEnumCategorySourceFieldRefInput<$PrismaModel> | null
+    not?: NestedEnumCategorySourceNullableFilter<$PrismaModel> | $Enums.CategorySource | null
   }
 
   export type UserScalarRelationFilter = {
@@ -8904,10 +8930,11 @@ export namespace Prisma {
     cleanupTime?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
-    categorySource?: SortOrder
-    categoryConfidence?: SortOrder
-    originalCategory?: SortOrder
     userId?: SortOrder
+    categoryConfidence?: SortOrder
+    categorySource?: SortOrder
+    originalCategory?: SortOrder
+    mealType?: SortOrder
   }
 
   export type RecipeAvgOrderByAggregateInput = {
@@ -8925,10 +8952,11 @@ export namespace Prisma {
     cleanupTime?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
-    categorySource?: SortOrder
-    categoryConfidence?: SortOrder
-    originalCategory?: SortOrder
     userId?: SortOrder
+    categoryConfidence?: SortOrder
+    categorySource?: SortOrder
+    originalCategory?: SortOrder
+    mealType?: SortOrder
   }
 
   export type RecipeMinOrderByAggregateInput = {
@@ -8942,24 +8970,15 @@ export namespace Prisma {
     cleanupTime?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
-    categorySource?: SortOrder
-    categoryConfidence?: SortOrder
-    originalCategory?: SortOrder
     userId?: SortOrder
+    categoryConfidence?: SortOrder
+    categorySource?: SortOrder
+    originalCategory?: SortOrder
+    mealType?: SortOrder
   }
 
   export type RecipeSumOrderByAggregateInput = {
     categoryConfidence?: SortOrder
-  }
-
-  export type EnumCategorySourceNullableWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: $Enums.CategorySource | EnumCategorySourceFieldRefInput<$PrismaModel> | null
-    in?: $Enums.CategorySource[] | ListEnumCategorySourceFieldRefInput<$PrismaModel> | null
-    notIn?: $Enums.CategorySource[] | ListEnumCategorySourceFieldRefInput<$PrismaModel> | null
-    not?: NestedEnumCategorySourceNullableWithAggregatesFilter<$PrismaModel> | $Enums.CategorySource | null
-    _count?: NestedIntNullableFilter<$PrismaModel>
-    _min?: NestedEnumCategorySourceNullableFilter<$PrismaModel>
-    _max?: NestedEnumCategorySourceNullableFilter<$PrismaModel>
   }
 
   export type FloatNullableWithAggregatesFilter<$PrismaModel = never> = {
@@ -8976,6 +8995,16 @@ export namespace Prisma {
     _sum?: NestedFloatNullableFilter<$PrismaModel>
     _min?: NestedFloatNullableFilter<$PrismaModel>
     _max?: NestedFloatNullableFilter<$PrismaModel>
+  }
+
+  export type EnumCategorySourceNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.CategorySource | EnumCategorySourceFieldRefInput<$PrismaModel> | null
+    in?: $Enums.CategorySource[] | ListEnumCategorySourceFieldRefInput<$PrismaModel> | null
+    notIn?: $Enums.CategorySource[] | ListEnumCategorySourceFieldRefInput<$PrismaModel> | null
+    not?: NestedEnumCategorySourceNullableWithAggregatesFilter<$PrismaModel> | $Enums.CategorySource | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedEnumCategorySourceNullableFilter<$PrismaModel>
+    _max?: NestedEnumCategorySourceNullableFilter<$PrismaModel>
   }
 
   export type IntFilter<$PrismaModel = never> = {
@@ -9267,20 +9296,12 @@ export namespace Prisma {
     set?: Date | string
   }
 
-  export type BoolFieldUpdateOperationsInput = {
-    set?: boolean
-  }
-
-  export type NullableIntFieldUpdateOperationsInput = {
-    set?: number | null
-    increment?: number
-    decrement?: number
-    multiply?: number
-    divide?: number
-  }
-
   export type NullableEnumCookingSkillLevelFieldUpdateOperationsInput = {
     set?: $Enums.CookingSkillLevel | null
+  }
+
+  export type EnumProcessingMethodFieldUpdateOperationsInput = {
+    set?: $Enums.ProcessingMethod
   }
 
   export type UserUpdatedietaryPreferencesInput = {
@@ -9293,8 +9314,16 @@ export namespace Prisma {
     push?: string | string[]
   }
 
-  export type EnumProcessingMethodFieldUpdateOperationsInput = {
-    set?: $Enums.ProcessingMethod
+  export type NullableIntFieldUpdateOperationsInput = {
+    set?: number | null
+    increment?: number
+    decrement?: number
+    multiply?: number
+    divide?: number
+  }
+
+  export type BoolFieldUpdateOperationsInput = {
+    set?: boolean
   }
 
   export type UserUpdatepreferredCategoriesInput = {
@@ -9438,16 +9467,16 @@ export namespace Prisma {
     push?: string | string[]
   }
 
-  export type NullableEnumCategorySourceFieldUpdateOperationsInput = {
-    set?: $Enums.CategorySource | null
-  }
-
   export type NullableFloatFieldUpdateOperationsInput = {
     set?: number | null
     increment?: number
     decrement?: number
     multiply?: number
     divide?: number
+  }
+
+  export type NullableEnumCategorySourceFieldUpdateOperationsInput = {
+    set?: $Enums.CategorySource | null
   }
 
   export type UserUpdateOneRequiredWithoutRecipesNestedInput = {
@@ -9536,24 +9565,16 @@ export namespace Prisma {
     update?: XOR<XOR<RecipeUpdateToOneWithWhereWithoutImagesInput, RecipeUpdateWithoutImagesInput>, RecipeUncheckedUpdateWithoutImagesInput>
   }
 
-  export type UserCreateNestedOneWithoutFavoritesInput = {
-    create?: XOR<UserCreateWithoutFavoritesInput, UserUncheckedCreateWithoutFavoritesInput>
-    connectOrCreate?: UserCreateOrConnectWithoutFavoritesInput
-    connect?: UserWhereUniqueInput
-  }
-
   export type RecipeCreateNestedOneWithoutFavoritesInput = {
     create?: XOR<RecipeCreateWithoutFavoritesInput, RecipeUncheckedCreateWithoutFavoritesInput>
     connectOrCreate?: RecipeCreateOrConnectWithoutFavoritesInput
     connect?: RecipeWhereUniqueInput
   }
 
-  export type UserUpdateOneRequiredWithoutFavoritesNestedInput = {
+  export type UserCreateNestedOneWithoutFavoritesInput = {
     create?: XOR<UserCreateWithoutFavoritesInput, UserUncheckedCreateWithoutFavoritesInput>
     connectOrCreate?: UserCreateOrConnectWithoutFavoritesInput
-    upsert?: UserUpsertWithoutFavoritesInput
     connect?: UserWhereUniqueInput
-    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutFavoritesInput, UserUpdateWithoutFavoritesInput>, UserUncheckedUpdateWithoutFavoritesInput>
   }
 
   export type RecipeUpdateOneRequiredWithoutFavoritesNestedInput = {
@@ -9562,6 +9583,14 @@ export namespace Prisma {
     upsert?: RecipeUpsertWithoutFavoritesInput
     connect?: RecipeWhereUniqueInput
     update?: XOR<XOR<RecipeUpdateToOneWithWhereWithoutFavoritesInput, RecipeUpdateWithoutFavoritesInput>, RecipeUncheckedUpdateWithoutFavoritesInput>
+  }
+
+  export type UserUpdateOneRequiredWithoutFavoritesNestedInput = {
+    create?: XOR<UserCreateWithoutFavoritesInput, UserUncheckedCreateWithoutFavoritesInput>
+    connectOrCreate?: UserCreateOrConnectWithoutFavoritesInput
+    upsert?: UserUpsertWithoutFavoritesInput
+    connect?: UserWhereUniqueInput
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutFavoritesInput, UserUpdateWithoutFavoritesInput>, UserUncheckedUpdateWithoutFavoritesInput>
   }
 
   export type UserCreateNestedOneWithoutOnboardingProgressInput = {
@@ -9621,9 +9650,18 @@ export namespace Prisma {
     not?: NestedDateTimeFilter<$PrismaModel> | Date | string
   }
 
-  export type NestedBoolFilter<$PrismaModel = never> = {
-    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
-    not?: NestedBoolFilter<$PrismaModel> | boolean
+  export type NestedEnumCookingSkillLevelNullableFilter<$PrismaModel = never> = {
+    equals?: $Enums.CookingSkillLevel | EnumCookingSkillLevelFieldRefInput<$PrismaModel> | null
+    in?: $Enums.CookingSkillLevel[] | ListEnumCookingSkillLevelFieldRefInput<$PrismaModel> | null
+    notIn?: $Enums.CookingSkillLevel[] | ListEnumCookingSkillLevelFieldRefInput<$PrismaModel> | null
+    not?: NestedEnumCookingSkillLevelNullableFilter<$PrismaModel> | $Enums.CookingSkillLevel | null
+  }
+
+  export type NestedEnumProcessingMethodFilter<$PrismaModel = never> = {
+    equals?: $Enums.ProcessingMethod | EnumProcessingMethodFieldRefInput<$PrismaModel>
+    in?: $Enums.ProcessingMethod[] | ListEnumProcessingMethodFieldRefInput<$PrismaModel>
+    notIn?: $Enums.ProcessingMethod[] | ListEnumProcessingMethodFieldRefInput<$PrismaModel>
+    not?: NestedEnumProcessingMethodFilter<$PrismaModel> | $Enums.ProcessingMethod
   }
 
   export type NestedIntNullableFilter<$PrismaModel = never> = {
@@ -9637,18 +9675,9 @@ export namespace Prisma {
     not?: NestedIntNullableFilter<$PrismaModel> | number | null
   }
 
-  export type NestedEnumCookingSkillLevelNullableFilter<$PrismaModel = never> = {
-    equals?: $Enums.CookingSkillLevel | EnumCookingSkillLevelFieldRefInput<$PrismaModel> | null
-    in?: $Enums.CookingSkillLevel[] | ListEnumCookingSkillLevelFieldRefInput<$PrismaModel> | null
-    notIn?: $Enums.CookingSkillLevel[] | ListEnumCookingSkillLevelFieldRefInput<$PrismaModel> | null
-    not?: NestedEnumCookingSkillLevelNullableFilter<$PrismaModel> | $Enums.CookingSkillLevel | null
-  }
-
-  export type NestedEnumProcessingMethodFilter<$PrismaModel = never> = {
-    equals?: $Enums.ProcessingMethod | EnumProcessingMethodFieldRefInput<$PrismaModel>
-    in?: $Enums.ProcessingMethod[] | ListEnumProcessingMethodFieldRefInput<$PrismaModel>
-    notIn?: $Enums.ProcessingMethod[] | ListEnumProcessingMethodFieldRefInput<$PrismaModel>
-    not?: NestedEnumProcessingMethodFilter<$PrismaModel> | $Enums.ProcessingMethod
+  export type NestedBoolFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
+    not?: NestedBoolFilter<$PrismaModel> | boolean
   }
 
   export type NestedStringWithAggregatesFilter<$PrismaModel = never> = {
@@ -9710,12 +9739,24 @@ export namespace Prisma {
     _max?: NestedDateTimeFilter<$PrismaModel>
   }
 
-  export type NestedBoolWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
-    not?: NestedBoolWithAggregatesFilter<$PrismaModel> | boolean
+  export type NestedEnumCookingSkillLevelNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.CookingSkillLevel | EnumCookingSkillLevelFieldRefInput<$PrismaModel> | null
+    in?: $Enums.CookingSkillLevel[] | ListEnumCookingSkillLevelFieldRefInput<$PrismaModel> | null
+    notIn?: $Enums.CookingSkillLevel[] | ListEnumCookingSkillLevelFieldRefInput<$PrismaModel> | null
+    not?: NestedEnumCookingSkillLevelNullableWithAggregatesFilter<$PrismaModel> | $Enums.CookingSkillLevel | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedEnumCookingSkillLevelNullableFilter<$PrismaModel>
+    _max?: NestedEnumCookingSkillLevelNullableFilter<$PrismaModel>
+  }
+
+  export type NestedEnumProcessingMethodWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.ProcessingMethod | EnumProcessingMethodFieldRefInput<$PrismaModel>
+    in?: $Enums.ProcessingMethod[] | ListEnumProcessingMethodFieldRefInput<$PrismaModel>
+    notIn?: $Enums.ProcessingMethod[] | ListEnumProcessingMethodFieldRefInput<$PrismaModel>
+    not?: NestedEnumProcessingMethodWithAggregatesFilter<$PrismaModel> | $Enums.ProcessingMethod
     _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedBoolFilter<$PrismaModel>
-    _max?: NestedBoolFilter<$PrismaModel>
+    _min?: NestedEnumProcessingMethodFilter<$PrismaModel>
+    _max?: NestedEnumProcessingMethodFilter<$PrismaModel>
   }
 
   export type NestedIntNullableWithAggregatesFilter<$PrismaModel = never> = {
@@ -9745,24 +9786,12 @@ export namespace Prisma {
     not?: NestedFloatNullableFilter<$PrismaModel> | number | null
   }
 
-  export type NestedEnumCookingSkillLevelNullableWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: $Enums.CookingSkillLevel | EnumCookingSkillLevelFieldRefInput<$PrismaModel> | null
-    in?: $Enums.CookingSkillLevel[] | ListEnumCookingSkillLevelFieldRefInput<$PrismaModel> | null
-    notIn?: $Enums.CookingSkillLevel[] | ListEnumCookingSkillLevelFieldRefInput<$PrismaModel> | null
-    not?: NestedEnumCookingSkillLevelNullableWithAggregatesFilter<$PrismaModel> | $Enums.CookingSkillLevel | null
-    _count?: NestedIntNullableFilter<$PrismaModel>
-    _min?: NestedEnumCookingSkillLevelNullableFilter<$PrismaModel>
-    _max?: NestedEnumCookingSkillLevelNullableFilter<$PrismaModel>
-  }
-
-  export type NestedEnumProcessingMethodWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: $Enums.ProcessingMethod | EnumProcessingMethodFieldRefInput<$PrismaModel>
-    in?: $Enums.ProcessingMethod[] | ListEnumProcessingMethodFieldRefInput<$PrismaModel>
-    notIn?: $Enums.ProcessingMethod[] | ListEnumProcessingMethodFieldRefInput<$PrismaModel>
-    not?: NestedEnumProcessingMethodWithAggregatesFilter<$PrismaModel> | $Enums.ProcessingMethod
+  export type NestedBoolWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
+    not?: NestedBoolWithAggregatesFilter<$PrismaModel> | boolean
     _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedEnumProcessingMethodFilter<$PrismaModel>
-    _max?: NestedEnumProcessingMethodFilter<$PrismaModel>
+    _min?: NestedBoolFilter<$PrismaModel>
+    _max?: NestedBoolFilter<$PrismaModel>
   }
 
   export type NestedEnumCategorySourceNullableFilter<$PrismaModel = never> = {
@@ -9770,16 +9799,6 @@ export namespace Prisma {
     in?: $Enums.CategorySource[] | ListEnumCategorySourceFieldRefInput<$PrismaModel> | null
     notIn?: $Enums.CategorySource[] | ListEnumCategorySourceFieldRefInput<$PrismaModel> | null
     not?: NestedEnumCategorySourceNullableFilter<$PrismaModel> | $Enums.CategorySource | null
-  }
-
-  export type NestedEnumCategorySourceNullableWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: $Enums.CategorySource | EnumCategorySourceFieldRefInput<$PrismaModel> | null
-    in?: $Enums.CategorySource[] | ListEnumCategorySourceFieldRefInput<$PrismaModel> | null
-    notIn?: $Enums.CategorySource[] | ListEnumCategorySourceFieldRefInput<$PrismaModel> | null
-    not?: NestedEnumCategorySourceNullableWithAggregatesFilter<$PrismaModel> | $Enums.CategorySource | null
-    _count?: NestedIntNullableFilter<$PrismaModel>
-    _min?: NestedEnumCategorySourceNullableFilter<$PrismaModel>
-    _max?: NestedEnumCategorySourceNullableFilter<$PrismaModel>
   }
 
   export type NestedFloatNullableWithAggregatesFilter<$PrismaModel = never> = {
@@ -9796,6 +9815,16 @@ export namespace Prisma {
     _sum?: NestedFloatNullableFilter<$PrismaModel>
     _min?: NestedFloatNullableFilter<$PrismaModel>
     _max?: NestedFloatNullableFilter<$PrismaModel>
+  }
+
+  export type NestedEnumCategorySourceNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.CategorySource | EnumCategorySourceFieldRefInput<$PrismaModel> | null
+    in?: $Enums.CategorySource[] | ListEnumCategorySourceFieldRefInput<$PrismaModel> | null
+    notIn?: $Enums.CategorySource[] | ListEnumCategorySourceFieldRefInput<$PrismaModel> | null
+    not?: NestedEnumCategorySourceNullableWithAggregatesFilter<$PrismaModel> | $Enums.CategorySource | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedEnumCategorySourceNullableFilter<$PrismaModel>
+    _max?: NestedEnumCategorySourceNullableFilter<$PrismaModel>
   }
 
   export type NestedIntWithAggregatesFilter<$PrismaModel = never> = {
@@ -9886,9 +9915,10 @@ export namespace Prisma {
     cleanupTime: string
     createdAt?: Date | string
     updatedAt?: Date | string
-    categorySource?: $Enums.CategorySource | null
     categoryConfidence?: number | null
+    categorySource?: $Enums.CategorySource | null
     originalCategory?: string | null
+    mealType?: string | null
     favorites?: RecipeFavoriteCreateNestedManyWithoutRecipeInput
     images?: RecipeImageCreateNestedManyWithoutRecipeInput
   }
@@ -9906,9 +9936,10 @@ export namespace Prisma {
     cleanupTime: string
     createdAt?: Date | string
     updatedAt?: Date | string
-    categorySource?: $Enums.CategorySource | null
     categoryConfidence?: number | null
+    categorySource?: $Enums.CategorySource | null
     originalCategory?: string | null
+    mealType?: string | null
     favorites?: RecipeFavoriteUncheckedCreateNestedManyWithoutRecipeInput
     images?: RecipeImageUncheckedCreateNestedManyWithoutRecipeInput
   }
@@ -10011,10 +10042,11 @@ export namespace Prisma {
     cleanupTime?: StringFilter<"Recipe"> | string
     createdAt?: DateTimeFilter<"Recipe"> | Date | string
     updatedAt?: DateTimeFilter<"Recipe"> | Date | string
-    categorySource?: EnumCategorySourceNullableFilter<"Recipe"> | $Enums.CategorySource | null
-    categoryConfidence?: FloatNullableFilter<"Recipe"> | number | null
-    originalCategory?: StringNullableFilter<"Recipe"> | string | null
     userId?: StringFilter<"Recipe"> | string
+    categoryConfidence?: FloatNullableFilter<"Recipe"> | number | null
+    categorySource?: EnumCategorySourceNullableFilter<"Recipe"> | $Enums.CategorySource | null
+    originalCategory?: StringNullableFilter<"Recipe"> | string | null
+    mealType?: StringNullableFilter<"Recipe"> | string | null
   }
 
   export type RecipeFavoriteUpsertWithWhereUniqueWithoutUserInput = {
@@ -10083,16 +10115,16 @@ export namespace Prisma {
     imageUrl?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    onboardingCompleted?: boolean
-    onboardingStep?: number | null
     cookingSkillLevel?: $Enums.CookingSkillLevel | null
+    defaultProcessingMethod?: $Enums.ProcessingMethod
     dietaryPreferences?: UserCreatedietaryPreferencesInput | $Enums.DietaryPreference[]
     favoriteCuisines?: UserCreatefavoriteCuisinesInput | string[]
     householdSize?: number | null
-    defaultProcessingMethod?: $Enums.ProcessingMethod
+    measurementSystem?: string | null
+    onboardingCompleted?: boolean
+    onboardingStep?: number | null
     preferredCategories?: UserCreatepreferredCategoriesInput | string[]
     timezone?: string | null
-    measurementSystem?: string | null
     favorites?: RecipeFavoriteCreateNestedManyWithoutUserInput
     onboardingProgress?: UserOnboardingProgressCreateNestedManyWithoutUserInput
   }
@@ -10105,16 +10137,16 @@ export namespace Prisma {
     imageUrl?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    onboardingCompleted?: boolean
-    onboardingStep?: number | null
     cookingSkillLevel?: $Enums.CookingSkillLevel | null
+    defaultProcessingMethod?: $Enums.ProcessingMethod
     dietaryPreferences?: UserCreatedietaryPreferencesInput | $Enums.DietaryPreference[]
     favoriteCuisines?: UserCreatefavoriteCuisinesInput | string[]
     householdSize?: number | null
-    defaultProcessingMethod?: $Enums.ProcessingMethod
+    measurementSystem?: string | null
+    onboardingCompleted?: boolean
+    onboardingStep?: number | null
     preferredCategories?: UserCreatepreferredCategoriesInput | string[]
     timezone?: string | null
-    measurementSystem?: string | null
     favorites?: RecipeFavoriteUncheckedCreateNestedManyWithoutUserInput
     onboardingProgress?: UserOnboardingProgressUncheckedCreateNestedManyWithoutUserInput
   }
@@ -10195,16 +10227,16 @@ export namespace Prisma {
     imageUrl?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    onboardingCompleted?: BoolFieldUpdateOperationsInput | boolean
-    onboardingStep?: NullableIntFieldUpdateOperationsInput | number | null
     cookingSkillLevel?: NullableEnumCookingSkillLevelFieldUpdateOperationsInput | $Enums.CookingSkillLevel | null
+    defaultProcessingMethod?: EnumProcessingMethodFieldUpdateOperationsInput | $Enums.ProcessingMethod
     dietaryPreferences?: UserUpdatedietaryPreferencesInput | $Enums.DietaryPreference[]
     favoriteCuisines?: UserUpdatefavoriteCuisinesInput | string[]
     householdSize?: NullableIntFieldUpdateOperationsInput | number | null
-    defaultProcessingMethod?: EnumProcessingMethodFieldUpdateOperationsInput | $Enums.ProcessingMethod
+    measurementSystem?: NullableStringFieldUpdateOperationsInput | string | null
+    onboardingCompleted?: BoolFieldUpdateOperationsInput | boolean
+    onboardingStep?: NullableIntFieldUpdateOperationsInput | number | null
     preferredCategories?: UserUpdatepreferredCategoriesInput | string[]
     timezone?: NullableStringFieldUpdateOperationsInput | string | null
-    measurementSystem?: NullableStringFieldUpdateOperationsInput | string | null
     favorites?: RecipeFavoriteUpdateManyWithoutUserNestedInput
     onboardingProgress?: UserOnboardingProgressUpdateManyWithoutUserNestedInput
   }
@@ -10217,16 +10249,16 @@ export namespace Prisma {
     imageUrl?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    onboardingCompleted?: BoolFieldUpdateOperationsInput | boolean
-    onboardingStep?: NullableIntFieldUpdateOperationsInput | number | null
     cookingSkillLevel?: NullableEnumCookingSkillLevelFieldUpdateOperationsInput | $Enums.CookingSkillLevel | null
+    defaultProcessingMethod?: EnumProcessingMethodFieldUpdateOperationsInput | $Enums.ProcessingMethod
     dietaryPreferences?: UserUpdatedietaryPreferencesInput | $Enums.DietaryPreference[]
     favoriteCuisines?: UserUpdatefavoriteCuisinesInput | string[]
     householdSize?: NullableIntFieldUpdateOperationsInput | number | null
-    defaultProcessingMethod?: EnumProcessingMethodFieldUpdateOperationsInput | $Enums.ProcessingMethod
+    measurementSystem?: NullableStringFieldUpdateOperationsInput | string | null
+    onboardingCompleted?: BoolFieldUpdateOperationsInput | boolean
+    onboardingStep?: NullableIntFieldUpdateOperationsInput | number | null
     preferredCategories?: UserUpdatepreferredCategoriesInput | string[]
     timezone?: NullableStringFieldUpdateOperationsInput | string | null
-    measurementSystem?: NullableStringFieldUpdateOperationsInput | string | null
     favorites?: RecipeFavoriteUncheckedUpdateManyWithoutUserNestedInput
     onboardingProgress?: UserOnboardingProgressUncheckedUpdateManyWithoutUserNestedInput
   }
@@ -10290,9 +10322,10 @@ export namespace Prisma {
     cleanupTime: string
     createdAt?: Date | string
     updatedAt?: Date | string
-    categorySource?: $Enums.CategorySource | null
     categoryConfidence?: number | null
+    categorySource?: $Enums.CategorySource | null
     originalCategory?: string | null
+    mealType?: string | null
     user: UserCreateNestedOneWithoutRecipesInput
     favorites?: RecipeFavoriteCreateNestedManyWithoutRecipeInput
   }
@@ -10310,10 +10343,11 @@ export namespace Prisma {
     cleanupTime: string
     createdAt?: Date | string
     updatedAt?: Date | string
-    categorySource?: $Enums.CategorySource | null
-    categoryConfidence?: number | null
-    originalCategory?: string | null
     userId: string
+    categoryConfidence?: number | null
+    categorySource?: $Enums.CategorySource | null
+    originalCategory?: string | null
+    mealType?: string | null
     favorites?: RecipeFavoriteUncheckedCreateNestedManyWithoutRecipeInput
   }
 
@@ -10346,9 +10380,10 @@ export namespace Prisma {
     cleanupTime?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    categorySource?: NullableEnumCategorySourceFieldUpdateOperationsInput | $Enums.CategorySource | null
     categoryConfidence?: NullableFloatFieldUpdateOperationsInput | number | null
+    categorySource?: NullableEnumCategorySourceFieldUpdateOperationsInput | $Enums.CategorySource | null
     originalCategory?: NullableStringFieldUpdateOperationsInput | string | null
+    mealType?: NullableStringFieldUpdateOperationsInput | string | null
     user?: UserUpdateOneRequiredWithoutRecipesNestedInput
     favorites?: RecipeFavoriteUpdateManyWithoutRecipeNestedInput
   }
@@ -10366,60 +10401,12 @@ export namespace Prisma {
     cleanupTime?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    categorySource?: NullableEnumCategorySourceFieldUpdateOperationsInput | $Enums.CategorySource | null
-    categoryConfidence?: NullableFloatFieldUpdateOperationsInput | number | null
-    originalCategory?: NullableStringFieldUpdateOperationsInput | string | null
     userId?: StringFieldUpdateOperationsInput | string
+    categoryConfidence?: NullableFloatFieldUpdateOperationsInput | number | null
+    categorySource?: NullableEnumCategorySourceFieldUpdateOperationsInput | $Enums.CategorySource | null
+    originalCategory?: NullableStringFieldUpdateOperationsInput | string | null
+    mealType?: NullableStringFieldUpdateOperationsInput | string | null
     favorites?: RecipeFavoriteUncheckedUpdateManyWithoutRecipeNestedInput
-  }
-
-  export type UserCreateWithoutFavoritesInput = {
-    id: string
-    email: string
-    firstName?: string | null
-    lastName?: string | null
-    imageUrl?: string | null
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    onboardingCompleted?: boolean
-    onboardingStep?: number | null
-    cookingSkillLevel?: $Enums.CookingSkillLevel | null
-    dietaryPreferences?: UserCreatedietaryPreferencesInput | $Enums.DietaryPreference[]
-    favoriteCuisines?: UserCreatefavoriteCuisinesInput | string[]
-    householdSize?: number | null
-    defaultProcessingMethod?: $Enums.ProcessingMethod
-    preferredCategories?: UserCreatepreferredCategoriesInput | string[]
-    timezone?: string | null
-    measurementSystem?: string | null
-    recipes?: RecipeCreateNestedManyWithoutUserInput
-    onboardingProgress?: UserOnboardingProgressCreateNestedManyWithoutUserInput
-  }
-
-  export type UserUncheckedCreateWithoutFavoritesInput = {
-    id: string
-    email: string
-    firstName?: string | null
-    lastName?: string | null
-    imageUrl?: string | null
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    onboardingCompleted?: boolean
-    onboardingStep?: number | null
-    cookingSkillLevel?: $Enums.CookingSkillLevel | null
-    dietaryPreferences?: UserCreatedietaryPreferencesInput | $Enums.DietaryPreference[]
-    favoriteCuisines?: UserCreatefavoriteCuisinesInput | string[]
-    householdSize?: number | null
-    defaultProcessingMethod?: $Enums.ProcessingMethod
-    preferredCategories?: UserCreatepreferredCategoriesInput | string[]
-    timezone?: string | null
-    measurementSystem?: string | null
-    recipes?: RecipeUncheckedCreateNestedManyWithoutUserInput
-    onboardingProgress?: UserOnboardingProgressUncheckedCreateNestedManyWithoutUserInput
-  }
-
-  export type UserCreateOrConnectWithoutFavoritesInput = {
-    where: UserWhereUniqueInput
-    create: XOR<UserCreateWithoutFavoritesInput, UserUncheckedCreateWithoutFavoritesInput>
   }
 
   export type RecipeCreateWithoutFavoritesInput = {
@@ -10435,9 +10422,10 @@ export namespace Prisma {
     cleanupTime: string
     createdAt?: Date | string
     updatedAt?: Date | string
-    categorySource?: $Enums.CategorySource | null
     categoryConfidence?: number | null
+    categorySource?: $Enums.CategorySource | null
     originalCategory?: string | null
+    mealType?: string | null
     user: UserCreateNestedOneWithoutRecipesInput
     images?: RecipeImageCreateNestedManyWithoutRecipeInput
   }
@@ -10455,10 +10443,11 @@ export namespace Prisma {
     cleanupTime: string
     createdAt?: Date | string
     updatedAt?: Date | string
-    categorySource?: $Enums.CategorySource | null
-    categoryConfidence?: number | null
-    originalCategory?: string | null
     userId: string
+    categoryConfidence?: number | null
+    categorySource?: $Enums.CategorySource | null
+    originalCategory?: string | null
+    mealType?: string | null
     images?: RecipeImageUncheckedCreateNestedManyWithoutRecipeInput
   }
 
@@ -10467,59 +10456,53 @@ export namespace Prisma {
     create: XOR<RecipeCreateWithoutFavoritesInput, RecipeUncheckedCreateWithoutFavoritesInput>
   }
 
-  export type UserUpsertWithoutFavoritesInput = {
-    update: XOR<UserUpdateWithoutFavoritesInput, UserUncheckedUpdateWithoutFavoritesInput>
+  export type UserCreateWithoutFavoritesInput = {
+    id: string
+    email: string
+    firstName?: string | null
+    lastName?: string | null
+    imageUrl?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    cookingSkillLevel?: $Enums.CookingSkillLevel | null
+    defaultProcessingMethod?: $Enums.ProcessingMethod
+    dietaryPreferences?: UserCreatedietaryPreferencesInput | $Enums.DietaryPreference[]
+    favoriteCuisines?: UserCreatefavoriteCuisinesInput | string[]
+    householdSize?: number | null
+    measurementSystem?: string | null
+    onboardingCompleted?: boolean
+    onboardingStep?: number | null
+    preferredCategories?: UserCreatepreferredCategoriesInput | string[]
+    timezone?: string | null
+    recipes?: RecipeCreateNestedManyWithoutUserInput
+    onboardingProgress?: UserOnboardingProgressCreateNestedManyWithoutUserInput
+  }
+
+  export type UserUncheckedCreateWithoutFavoritesInput = {
+    id: string
+    email: string
+    firstName?: string | null
+    lastName?: string | null
+    imageUrl?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    cookingSkillLevel?: $Enums.CookingSkillLevel | null
+    defaultProcessingMethod?: $Enums.ProcessingMethod
+    dietaryPreferences?: UserCreatedietaryPreferencesInput | $Enums.DietaryPreference[]
+    favoriteCuisines?: UserCreatefavoriteCuisinesInput | string[]
+    householdSize?: number | null
+    measurementSystem?: string | null
+    onboardingCompleted?: boolean
+    onboardingStep?: number | null
+    preferredCategories?: UserCreatepreferredCategoriesInput | string[]
+    timezone?: string | null
+    recipes?: RecipeUncheckedCreateNestedManyWithoutUserInput
+    onboardingProgress?: UserOnboardingProgressUncheckedCreateNestedManyWithoutUserInput
+  }
+
+  export type UserCreateOrConnectWithoutFavoritesInput = {
+    where: UserWhereUniqueInput
     create: XOR<UserCreateWithoutFavoritesInput, UserUncheckedCreateWithoutFavoritesInput>
-    where?: UserWhereInput
-  }
-
-  export type UserUpdateToOneWithWhereWithoutFavoritesInput = {
-    where?: UserWhereInput
-    data: XOR<UserUpdateWithoutFavoritesInput, UserUncheckedUpdateWithoutFavoritesInput>
-  }
-
-  export type UserUpdateWithoutFavoritesInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    email?: StringFieldUpdateOperationsInput | string
-    firstName?: NullableStringFieldUpdateOperationsInput | string | null
-    lastName?: NullableStringFieldUpdateOperationsInput | string | null
-    imageUrl?: NullableStringFieldUpdateOperationsInput | string | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    onboardingCompleted?: BoolFieldUpdateOperationsInput | boolean
-    onboardingStep?: NullableIntFieldUpdateOperationsInput | number | null
-    cookingSkillLevel?: NullableEnumCookingSkillLevelFieldUpdateOperationsInput | $Enums.CookingSkillLevel | null
-    dietaryPreferences?: UserUpdatedietaryPreferencesInput | $Enums.DietaryPreference[]
-    favoriteCuisines?: UserUpdatefavoriteCuisinesInput | string[]
-    householdSize?: NullableIntFieldUpdateOperationsInput | number | null
-    defaultProcessingMethod?: EnumProcessingMethodFieldUpdateOperationsInput | $Enums.ProcessingMethod
-    preferredCategories?: UserUpdatepreferredCategoriesInput | string[]
-    timezone?: NullableStringFieldUpdateOperationsInput | string | null
-    measurementSystem?: NullableStringFieldUpdateOperationsInput | string | null
-    recipes?: RecipeUpdateManyWithoutUserNestedInput
-    onboardingProgress?: UserOnboardingProgressUpdateManyWithoutUserNestedInput
-  }
-
-  export type UserUncheckedUpdateWithoutFavoritesInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    email?: StringFieldUpdateOperationsInput | string
-    firstName?: NullableStringFieldUpdateOperationsInput | string | null
-    lastName?: NullableStringFieldUpdateOperationsInput | string | null
-    imageUrl?: NullableStringFieldUpdateOperationsInput | string | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    onboardingCompleted?: BoolFieldUpdateOperationsInput | boolean
-    onboardingStep?: NullableIntFieldUpdateOperationsInput | number | null
-    cookingSkillLevel?: NullableEnumCookingSkillLevelFieldUpdateOperationsInput | $Enums.CookingSkillLevel | null
-    dietaryPreferences?: UserUpdatedietaryPreferencesInput | $Enums.DietaryPreference[]
-    favoriteCuisines?: UserUpdatefavoriteCuisinesInput | string[]
-    householdSize?: NullableIntFieldUpdateOperationsInput | number | null
-    defaultProcessingMethod?: EnumProcessingMethodFieldUpdateOperationsInput | $Enums.ProcessingMethod
-    preferredCategories?: UserUpdatepreferredCategoriesInput | string[]
-    timezone?: NullableStringFieldUpdateOperationsInput | string | null
-    measurementSystem?: NullableStringFieldUpdateOperationsInput | string | null
-    recipes?: RecipeUncheckedUpdateManyWithoutUserNestedInput
-    onboardingProgress?: UserOnboardingProgressUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type RecipeUpsertWithoutFavoritesInput = {
@@ -10546,9 +10529,10 @@ export namespace Prisma {
     cleanupTime?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    categorySource?: NullableEnumCategorySourceFieldUpdateOperationsInput | $Enums.CategorySource | null
     categoryConfidence?: NullableFloatFieldUpdateOperationsInput | number | null
+    categorySource?: NullableEnumCategorySourceFieldUpdateOperationsInput | $Enums.CategorySource | null
     originalCategory?: NullableStringFieldUpdateOperationsInput | string | null
+    mealType?: NullableStringFieldUpdateOperationsInput | string | null
     user?: UserUpdateOneRequiredWithoutRecipesNestedInput
     images?: RecipeImageUpdateManyWithoutRecipeNestedInput
   }
@@ -10566,11 +10550,67 @@ export namespace Prisma {
     cleanupTime?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    categorySource?: NullableEnumCategorySourceFieldUpdateOperationsInput | $Enums.CategorySource | null
-    categoryConfidence?: NullableFloatFieldUpdateOperationsInput | number | null
-    originalCategory?: NullableStringFieldUpdateOperationsInput | string | null
     userId?: StringFieldUpdateOperationsInput | string
+    categoryConfidence?: NullableFloatFieldUpdateOperationsInput | number | null
+    categorySource?: NullableEnumCategorySourceFieldUpdateOperationsInput | $Enums.CategorySource | null
+    originalCategory?: NullableStringFieldUpdateOperationsInput | string | null
+    mealType?: NullableStringFieldUpdateOperationsInput | string | null
     images?: RecipeImageUncheckedUpdateManyWithoutRecipeNestedInput
+  }
+
+  export type UserUpsertWithoutFavoritesInput = {
+    update: XOR<UserUpdateWithoutFavoritesInput, UserUncheckedUpdateWithoutFavoritesInput>
+    create: XOR<UserCreateWithoutFavoritesInput, UserUncheckedCreateWithoutFavoritesInput>
+    where?: UserWhereInput
+  }
+
+  export type UserUpdateToOneWithWhereWithoutFavoritesInput = {
+    where?: UserWhereInput
+    data: XOR<UserUpdateWithoutFavoritesInput, UserUncheckedUpdateWithoutFavoritesInput>
+  }
+
+  export type UserUpdateWithoutFavoritesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    firstName?: NullableStringFieldUpdateOperationsInput | string | null
+    lastName?: NullableStringFieldUpdateOperationsInput | string | null
+    imageUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    cookingSkillLevel?: NullableEnumCookingSkillLevelFieldUpdateOperationsInput | $Enums.CookingSkillLevel | null
+    defaultProcessingMethod?: EnumProcessingMethodFieldUpdateOperationsInput | $Enums.ProcessingMethod
+    dietaryPreferences?: UserUpdatedietaryPreferencesInput | $Enums.DietaryPreference[]
+    favoriteCuisines?: UserUpdatefavoriteCuisinesInput | string[]
+    householdSize?: NullableIntFieldUpdateOperationsInput | number | null
+    measurementSystem?: NullableStringFieldUpdateOperationsInput | string | null
+    onboardingCompleted?: BoolFieldUpdateOperationsInput | boolean
+    onboardingStep?: NullableIntFieldUpdateOperationsInput | number | null
+    preferredCategories?: UserUpdatepreferredCategoriesInput | string[]
+    timezone?: NullableStringFieldUpdateOperationsInput | string | null
+    recipes?: RecipeUpdateManyWithoutUserNestedInput
+    onboardingProgress?: UserOnboardingProgressUpdateManyWithoutUserNestedInput
+  }
+
+  export type UserUncheckedUpdateWithoutFavoritesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    firstName?: NullableStringFieldUpdateOperationsInput | string | null
+    lastName?: NullableStringFieldUpdateOperationsInput | string | null
+    imageUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    cookingSkillLevel?: NullableEnumCookingSkillLevelFieldUpdateOperationsInput | $Enums.CookingSkillLevel | null
+    defaultProcessingMethod?: EnumProcessingMethodFieldUpdateOperationsInput | $Enums.ProcessingMethod
+    dietaryPreferences?: UserUpdatedietaryPreferencesInput | $Enums.DietaryPreference[]
+    favoriteCuisines?: UserUpdatefavoriteCuisinesInput | string[]
+    householdSize?: NullableIntFieldUpdateOperationsInput | number | null
+    measurementSystem?: NullableStringFieldUpdateOperationsInput | string | null
+    onboardingCompleted?: BoolFieldUpdateOperationsInput | boolean
+    onboardingStep?: NullableIntFieldUpdateOperationsInput | number | null
+    preferredCategories?: UserUpdatepreferredCategoriesInput | string[]
+    timezone?: NullableStringFieldUpdateOperationsInput | string | null
+    recipes?: RecipeUncheckedUpdateManyWithoutUserNestedInput
+    onboardingProgress?: UserOnboardingProgressUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserCreateWithoutOnboardingProgressInput = {
@@ -10581,16 +10621,16 @@ export namespace Prisma {
     imageUrl?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    onboardingCompleted?: boolean
-    onboardingStep?: number | null
     cookingSkillLevel?: $Enums.CookingSkillLevel | null
+    defaultProcessingMethod?: $Enums.ProcessingMethod
     dietaryPreferences?: UserCreatedietaryPreferencesInput | $Enums.DietaryPreference[]
     favoriteCuisines?: UserCreatefavoriteCuisinesInput | string[]
     householdSize?: number | null
-    defaultProcessingMethod?: $Enums.ProcessingMethod
+    measurementSystem?: string | null
+    onboardingCompleted?: boolean
+    onboardingStep?: number | null
     preferredCategories?: UserCreatepreferredCategoriesInput | string[]
     timezone?: string | null
-    measurementSystem?: string | null
     recipes?: RecipeCreateNestedManyWithoutUserInput
     favorites?: RecipeFavoriteCreateNestedManyWithoutUserInput
   }
@@ -10603,16 +10643,16 @@ export namespace Prisma {
     imageUrl?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    onboardingCompleted?: boolean
-    onboardingStep?: number | null
     cookingSkillLevel?: $Enums.CookingSkillLevel | null
+    defaultProcessingMethod?: $Enums.ProcessingMethod
     dietaryPreferences?: UserCreatedietaryPreferencesInput | $Enums.DietaryPreference[]
     favoriteCuisines?: UserCreatefavoriteCuisinesInput | string[]
     householdSize?: number | null
-    defaultProcessingMethod?: $Enums.ProcessingMethod
+    measurementSystem?: string | null
+    onboardingCompleted?: boolean
+    onboardingStep?: number | null
     preferredCategories?: UserCreatepreferredCategoriesInput | string[]
     timezone?: string | null
-    measurementSystem?: string | null
     recipes?: RecipeUncheckedCreateNestedManyWithoutUserInput
     favorites?: RecipeFavoriteUncheckedCreateNestedManyWithoutUserInput
   }
@@ -10641,16 +10681,16 @@ export namespace Prisma {
     imageUrl?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    onboardingCompleted?: BoolFieldUpdateOperationsInput | boolean
-    onboardingStep?: NullableIntFieldUpdateOperationsInput | number | null
     cookingSkillLevel?: NullableEnumCookingSkillLevelFieldUpdateOperationsInput | $Enums.CookingSkillLevel | null
+    defaultProcessingMethod?: EnumProcessingMethodFieldUpdateOperationsInput | $Enums.ProcessingMethod
     dietaryPreferences?: UserUpdatedietaryPreferencesInput | $Enums.DietaryPreference[]
     favoriteCuisines?: UserUpdatefavoriteCuisinesInput | string[]
     householdSize?: NullableIntFieldUpdateOperationsInput | number | null
-    defaultProcessingMethod?: EnumProcessingMethodFieldUpdateOperationsInput | $Enums.ProcessingMethod
+    measurementSystem?: NullableStringFieldUpdateOperationsInput | string | null
+    onboardingCompleted?: BoolFieldUpdateOperationsInput | boolean
+    onboardingStep?: NullableIntFieldUpdateOperationsInput | number | null
     preferredCategories?: UserUpdatepreferredCategoriesInput | string[]
     timezone?: NullableStringFieldUpdateOperationsInput | string | null
-    measurementSystem?: NullableStringFieldUpdateOperationsInput | string | null
     recipes?: RecipeUpdateManyWithoutUserNestedInput
     favorites?: RecipeFavoriteUpdateManyWithoutUserNestedInput
   }
@@ -10663,16 +10703,16 @@ export namespace Prisma {
     imageUrl?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    onboardingCompleted?: BoolFieldUpdateOperationsInput | boolean
-    onboardingStep?: NullableIntFieldUpdateOperationsInput | number | null
     cookingSkillLevel?: NullableEnumCookingSkillLevelFieldUpdateOperationsInput | $Enums.CookingSkillLevel | null
+    defaultProcessingMethod?: EnumProcessingMethodFieldUpdateOperationsInput | $Enums.ProcessingMethod
     dietaryPreferences?: UserUpdatedietaryPreferencesInput | $Enums.DietaryPreference[]
     favoriteCuisines?: UserUpdatefavoriteCuisinesInput | string[]
     householdSize?: NullableIntFieldUpdateOperationsInput | number | null
-    defaultProcessingMethod?: EnumProcessingMethodFieldUpdateOperationsInput | $Enums.ProcessingMethod
+    measurementSystem?: NullableStringFieldUpdateOperationsInput | string | null
+    onboardingCompleted?: BoolFieldUpdateOperationsInput | boolean
+    onboardingStep?: NullableIntFieldUpdateOperationsInput | number | null
     preferredCategories?: UserUpdatepreferredCategoriesInput | string[]
     timezone?: NullableStringFieldUpdateOperationsInput | string | null
-    measurementSystem?: NullableStringFieldUpdateOperationsInput | string | null
     recipes?: RecipeUncheckedUpdateManyWithoutUserNestedInput
     favorites?: RecipeFavoriteUncheckedUpdateManyWithoutUserNestedInput
   }
@@ -10690,9 +10730,10 @@ export namespace Prisma {
     cleanupTime: string
     createdAt?: Date | string
     updatedAt?: Date | string
-    categorySource?: $Enums.CategorySource | null
     categoryConfidence?: number | null
+    categorySource?: $Enums.CategorySource | null
     originalCategory?: string | null
+    mealType?: string | null
   }
 
   export type RecipeFavoriteCreateManyUserInput = {
@@ -10726,9 +10767,10 @@ export namespace Prisma {
     cleanupTime?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    categorySource?: NullableEnumCategorySourceFieldUpdateOperationsInput | $Enums.CategorySource | null
     categoryConfidence?: NullableFloatFieldUpdateOperationsInput | number | null
+    categorySource?: NullableEnumCategorySourceFieldUpdateOperationsInput | $Enums.CategorySource | null
     originalCategory?: NullableStringFieldUpdateOperationsInput | string | null
+    mealType?: NullableStringFieldUpdateOperationsInput | string | null
     favorites?: RecipeFavoriteUpdateManyWithoutRecipeNestedInput
     images?: RecipeImageUpdateManyWithoutRecipeNestedInput
   }
@@ -10746,9 +10788,10 @@ export namespace Prisma {
     cleanupTime?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    categorySource?: NullableEnumCategorySourceFieldUpdateOperationsInput | $Enums.CategorySource | null
     categoryConfidence?: NullableFloatFieldUpdateOperationsInput | number | null
+    categorySource?: NullableEnumCategorySourceFieldUpdateOperationsInput | $Enums.CategorySource | null
     originalCategory?: NullableStringFieldUpdateOperationsInput | string | null
+    mealType?: NullableStringFieldUpdateOperationsInput | string | null
     favorites?: RecipeFavoriteUncheckedUpdateManyWithoutRecipeNestedInput
     images?: RecipeImageUncheckedUpdateManyWithoutRecipeNestedInput
   }
@@ -10766,9 +10809,10 @@ export namespace Prisma {
     cleanupTime?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    categorySource?: NullableEnumCategorySourceFieldUpdateOperationsInput | $Enums.CategorySource | null
     categoryConfidence?: NullableFloatFieldUpdateOperationsInput | number | null
+    categorySource?: NullableEnumCategorySourceFieldUpdateOperationsInput | $Enums.CategorySource | null
     originalCategory?: NullableStringFieldUpdateOperationsInput | string | null
+    mealType?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type RecipeFavoriteUpdateWithoutUserInput = {

@@ -21,6 +21,24 @@ interface OnboardingWizardProps {
   className?: string;
 }
 
+// Simple component for the final success screen
+const OnboardingSuccessScreen = ({ onContinue }: { onContinue: () => void }) => (
+  <Card className="w-full max-w-lg mx-auto">
+    <CardHeader>
+      <CardTitle className="text-2xl text-center">🎉 Onboarding Complete!</CardTitle>
+      <CardDescription className="text-center">
+        You're all set up. Welcome to your personalized cookbook experience.
+      </CardDescription>
+    </CardHeader>
+    <CardContent className="flex flex-col items-center gap-4">
+      <p>You can now start adding, organizing, and discovering recipes.</p>
+      <Button onClick={onContinue} className="w-full">
+        Continue to Dashboard
+      </Button>
+    </CardContent>
+  </Card>
+);
+
 export function OnboardingWizard({ onComplete, onSkip, className }: OnboardingWizardProps) {
   const {
     currentStep,
@@ -34,6 +52,7 @@ export function OnboardingWizard({ onComplete, onSkip, className }: OnboardingWi
   } = useOnboarding();
 
   const [isProcessing, setIsProcessing] = useState(false);
+  const [showSuccessScreen, setShowSuccessScreen] = useState(false);
 
   const currentStepInfo = ONBOARDING_STEPS[currentStep];
   const isFirstStep = currentStep === 0;
@@ -50,7 +69,12 @@ export function OnboardingWizard({ onComplete, onSkip, className }: OnboardingWi
       
       if (isLastStep) {
         await completeOnboarding();
-        onComplete?.();
+        if (onComplete) {
+          onComplete();
+        } else {
+          // If no onComplete handler is provided, show the success screen as a fallback.
+          setShowSuccessScreen(true);
+        }
       } else {
         await nextStep();
       }
@@ -80,7 +104,12 @@ export function OnboardingWizard({ onComplete, onSkip, className }: OnboardingWi
     setIsProcessing(true);
     try {
       await skipOnboarding();
-      onSkip?.();
+      if (onSkip) {
+        onSkip();
+      } else {
+        // Fallback for skip, maybe redirect or show success
+        window.location.href = '/';
+      }
     } catch (error) {
       console.error('Error skipping onboarding:', error);
     } finally {
@@ -104,6 +133,14 @@ export function OnboardingWizard({ onComplete, onSkip, className }: OnboardingWi
           <p className="text-sm text-gray-600 mt-1">Welcome to Caren&apos;s Cookbook</p>
         </div>
       </div>
+    );
+  }
+
+  if (showSuccessScreen) {
+    return (
+      <OnboardingSuccessScreen 
+        onContinue={() => window.location.href = '/'} 
+      />
     );
   }
 

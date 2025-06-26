@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { clerkMiddleware, createRouteMatcher } from '@clerk/nextjs/server';
 import { RouteProtection } from '@/lib/constants/routes';
+import { OnboardingService } from '@/lib/services/onboarding';
 
 // Define route matchers for different types of routes
 const isPublicRoute = createRouteMatcher([
@@ -18,50 +19,20 @@ const isApiRoute = createRouteMatcher([
   '/api(.*)'
 ]);
 
+const ALL_PROTECTED_ROUTES = () => true; // Protect all routes by default
+
 export default clerkMiddleware(async (auth, req: NextRequest) => {
   const { userId } = await auth();
   const { pathname } = req.nextUrl;
 
-  // Allow public routes without any checks
-  if (isPublicRoute(req)) {
-    return NextResponse.next();
-  }
-
-  // Handle API routes separately (they have their own guards)
-  if (isApiRoute(req)) {
-    // API routes are protected by their own middleware
-    // Just ensure authentication for protected API routes
-    if (RouteProtection.requiresAuth(pathname) && !userId) {
-      return NextResponse.json(
-        { error: 'Unauthorized', message: 'Authentication required' },
-        { status: 401 }
-      );
-    }
-    return NextResponse.next();
-  }
-
-  // Redirect unauthenticated users to sign-in for protected routes
-  if (!userId && RouteProtection.requiresAuth(pathname)) {
-    const signInUrl = new URL('/sign-in', req.url);
-    signInUrl.searchParams.set('redirect_url', pathname);
-    return NextResponse.redirect(signInUrl);
-  }
-
-  // For authenticated users, check onboarding status for protected routes
-  if (userId && RouteProtection.requiresOnboarding(pathname)) {
-    try {
-      // Check onboarding status from our API
-      const baseUrl = req.nextUrl.origin;
-      const onboardingResponse = await fetch(`${baseUrl}/api/onboarding/progress`, {
-        headers: {
-          'Authorization': `Bearer ${userId}`, // Pass user ID for server-side auth
-          'Cookie': req.headers.get('cookie') || ''
-        }
-      });
-
-      if (onboardingResponse.ok) {
-        const data = await onboardingResponse.json();
-        const isOnboardingComplete = data.progress?.isCompleted || false;
+  // If the route is not public, it is protected
+  if (!isPublicRoute(req)) {
+    // For authenticated users, check onboarding status for protected routes
+    if (userId) {
+      try {
+        // Direct service call instead of fetch
+        const onboardingProgress = await OnboardingService.getUserProgress(userId);
+        const isOnboardingComplete = onboardingProgress.isCompleted;
 
         // If onboarding is not complete, redirect to onboarding
         if (!isOnboardingComplete && !isOnboardingRoute(req)) {
@@ -93,16 +64,22 @@ export default clerkMiddleware(async (auth, req: NextRequest) => {
           
           return response;
         }
-      } else {
-        // If we can't check onboarding status, allow access but log the issue
-        console.warn(`Failed to check onboarding status for user ${userId} on ${pathname}`);
+      } catch (error) {
+        // FAIL-CLOSED: If we can't check status, log the error and redirect to sign-in.
+        console.error(`CRITICAL: Failed to check onboarding status for user ${userId} on ${pathname}.`, error);
+        const signInUrl = new URL('/sign-in', req.url);
+        signInUrl.searchParams.set('redirect_url', pathname);
+        return NextResponse.redirect(signInUrl);
       }
-    } catch (error) {
-      // If there's an error checking onboarding status, allow access but log the issue
-      console.error('Error checking onboarding status in middleware:', error);
+    } else {
+      // For unauthenticated users, redirect to sign-in for protected routes
+      const signInUrl = new URL('/sign-in', req.url);
+      signInUrl.searchParams.set('redirect_url', pathname);
+      return NextResponse.redirect(signInUrl);
     }
   }
 
+  // Allow public routes to pass through
   return NextResponse.next();
 });
 

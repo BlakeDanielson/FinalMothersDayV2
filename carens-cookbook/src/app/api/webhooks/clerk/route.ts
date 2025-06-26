@@ -67,7 +67,6 @@ export async function POST(req: NextRequest) {
             preferredCategories: ['Breakfast', 'Lunch', 'Dinner', 'Snacks', 'Desserts'],
             // Initialize onboarding for new users
             onboardingCompleted: false,
-            onboardingStep: 0,
           },
         });
 
