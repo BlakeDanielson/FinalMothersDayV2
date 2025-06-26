@@ -7,11 +7,11 @@ import { Toaster } from 'sonner';
 
 import { Button } from "@/components/ui/button";
 import RecipeDisplay from "@/components/RecipeDisplay";
-import { BentoGrid } from "@/components/BentoGrid";
 import StatsDashboard from "@/components/StatsDashboard";
-import { CategoryCard } from "@/components/category/CategoryCard";
+import { CategorizedRecipeBrowser } from "@/components/home/CategorizedRecipeBrowser";
 import { RecipeImportModal } from "@/components/recipe-import/RecipeImportModal";
 import { useHomePage } from "@/hooks/useHomePage";
+import { useCategorizedData } from "@/hooks/useCategorizedData";
 
 export default function HomePage() {
   const {
@@ -30,11 +30,7 @@ export default function HomePage() {
     setUrl,
     urlProcessingMethod,
     setUrlProcessingMethod,
-    processedCategories,
-    
     // Data
-    categoriesLoading,
-    categoriesError,
     savedRecipes,
     
     // Handlers
@@ -49,6 +45,20 @@ export default function HomePage() {
     handleQuickScanPhoto,
     handleQuickScanMultiPhoto,
   } = useHomePage();
+
+  // New categorized data hook
+  const {
+    data: categorizedData,
+    isLoading: categorizedLoading,
+    error: categorizedError,
+  } = useCategorizedData();
+
+  // Enhanced category click handler to support different types
+  const handleCategorizedClick = (categoryName: string) => {
+    // For now, we'll use the existing category click handler
+    // In the future, you might want to navigate to filtered views based on type
+    handleCategoryClick(categoryName);
+  };
 
   if (currentView === 'recipe' && selectedRecipe) {
     return (
@@ -69,7 +79,7 @@ export default function HomePage() {
       <Toaster richColors position="top-right" />
       
       {/* Full-Screen Hero Section with Crossfading Background */}
-      <div className="relative min-h-screen overflow-hidden">
+      <div className="relative overflow-hidden" style={{ height: 'calc(100vh - 64px)' }}>
         {/* Full-background auto-crossfading photo carousel */}
         <div className="absolute inset-0 w-full h-full">
           <div className="relative w-full h-full overflow-hidden">
@@ -133,8 +143,8 @@ export default function HomePage() {
         {/* Dark overlay for text readability */}
         <div className="absolute inset-0 bg-black/40 z-10"></div>
 
-        {/* Content Container - Centered in full viewport */}
-        <div className="relative z-20 flex flex-col justify-center items-center min-h-screen px-4 py-8">
+        {/* Content Container - Centered in available viewport */}
+        <div className="relative z-20 flex flex-col justify-center items-center h-full px-4 py-8">
           <div className="container mx-auto text-center">
             {/* Main Header */}
             <header className="mb-16">
@@ -288,108 +298,15 @@ export default function HomePage() {
           )}
 
           {currentView === 'list' && (
-            <motion.div
-              className="mb-8"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ duration: 0.5, delay: 0.6 }}
-            >
-              <div className="text-center mb-16">
-                <motion.div
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.6 }}
-                  className="backdrop-blur-sm bg-white/60 rounded-3xl p-8 max-w-2xl mx-auto border border-white/40 shadow-xl"
-                >
-                  <h2 className="text-4xl font-bold bg-gradient-to-r from-gray-900 via-gray-700 to-gray-900 bg-clip-text text-transparent mb-4">
-                    Recipe Categories
-                  </h2>
-                  <p className="text-xl text-gray-600 font-light">
-                    Browse your culinary collection • <span className="font-semibold text-primary">{savedRecipes.length}</span> total recipes
-                  </p>
-                </motion.div>
-              </div>
-
-              {/* Loading State */}
-              {categoriesLoading && (
-                <div className="text-center py-16">
-                  <motion.div
-                    animate={{ rotate: 360 }}
-                    transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
-                    className="h-12 w-12 border-4 border-primary border-t-transparent rounded-full mx-auto mb-4"
-                  />
-                  <p className="text-lg text-muted-foreground font-light">Loading your recipe categories...</p>
-                </div>
-              )}
-
-              {/* Error State */}
-              {categoriesError && !categoriesLoading && (
-                <div className="text-center py-16">
-                  <div className="bg-red-50 border border-red-200 rounded-lg p-6 max-w-md mx-auto">
-                    <p className="text-red-800 font-medium mb-2">Unable to load categories</p>
-                    <p className="text-red-600 text-sm mb-4">{categoriesError}</p>
-                    <Button 
-                      onClick={() => window.location.reload()}
-                      variant="outline"
-                      className="border-red-300 text-red-700 hover:bg-red-50"
-                    >
-                      Try Again
-                    </Button>
-                  </div>
-                </div>
-              )}
-
-              {/* Categories Grid */}
-              {!categoriesLoading && !categoriesError && (
-                <motion.div
-                  initial={{ opacity: 0, y: 30 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.8, delay: 0.3 }}
-                >
-                  <BentoGrid className="gap-8" data-tour="recipe-categories">
-                    {processedCategories.map((category, index) => (
-                      <motion.div
-                        key={category.name + index}
-                        initial={{ opacity: 0, y: 20 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ 
-                          duration: 0.5, 
-                          delay: 0.1 * index,
-                          ease: "easeOut"
-                        }}
-                        className="h-full min-h-[450px]"
-                      >
-                        <CategoryCard 
-                          categoryName={category.name} 
-                          itemCount={category.count}
-                          imageUrl={category.imageUrl}
-                          onClick={() => handleCategoryClick(category.name)} 
-                        />
-                      </motion.div>
-                    ))}
-                  </BentoGrid>
-                </motion.div>
-              )}
-
-              {/* Empty State for when no categories are loaded */}
-              {!categoriesLoading && !categoriesError && processedCategories.length === 0 && (
-                <div className="text-center py-16">
-                  <div className="bg-muted/30 border border-muted rounded-lg p-8 max-w-md mx-auto">
-                    <Camera className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
-                    <p className="text-lg font-medium mb-2">No categories yet</p>
-                    <p className="text-muted-foreground text-sm mb-4">
-                      Start by importing your first recipe to see categories here
-                    </p>
-                    <Button onClick={handleQuickImportURL} className="mr-2">
-                      Import Recipe
-                    </Button>
-                    <Button onClick={handleQuickScanPhoto} variant="outline">
-                      Scan Photo
-                    </Button>
-                  </div>
-                </div>
-              )}
-            </motion.div>
+            <CategorizedRecipeBrowser
+              recipeCategories={categorizedData?.recipeCategories || []}
+              mealTypes={categorizedData?.mealTypes || []}
+              cuisines={categorizedData?.cuisines || []}
+              isLoading={categorizedLoading}
+              error={categorizedError}
+              onCategoryClick={handleCategorizedClick}
+              totalRecipes={categorizedData?.totalRecipes || savedRecipes.length}
+            />
           )}
 
           {/* Stats Dashboard */}
