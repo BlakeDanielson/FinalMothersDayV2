@@ -85,9 +85,86 @@ RecipeImportModal
 - Enhance mobile experience
 - Simplify AI provider selection 
 
-# Current Task - Categories Loading Fix
+# Current Task - Recipe Photo Categories Enhancement
 
-## ✅ COMPLETED: Fix Default Categories Loading Issue
+## ✅ COMPLETED: Replace Category Icons with Recipe Photos + Broken Image Detection
+
+### Problem Identified
+1. **Generic Icons**: Category cards were showing placeholder icons instead of actual recipe photos
+2. **Broken Image URLs**: Some recipes had broken AllRecipes URLs that looked valid but failed to load, preventing categories from showing any photos
+
+### Solution Implemented
+**Enhanced the category system to use real recipe photos as category icons** with **intelligent broken image detection** that actually tests if images load before using them.
+
+### Key Features Added
+1. **Real Image Testing**: Actually tests if images load before using them
+   - Creates temporary Image objects to test URLs
+   - 3-second timeout to avoid hanging on slow URLs
+   - Skips broken AllRecipes and other failed URLs
+   - Tests up to 3 candidates per category for performance
+
+2. **Smart Photo Selection**: Automatically selects the best working recipe photo
+   - Prioritizes most recently updated/created recipes
+   - Validates both URL format AND actual image loading
+   - Falls back gracefully to original icons when no working photos available
+
+3. **Comprehensive Coverage**: Applied to all three category types:
+   - **Recipe Categories** (Protein/Ingredient types)
+   - **Meal Types** (Appetizer, Main Course, etc.)
+   - **Cuisines** (Italian, Mexican, etc.)
+
+4. **Performance Optimized**: Async image testing with smart limits
+   - Tests maximum 3 images per category to avoid delays
+   - Parallel processing for all categories
+   - Detailed console logging for debugging broken URLs
+
+### Technical Implementation
+**Modified files**:
+- `useCategorizedData.ts` - Enhanced to fetch and assign recipe photos
+- `CategoryCard.tsx` - Already supported `imageUrl` prop (no changes needed)
+
+**Key changes**:
+```typescript
+// Added smart photo selection helper
+const selectBestRecipeImage = (recipes: any[]): string | null => {
+  // Filters, sorts, and validates recipe images
+  // Returns most recent valid image URL or null
+};
+
+// Enhanced each category type to use real photos
+const recipeCategories = categories.map((cat: any) => {
+  const recipesInCategory = recipes.filter(recipe => recipe.category === cat.name);
+  const bestImageUrl = selectBestRecipeImage(recipesInCategory);
+  
+  return {
+    name: cat.name,
+    count: cat.count,
+    imageUrl: bestImageUrl  // Real recipe photo or null for icon fallback
+  };
+});
+```
+
+### User Experience Impact
+- ✅ **Personal Touch**: Categories now show actual food photos from user's recipes
+- ✅ **Visual Appeal**: Much more engaging than generic icons
+- ✅ **Smart Fallbacks**: Icons still appear when no photos available
+- ✅ **Always Fresh**: Most recent photos are prioritized
+- ✅ **No Breaking Changes**: Existing icon system remains as fallback
+
+### Behavior
+- **With Recipe Photos**: Category cards display beautiful food photos from user's actual recipes
+- **Without Photos**: Falls back to the existing animated icon system with gradients
+- **Mixed State**: Some categories show photos, others show icons based on availability
+- **Authentication**: Works for both authenticated (real data) and non-authenticated (default categories) users
+
+## Previous Completed Work
+
+### ✅ COMPLETED: UI Carousel Implementation
+**Problem Solved:** User wanted to change from showing all recipe categories to showing three separate carousel sections.
+
+**Solution Implemented:** Created horizontal scrolling carousels for Categories, Meal Types, and Cuisines with proper navigation and recipe photo integration.
+
+### ✅ COMPLETED: Fix Default Categories Loading Issue
 
 ### Problem Identified
 There was an issue where default categories didn't load on the homepage when a user was not logged in, showing the error:

@@ -129,3 +129,12 @@
   75% { opacity: 0; }
   100% { opacity: 0; }
 }
+
+/* Hide scrollbars for carousel */
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}

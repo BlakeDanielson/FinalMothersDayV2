@@ -25,44 +25,71 @@ const openaiClient = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
 });
 
-
-
 // File validation constants
 const MAX_FILES = 5; // Maximum 5 images per recipe
 const SUPPORTED_EXTENSIONS = ['.jpg', '.jpeg', '.png', '.heic', '.heif', '.webp'];
 
-const getMultipleImageSystemPrompt = (schemaString: string) => `You are an expert recipe analysis assistant specializing in interpreting multiple images of recipes. You will receive several photos that together show a complete recipe (e.g., photos of different pages of a cookbook, recipe cards, or handwritten notes). Your task is to extract detailed recipe information from ALL provided images and consolidate them into a single comprehensive recipe.
+// Phase 1: Text extraction prompt
+const getTextExtractionPrompt = () => `You are an expert text extraction assistant. Your task is to extract ALL visible text from this recipe image. This could be a page from a cookbook, a recipe card, handwritten notes, or any other format containing recipe information.
 
-**Stage 1: Content Extraction from All Images**
-Carefully analyze ALL provided images. From the visual content across all images, you are REQUIRED to extract:
-*   \`title\`: The main title of the recipe as visible in any of the images. If multiple titles appear, choose the most prominent or complete one.
-*   \`ingredients\`: A comprehensive array of strings, where each string is a single ingredient (e.g., "1 cup flour", "2 tbsp olive oil"). Capture ALL ingredients visible across ALL images, avoiding duplicates.
-*   \`steps\`: An array of strings, where each string is a distinct preparation or cooking step. Capture ALL steps in logical order as visible across ALL images.
-*   \`images\`: This field should always contain the URLs of the processed images in the order they were provided.
+**Instructions:**
+1. Extract ALL text you can see in the image, maintaining the original structure and order
+2. If there are sections (like "Ingredients:", "Instructions:", etc.), preserve those headers
+3. For lists, maintain the list format with line breaks
+4. If text is handwritten and unclear, make your best effort but indicate uncertainty with [unclear: possible_text]
+5. If there are multiple columns or sections, separate them clearly
+6. Include any measurements, quantities, temperatures, or timing information
+7. Don't interpret or reformat - just extract the raw text as accurately as possible
 
-These fields (\`title\`, \`ingredients\`, \`steps\`, and \`images\`) MUST be derived from the visual information across all images. Do not invent or infer them if they are not visually present.
+**Output Format:**
+Return ONLY the extracted text in a clean, readable format. Do not add any commentary, explanations, or JSON formatting - just the raw text content from the image.
+
+If no readable text is found, return: "NO_TEXT_FOUND"`;
+
+// Phase 2: Recipe assembly prompt
+const getRecipeAssemblyPrompt = (schemaString: string, extractedTexts: string[]) => `You are an expert recipe analysis assistant. You have been provided with text extracted from ${extractedTexts.length} recipe images. Your task is to analyze these text extractions and assemble them into a single, comprehensive recipe.
+
+**Extracted Text from Images:**
+${extractedTexts.map((text, index) => `
+--- Image ${index + 1} Text ---
+${text}
+---
+`).join('\n')}
+
+**Your Task:**
+Analyze the extracted text and create a complete recipe. The text may come from different pages of a cookbook, multiple recipe cards, or handwritten notes that together form one complete recipe.
+
+**Stage 1: Content Assembly from Extracted Text**
+From the provided text extractions, you are REQUIRED to identify and extract:
+*   \`title\`: The main title of the recipe. If multiple titles appear, choose the most prominent or complete one.
+*   \`ingredients\`: A comprehensive array of strings, where each string is a single ingredient with measurements (e.g., "1 cup flour", "2 tbsp olive oil"). Combine all ingredients from all text extractions, avoiding duplicates.
+*   \`steps\`: An array of strings, where each string is a distinct preparation or cooking step. Combine all steps in logical order from all text extractions.
+
+These fields MUST be derived from the extracted text. Do not invent or infer them if they are not present in the text.
 
 **Stage 2: AI-Powered Content Generation**
-Once you have successfully extracted the \`title\`, \`ingredients\`, and \`steps\` from the images, you will then use THIS EXTRACTED INFORMATION to intelligently generate and provide plausible values for the following fields. These generated fields should be contextually relevant to the extracted recipe content:
-*   \`description\`: Based on the extracted \`title\`, \`ingredients\`, and \`steps\`, write a concise and appealing summary of the recipe (typically 1-3 sentences).
-*   \`cuisine\`: Based on the extracted \`ingredients\` and cooking \`steps\`, determine and state the most appropriate primary cuisine type (e.g., "Italian", "Mexican", "Indian", "American Comfort Food", "Mediterranean").
-*   \`category\`: Based on the overall nature of the recipe from the extracted content, determine and state a suitable meal category from this list: Chicken, Beef, Vegetables, Salad, Appetizer, Seafood, Thanksgiving, Lamb, Pork, Soup, Pasta, Dessert, Drinks, Sauces & Seasoning.
-*   \`prepTime\`: Based on the extracted \`ingredients\` (e.g., amount of chopping) and \`steps\`, estimate the active preparation time required before cooking begins. Provide a string like "Approx. X minutes" or "X hours Y minutes".
-*   \`cleanupTime\`: Based on the extracted \`ingredients\` and cooking \`steps\` (e.g., number of bowls/pans used), estimate the time needed for cleanup after cooking. Provide a string like "Approx. X minutes".
+Once you have successfully assembled the \`title\`, \`ingredients\`, and \`steps\` from the extracted text, generate contextually relevant values for:
+*   \`description\`: Based on the assembled recipe, write a concise and appealing summary (1-3 sentences).
+*   \`cuisine\`: Determine the most appropriate primary cuisine type (e.g., "Italian", "Mexican", "Indian", "American Comfort Food", "Mediterranean").
+*   \`category\`: Determine a suitable meal category from: Chicken, Beef, Vegetables, Salad, Appetizer, Seafood, Thanksgiving, Lamb, Pork, Soup, Pasta, Dessert, Drinks, Sauces & Seasoning.
+*   \`prepTime\`: Estimate active preparation time. Provide a string like "Approx. X minutes" or "X hours Y minutes".
+*   \`cleanupTime\`: Estimate cleanup time based on complexity. Provide a string like "Approx. X minutes".
 
-**Multi-Image Processing Guidelines:**
-- If images show different parts of the same recipe (e.g., ingredients list on one page, steps on another), combine them logically
-- If images contain overlapping information, consolidate and avoid duplicates
-- Maintain the order of steps as they appear across the images
-- If images seem to show different recipes, focus on the most complete or prominent one
+**Multi-Text Processing Guidelines:**
+- If texts show different parts of the same recipe, combine them logically
+- If texts contain overlapping information, consolidate and avoid duplicates
+- Maintain logical order of steps
+- If texts seem to show different recipes, focus on the most complete or prominent one
 
 **Output Requirements:**
-You MUST return a single JSON object. This object must contain all fields: \`title\`, \`ingredients\`, \`steps\`, \`images\`, \`description\`, \`cuisine\`, \`category\`, \`prepTime\`, and \`cleanupTime\`.
+You MUST return a valid JSON object containing all fields: \`title\`, \`ingredients\`, \`steps\`, \`images\`, \`description\`, \`cuisine\`, \`category\`, \`prepTime\`, and \`cleanupTime\`.
+
+The \`images\` field will be populated automatically - just include it as an empty array in your response.
+
 Adherence to the following JSON schema structure is MANDATORY:
 ${schemaString}
 
-**Important:** If the images do not contain a clear, readable recipe with visible ingredients and steps, you must return an empty object {} to indicate that no recipe was detected.
-`;
+**Important:** If the extracted text does not contain a clear, readable recipe with identifiable ingredients and steps, you must return an empty object {} to indicate that no recipe was detected.`;
 
 function validateFiles(imageFiles: File[], provider: AIProvider = 'openai'): void {
   // Check if files exist
@@ -225,77 +252,155 @@ function handleOpenAIError(error: unknown): never {
   });
 }
 
-
-
-async function processMultipleImagesWithOpenAI(
-  imageData: Array<{ base64: string; mimeType: string; fileName: string }>, 
-  systemPrompt: string,
+// Phase 1: Extract text from individual images
+async function extractTextFromImage(
+  imageBase64: string, 
+  imageMimeType: string, 
+  fileName: string,
   model: string = AI_MODELS.OPENAI_MAIN
-) {
-  // Prepare content array for OpenAI with proper typing
-  const content: ChatCompletionContentPart[] = [
-    { type: "text", text: systemPrompt }
-  ];
-
-  // Add all images to the content
-  imageData.forEach((img) => {
-    content.push({
-      type: "image_url",
-      image_url: {
-        url: `data:${img.mimeType};base64,${img.base64}`,
-        detail: "high",
-      },
-    });
-  });
-
+): Promise<string> {
+  const textExtractionPrompt = getTextExtractionPrompt();
+  
   const chatCompletion = await openaiClient.chat.completions.create({
     model: model,
     messages: [
       {
         role: "user",
-        content: content,
+        content: [
+          { type: "text", text: textExtractionPrompt },
+          {
+            type: "image_url",
+            image_url: {
+              url: `data:${imageMimeType};base64,${imageBase64}`,
+              detail: "high",
+            },
+          },
+        ],
+      },
+    ],
+    max_tokens: AI_SETTINGS.OPENAI.MAX_TOKENS, // Standard tokens for text extraction
+  });
+
+  const extractedText = chatCompletion.choices[0]?.message?.content || "";
+  
+  // Log the extraction for debugging
+  console.log(`[TEXT-EXTRACT] ${fileName}: ${extractedText.slice(0, 200)}${extractedText.length > 200 ? '...' : ''}`);
+  
+  return extractedText;
+}
+
+// Phase 2: Assemble extracted texts into recipe format
+async function assembleRecipeFromTexts(
+  extractedTexts: string[],
+  schemaString: string,
+  model: string = AI_MODELS.OPENAI_MAIN
+): Promise<string | null> {
+  const assemblyPrompt = getRecipeAssemblyPrompt(schemaString, extractedTexts);
+  
+  const chatCompletion = await openaiClient.chat.completions.create({
+    model: model,
+    messages: [
+      {
+        role: "user",
+        content: assemblyPrompt,
       },
     ],
     response_format: { type: "json_object" },
-    max_tokens: Math.min(AI_SETTINGS.OPENAI.MAX_TOKENS * 3, 16000), // Triple for multiple images, but cap at model limit
+    max_tokens: AI_SETTINGS.OPENAI.MAX_TOKENS * 2, // Double tokens for recipe assembly
   });
 
   return chatCompletion.choices[0]?.message?.content;
 }
 
+// Legacy function for backward compatibility (now using two-phase approach)
+async function processMultipleImagesWithOpenAI(
+  imageData: Array<{ base64: string; mimeType: string; fileName: string }>, 
+  schemaString: string,
+  model: string = AI_MODELS.OPENAI_MAIN
+) {
+  // Phase 1: Extract text from each image
+  console.log(`[MULTI-RECIPE] Starting Phase 1: Text extraction from ${imageData.length} images`);
+  const extractedTexts: string[] = [];
+  
+  for (let i = 0; i < imageData.length; i++) {
+    const img = imageData[i];
+    try {
+      const extractedText = await extractTextFromImage(img.base64, img.mimeType, img.fileName, model);
+      
+      if (extractedText === "NO_TEXT_FOUND" || extractedText.trim().length === 0) {
+        console.warn(`[TEXT-EXTRACT] No readable text found in ${img.fileName}`);
+        continue;
+      }
+      
+      extractedTexts.push(extractedText);
+    } catch (error) {
+      console.error(`[TEXT-EXTRACT] Failed to extract text from ${img.fileName}:`, error);
+      // Continue with other images rather than failing completely
+      continue;
+    }
+  }
+
+  if (extractedTexts.length === 0) {
+    throw new RecipeProcessingError({
+      type: ErrorType.RECIPE_NOT_DETECTED,
+      message: 'No readable text found in any images',
+      userMessage: 'We couldn\'t find readable text in any of the uploaded images.',
+      actionable: 'Please ensure the images are clear, well-lit, and contain visible recipe text.',
+      retryable: true,
+      statusCode: 422
+    });
+  }
+
+  // Phase 2: Assemble texts into recipe format
+  console.log(`[MULTI-RECIPE] Starting Phase 2: Assembling recipe from ${extractedTexts.length} text extractions`);
+  const assembledRecipe = await assembleRecipeFromTexts(extractedTexts, schemaString, model);
+  
+  return assembledRecipe;
+}
+
+// Legacy function for GPT Mini (now using two-phase approach)
 async function processMultipleImagesWithGPTMini(
   imageData: Array<{ base64: string; mimeType: string; fileName: string }>, 
-  systemPrompt: string
+  schemaString: string
 ) {
-  // Prepare content array for OpenAI with proper typing
-  const content: ChatCompletionContentPart[] = [
-    { type: "text", text: systemPrompt }
-  ];
+  // Phase 1: Extract text from each image using GPT Mini
+  console.log(`[MULTI-RECIPE-MINI] Starting Phase 1: Text extraction from ${imageData.length} images`);
+  const extractedTexts: string[] = [];
+  
+  for (let i = 0; i < imageData.length; i++) {
+    const img = imageData[i];
+    try {
+      const extractedText = await extractTextFromImage(img.base64, img.mimeType, img.fileName, AI_MODELS.OPENAI_MINI);
+      
+      if (extractedText === "NO_TEXT_FOUND" || extractedText.trim().length === 0) {
+        console.warn(`[TEXT-EXTRACT-MINI] No readable text found in ${img.fileName}`);
+        continue;
+      }
+      
+      extractedTexts.push(extractedText);
+    } catch (error) {
+      console.error(`[TEXT-EXTRACT-MINI] Failed to extract text from ${img.fileName}:`, error);
+      // Continue with other images rather than failing completely
+      continue;
+    }
+  }
 
-  // Add all images to the content
-  imageData.forEach((img) => {
-    content.push({
-      type: "image_url",
-      image_url: {
-        url: `data:${img.mimeType};base64,${img.base64}`,
-        detail: "high",
-      },
+  if (extractedTexts.length === 0) {
+    throw new RecipeProcessingError({
+      type: ErrorType.RECIPE_NOT_DETECTED,
+      message: 'No readable text found in any images',
+      userMessage: 'We couldn\'t find readable text in any of the uploaded images.',
+      actionable: 'Please ensure the images are clear, well-lit, and contain visible recipe text.',
+      retryable: true,
+      statusCode: 422
     });
-  });
+  }
 
-  const chatCompletion = await openaiClient.chat.completions.create({
-    model: AI_MODELS.OPENAI_MINI,
-    messages: [
-      {
-        role: "user",
-        content: content,
-      },
-    ],
-    response_format: { type: "json_object" },
-    max_tokens: Math.min(AI_SETTINGS.OPENAI.MAX_TOKENS * 3, 16000), // Triple for multiple images, but cap at model limit
-  });
-
-  return chatCompletion.choices[0]?.message?.content;
+  // Phase 2: Assemble texts into recipe format using GPT Mini
+  console.log(`[MULTI-RECIPE-MINI] Starting Phase 2: Assembling recipe from ${extractedTexts.length} text extractions`);
+  const assembledRecipe = await assembleRecipeFromTexts(extractedTexts, schemaString, AI_MODELS.OPENAI_MINI);
+  
+  return assembledRecipe;
 }
 
 export async function POST(req: NextRequest) {
@@ -400,23 +505,22 @@ export async function POST(req: NextRequest) {
     }
 
     const schemaString = JSON.stringify(scanMultipleRecipeZodSchema.shape);
-    const systemPrompt = getMultipleImageSystemPrompt(schemaString);
 
-    // Process images with selected AI provider
+    // Process images with selected AI provider using two-phase approach
     let responseContent: string | null = null;
     
     try {
       if (provider === 'openai') {
-        responseContent = await processMultipleImagesWithOpenAI(imageData, systemPrompt, selectedModel);
+        responseContent = await processMultipleImagesWithOpenAI(imageData, schemaString, selectedModel);
       } else if (provider === 'gemini') {
-        responseContent = await processMultipleImagesWithGPTMini(imageData, systemPrompt);
+        responseContent = await processMultipleImagesWithGPTMini(imageData, schemaString);
       }
     } catch (error: unknown) {
-              if (provider === 'openai') {
-          handleOpenAIError(error);
-        } else if (provider === 'gemini') {
-          handleOpenAIError(error);
-        } else {
+      if (provider === 'openai') {
+        handleOpenAIError(error);
+      } else if (provider === 'gemini') {
+        handleOpenAIError(error);
+      } else {
         throw error;
       }
     }
