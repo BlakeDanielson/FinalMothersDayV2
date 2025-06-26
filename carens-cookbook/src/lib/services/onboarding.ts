@@ -59,7 +59,6 @@ export class OnboardingService {
       where: { id: userId },
       select: {
         onboardingCompleted: true,
-        onboardingStep: true,
         onboardingProgress: {
           orderBy: { stepId: 'asc' }
         }
@@ -251,21 +250,15 @@ export class OnboardingService {
    * Reset user's onboarding progress
    */
   static async resetProgress(userId: string): Promise<void> {
-    await prisma.$transaction(async (tx) => {
-      // Delete all progress records
-      await tx.userOnboardingProgress.deleteMany({
-        where: { userId }
-      });
-
-      // Reset user's onboarding status
-      await tx.user.update({
+    await prisma.$transaction([
+      prisma.userOnboardingProgress.deleteMany({ where: { userId } }),
+      prisma.user.update({
         where: { id: userId },
         data: {
-          onboardingCompleted: false,
-          onboardingStep: 0
+          onboardingCompleted: false
         }
-      });
-    });
+      })
+    ]);
   }
 
   /**
