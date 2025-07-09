@@ -10,6 +10,7 @@ import RecipeDisplay from "@/components/RecipeDisplay";
 import StatsDashboard from "@/components/StatsDashboard";
 import { CategorizedRecipeBrowser } from "@/components/home/CategorizedRecipeBrowser";
 import { RecipeImportModal } from "@/components/recipe-import/RecipeImportModal";
+import { AIFeatureShowcase } from "@/components/home/AIFeatureShowcase";
 import { useHomePage } from "@/hooks/useHomePage";
 import { useCategorizedData } from "@/hooks/useCategorizedData";
 
@@ -279,6 +280,11 @@ export default function HomePage() {
         </div>
         
         <div className="relative container mx-auto px-4 py-16">
+          {/* AI Feature Showcase */}
+          {currentView === 'list' && (
+            <AIFeatureShowcase />
+          )}
+
           {currentView !== 'list' && (
             <motion.div
               className="mb-12"

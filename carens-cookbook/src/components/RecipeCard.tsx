@@ -8,6 +8,7 @@ import { Trash2 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { RecipeData as ImportedRecipeData } from "@/components/RecipeDisplay"; // Assuming RecipeDisplay exports this
 import { useSettings } from '@/contexts/SettingsContext'; // Import useSettings
+import { AIProcessedIndicator } from "@/components/ui/AICapabilityBadge";
 
 export interface RecipeCardProps extends ImportedRecipeData {
   tags?: string[];
@@ -100,15 +101,18 @@ export const RecipeCard = ({
             </Button>
         )}
 
-        {tags && tags.length > 0 && (
-          <div className="flex flex-wrap gap-1 mb-1">
-            {tags.map((tag, i) => (
-              <Badge key={i} variant="secondary" className="text-xs px-1.5 py-0.5">
-                {tag}
-              </Badge>
-            ))}
-          </div>
-        )}
+        <div className="flex flex-wrap items-center gap-1 mb-1">
+          {tags && tags.length > 0 && (
+            <>
+              {tags.map((tag, i) => (
+                <Badge key={i} variant="secondary" className="text-xs px-1.5 py-0.5">
+                  {tag}
+                </Badge>
+              ))}
+            </>
+          )}
+          <AIProcessedIndicator className="ml-auto" />
+        </div>
         <h3 
           className={cn(
             "text-lg font-semibold text-foreground line-clamp-2",
