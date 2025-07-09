@@ -26,9 +26,9 @@ const OnboardingSuccessScreen = ({ onContinue }: { onContinue: () => void }) => 
   <Card className="w-full max-w-lg mx-auto">
     <CardHeader>
       <CardTitle className="text-2xl text-center">🎉 Onboarding Complete!</CardTitle>
-      <CardDescription className="text-center">
-        You're all set up. Welcome to your personalized cookbook experience.
-      </CardDescription>
+              <CardDescription className="text-center">
+          You&apos;re all set up. Welcome to your personalized cookbook experience.
+        </CardDescription>
     </CardHeader>
     <CardContent className="flex flex-col items-center gap-4">
       <p>You can now start adding, organizing, and discovering recipes.</p>

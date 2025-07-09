@@ -2,11 +2,6 @@ import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/db';
 import { z } from 'zod';
 import { auth } from '@clerk/nextjs/server';
-import { 
-  profileSetupSchema,
-  categorySetupSchema,
-  preferencesSchema
-} from '@/lib/validation/user-preferences';
 import { OnboardingService } from '@/lib/services/onboarding';
 import { ONBOARDING_STEPS } from '@/lib/constants/user-preferences';
 
@@ -15,11 +10,6 @@ const onboardingUpdateSchema = z.object({
   step: z.number().int().min(0),
   data: z.record(z.any()).optional(),
   markCompleted: z.boolean().default(false)
-});
-
-// Schema for completing onboarding
-const completeOnboardingSchema = z.object({
-  completed: z.literal(true)
 });
 
 /**
@@ -100,7 +90,7 @@ export async function POST(req: NextRequest) {
 /**
  * Reset user's onboarding progress
  */
-export async function DELETE(req: NextRequest) {
+export async function DELETE() {
   try {
     const { userId } = await auth();
     if (!userId) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });

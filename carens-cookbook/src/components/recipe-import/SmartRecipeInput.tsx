@@ -16,6 +16,8 @@ import { Input } from "@/components/ui/input";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import RecipeLoadingProgress from "@/components/ui/RecipeLoadingProgress";
+import { AIProcessingIndicator } from "@/components/ui/AIProcessingIndicator";
+import { AICapabilityBadge, AIFeatureShowcase } from "@/components/ui/AICapabilityBadge";
 
 interface SmartRecipeInputProps {
   isOpen: boolean;
@@ -165,6 +167,22 @@ export function SmartRecipeInput({
     }
   };
 
+  const getAIProcessingStage = (message: string): 'analyzing' | 'extracting' | 'enhancing' | 'organizing' | 'complete' => {
+    const lowerMessage = message.toLowerCase();
+    if (lowerMessage.includes('analyzing') || lowerMessage.includes('scanning') || lowerMessage.includes('reading')) {
+      return 'analyzing';
+    } else if (lowerMessage.includes('extracting') || lowerMessage.includes('processing') || lowerMessage.includes('parsing')) {
+      return 'extracting';
+    } else if (lowerMessage.includes('enhancing') || lowerMessage.includes('improving') || lowerMessage.includes('filling')) {
+      return 'enhancing';
+    } else if (lowerMessage.includes('organizing') || lowerMessage.includes('categorizing') || lowerMessage.includes('structuring')) {
+      return 'organizing';
+    } else if (lowerMessage.includes('complete') || lowerMessage.includes('done') || lowerMessage.includes('finished')) {
+      return 'complete';
+    }
+    return 'extracting'; // default
+  };
+
   const canSubmit = (inputMode === 'url' && urlValue.trim()) || 
                    (inputMode === 'photo' && selectedFiles.length > 0);
 
@@ -176,6 +194,9 @@ export function SmartRecipeInput({
             <Sparkles className="h-6 w-6 text-primary" />
             Add Your Recipe
           </DialogTitle>
+          <div className="flex justify-center pt-2">
+            <AIFeatureShowcase features={['vision', 'web-scraping', 'extraction', 'enhancement']} />
+          </div>
         </DialogHeader>
 
         <div className="space-y-6">
@@ -485,9 +506,13 @@ export function SmartRecipeInput({
 
           {/* Loading Progress */}
           {isLoading && loadingStepMessage && (
-            <RecipeLoadingProgress 
-              progress={loadingProgress} 
-              statusMessage={loadingStepMessage} 
+            <AIProcessingIndicator
+              stage={getAIProcessingStage(loadingStepMessage)}
+              progress={loadingProgress}
+              message={loadingStepMessage}
+              processingType={inputMode === 'url' ? 'url' : 'image'}
+              aiProvider={inputMode === 'url' ? getUIModelConfig(selectedGeminiProvider).name : getUIModelConfig(selectedGeminiProvider).name}
+              showTechnicalDetails={showAdvanced}
             />
           )}
 
