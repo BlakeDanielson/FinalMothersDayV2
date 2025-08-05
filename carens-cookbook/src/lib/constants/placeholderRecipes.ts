@@ -15,7 +15,7 @@ export const placeholderRecipes: PlaceholderRecipe[] = [
     prepTime: "10 min",
     cleanupTime: "15 min",
     ingredients: [], steps: [],
-    image: "https://images.unsplash.com/photo-1565299624946-b28f40a0ca4b?auto=format&fit=crop&w=1770&q=80"
+    image: "https://images.unsplash.com/photo-1473093295043-cdd812d0e601?auto=format&fit=crop&w=1770&q=80"
   },
   {
     id: "placeholder-2",
@@ -26,7 +26,7 @@ export const placeholderRecipes: PlaceholderRecipe[] = [
     prepTime: "10 min",
     cleanupTime: "5 min",
     ingredients: [], steps: [],
-    image: "https://images.unsplash.com/photo-1572441713132-51c75654db73?auto=format&fit=crop&w=1770&q=80"
+    image: "https://images.unsplash.com/photo-1546554137-f86b9593a222?auto=format&fit=crop&w=1770&q=80"
   },
   {
     id: "placeholder-3",
@@ -48,7 +48,7 @@ export const placeholderRecipes: PlaceholderRecipe[] = [
     prepTime: "15 min",
     cleanupTime: "12 min",
     ingredients: [], steps: [],
-    image: "https://images.unsplash.com/photo-1551024601-bec78d8d590d?auto=format&fit=crop&w=1770&q=80"
+    image: "https://images.unsplash.com/photo-1499636136210-6f4ee915583e?auto=format&fit=crop&w=1770&q=80"
   },
   {
     id: "placeholder-5",
@@ -70,7 +70,7 @@ export const placeholderRecipes: PlaceholderRecipe[] = [
     prepTime: "15 min",
     cleanupTime: "10 min",
     ingredients: [], steps: [],
-    image: "https://images.unsplash.com/photo-1608039819226-e6ea12c05aa2?auto=format&fit=crop&w=1770&q=80"
+    image: "https://images.unsplash.com/photo-1546833999-b9f581a1996d?auto=format&fit=crop&w=1770&q=80"
   },
   {
     id: "placeholder-7",
@@ -103,7 +103,7 @@ export const placeholderRecipes: PlaceholderRecipe[] = [
     prepTime: "30 min",
     cleanupTime: "4 hours (cooking)",
     ingredients: [], steps: [],
-    image: "https://images.unsplash.com/photo-1574966771070-9639608a1173?auto=format&fit=crop&w=1771&q=80"
+    image: "https://images.unsplash.com/photo-1507048331197-7d4ac70811cf?auto=format&fit=crop&w=1770&q=80"
   },
   {
     id: "placeholder-10",
@@ -114,7 +114,7 @@ export const placeholderRecipes: PlaceholderRecipe[] = [
     prepTime: "15 min",
     cleanupTime: "20 min",
     ingredients: [], steps: [],
-    image: "https://images.unsplash.com/photo-1600891964091-bab6873a49dc?auto=format&fit=crop&w=1770&q=80"
+    image: "https://images.unsplash.com/photo-1588166524941-3bf61a9c41db?auto=format&fit=crop&w=1770&q=80"
   },
   {
     id: "placeholder-11",
@@ -125,7 +125,7 @@ export const placeholderRecipes: PlaceholderRecipe[] = [
     prepTime: "20 min",
     cleanupTime: "8 hours (cooking)",
     ingredients: [], steps: [],
-    image: "https://images.unsplash.com/photo-1628268900122-c0a3a9ade820?auto=format&fit=crop&w=1770&q=80"
+    image: "https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&w=1770&q=80"
   },
   {
     id: "placeholder-12",
@@ -147,7 +147,7 @@ export const placeholderRecipes: PlaceholderRecipe[] = [
     prepTime: "5 min",
     cleanupTime: "5 min",
     ingredients: [], steps: [],
-    image: "https://images.unsplash.com/photo-1551030173-1b2ff3648450?auto=format&fit=crop&w=1770&q=80"
+    image: "https://images.unsplash.com/photo-1556679343-c7306c1976bc?auto=format&fit=crop&w=1770&q=80"
   },
   {
     id: "placeholder-14",
@@ -158,27 +158,27 @@ export const placeholderRecipes: PlaceholderRecipe[] = [
     prepTime: "10 min",
     cleanupTime: "5 min",
     ingredients: [], steps: [],
-    image: "https://images.unsplash.com/photo-1562504648-5b7a96109ba3?auto=format&fit=crop&w=1770&q=80"
+    image: "https://images.unsplash.com/photo-1607532941433-304659e8198a?auto=format&fit=crop&w=1770&q=80"
   }
 ];
 
 export const ALL_POSSIBLE_CATEGORIES: { name: string; defaultImageUrl?: string | null }[] = [
-  { name: "Appetizer", defaultImageUrl: "https://images.unsplash.com/photo-1572441713132-51c75654db73?auto=format&fit=crop&w=1770&q=80" },
-  { name: "Beef", defaultImageUrl: "https://images.unsplash.com/photo-1608039819226-e6ea12c05aa2?auto=format&fit=crop&w=1770&q=80" },
-  { name: "Beverage", defaultImageUrl: "https://images.unsplash.com/photo-1551030173-1b2ff3648450?auto=format&fit=crop&w=1770&q=80" },
+  { name: "Appetizer", defaultImageUrl: "https://images.unsplash.com/photo-1546554137-f86b9593a222?auto=format&fit=crop&w=1770&q=80" },
+  { name: "Beef", defaultImageUrl: "https://images.unsplash.com/photo-1546833999-b9f581a1996d?auto=format&fit=crop&w=1770&q=80" },
+  { name: "Beverage", defaultImageUrl: "https://images.unsplash.com/photo-1556679343-c7306c1976bc?auto=format&fit=crop&w=1770&q=80" },
   { name: "Breakfast", defaultImageUrl: "https://images.unsplash.com/photo-1484723091739-30a097e8f929?auto=format&fit=crop&w=1770&q=80" },
   { name: "Chicken", defaultImageUrl: "https://images.unsplash.com/photo-1567620905732-2d1ec7ab7445?auto=format&fit=crop&w=1770&q=80" },
-  { name: "Dessert", defaultImageUrl: "https://images.unsplash.com/photo-1551024601-bec78d8d590d?auto=format&fit=crop&w=1770&q=80" },
-  { name: "Drinks", defaultImageUrl: "https://images.unsplash.com/photo-1551030173-1b2ff3648450?auto=format&fit=crop&w=1770&q=80" },
-  { name: "Lamb", defaultImageUrl: "https://images.unsplash.com/photo-1600891964091-bab6873a49dc?auto=format&fit=crop&w=1770&q=80" },
-  { name: "Pasta", defaultImageUrl: "https://images.unsplash.com/photo-1565299624946-b28f40a0ca4b?auto=format&fit=crop&w=1770&q=80" },
-  { name: "Pork", defaultImageUrl: "https://images.unsplash.com/photo-1628268900122-c0a3a9ade820?auto=format&fit=crop&w=1770&q=80" },
+  { name: "Dessert", defaultImageUrl: "https://images.unsplash.com/photo-1499636136210-6f4ee915583e?auto=format&fit=crop&w=1770&q=80" },
+  { name: "Drinks", defaultImageUrl: "https://images.unsplash.com/photo-1556679343-c7306c1976bc?auto=format&fit=crop&w=1770&q=80" },
+  { name: "Lamb", defaultImageUrl: "https://images.unsplash.com/photo-1588166524941-3bf61a9c41db?auto=format&fit=crop&w=1770&q=80" },
+  { name: "Pasta", defaultImageUrl: "https://images.unsplash.com/photo-1473093295043-cdd812d0e601?auto=format&fit=crop&w=1770&q=80" },
+  { name: "Pork", defaultImageUrl: "https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&w=1770&q=80" },
   { name: "Salad", defaultImageUrl: "https://images.unsplash.com/photo-1540189549336-e6e99c3679fe?auto=format&fit=crop&w=1770&q=80" },
-  { name: "Sauce", defaultImageUrl: "https://images.unsplash.com/photo-1562504648-5b7a96109ba3?auto=format&fit=crop&w=1770&q=80" },
+  { name: "Sauce", defaultImageUrl: "https://images.unsplash.com/photo-1607532941433-304659e8198a?auto=format&fit=crop&w=1770&q=80" },
   { name: "Seafood", defaultImageUrl: "https://images.unsplash.com/photo-1571091718767-18b5b1457add?auto=format&fit=crop&w=1770&q=80" },
   { name: "Side Dish", defaultImageUrl: "https://images.unsplash.com/photo-1540420773420-3366772f4999?auto=format&fit=crop&w=1770&q=80" },
-  { name: "Sauces & Seasoning", defaultImageUrl: "https://images.unsplash.com/photo-1562504648-5b7a96109ba3?auto=format&fit=crop&w=1770&q=80" },
+  { name: "Sauces & Seasoning", defaultImageUrl: "https://images.unsplash.com/photo-1607532941433-304659e8198a?auto=format&fit=crop&w=1770&q=80" },
   { name: "Soup", defaultImageUrl: "https://images.unsplash.com/photo-1547592180-85f173990554?auto=format&fit=crop&w=1770&q=80" },
-  { name: "Thanksgiving", defaultImageUrl: "https://images.unsplash.com/photo-1574966771070-9639608a1173?auto=format&fit=crop&w=1771&q=80" },
-  { name: "Vegetable", defaultImageUrl: "https://images.unsplash.com/photo-1597362925123-77861d3fbac8?auto=format&fit=crop&w=1770&q=80" },
+  { name: "Thanksgiving", defaultImageUrl: "https://images.unsplash.com/photo-1507048331197-7d4ac70811cf?auto=format&fit=crop&w=1770&q=80" },
+  { name: "Vegetable", defaultImageUrl: "https://images.unsplash.com/photo-1540420773420-3366772f4999?auto=format&fit=crop&w=1770&q=80" },
 ].sort((a, b) => a.name.localeCompare(b.name)); 
