@@ -4,13 +4,9 @@ import {
   Brain, 
   Eye, 
   Sparkles, 
-  Zap, 
   Globe, 
-  ImageIcon, 
-  FileText, 
   Wand2,
   Search,
-  Cpu,
   Bot,
   Stars,
   Wand
