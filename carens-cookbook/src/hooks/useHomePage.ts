@@ -302,10 +302,7 @@ export function useHomePage() {
     setShowAddRecipeModal(true);
   }, []);
 
-  const handleQuickScanMultiPhoto = useCallback(() => {
-    setActiveImportTab('multi-photo');
-    setShowAddRecipeModal(true);
-  }, []);
+
 
   const handleShowStats = useCallback(() => {
     setCurrentView('stats');
@@ -354,7 +351,7 @@ export function useHomePage() {
     handleCategoryClick,
     handleQuickImportURL,
     handleQuickScanPhoto,
-    handleQuickScanMultiPhoto,
+
     handleShowStats,
   };
 } 

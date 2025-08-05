@@ -2,7 +2,7 @@
 
 import React from "react";
 import { motion } from "framer-motion";
-import { HomeIcon, Camera, SearchIcon, Images } from "lucide-react";
+import { HomeIcon, Camera, SearchIcon } from "lucide-react";
 import { Toaster } from 'sonner';
 
 import { Button } from "@/components/ui/button";
@@ -10,7 +10,7 @@ import RecipeDisplay from "@/components/RecipeDisplay";
 import StatsDashboard from "@/components/StatsDashboard";
 import { CategorizedRecipeBrowser } from "@/components/home/CategorizedRecipeBrowser";
 import { RecipeImportModal } from "@/components/recipe-import/RecipeImportModal";
-import { AIFeatureShowcase } from "@/components/home/AIFeatureShowcase";
+
 import { useHomePage } from "@/hooks/useHomePage";
 import { useCategorizedData } from "@/hooks/useCategorizedData";
 
@@ -44,7 +44,7 @@ export default function HomePage() {
     handleCategoryClick,
     handleQuickImportURL,
     handleQuickScanPhoto,
-    handleQuickScanMultiPhoto,
+
   } = useHomePage();
 
   // New categorized data hook
@@ -179,7 +179,7 @@ export default function HomePage() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: 0.4 }}
             >
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto" data-tour="recipe-pathways">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto" data-tour="recipe-pathways">
                 <motion.div
                   className="backdrop-blur-lg bg-white/15 hover:bg-white/25 rounded-3xl p-8 cursor-pointer transition-all duration-300 group border border-white/30 hover:border-white/50 shadow-2xl hover:shadow-[0_20px_60px_rgba(0,0,0,0.4)] hover:scale-105"
                   onClick={handleQuickImportURL}
@@ -220,24 +220,7 @@ export default function HomePage() {
                   </div>
                 </motion.div>
                 
-                <motion.div
-                  className="backdrop-blur-lg bg-white/15 hover:bg-white/25 rounded-3xl p-8 cursor-pointer transition-all duration-300 group border border-white/30 hover:border-white/50 shadow-2xl hover:shadow-[0_20px_60px_rgba(0,0,0,0.4)] hover:scale-105"
-                  onClick={handleQuickScanMultiPhoto}
-                  whileHover={{ y: -5 }}
-                  transition={{ duration: 0.2 }}
-                >
-                  <div className="text-center">
-                    <div className="mx-auto w-24 h-24 bg-purple-500 hover:bg-purple-400 rounded-full flex items-center justify-center mb-6 group-hover:scale-110 transition-all duration-300 shadow-xl">
-                      <Images className="h-12 w-12 text-white" />
-                    </div>
-                    <h3 className="text-2xl font-bold mb-3 text-white" style={{textShadow: '0 2px 10px rgba(0,0,0,0.6)'}}>
-                      Multi-Recipe Scan
-                    </h3>
-                    <p className="text-white/80 text-base font-medium" style={{textShadow: '0 1px 5px rgba(0,0,0,0.5)'}}>
-                      Upload multiple photos of one recipe
-                    </p>
-                  </div>
-                </motion.div>
+
               </div>
             </motion.section>
           </div>
@@ -280,10 +263,7 @@ export default function HomePage() {
         </div>
         
         <div className="relative container mx-auto px-4 py-16">
-          {/* AI Feature Showcase */}
-          {currentView === 'list' && (
-            <AIFeatureShowcase />
-          )}
+
 
           {currentView !== 'list' && (
             <motion.div
