@@ -2,6 +2,7 @@
 
 ### Duplicate middleware and illegal DB access in middleware
 - **Issue**: Two middleware files exist: `carens-cookbook/middleware.ts` and `carens-cookbook/src/middleware.ts`. Only one should be used.
+- **Status**: Resolved — removed `carens-cookbook/middleware.ts` and kept `carens-cookbook/src/middleware.ts` (commit d59634c).
 - **Risk**: `carens-cookbook/middleware.ts` calls Prisma via `OnboardingService` (Edge runtime, no Node/DB access) which will break in production.
 - **Recommendation**:
   - Delete `carens-cookbook/middleware.ts`.
