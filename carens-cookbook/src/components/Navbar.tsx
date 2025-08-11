@@ -3,10 +3,10 @@
 import React, { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { Search, Menu, X, BookOpen, Settings, Heart, Clock, ShoppingCart, User } from "lucide-react";
+import { Search, Menu, X, BookOpen, Settings, User } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Badge } from "@/components/ui/badge";
+// Badge removed; no nav badges currently used
 import { SignedIn, SignedOut, SignInButton, UserButton } from "@clerk/nextjs";
 
 interface NavbarProps {
@@ -30,9 +30,6 @@ export default function Navbar({ className }: NavbarProps) {
   const navItems = [
     { href: "/", label: "Home", icon: BookOpen },
     { href: "/profile", label: "Profile", icon: User },
-    { href: "/favorites", label: "Favorites", icon: Heart, badge: "New" },
-    { href: "/meal-plans", label: "Meal Plans", icon: Clock, badge: "New" },
-    { href: "/shopping-lists", label: "Shopping", icon: ShoppingCart, badge: "New" },
     { href: "/settings", label: "Settings", icon: Settings },
   ];
 
@@ -63,16 +60,11 @@ export default function Navbar({ className }: NavbarProps) {
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center space-x-1">
             <SignedIn>
-              {navItems.map(({ href, label, icon: Icon, badge }) => (
+              {navItems.map(({ href, label, icon: Icon }) => (
                 <Link key={href} href={href}>
                   <Button variant="ghost" className="relative flex items-center space-x-2">
                     <Icon className="h-4 w-4" />
                     <span>{label}</span>
-                    {badge && (
-                      <Badge variant="secondary" className="absolute -top-1 -right-1 text-xs">
-                        {badge}
-                      </Badge>
-                    )}
                   </Button>
                 </Link>
               ))}
@@ -121,16 +113,11 @@ export default function Navbar({ className }: NavbarProps) {
             <SignedIn>
               {/* Mobile Navigation Items */}
               <div className="space-y-2 mb-4">
-                {navItems.map(({ href, label, icon: Icon, badge }) => (
+                {navItems.map(({ href, label, icon: Icon }) => (
                   <Link key={href} href={href} onClick={() => setIsMenuOpen(false)}>
                     <Button variant="ghost" className="w-full justify-start relative">
                       <Icon className="h-4 w-4 mr-2" />
                       {label}
-                      {badge && (
-                        <Badge variant="secondary" className="ml-auto text-xs">
-                          {badge}
-                        </Badge>
-                      )}
                     </Button>
                   </Link>
                 ))}
