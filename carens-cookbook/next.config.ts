@@ -24,26 +24,8 @@ const nextConfig: NextConfig = {
     return config;
   },
   images: {
-    // More permissive configuration - allows any HTTPS hostname
-    remotePatterns: [
-      {
-        protocol: 'https',
-        hostname: '**',
-        port: '',
-        pathname: '/**',
-      },
-    ],
-    // Alternative: You can also use domains array for broader compatibility
-    // domains: ['*'], // This would allow any domain, but remotePatterns is more secure
-    
-    // Keep some common recipe sites explicitly for documentation
-    // These are now covered by the wildcard pattern above
-    // Common recipe sites: images.unsplash.com, res.cloudinary.com, 
-    // cdn.loveandlemons.com, www.loveandlemons.com, images.immediate.co.uk,
-    // www.bbcgoodfood.com, static01.nyt.com, www.foodandwine.com,
-    // assets.epicurious.com, www.simplyrecipes.com, www.allrecipes.com,
-    // imagesvc.meredithcorp.io, www.tasteofhome.com, assets.bonappetit.com,
-    // www.seriouseats.com, cdn.pixabay.com, images.pexels.com, thecozycook.com
+    // Disable Next.js image optimization; we embed remote images directly
+    unoptimized: true,
   },
 };
 

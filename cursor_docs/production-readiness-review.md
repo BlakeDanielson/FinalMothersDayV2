@@ -22,8 +22,8 @@
 
 ### Next image config wildcard likely invalid and unsafe
 - **Issue**: `hostname: '**'` in `carens-cookbook/next.config.ts` is not valid or recommended in Next 15.
-- **Recommendation**: Replace with an explicit allowlist (adjust to real sources):
-  - `images: { domains: ['images.unsplash.com', 'res.cloudinary.com', 'static01.nyt.com'] }`
+- **Decision**: We cannot enumerate all remote recipe image hosts reliably; user images are not uploaded by users directly.
+- **Resolution**: Set `images.unoptimized: true` and remove wildcard patterns to avoid unsafe broad allowlists while keeping functionality.
 
 ### Unsafe/untested service worker enabled sitewide
 - **Issue**: `carens-cookbook/src/app/layout.tsx` loads `registerServiceWorker.js` unconditionally which registers a simplistic SW.
