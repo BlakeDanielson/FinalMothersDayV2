@@ -9,6 +9,7 @@ import { FeatureTourProvider } from "@/contexts/FeatureTourContext";
 import { TourOverlay } from "@/components/tour/TourOverlay";
 import { QueryProvider } from "@/components/providers/QueryProvider";
 import { Analytics } from "@vercel/analytics/next";
+import '@/lib/utils/suppress-console';
 
 const inter = Inter({ subsets: ["latin"] });
 

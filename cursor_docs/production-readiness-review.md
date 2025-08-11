@@ -48,6 +48,9 @@
 - **Recommendation**:
   - Gate server logs behind `LOG_LEVEL` using the Winston logger (`src/lib/utils/logger.ts`).
   - Remove client `console.log` for redirects/progress. Keep structured error logs.
+ - **Resolution**:
+   - Added production console suppression (`src/lib/utils/suppress-console.ts`) imported in `src/app/layout.tsx` to no-op non-error logs in production.
+   - Keep `LOG_LEVEL`-based server logging for error-only in prod; prefer replacing `console` with structured logs where necessary.
 
 ### Error handling: strong foundation, finish centralization
 - **Strength**: `RecipeProcessingError`, Zod validation, classified error mapping across scan endpoints. Category-specific `CategoryErrorHandler` with retry/backoff.
