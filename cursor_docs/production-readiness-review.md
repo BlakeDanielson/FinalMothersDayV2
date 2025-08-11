@@ -95,33 +95,32 @@
 
 
 ## Remove / disable for now
-- `carens-cookbook/middleware.ts` (root-level) to avoid DB-in-middleware and duplication.
+- Already removed: `carens-cookbook/middleware.ts` (root-level) that used DB from middleware and duplicated logic.
 - Service worker registration in `layout.tsx` until a complete PWA strategy is finished.
 - Verbose client `console.log` (e.g., `ProtectedRoute`) and the loudest server logs not behind a level gate.
 - Committed `carens-cookbook/src/generated/prisma/**` (replace with on-build generate).
 
 
 ## Action checklist (minimal, safe order)
-- **Remove duplicate/invalid middleware**
-  - Delete `carens-cookbook/middleware.ts`.
-  - Keep `carens-cookbook/src/middleware.ts` and continue using `withOnboardingGuard` in route handlers.
-- **Fix Prisma client handling**
-  - Add `carens-cookbook/src/generated/prisma/**` to `.gitignore`.
-  - Remove committed generated client; rely on `prisma generate` during `npm run build`.
-- **Tame image config**
+- [x] Remove duplicate/invalid middleware
+  - Deleted `carens-cookbook/middleware.ts`; kept `carens-cookbook/src/middleware.ts` with `auth.protect()` and `withOnboardingGuard`.
+- [x] Fix Prisma client handling
+  - Added `carens-cookbook/src/generated/prisma/**` to `.gitignore`; untracked committed client; build regenerates via `prisma generate`.
+- [x] Add CI for lint/build
+  - GitHub Actions workflow added to run lint and build on push/PR to `main`.
+- [ ] Tame image config
   - Replace wildcard image host config with an explicit allowlist, or disable optimization temporarily.
-- **Disable SW until ready**
-  - Remove the SW `<Script>` include in `layout.tsx`.
-  - Keep or remove SW files, but do not register until caching is finalized.
-- **Add PWA icons (or correct manifest)**
+- [ ] Disable SW until ready
+  - Remove the SW `<Script>` include in `layout.tsx`; keep files but do not register until caching is finalized.
+- [ ] Add PWA icons (or correct manifest)
   - Ensure `public/icons/icon-*.png` exist or update `public/manifest.json` paths.
-- **Add rate limiting**
+- [ ] Add rate limiting
   - Implement per-user limits on `/api/scan-recipe*` and `/api/fetch-recipe*`.
-- **Quiet logs**
+- [ ] Quiet logs
   - Remove client logs; gate server logs via `LOG_LEVEL` and Winston.
 
 
 ## Quick summaries
-- **Removed blockers found**: DB usage in middleware; duplicate middleware; committed Prisma binaries; risky SW; invalid image wildcard; missing PWA icons; lack of rate limiting.
+- **Resolved blockers**: Duplicate middleware and DB-in-middleware; committed Prisma binaries/client; CI now runs lint/build.
 - **Ready areas**: Clerk auth/webhooks; robust validation and error handling; domain service structure; Prisma schema/migrations.
-- **Proposed next actions**: Delete bad middleware; un-register SW; fix image config; stop committing Prisma generated; add rate limits; reduce logs. 
+- **Next actions**: Fix image config allowlist; un-register SW; add PWA icons or update manifest; add per-user rate limiting; reduce verbose logs; review caching strategy for serverless.
