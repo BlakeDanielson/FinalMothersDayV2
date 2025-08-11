@@ -29,6 +29,7 @@
 - **Issue**: `carens-cookbook/src/app/layout.tsx` loads `registerServiceWorker.js` unconditionally which registers a simplistic SW.
 - **Risk**: Stale pages, no versioning, unclear interaction with Next caching.
 - **Recommendation**: Disable for launch (remove the `<Script>` include) unless a complete PWA strategy is implemented (workbox/next-pwa, asset-only caching, versioned cache keys, offline page, exclude API/HTML routes).
+- **Status**: Completed — removed SW registration from `src/app/layout.tsx`.
 
 ### PWA icons missing from public
 - **Issue**: `public/manifest.json` references `/icons/icon-*.png` but `public/icons/` is missing.

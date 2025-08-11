@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
-import Script from 'next/script';
 import Navbar from "@/components/Navbar";
 import { SettingsProvider } from "@/contexts/SettingsContext";
 import FloatingSettingsButton from "@/components/FloatingSettingsButton";
@@ -56,10 +55,7 @@ export default function RootLayout({
               </FeatureTourProvider>
             </SettingsProvider>
           </QueryProvider>
-          <Script
-            src="/registerServiceWorker.js"
-            strategy="lazyOnload"
-          />
+          {/* Service worker registration disabled until full PWA strategy is ready */}
           <Analytics />
         </body>
       </html>
