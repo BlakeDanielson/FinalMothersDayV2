@@ -15,6 +15,7 @@
   - Stop committing the generated client.
   - Add `carens-cookbook/src/generated/prisma/**` to `.gitignore`.
   - Remove the folder from git; rely on `prisma generate` in the build script.
+ - **Status**: In progress — ignore rule added and committed files untracked; build regenerates client during CI/build.
 - **Evidence**:
   - `carens-cookbook/src/generated/prisma/index.js` references `query_engine-windows.dll.node`.
   - `eslint.config.mjs` already ignores the generated folder.
