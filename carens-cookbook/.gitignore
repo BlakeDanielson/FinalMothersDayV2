@@ -60,3 +60,6 @@ next-env.d.ts
 /scripts/
 /cursor_docs/
 /tasks/
+
+# Prisma generated client (do not commit; generated on build)
+/src/generated/prisma/**
