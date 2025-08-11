@@ -31,9 +31,9 @@
 - **Recommendation**: Disable for launch (remove the `<Script>` include) unless a complete PWA strategy is implemented (workbox/next-pwa, asset-only caching, versioned cache keys, offline page, exclude API/HTML routes).
 - **Status**: Completed — removed SW registration from `src/app/layout.tsx`.
 
-### PWA icons missing from public
-- **Issue**: `public/manifest.json` references `/icons/icon-*.png` but `public/icons/` is missing.
-- **Recommendation**: Add those icon assets or update the manifest to existing assets.
+### PWA assets
+- **Decision**: Defer PWA. Removing registration; leaving `manifest.json` is harmless but optional.
+- **Action**: Remove service worker scripts; revisit full PWA later (icons, offline page, versioned caches).
 
 ### No rate limiting on expensive endpoints
 - **Issue**: AI/image endpoints (`/api/scan-recipe*`, `/api/fetch-recipe*`) lack throttling.
