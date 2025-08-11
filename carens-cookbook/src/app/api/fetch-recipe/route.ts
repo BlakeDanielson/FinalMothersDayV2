@@ -3,6 +3,7 @@ import OpenAI from 'openai';
 import { GoogleGenAI } from '@google/genai';
 import { z } from "zod";
 import { withOnboardingGuard } from '@/lib/middleware/onboarding-guard';
+import { withRateLimit } from '@/lib/middleware/rate-limit';
 import { AI_SETTINGS, getBackendProviderFromUI, getModelFromUIProvider, type UIProvider } from '@/lib/config/ai-models';
 import { auth } from '@clerk/nextjs/server';
 import { prisma } from '@/lib/db';
@@ -212,7 +213,7 @@ ${recipeContent}`;
 }
 
 // NEW: Optimized POST handler using the orchestrator (Gemini URL-direct primary, OpenAI fallback)
-export const PUT = withOnboardingGuard(async (request: NextRequest) => {
+export const PUT = withRateLimit(withOnboardingGuard(async (request: NextRequest) => {
   try {
     const { url, forceStrategy, geminiProvider = 'gemini-pro', openaiProvider = 'openai-main' } = await request.json();
 
@@ -274,10 +275,10 @@ export const PUT = withOnboardingGuard(async (request: NextRequest) => {
       { status: 500 }
     );
   }
-});
+}), { id: 'fetch-recipe', limit: 10, windowMs: 60_000 });
 
 // EXISTING: Legacy POST handler (maintained for compatibility)
-export const POST = withOnboardingGuard(async (request: NextRequest) => {
+export const POST = withRateLimit(withOnboardingGuard(async (request: NextRequest) => {
   let uiProvider: UIProvider = 'openai-main'; // Default value
   
   try {
@@ -434,4 +435,4 @@ export const POST = withOnboardingGuard(async (request: NextRequest) => {
       { status: 500 }
     );
   }
-}); 
+}), { id: 'fetch-recipe', limit: 10, windowMs: 60_000 });

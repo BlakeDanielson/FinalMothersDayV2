@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { extractRecipeOptimized, checkOptimizationReadiness } from '@/lib/services/recipe-extraction-orchestrator';
+import { withRateLimit } from '@/lib/middleware/rate-limit';
 import { auth } from '@clerk/nextjs/server';
 
 // Helper function to fix relative URLs
@@ -87,7 +88,7 @@ function createErrorEvent(error: string) {
   })}\n\n`;
 }
 
-export const POST = async (request: NextRequest) => {
+export const POST = withRateLimit(async (request: NextRequest) => {
   const { url, forceStrategy, geminiProvider = 'gemini-pro', openaiProvider = 'openai-main' } = await request.json();
 
   if (!url) {
@@ -176,7 +177,7 @@ export const POST = async (request: NextRequest) => {
   });
 
   return new NextResponse(stream, { headers: responseHeaders });
-};
+}, { id: 'fetch-recipe-stream', limit: 10, windowMs: 60_000 });
 
 // Enhanced orchestrator with progress tracking
 async function extractRecipeOptimizedWithProgress(

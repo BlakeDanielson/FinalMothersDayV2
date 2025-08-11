@@ -7,6 +7,7 @@ import { categoryService } from '@/lib/categories';
 import { auth } from '@clerk/nextjs/server';
 
 import { AI_SETTINGS, getBackendProviderFromUI, getModelFromUIProvider, type UIProvider } from '@/lib/config/ai-models';
+import { withRateLimit } from '@/lib/middleware/rate-limit';
 import { validateFileSize, getFileSizeErrorMessage } from '@/lib/utils/file-size-validation';
 
 // Zod schema for recipe data parsed from an image
@@ -424,7 +425,7 @@ async function extractRecipeFromImageWithProgress(
   };
 }
 
-export const POST = async (request: NextRequest) => {
+export const POST = withRateLimit(async (request: NextRequest) => {
   const formData = await request.formData();
   const imageFile = formData.get('image') as File;
   const provider = (formData.get('provider') as UIProvider) || 'openai-main';
@@ -511,4 +512,4 @@ export const POST = async (request: NextRequest) => {
   });
 
   return new NextResponse(stream, { headers: responseHeaders });
-}; 
+}, { id: 'scan-recipe-stream', limit: 3, windowMs: 60_000 });

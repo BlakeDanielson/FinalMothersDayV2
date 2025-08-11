@@ -7,6 +7,7 @@ import { categoryService, categoryResolver } from '@/lib/categories';
 import { auth } from '@clerk/nextjs/server';
 import { CategorySource } from '@/generated/prisma';
 import { withOnboardingGuard } from '@/lib/middleware/onboarding-guard';
+import { withRateLimit } from '@/lib/middleware/rate-limit';
 import { AI_MODELS, AI_SETTINGS, getBackendProviderFromUI, getModelFromUIProvider, type UIProvider } from '@/lib/config/ai-models';
 import { validateFileSize, getFileSizeErrorMessage } from '@/lib/utils/file-size-validation';
 
@@ -255,7 +256,7 @@ async function processImageWithGPTMini(imageBase64: string, imageMimeType: strin
   return chatCompletion.choices[0]?.message?.content;
 }
 
-export const POST = withOnboardingGuard(async (req: NextRequest) => {
+export const POST = withRateLimit(withOnboardingGuard(async (req: NextRequest) => {
   const requestId = Math.random().toString(36).substr(2, 9);
   const startTime = Date.now();
   
@@ -612,4 +613,4 @@ export const POST = withOnboardingGuard(async (req: NextRequest) => {
       { status: recipeError.statusCode || 500 }
     );
   }
-}); 
+}), { id: 'scan-recipe', limit: 5, windowMs: 60_000 });

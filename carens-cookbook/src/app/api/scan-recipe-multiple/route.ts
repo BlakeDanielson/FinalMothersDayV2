@@ -4,6 +4,7 @@ import { z } from 'zod';
 import { RecipeProcessingError, ErrorType, logError } from '@/lib/errors';
 import { AIProvider, getProviderConfig } from '@/lib/ai-providers';
 import { AI_MODELS, AI_SETTINGS, getBackendProviderFromUI, getModelFromUIProvider, type UIProvider } from '@/lib/config/ai-models';
+import { withRateLimit } from '@/lib/middleware/rate-limit';
 import { validateFileSize, getFileSizeErrorMessage } from '@/lib/utils/file-size-validation';
 
 // Zod schema for recipe data parsed from multiple images
@@ -402,7 +403,7 @@ async function processMultipleImagesWithGPTMini(
   return assembledRecipe;
 }
 
-export async function POST(req: NextRequest) {
+export const POST = withRateLimit(async (req: NextRequest) => {
   try {
     // Parse form data
     let formData: FormData;
@@ -624,4 +625,4 @@ export async function POST(req: NextRequest) {
       { status: recipeError.statusCode || 500 }
     );
   }
-} 
+}, { id: 'scan-recipe-multiple', limit: 3, windowMs: 60_000 });

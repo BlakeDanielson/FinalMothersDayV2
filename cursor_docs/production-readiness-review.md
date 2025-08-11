@@ -38,7 +38,7 @@
 ### No rate limiting on expensive endpoints
 - **Issue**: AI/image endpoints (`/api/scan-recipe*`, `/api/fetch-recipe*`) lack throttling.
 - **Risk**: Abuse can be costly.
-- **Recommendation**: Add per-user rate limiting (e.g., Upstash Ratelimit with Clerk user/session) or simple in-memory throttling if not serverless (note: in-memory is ineffective on serverless).
+- **Resolution**: Added reusable rate limiter (`withRateLimit`) using Upstash when configured, with in-memory fallback for dev; applied to `scan-recipe`, `scan-recipe-stream`, `scan-recipe-multiple`, `fetch-recipe`, and `fetch-recipe-stream`.
 
 
 ## Should-fix soon
