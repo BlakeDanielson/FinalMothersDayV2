@@ -1,0 +1,43 @@
+name: CI
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Use Node.js 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'npm'
+
+      - name: Install root deps
+        run: npm ci
+
+      - name: Install app deps
+        working-directory: carens-cookbook
+        run: npm ci
+
+      - name: Lint
+        working-directory: carens-cookbook
+        run: npm run lint
+
+      - name: Build
+        env:
+          # Provide dummy envs required for build; override in repo secrets if needed
+          DATABASE_URL: postgresql://postgres:postgres@localhost:5432/postgres
+          NEXT_TELEMETRY_DISABLED: 1
+        working-directory: carens-cookbook
+        run: npm run build
+
