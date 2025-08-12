@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useEffect, useCallback } from "react";
+import Image from "next/image";
 import { ChevronLeft, ChevronRight, Play, Pause } from "lucide-react";
 
 const photos = [
@@ -87,11 +88,14 @@ export default function RecipePhotoCarousel() {
         >
           {photos.map((image, index) => (
             <div key={index} className="min-w-full h-full relative">
-              <img
+              <Image
                 src={image.src}
                 alt={image.title}
-                className="w-full h-full object-cover"
+                fill
+                sizes="100vw"
+                className="object-cover"
                 draggable={false}
+                priority={index === 0}
               />
               {/* Gradient overlay */}
               <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent" />
