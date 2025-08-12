@@ -1,6 +1,7 @@
 "use client"
 
 import React from "react";
+import Image from "next/image";
 import { motion } from "framer-motion";
 import { HomeIcon, Camera, SearchIcon } from "lucide-react";
 import { Toaster } from 'sonner';
@@ -117,22 +118,28 @@ export default function HomePage() {
                 }}
               >
                 {/* Left image */}
-                <div className="w-full h-full">
-                  <img
+                <div className="relative w-full h-full">
+                  <Image
                     src={pair.left}
                     alt={`Recipe background left ${idx + 1}`}
-                    className="w-full h-full object-cover object-center"
+                    fill
+                    sizes="100vw"
+                    priority={idx === 0}
+                    className="object-cover object-center"
                     draggable={false}
                   />
                 </div>
                 {/* Subtle divider */}
                 <div className="absolute left-1/2 top-0 bottom-0 w-px bg-white/20 transform -translate-x-1/2 z-10"></div>
                 {/* Right image */}
-                <div className="w-full h-full">
-                  <img
+                <div className="relative w-full h-full">
+                  <Image
                     src={pair.right}
                     alt={`Recipe background right ${idx + 1}`}
-                    className="w-full h-full object-cover object-center"
+                    fill
+                    sizes="100vw"
+                    priority={idx === 0}
+                    className="object-cover object-center"
                     draggable={false}
                   />
                 </div>
