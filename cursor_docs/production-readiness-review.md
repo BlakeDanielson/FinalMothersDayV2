@@ -75,7 +75,9 @@
 ## Nice-to-have (post-GA)
 
 ### Security headers/CSP
-- Add `Content-Security-Policy`, `Referrer-Policy`, `Permissions-Policy`, etc., via Next middleware or `next.config.ts` headers.
+- Status: Implemented via `next.config.ts` headers().
+- CSP: conservative defaults, allows Clerk and Vercel Analytics, images from https/data/blob, denies framing.
+- Also set: HSTS, Referrer-Policy, X-Content-Type-Options, X-Frame-Options, COOP/CORP, restrictive Permissions-Policy.
 
 ### Observability
 - Consider Sentry (server/client) for error tracking in addition to `@vercel/analytics`.
@@ -118,11 +120,11 @@
 - [ ] Disable SW until ready
   - Remove the SW `<Script>` include in `layout.tsx`; keep files but do not register until caching is finalized.
 - [ ] Add PWA icons (or correct manifest)
-  - Ensure `public/icons/icon-*.png` exist or update `public/manifest.json` paths.
+  - Defer: icons cleared from manifest for now to avoid broken paths; re-add when PWA is implemented.
 - [x] Add rate limiting
   - `withRateLimit` applied across `/api/scan-recipe*` and `/api/fetch-recipe*`.
-- [ ] Quiet logs
-  - Remove client logs; gate server logs via `LOG_LEVEL` and Winston.
+- [x] Quiet logs
+  - Client console suppressed in prod; Winston defaults to `error` in prod and avoids file transports on serverless.
 
 
 ## Quick summaries
