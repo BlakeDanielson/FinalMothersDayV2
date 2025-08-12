@@ -1,6 +1,9 @@
 import winston from 'winston';
 import { format } from 'winston';
 
+const isProduction = process.env.NODE_ENV === 'production';
+const isServerless = Boolean(process.env.VERCEL) || process.env.NEXT_RUNTIME === 'edge';
+
 // Define log levels for category operations
 const categoryLogLevels = {
   error: 0,
@@ -27,39 +30,43 @@ const categoryLogFormat = format.combine(
   })
 );
 
-// Create the logger instance
-const winstonLogger = winston.createLogger({
-  levels: categoryLogLevels,
-  level: process.env.LOG_LEVEL || 'info',
-  format: categoryLogFormat,
-  defaultMeta: { service: 'recipe-category-service' },
-  transports: [
-    // Console transport for development
-    new winston.transports.Console({
-      format: format.combine(
-        format.colorize(),
-        format.printf(({ timestamp, level, message, operation, ...meta }) => {
-          const metaStr = Object.keys(meta).length > 0 ? ` | ${JSON.stringify(meta)}` : '';
-          return `${timestamp} [${level}] ${operation ? `[${operation}]` : ''} ${message}${metaStr}`;
-        })
-      )
-    }),
-    
-    // File transport for production logs
+// Build transports with serverless awareness
+const transports: winston.transport[] = [
+  new winston.transports.Console({
+    format: format.combine(
+      format.colorize(),
+      format.printf(({ timestamp, level, message, operation, ...meta }) => {
+        const metaStr = Object.keys(meta).length > 0 ? ` | ${JSON.stringify(meta)}` : '';
+        return `${timestamp} [${level}] ${operation ? `[${operation}]` : ''} ${message}${metaStr}`;
+      })
+    )
+  }),
+];
+
+// Avoid file writes in serverless/edge. Enable in local/dev or non-serverless prod only.
+if (!isServerless) {
+  transports.push(
     new winston.transports.File({
       filename: 'logs/category-errors.log',
       level: 'error',
       maxsize: 5242880, // 5MB
       maxFiles: 5,
     }),
-    
-    // File transport for all logs
     new winston.transports.File({
       filename: 'logs/category-operations.log',
       maxsize: 5242880, // 5MB
       maxFiles: 10,
     })
-  ],
+  );
+}
+
+// Create the logger instance
+const winstonLogger = winston.createLogger({
+  levels: categoryLogLevels,
+  level: process.env.LOG_LEVEL || (isProduction ? 'error' : 'debug'),
+  format: categoryLogFormat,
+  defaultMeta: { service: 'recipe-category-service' },
+  transports,
 });
 
 // Enhanced logging interface for category operations
