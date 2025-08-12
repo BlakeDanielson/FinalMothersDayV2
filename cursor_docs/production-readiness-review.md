@@ -38,10 +38,8 @@
 - **Decision**: Defer PWA. Removing registration; leaving `manifest.json` is harmless but optional.
 - **Action**: Remove service worker scripts; revisit full PWA later (icons, offline page, versioned caches).
 
-### No rate limiting on expensive endpoints
-- **Issue**: AI/image endpoints (`/api/scan-recipe*`, `/api/fetch-recipe*`) lack throttling.
-- **Risk**: Abuse can be costly.
-- **Resolution**: Added reusable rate limiter (`withRateLimit`) using Upstash when configured, with in-memory fallback for dev; applied to `scan-recipe`, `scan-recipe-stream`, `scan-recipe-multiple`, `fetch-recipe`, and `fetch-recipe-stream`.
+### Rate limiting on expensive endpoints
+- **Status**: Implemented. `withRateLimit` is applied to `scan-recipe`, `scan-recipe-stream`, `scan-recipe-multiple`, `fetch-recipe` (PUT/POST), and `fetch-recipe-stream`. Upstash-backed when configured with in-memory fallback for dev.
 
 
 ## Should-fix soon
@@ -121,8 +119,8 @@
   - Remove the SW `<Script>` include in `layout.tsx`; keep files but do not register until caching is finalized.
 - [ ] Add PWA icons (or correct manifest)
   - Ensure `public/icons/icon-*.png` exist or update `public/manifest.json` paths.
-- [ ] Add rate limiting
-  - Implement per-user limits on `/api/scan-recipe*` and `/api/fetch-recipe*`.
+- [x] Add rate limiting
+  - `withRateLimit` applied across `/api/scan-recipe*` and `/api/fetch-recipe*`.
 - [ ] Quiet logs
   - Remove client logs; gate server logs via `LOG_LEVEL` and Winston.
 
