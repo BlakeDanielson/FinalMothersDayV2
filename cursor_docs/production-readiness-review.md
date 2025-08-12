@@ -20,10 +20,13 @@
   - `carens-cookbook/src/generated/prisma/index.js` references `query_engine-windows.dll.node`.
   - `eslint.config.mjs` already ignores the generated folder.
 
-### Next image config wildcard likely invalid and unsafe
-- **Issue**: `hostname: '**'` in `carens-cookbook/next.config.ts` is not valid or recommended in Next 15.
-- **Decision**: We cannot enumerate all remote recipe image hosts reliably; user images are not uploaded by users directly.
-- **Resolution**: Set `images.unoptimized: true` and remove wildcard patterns to avoid unsafe broad allowlists while keeping functionality.
+### Next image config and <img> usage
+- **Issue**: `hostname: '**'` in `carens-cookbook/next.config.ts` was unsafe; multiple `<img>` usages bypassed Next image pipeline.
+- **Decision**: Cannot enumerate all remote recipe image hosts reliably.
+- **Resolution**:
+  - Set `images.unoptimized: true` in `next.config.ts` (already done).
+  - Replaced `<img>` with `next/image` in `src/app/page.tsx` and `src/components/ui/RecipePhotoCarousel.tsx` using `fill` + `sizes="100vw"` for proper layout and better LCP.
+  - Left `unoptimized: true` to avoid remote allowlist while still leveraging Next Image component’s layout handling.
 
 ### Unsafe/untested service worker enabled sitewide
 - **Issue**: `carens-cookbook/src/app/layout.tsx` loads `registerServiceWorker.js` unconditionally which registers a simplistic SW.
@@ -112,8 +115,8 @@
   - Added `carens-cookbook/src/generated/prisma/**` to `.gitignore`; untracked committed client; build regenerates via `prisma generate`.
 - [x] Add CI for lint/build
   - GitHub Actions workflow added to run lint and build on push/PR to `main`.
-- [ ] Tame image config
-  - Replace wildcard image host config with an explicit allowlist, or disable optimization temporarily.
+- [x] Tame image config and usage
+  - Set `images.unoptimized: true` and replace `<img>` instances with `next/image` where applicable.
 - [ ] Disable SW until ready
   - Remove the SW `<Script>` include in `layout.tsx`; keep files but do not register until caching is finalized.
 - [ ] Add PWA icons (or correct manifest)
