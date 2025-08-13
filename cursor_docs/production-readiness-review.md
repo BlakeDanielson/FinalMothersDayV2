@@ -80,8 +80,14 @@
 - CSP: conservative defaults, allows Clerk and Vercel Analytics, images from https/data/blob, denies framing.
 - Also set: HSTS, Referrer-Policy, X-Content-Type-Options, X-Frame-Options, COOP/CORP, restrictive Permissions-Policy.
 
-### Observability
-- Consider Sentry (server/client) for error tracking in addition to `@vercel/analytics`.
+### Observability (Sentry)
+- Status: Implemented
+  - Sentry integrated via `withSentryConfig` in `next.config.ts` and `src/instrumentation.ts` (App Router).
+  - Middleware wrapped with Sentry (`wrapMiddlewareWithSentry`).
+  - Global render error handler added at `src/app/global-error.tsx`.
+  - Verification endpoint: `GET /api/sentry-test` triggers a captured event.
+  - Env vars set in GitHub and Vercel: `SENTRY_DSN`, `NEXT_PUBLIC_SENTRY_DSN` (optionally `SENTRY_TRACES_SAMPLE_RATE`).
+  - Sourcemaps generation enabled; to auto-upload, add GitHub secrets: `SENTRY_AUTH_TOKEN`, `SENTRY_ORG`, `SENTRY_PROJECT` (optional).
 
 ### Image pipeline
 - If you cannot enumerate remote hosts, consider `images: { unoptimized: true }` temporarily, or proxy images rather than permissive wildcards.
@@ -129,6 +135,8 @@
   - Client console suppressed in prod; Winston defaults to `error` in prod and avoids file transports on serverless.
  - [x] Add smoke tests to CI
    - Playwright smoke suite runs post-build in GitHub Actions.
+ - [x] Observability (Sentry)
+   - Sentry wired (client/server/middleware), global error handler added, and `/api/sentry-test` endpoint; DSNs configured in GitHub/Vercel. Optional: add `SENTRY_AUTH_TOKEN` + `SENTRY_ORG` + `SENTRY_PROJECT` for sourcemap uploads.
 
 
 ## Quick summaries
