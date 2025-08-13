@@ -137,9 +137,14 @@
    - Playwright smoke suite runs post-build in GitHub Actions.
  - [x] Observability (Sentry)
    - Sentry wired (client/server/middleware), global error handler added, and `/api/sentry-test` endpoint; DSNs configured in GitHub/Vercel. Optional: add `SENTRY_AUTH_TOKEN` + `SENTRY_ORG` + `SENTRY_PROJECT` for sourcemap uploads.
+ - [ ] Enable Sentry sourcemap uploads (later)
+   - Add GitHub secrets: `SENTRY_AUTH_TOKEN` (project:releases, org:read), `SENTRY_ORG`, `SENTRY_PROJECT`.
+   - Set `withSentryConfig({ sourcemaps: { deleteSourcemapsAfterUpload: true } })` in `next.config.ts`.
+   - Benefit: de‑minified stack traces in Sentry with original TS/TSX lines.
 
 
 ## Quick summaries
 - **Resolved blockers**: Duplicate middleware and DB-in-middleware; committed Prisma binaries/client; CI runs lint/build and smoke tests; app icons/manifest configured.
 - **Ready areas**: Clerk auth/webhooks; robust validation and error handling; rate limiting in place; security headers configured; domain service structure; Prisma schema/migrations.
 - **Next actions**: Consider observability (e.g., Sentry); review caching strategy for serverless and consider Redis for persistent caches; revisit image optimization strategy post-GA; optionally add authenticated smoke check; plan full PWA (offline, caching) later.
+  - Enable Sentry sourcemap uploads (configure GitHub secrets, turn on delete-after-upload in `next.config.ts`).
