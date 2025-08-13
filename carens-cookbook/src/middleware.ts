@@ -1,4 +1,5 @@
 import { clerkMiddleware, createRouteMatcher } from "@clerk/nextjs/server";
+export { withSentry } from '@sentry/nextjs/middleware';
 
 // Define routes that should be public (accessible without authentication)
 const isPublicRoute = createRouteMatcher([
