@@ -13,6 +13,7 @@
     "test:smoke": "playwright test tests/e2e/smoke.test.ts",
     "test:debug": "playwright test --debug",
     "test:report": "playwright show-report",
+    "generate:icons": "tsx scripts/generate-icons.ts",
     "audit-categories": "npx tsx scripts/audit-categories.ts",
     "test-categories": "npx tsx scripts/test-category-service.ts",
     "test-resolver": "npx tsx scripts/test-category-resolver.ts",
