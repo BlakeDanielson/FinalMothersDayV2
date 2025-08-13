@@ -68,8 +68,8 @@
 
 ### Build and testing
 - **Status**: Playwright infra present; scripts in `carens-cookbook/package.json`.
-- **Recommendation**: Add a minimal smoke test (login + main flows) and wire into CI.
-- **Status**: CI added — GitHub Actions workflow runs lint and build on push/PR to `main`.
+- **Status**: CI runs lint, build, and Playwright smoke tests on push/PR to `main`.
+- **Recommendation**: Optionally add an authenticated smoke check guarded by CI secrets.
 
 
 ## Nice-to-have (post-GA)
@@ -125,9 +125,11 @@
   - `withRateLimit` applied across `/api/scan-recipe*` and `/api/fetch-recipe*`.
 - [x] Quiet logs
   - Client console suppressed in prod; Winston defaults to `error` in prod and avoids file transports on serverless.
+ - [x] Add smoke tests to CI
+   - Playwright smoke suite runs post-build in GitHub Actions.
 
 
 ## Quick summaries
-- **Resolved blockers**: Duplicate middleware and DB-in-middleware; committed Prisma binaries/client; CI now runs lint/build.
+- **Resolved blockers**: Duplicate middleware and DB-in-middleware; committed Prisma binaries/client; CI runs lint/build and smoke tests.
 - **Ready areas**: Clerk auth/webhooks; robust validation and error handling; rate limiting in place; security headers configured; domain service structure; Prisma schema/migrations.
-- **Next actions**: Add real PWA icons and re-enable manifest icons; add minimal Playwright smoke tests; consider observability (e.g., Sentry); review caching strategy for serverless and consider Redis for persistent caches; revisit image optimization strategy post-GA.
+- **Next actions**: Add real PWA icons and re-enable manifest icons; consider observability (e.g., Sentry); review caching strategy for serverless and consider Redis for persistent caches; revisit image optimization strategy post-GA; optionally add authenticated smoke check.
