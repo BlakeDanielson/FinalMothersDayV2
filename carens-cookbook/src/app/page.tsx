@@ -85,56 +85,35 @@ export default function HomePage() {
         {/* Full-background auto-crossfading photo carousel */}
         <div className="absolute inset-0 w-full h-full">
           <div className="relative w-full h-full overflow-hidden">
-            {/* Background images that crossfade - now limited to the two specified images */}
-            {[
-              // Pair 1 (A | B)
-              {
-                left: "https://images.unsplash.com/photo-1484723091739-30a097e8f929?auto=format&fit=crop&w=1920&q=80",
-                right: "https://images.unsplash.com/photo-1555939594-58d7cb561ad1?auto=format&fit=crop&w=1920&q=80"
-              },
-              // Pair 2 (B | A) to keep continuous crossfade using only these two images
-              {
-                left: "https://images.unsplash.com/photo-1555939594-58d7cb561ad1?auto=format&fit=crop&w=1920&q=80",
-                right: "https://images.unsplash.com/photo-1484723091739-30a097e8f929?auto=format&fit=crop&w=1920&q=80"
-              }
-            ].map((pair, idx) => (
-              <div
-                key={idx}
-                className="absolute inset-0 w-full h-full flex heroFade"
-                style={{
-                  animationDelay: `${idx * 5}s`,
-                  animationDuration: '20s',
-                  animationIterationCount: 'infinite'
-                }}
-              >
-                {/* Left image */}
-                <div className="relative w-full h-full">
-                  <Image
-                    src={pair.left}
-                    alt={`Recipe background left ${idx + 1}`}
-                    fill
-                    sizes="100vw"
-                    priority={idx === 0}
-                    className="object-cover object-center"
-                    draggable={false}
-                  />
-                </div>
-                {/* Subtle divider */}
-                <div className="absolute left-1/2 top-0 bottom-0 w-px bg-white/20 transform -translate-x-1/2 z-10"></div>
-                {/* Right image */}
-                <div className="relative w-full h-full">
-                  <Image
-                    src={pair.right}
-                    alt={`Recipe background right ${idx + 1}`}
-                    fill
-                    sizes="100vw"
-                    priority={idx === 0}
-                    className="object-cover object-center"
-                    draggable={false}
-                  />
-                </div>
+            {/* Background images - single static pair (no crossfade) */}
+            <div className="absolute inset-0 w-full h-full flex">
+              {/* Left image */}
+              <div className="relative w-full h-full">
+                <Image
+                  src="https://images.unsplash.com/photo-1484723091739-30a097e8f929?auto=format&fit=crop&w=1920&q=80"
+                  alt="Recipe background left"
+                  fill
+                  sizes="100vw"
+                  priority
+                  className="object-cover object-center"
+                  draggable={false}
+                />
               </div>
-            ))}
+              {/* Subtle divider */}
+              <div className="absolute left-1/2 top-0 bottom-0 w-px bg-white/20 transform -translate-x-1/2 z-10"></div>
+              {/* Right image */}
+              <div className="relative w-full h-full">
+                <Image
+                  src="https://images.unsplash.com/photo-1555939594-58d7cb561ad1?auto=format&fit=crop&w=1920&q=80"
+                  alt="Recipe background right"
+                  fill
+                  sizes="100vw"
+                  priority
+                  className="object-cover object-center"
+                  draggable={false}
+                />
+              </div>
+            </div>
           </div>
         </div>
 
