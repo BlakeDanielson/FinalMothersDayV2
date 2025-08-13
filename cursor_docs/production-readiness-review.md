@@ -35,8 +35,9 @@
 - **Status**: Completed — removed SW registration from `src/app/layout.tsx`.
 
 ### PWA assets
-- **Decision**: Defer PWA. Removing registration; leaving `manifest.json` is harmless but optional.
-- **Action**: Remove service worker scripts; revisit full PWA later (icons, offline page, versioned caches).
+- **Decision**: Defer full PWA/service worker for now.
+- **Status**: Icons generated and wired. `manifest.json` restored with standard and maskable icons; favicons and apple-touch-icon added; links added in `src/app/layout.tsx`.
+- **Action**: Keep SW disabled; revisit full PWA later (offline page, versioned caches, next-pwa/workbox).
 
 ### Rate limiting on expensive endpoints
 - **Status**: Implemented. `withRateLimit` is applied to `scan-recipe`, `scan-recipe-stream`, `scan-recipe-multiple`, `fetch-recipe` (PUT/POST), and `fetch-recipe-stream`. Upstash-backed when configured with in-memory fallback for dev.
@@ -119,8 +120,9 @@
   - Set `images.unoptimized: true` and replace `<img>` instances with `next/image` where applicable.
 - [x] Disable SW until ready
   - SW registration removed from `layout.tsx`; defer full PWA strategy until ready.
-- [ ] Add PWA icons (or correct manifest)
-  - Defer: icons cleared from manifest for now to avoid broken paths; re-add when PWA is implemented.
+- [x] Add PWA icons (and correct manifest)
+  - Generated icons from `public/icons/source.png` via `npm run generate:icons` (script at `scripts/generate-icons.ts`).
+  - Restored `manifest.json` icons; added favicons and apple-touch icon; linked in `layout.tsx`.
 - [x] Add rate limiting
   - `withRateLimit` applied across `/api/scan-recipe*` and `/api/fetch-recipe*`.
 - [x] Quiet logs
@@ -130,6 +132,6 @@
 
 
 ## Quick summaries
-- **Resolved blockers**: Duplicate middleware and DB-in-middleware; committed Prisma binaries/client; CI runs lint/build and smoke tests.
+- **Resolved blockers**: Duplicate middleware and DB-in-middleware; committed Prisma binaries/client; CI runs lint/build and smoke tests; app icons/manifest configured.
 - **Ready areas**: Clerk auth/webhooks; robust validation and error handling; rate limiting in place; security headers configured; domain service structure; Prisma schema/migrations.
-- **Next actions**: Add real PWA icons and re-enable manifest icons; consider observability (e.g., Sentry); review caching strategy for serverless and consider Redis for persistent caches; revisit image optimization strategy post-GA; optionally add authenticated smoke check.
+- **Next actions**: Consider observability (e.g., Sentry); review caching strategy for serverless and consider Redis for persistent caches; revisit image optimization strategy post-GA; optionally add authenticated smoke check; plan full PWA (offline, caching) later.
