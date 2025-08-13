@@ -85,27 +85,17 @@ export default function HomePage() {
         {/* Full-background auto-crossfading photo carousel */}
         <div className="absolute inset-0 w-full h-full">
           <div className="relative w-full h-full overflow-hidden">
-            {/* Background images that crossfade - now in pairs side by side */}
+            {/* Background images that crossfade - now limited to the two specified images */}
             {[
-              // Pair 1
-              {
-                left: "https://images.unsplash.com/photo-1565299624946-b28f40a0ca4b?auto=format&fit=crop&w=1920&q=80",
-                right: "https://images.unsplash.com/photo-1540189549336-e6e99c3679fe?auto=format&fit=crop&w=1920&q=80"
-              },
-              // Pair 2
-              {
-                left: "https://images.unsplash.com/photo-1567620905732-2d1ec7ab7445?auto=format&fit=crop&w=1920&q=80",
-                right: "https://images.unsplash.com/photo-1455619452474-d2be8b1e70cd?auto=format&fit=crop&w=1920&q=80"
-              },
-              // Pair 3
-              {
-                left: "https://images.unsplash.com/photo-1571091718767-18b5b1457add?auto=format&fit=crop&w=1920&q=80",
-                right: "https://images.unsplash.com/photo-1555939594-58d7cb561ad1?auto=format&fit=crop&w=1920&q=80"
-              },
-              // Pair 4
+              // Pair 1 (A | B)
               {
                 left: "https://images.unsplash.com/photo-1484723091739-30a097e8f929?auto=format&fit=crop&w=1920&q=80",
-                right: "https://images.unsplash.com/photo-1547592180-85f173990554?auto=format&fit=crop&w=1920&q=80"
+                right: "https://images.unsplash.com/photo-1555939594-58d7cb561ad1?auto=format&fit=crop&w=1920&q=80"
+              },
+              // Pair 2 (B | A) to keep continuous crossfade using only these two images
+              {
+                left: "https://images.unsplash.com/photo-1555939594-58d7cb561ad1?auto=format&fit=crop&w=1920&q=80",
+                right: "https://images.unsplash.com/photo-1484723091739-30a097e8f929?auto=format&fit=crop&w=1920&q=80"
               }
             ].map((pair, idx) => (
               <div
