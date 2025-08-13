@@ -117,8 +117,8 @@
   - GitHub Actions workflow added to run lint and build on push/PR to `main`.
 - [x] Tame image config and usage
   - Set `images.unoptimized: true` and replace `<img>` instances with `next/image` where applicable.
-- [ ] Disable SW until ready
-  - Remove the SW `<Script>` include in `layout.tsx`; keep files but do not register until caching is finalized.
+- [x] Disable SW until ready
+  - SW registration removed from `layout.tsx`; defer full PWA strategy until ready.
 - [ ] Add PWA icons (or correct manifest)
   - Defer: icons cleared from manifest for now to avoid broken paths; re-add when PWA is implemented.
 - [x] Add rate limiting
@@ -129,5 +129,5 @@
 
 ## Quick summaries
 - **Resolved blockers**: Duplicate middleware and DB-in-middleware; committed Prisma binaries/client; CI now runs lint/build.
-- **Ready areas**: Clerk auth/webhooks; robust validation and error handling; domain service structure; Prisma schema/migrations.
-- **Next actions**: Fix image config allowlist; un-register SW; add PWA icons or update manifest; add per-user rate limiting; reduce verbose logs; review caching strategy for serverless.
+- **Ready areas**: Clerk auth/webhooks; robust validation and error handling; rate limiting in place; security headers configured; domain service structure; Prisma schema/migrations.
+- **Next actions**: Add real PWA icons and re-enable manifest icons; add minimal Playwright smoke tests; consider observability (e.g., Sentry); review caching strategy for serverless and consider Redis for persistent caches; revisit image optimization strategy post-GA.
