@@ -1,5 +1,5 @@
 import { clerkMiddleware, createRouteMatcher } from "@clerk/nextjs/server";
-export { withSentry } from '@sentry/nextjs/middleware';
+import { withSentry } from '@sentry/nextjs';
 
 // Define routes that should be public (accessible without authentication)
 const isPublicRoute = createRouteMatcher([
@@ -25,12 +25,12 @@ const isPublicRoute = createRouteMatcher([
 // ]);
 
 // Make the middleware callback async and use auth.protect() directly
-export default clerkMiddleware(async (auth, req) => {
+export default withSentry(clerkMiddleware(async (auth, req) => {
   if (!isPublicRoute(req)) {
     // According to Clerk docs, auth.protect() should be available here and is async
     await auth.protect();
   }
-});
+}));
 
 export const config = {
   matcher: [
