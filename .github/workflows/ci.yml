@@ -41,3 +41,15 @@ jobs:
         working-directory: carens-cookbook
         run: npm run build
 
+      - name: Install Playwright browsers
+        working-directory: carens-cookbook
+        run: npx playwright install --with-deps
+
+      - name: Smoke tests
+        env:
+          # Minimal env to allow Clerk provider to initialize in dev server
+          NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY: test_publishable_key
+          NEXT_TELEMETRY_DISABLED: 1
+        working-directory: carens-cookbook
+        run: npm run test:smoke
+
