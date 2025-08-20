@@ -316,7 +316,7 @@ export function logError(error: RecipeProcessingError, additionalContext?: Recor
   console.error('RecipeProcessingError:', logData);
   
   // In production, you might want to send this to an error tracking service
-  // like Sentry, LogRocket, or your own analytics
+  // like LogRocket or your own analytics
   if (typeof window !== 'undefined' && 'gtag' in window && typeof (window as unknown as { gtag: (command: string, action: string, parameters?: Record<string, unknown>) => void }).gtag === 'function') {
     (window as unknown as { gtag: (command: string, action: string, parameters?: Record<string, unknown>) => void }).gtag('event', 'recipe_processing_error', {
       error_type: error.type,

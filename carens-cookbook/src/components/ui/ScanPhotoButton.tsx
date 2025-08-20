@@ -20,7 +20,7 @@ const ScanPhotoButton: React.FC<ScanPhotoButtonProps> = ({
   className,
   variant = "secondary", // Defaulting to secondary for a less prominent look initially
   size = "lg",        // Defaulting to large for easier tapping on iPad
-  buttonText = "Scan Recipe Photo", // Default button text
+  buttonText = "Analyze Photo", // Default button text
   disabled = false, // Default to enabled
   defaultProvider = "openai", // Default to OpenAI
 }) => {

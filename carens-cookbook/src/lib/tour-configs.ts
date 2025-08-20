@@ -32,7 +32,7 @@ export const TOUR_CONFIGS: Record<string, TourConfig> = {
       },
       {
         id: 'scan-recipe',
-        title: 'Scan Recipe Photos 📸',
+        title: 'Analyze Photos 📸',
         content: 'Got a recipe card or cookbook? Take a photo and our AI will extract the ingredients and instructions automatically. Perfect for digitizing family recipes!',
         target: '[data-tour="scan-recipe-button"]',
         position: 'bottom',

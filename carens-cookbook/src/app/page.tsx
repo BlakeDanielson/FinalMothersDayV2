@@ -188,7 +188,7 @@ export default function HomePage() {
                       <Camera className="h-12 w-12 text-white" />
                     </div>
                     <h3 className="text-2xl font-bold mb-3 text-white" style={{textShadow: '0 2px 10px rgba(0,0,0,0.6)'}}>
-                      Scan Recipe Photo
+                      Analyze Photo
                     </h3>
                     <p className="text-white/80 text-base font-medium" style={{textShadow: '0 1px 5px rgba(0,0,0,0.5)'}}>
                       Upload a photo to extract recipe
